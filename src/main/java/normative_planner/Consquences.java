@@ -1,4 +1,4 @@
 package normative_planner;
 
-public interface Consquences {
+public interface NormConsquences {
 }

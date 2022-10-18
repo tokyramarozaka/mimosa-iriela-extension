@@ -5,72 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cb108de8-9a9d-453e-8c4c-86aa24a0e7fc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar/AStarProblem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar/Operator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar/ProblemState.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar/State.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/backward/BackwardPlanningProblem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/forward/ForwardPlanningProblem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Flaw.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Modification.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/OpenCondition.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/OpenConditionResolver.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PartialOrder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PartiallyOrderedElement.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Plan.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PopPlanningProblem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PopSituation.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Step.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/TemporalConstraints.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Threat.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/ThreatResolver.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/exception/EmptyClauseException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/exception/NoPlanFoundException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/graph/Graph.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/graph/Link.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/graph/Node.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/Action.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/ActionConsequence.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/ActionPrecondition.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/Atom.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/Codenotation.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/CodenotationConstraints.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/Constant.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/Constraint.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/Context.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/ContextPair.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/ContextualAtom.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/ContextualPredicate.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/ContextualTerm.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/Goal.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/Graphic.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/LogicalEntity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/LogicalInstance.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/Predicate.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/Rule.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/RuleConclusions.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/RuleConditions.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/Situation.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/Term.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/Unifiable.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/Variable.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/automated_theorem_proving/Clause.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/automated_theorem_proving/ClauseSet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/automated_theorem_proving/Resolution.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/mapper/ContextMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/mapper/GoalMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/mapper/RuleMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/utils/ContextChange.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/normative_planner/Consquences.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/normative_planner/Norm.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/normative_planner/NormCondition.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/planning/Problem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/normative_planner/Consquences.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/normative_planner/Consquences.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,19 +35,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/IRIELA/Desktop/ExamenFinal_PROG2/Ylan/Backend-Contest-Manage&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Global Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/IRIELA/Desktop/ExamenFinal_PROG2/Ylan/Backend-Contest-Manage",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Global Libraries",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="aStar_planning.pop" />
@@ -150,6 +87,7 @@
       <workItem from="1665660822824" duration="2016000" />
       <workItem from="1665726893343" duration="6404000" />
       <workItem from="1665920052167" duration="776000" />
+      <workItem from="1666071887302" duration="1702000" />
     </task>
     <servers />
   </component>
