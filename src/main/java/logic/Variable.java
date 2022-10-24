@@ -1,6 +1,17 @@
 package logic;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+import java.util.List;
+
+@ToString
+@EqualsAndHashCode
 public class Variable extends Term{
+    public Variable(String name) {
+        super(name);
+    }
+
     @Override
     public boolean unify(Context currentContext, Unifiable other, Context otherContext) {
         return false;
@@ -9,11 +20,21 @@ public class Variable extends Term{
     @Override
     public boolean unify(Context currentContext, Unifiable other, Context otherContext,
                          CodenotationConstraints codenotationConstraint) {
-        return false;
+
+    }
+
+    @Override
+    public boolean unifyBis(Context fromContext, Unifiable to, Context toContext, List<ContextualTerm> currentChanges) {
+
+    }
+
+    @Override
+    public boolean unifyBis(Context fromContext, Unifiable to, Context toContext, List<ContextualTerm> currentChanges, CodenotationConstraints codenotationConstraints) {
+
     }
 
     @Override
     public Unifiable build(Context context) {
-        return null;
+
     }
 }

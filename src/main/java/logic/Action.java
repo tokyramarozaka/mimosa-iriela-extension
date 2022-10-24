@@ -18,7 +18,6 @@ import java.util.List;
  * </ul>
  */
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode

@@ -48,12 +48,12 @@ public interface AStarProblem {
     public double evaluateState(State state);
 
     /**
-     * Evaluates the cost of a transition
+     * Evaluates the cost of an operator
      * It is used in processing which ProblemState in A* is processed first alongside heuristic distance
-     * @param transition
+     * @param operator
      * @return
      */
-    public double evaluateTransition(Operator transition);
+    public double evaluateOperator(Operator operator);
 
     /**
      * Determines if a state is valid. In the case it is invalid, it is thrown out of the search space

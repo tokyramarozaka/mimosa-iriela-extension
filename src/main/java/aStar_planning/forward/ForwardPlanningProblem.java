@@ -44,7 +44,7 @@ public class ForwardPlanningProblem extends Problem implements AStarProblem {
     }
 
     @Override
-    public double evaluateTransition(Operator transition) {
+    public double evaluateOperator(Operator transition) {
         return 0;
     }
 

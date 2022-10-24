@@ -2,13 +2,14 @@ package aStar;
 public class ProblemState implements Comparable<ProblemState> {
     private ProblemState parent;
     private State state;
-    private Operator operatorTaken;
-    double g,h;
+    private Operator appliedOperator;
+    double g;
+    double h;
 
-    public ProblemState(ProblemState parent, State world, Operator transitionTaken, double g, double h) {
+    public ProblemState(ProblemState parent, State world, Operator appliedOperator, double g, double h) {
         this.parent = parent;
         this.state = world;
-        this.operatorTaken = transitionTaken;
+        this.appliedOperator = appliedOperator;
         this.g = g;
         this.h = h;
     }
@@ -25,8 +26,8 @@ public class ProblemState implements Comparable<ProblemState> {
         return this.state;
     }
 
-    public Operator getTransitionTaken() {
-        return this.operatorTaken;
+    public Operator getAppliedOperator() {
+        return this.appliedOperator;
     }
 
     @Override
