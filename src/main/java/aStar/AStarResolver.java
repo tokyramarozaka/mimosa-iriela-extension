@@ -13,7 +13,7 @@ import java.util.Queue;
 @RequiredArgsConstructor
 @Getter
 @Slf4j
-public class aStar {
+public class AStarResolver {
     private AStarProblem problem;
     private final Queue<ProblemState> open = new PriorityQueue<>();
     private final List<State> closed = new ArrayList<>();

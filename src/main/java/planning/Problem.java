@@ -11,7 +11,6 @@ import lombok.ToString;
 import java.util.List;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @ToString
 public class Problem {

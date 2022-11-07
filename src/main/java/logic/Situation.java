@@ -10,7 +10,6 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @ToString
@@ -18,6 +17,10 @@ import java.util.List;
 public class Situation implements State {
     private List<ContextualPredicate> contextualPredicates;
     private Context stateContext = new Context();
+
+    public Situation(List<ContextualPredicate> contextualPredicates){
+        this.contextualPredicates = contextualPredicates;
+    }
 
     public List<LogicalInstance> allPossibleActionInstances(List<Action> possibleActions){
         List<LogicalInstance> allActionInstances = new ArrayList<>();

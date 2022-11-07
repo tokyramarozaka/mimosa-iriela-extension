@@ -5,33 +5,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cb108de8-9a9d-453e-8c4c-86aa24a0e7fc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar/aStar.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/StepDetails.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/norms/DeonticOperator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/norms/Norm.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/norms/NormConsequences.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/time/Interval.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/popIT/ColoredBlocks_IT.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/normative_pop/NormativePopPlanningProblem.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/logic/mapper/PredicatesMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/logic/mapper/SituationMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/planning/Situation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/backward_IT/BlocksWorld_Backward_IT.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/backward_IT/Graph_Backwards_IT.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/forward_IT/BlocksWorld_Forward_IT.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/forward_IT/Graph_Forward_IT.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/pop_IT/ColoredBlocks_IT.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/testUtils/ActionFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/testUtils/BlockFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/testUtils/Blocks.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/testUtils/GoalFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/testUtils/PredicateFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/testUtils/SituationFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar/AStarProblem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar/AStarProblem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar/ProblemState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar/ProblemState.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/backward/BackwardPlanningProblem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/backward/BackwardPlanningProblem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/forward/ForwardPlanningProblem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/forward/ForwardPlanningProblem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Modification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PlanModification.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/OpenConditionResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/OpenConditionResolver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Plan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Plan.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PopPlanningProblem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PopPlanningProblem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PopSituation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PopSituation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/TemporalConstraints.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/TemporalConstraints.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/ThreatResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/ThreatResolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Action.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Action.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Constant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Constant.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Context.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Context.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Term.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Term.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Variable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Variable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/normative_planner/Consquences.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/normative_planner/Norm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/norms/NormConditions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/normative_planner/NormCondition.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Step.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Step.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/StepDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/StepDetails.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Situation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Situation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/utils/ContextChange.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/utils/ContextChange.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/planning/Problem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/planning/Problem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/time/Interval.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/time/Interval.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/popIT/ColoredBlocks_IT.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,6 +77,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="testUtils" />
       <recent name="aStar_planning.pop" />
       <recent name="logic" />
     </key>
@@ -125,7 +126,19 @@
       <workItem from="1666439002911" duration="10264000" />
       <workItem from="1666512519352" duration="1549000" />
       <workItem from="1666586878482" duration="85000" />
-      <workItem from="1666637781593" duration="607000" />
+      <workItem from="1666637781593" duration="1458000" />
+      <workItem from="1666678257348" duration="597000" />
+      <workItem from="1666712148867" duration="1849000" />
+      <workItem from="1666799951339" duration="2405000" />
+      <workItem from="1666859332507" duration="3483000" />
+      <workItem from="1667070493425" duration="600000" />
+      <workItem from="1667201329273" duration="1634000" />
+      <workItem from="1667230329754" duration="1613000" />
+      <workItem from="1667496625466" duration="5150000" />
+      <workItem from="1667546312080" duration="5331000" />
+      <workItem from="1667713690745" duration="1231000" />
+      <workItem from="1667756464433" duration="1439000" />
+      <workItem from="1667816456375" duration="5465000" />
     </task>
     <servers />
   </component>

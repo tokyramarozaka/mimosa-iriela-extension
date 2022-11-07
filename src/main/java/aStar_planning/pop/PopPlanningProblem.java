@@ -6,6 +6,7 @@ import aStar.State;
 import logic.Action;
 import logic.ActionConsequence;
 import logic.ActionPrecondition;
+import logic.Atom;
 import logic.CodenotationConstraints;
 import logic.Context;
 import logic.ContextualAtom;
@@ -73,13 +74,13 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
         List<Step> dummySteps = new ArrayList<>();
 
         LogicalInstance initialStep = new LogicalInstance(
-                producingAction(this.getInitialSituation().getContextualPredicates(),
+                this.producingAction(this.getInitialSituation().getContextualPredicates(),
                         "initial"),
                 new Context()
         );
 
         LogicalInstance finalStep = new LogicalInstance(
-                requiringAction(this.getGoal().getPropositions(), "final"),
+                this.requiringAction(this.getGoal().getPropositions(), "final"),
                 new Context()
         );
 
@@ -90,14 +91,21 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
         return new Action(
                 actionName,
                 new ActionPrecondition(),
-                new ActionConsequence()
+                new ActionConsequence(propositions
+                        .stream()
+                        .map(proposition -> new Atom(false, proposition.getPredicate()))
+                        .toList()
+                )
         );
     }
 
     public Action requiringAction(List<ContextualAtom> propositions, String actionName){
         return new Action(
                 actionName,
-                new ActionPrecondition(),
+                new ActionPrecondition(propositions
+                        .stream()
+                        .map(proposition -> proposition.getAtom())
+                        .toList()),
                 new ActionConsequence()
         );
     }

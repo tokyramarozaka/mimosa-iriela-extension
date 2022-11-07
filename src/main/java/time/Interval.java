@@ -11,4 +11,12 @@ import lombok.ToString;
 public class Interval {
     private PopSituation startingSituation;
     private PopSituation endingSituation;
+
+    public boolean overlaps(PopSituation popSituation){
+
+    }
+
+    public boolean intersects(Interval toTest){
+
+    }
 }

@@ -3,14 +3,22 @@ package aStar_planning.forward;
 import aStar.AStarProblem;
 import aStar.Operator;
 import aStar.State;
+import logic.Action;
+import logic.Goal;
 import logic.LogicalInstance;
 import logic.Situation;
 import planning.Problem;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class ForwardPlanningProblem extends Problem implements AStarProblem {
+    public ForwardPlanningProblem(Situation initialSituation, List<Action> possibleActions, Goal goal) {
+        super(initialSituation, possibleActions, goal);
+    }
+
     @Override
     public State getInitialState() {
         return this.getInitialSituation();
@@ -55,7 +63,8 @@ public class ForwardPlanningProblem extends Problem implements AStarProblem {
 
     @Override
     public List<Operator> getSolution(List<Operator> solutionSteps) {
-        return null;
+        Collections.reverse(solutionSteps);
+        return solutionSteps;
     }
 
     @Override

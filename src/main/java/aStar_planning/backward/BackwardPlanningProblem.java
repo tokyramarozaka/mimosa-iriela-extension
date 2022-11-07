@@ -50,7 +50,7 @@ public class BackwardPlanningProblem extends Problem implements AStarProblem {
 
     @Override
     public List<Operator> getSolution(List<Operator> solutionSteps) {
-        return null;
+        return solutionSteps;
     }
 
     @Override

@@ -3,7 +3,10 @@ package aStar_planning.pop;
 import aStar.Operator;
 import aStar.State;
 import logic.Action;
+import logic.Atom;
 import logic.CodenotationConstraints;
+import logic.Context;
+import logic.ContextualAtom;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -41,7 +44,12 @@ public class Plan implements State {
     public void evaluateFlaws(){
         this.flaws = new HashSet<>();
 
-        for(Step step : this.steps.stream().filter(this::isNotInitialStep)) {
+        List<Step> stepsExceptInitialStep = this.steps
+                .stream()
+                .filter(step -> isNotInitialStep(step))
+                .toList();
+
+        for(Step step : stepsExceptInitialStep) {
             this.getThreats(step)
                     .forEach(threat -> this.flaws.add(threat));
 
@@ -53,14 +61,32 @@ public class Plan implements State {
     private boolean isNotInitialStep(Step step) {
         Action stepAction = ((Action) step.getActionInstance().getLogicalEntity());
 
-        return !Objects.equals(
-                stepAction.getName(),
-                "initial"
-        );
+        return !Objects.equals(stepAction.getName(),"initial");
     }
 
     private List<Flaw> getOpenConditions(Step step) {
+        List<Flaw> openConditions = new ArrayList<>();
 
+        for (Atom precondition : step.getActionPreconditions().getAtoms()) {
+            if(!isAsserted(precondition, step.getActionInstance().getContext()),
+                getPrecedingSituation(step))
+            {
+                openConditions.add(buildOpenCondition(precondition, step));
+            }
+        }
+
+        return openConditions;
+    }
+
+    private boolean isAsserted(Atom precondition, Context context, PopSituation situation) {
+        return allStepsBefore(situation)
+                .stream()
+                .
+    }
+
+    private OpenCondition buildOpenCondition(Atom missingPrecondition, Step step) {
+        return new OpenCondition(StepDetails.getPrecedingSituation(step, this),
+                new ContextualAtom(new Context(), missingPrecondition));
     }
 
     private List<Flaw> getThreats(Step step) {
