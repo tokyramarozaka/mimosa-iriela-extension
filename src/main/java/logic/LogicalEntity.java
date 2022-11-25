@@ -8,4 +8,6 @@ public abstract class LogicalEntity {
     public abstract LogicalEntity build(Context context);
 
     public abstract LogicalEntity copy();
+
+    public abstract String getLabel();
 }

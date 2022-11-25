@@ -22,6 +22,40 @@ public class CodenotationConstraints {
     private List<Codenotation> codenotations;
 
     public boolean isCoherent() {
+        return true;
+    }
+
+    public ContextualTerm getLink(Variable variable, Context context) {
+        ContextualTerm source = new ContextualTerm(context,variable);
+
+        if(!isLinked(variable, context)){
+            return source;
+        }
+
+        return this.codenotations
+                .stream()
+                .filter(codenotation -> codenotation.getLeftContextualTerm().equals(source))
+                .findFirst()
+                .get()
+                .getRightContextualTerm();
 
     }
+
+    public boolean isLinked(Variable variable, Context context) {
+        ContextualTerm toTest = new ContextualTerm(context, variable);
+
+        return this.codenotations
+                .stream()
+                .filter(codenotation -> codenotation.getLeftContextualTerm().equals(toTest))
+                .count() > 0;
+    }
+
+    public boolean isAllowed(Codenotation codenotationToAdd) {
+        return this.codenotations
+                .stream()
+                .filter(codenotation -> codenotation.matches(codenotationToAdd)
+                        && codenotationToAdd.isCodenotation() != codenotationToAdd.isCodenotation())
+                .count() == 0;
+    }
+
 }

@@ -1,40 +1,67 @@
 package logic;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
 import java.util.List;
 
-@ToString
-@EqualsAndHashCode
 public class Variable extends Term{
     public Variable(String name) {
         super(name);
     }
 
     @Override
-    public boolean unify(Context currentContext, Unifiable other, Context otherContext) {
-        return false;
+    public boolean attemptUnification(Context fromContext, Unifiable to, Context toContext,
+                                      List<ContextualTerm> currentChanges) {
+        if(fromContext.equals(toContext)){
+            return this.equals(to);
+        }
+
+        if(fromContext.isLinked(this)){
+            ContextualTerm variableLink = fromContext.getLink(this);
+
+            return variableLink
+                    .getTerm()
+                    .attemptUnification(variableLink.getContext(), to, toContext,currentChanges);
+        }else{
+            fromContext.link(this, (Term)to,toContext);
+            currentChanges.add(new ContextualTerm(fromContext, this));
+            return true;
+        }
     }
 
     @Override
-    public boolean unify(Context currentContext, Unifiable other, Context otherContext,
-                         CodenotationConstraints codenotationConstraint) {
+    public boolean attemptUnification(Context fromContext, Unifiable to, Context toContext,
+                                      List<ContextualTerm> currentChanges,
+                                      CodenotationConstraints codenotationConstraints
+    ) {
+        if (!codenotationConstraints.isCoherent()){
+            return false;
+        }
 
-    }
+        if(fromContext.equals(toContext) && this.equals(to)){
+            return true;
+        }
 
-    @Override
-    public boolean unifyBis(Context fromContext, Unifiable to, Context toContext, List<ContextualTerm> currentChanges) {
+        if (codenotationConstraints.isLinked(this, fromContext)){
+            ContextualTerm variableLink = codenotationConstraints.getLink(this, fromContext);
 
-    }
+            return variableLink.getTerm().unify(variableLink.getContext(),to,toContext);
+        }
 
-    @Override
-    public boolean unifyBis(Context fromContext, Unifiable to, Context toContext, List<ContextualTerm> currentChanges, CodenotationConstraints codenotationConstraints) {
+        Codenotation codenotationToAdd = new Codenotation(
+                true,
+                new ContextualTerm(fromContext,this),
+                new ContextualTerm(toContext,(Term) to)
+        );
 
+        return codenotationConstraints.isAllowed(codenotationToAdd);
     }
 
     @Override
     public Unifiable build(Context context) {
+        return context.build(this);
+    }
 
+    @Override
+    public String toString() {
+        return this.getName();
     }
 }

@@ -1,19 +1,16 @@
 package pop_IT;
 
 import logic.Constant;
-import logic.ContextualPredicate;
-import logic.Goal;
-import logic.Situation;
 import org.junit.jupiter.api.Test;
 import testUtils.BlockFactory;
 
 public class ColoredBlocks_IT {
-    private final Constant blockA = BlockFactory.create("A");
-    private final Constant blockB = BlockFactory.create("B");
-    private final Constant blockC = BlockFactory.create("C");
-    private final Constant blockD = BlockFactory.create("D");
-    private final Constant blockE = BlockFactory.create("E");
-    private final Constant blockF = BlockFactory.create("F");
+    private final Constant blockA = (Constant) BlockFactory.create("CONSTANT","A");
+    private final Constant blockB = (Constant) BlockFactory.create("CONSTANT","B");
+    private final Constant blockC = (Constant) BlockFactory.create("CONSTANT","C");
+    private final Constant blockD = (Constant) BlockFactory.create("CONSTANT","D");
+    private final Constant blockE = (Constant) BlockFactory.create("CONSTANT","E");
+    private final Constant blockF = (Constant) BlockFactory.create("CONSTANT","F");
 
     @Test
     public void shouldStackThreeConcreteBlocks(){

@@ -7,15 +7,19 @@ import logic.Action;
 import logic.Goal;
 import logic.LogicalInstance;
 import logic.Situation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import planning.Problem;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 public class ForwardPlanningProblem extends Problem implements AStarProblem {
-    public ForwardPlanningProblem(Situation initialSituation, List<Action> possibleActions, Goal goal) {
+    private static final Logger logger = LogManager.getLogger(ForwardPlanningProblem.class);
+
+    public ForwardPlanningProblem(Situation initialSituation, List<Action> possibleActions,
+                                  Goal goal) {
         super(initialSituation, possibleActions, goal);
     }
 
@@ -38,16 +42,20 @@ public class ForwardPlanningProblem extends Problem implements AStarProblem {
                 .allPossibleActionInstances(this.getPossibleActions())
                 .forEach(possibleActionInstance -> options.add(possibleActionInstance));
 
+        logger.info("GETTING OPTIONS FOR : \n\t"+state+"\nOPTIONS ARE : \n\t"+options);
         return options;
     }
 
     @Override
     public State apply(Operator operator, State state) {
+        logger.info("APPLYING "+operator);
+        logger.info("GOT RESULT : "+((Situation)state).applyActionInstance((LogicalInstance)operator));
         return ((Situation)state).applyActionInstance((LogicalInstance)operator);
     }
 
     @Override
     public double evaluateState(State state) {
+        logger.info("Heuristic distance : "+((Situation)state).goalDistance(this.getGoal()));
         return ((Situation)state).goalDistance(this.getGoal());
     }
 
@@ -62,13 +70,19 @@ public class ForwardPlanningProblem extends Problem implements AStarProblem {
     }
 
     @Override
-    public List<Operator> getSolution(List<Operator> solutionSteps) {
-        Collections.reverse(solutionSteps);
-        return solutionSteps;
+    public List<Operator> getSolution(List<Operator> solutionOperators) {
+        Collections.reverse(solutionOperators);
+        return solutionOperators;
     }
 
     @Override
-    public String showSolution(List<Operator> solutionSteps) {
-        return null;
+    public String showSolution(List<Operator> solutionPlan) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        solutionPlan.forEach(step -> {
+            stringBuilder.append("\n\t").append(step);
+        });
+
+        return stringBuilder.toString();
     }
 }

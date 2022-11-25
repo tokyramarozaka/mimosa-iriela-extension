@@ -16,7 +16,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString
 @EqualsAndHashCode
 public class Atom {
     private boolean negation;
@@ -24,5 +23,16 @@ public class Atom {
 
     public Atom build(Context context) {
         return new Atom(this.negation,(Predicate) this.predicate.build(context));
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder
+                .append(this.isNegation() ? "¬" : "")
+                .append(this.predicate);
+
+        return stringBuilder.toString();
     }
 }

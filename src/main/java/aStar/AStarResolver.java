@@ -2,22 +2,25 @@ package aStar;
 
 import exception.NoPlanFoundException;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-@RequiredArgsConstructor
 @Getter
-@Slf4j
 public class AStarResolver {
     private AStarProblem problem;
     private final Queue<ProblemState> open = new PriorityQueue<>();
     private final List<State> closed = new ArrayList<>();
+    private final static Logger logger = LogManager.getLogger(AStarResolver.class);
 
+    public AStarResolver(AStarProblem problem){
+        this.problem = problem;
+    }
+    
     public List<Operator> findSolution() throws NoPlanFoundException {
         open.add(new ProblemState(null, problem.getInitialState(), null, 0,
                 problem.evaluateState(problem.getInitialState())));
@@ -32,6 +35,11 @@ public class AStarResolver {
                 continue;
             }
 
+            if (problem.isFinal(candidate.getState())){
+                solutionState = candidate;
+                break;
+            }
+            
             for (Operator option : problem.getOptions(candidate.getState())) {
                 State nextState = problem.apply(option, candidate.getState());
 
@@ -45,7 +53,7 @@ public class AStarResolver {
                         found = true;
                         solutionState = successor;
                         break;
-                    }else {
+                    } else {
                         open.add(successor);
                     }
                 }
@@ -55,10 +63,13 @@ public class AStarResolver {
         }
 
         if (solutionState == null) {
+            logger.info("No plans were found");
             throw new NoPlanFoundException();
         }
 
-        return extractSolution(solutionState);
+        List<Operator> solution = extractSolution(solutionState);
+
+        return solution;
     }
 
     public List<Operator> extractSolution(ProblemState finalState){

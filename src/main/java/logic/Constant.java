@@ -1,41 +1,57 @@
 package logic;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
 import java.util.List;
 
 
-@ToString
-@EqualsAndHashCode
 public class Constant extends Term{
     public Constant(String name){
         super(name);
     }
 
     @Override
-    public boolean unify(Context currentContext, Unifiable other, Context otherContext) {
+    public boolean unify(Context fromContext, Unifiable to, Context toContext) {
         return false;
     }
 
     @Override
-    public boolean unify(Context currentContext, Unifiable other, Context otherContext, CodenotationConstraints codenotationConstraint) {
+    public boolean unify(Context fromContext, Unifiable to, Context toContext, CodenotationConstraints codenotationConstraint) {
         return false;
     }
 
     @Override
-    public boolean unifyBis(Context fromContext, Unifiable to, Context toContext, List<ContextualTerm> currentChanges) {
-        return false;
+    public boolean attemptUnification(Context fromContext, Unifiable to, Context toContext, List<ContextualTerm> currentChanges) {
+        if (to instanceof Constant){
+            return this.sameName((Term) to);
+        }
+        if (to instanceof Variable){
+            return ((Variable)to).attemptUnification(toContext, this, fromContext,currentChanges);
+        }
+
+        throw new UnsupportedOperationException(
+                "Only variables and constants unifications are supported.");
     }
 
+    /**
+     * TODO : implement the unification of constant with CodenotationConstraints
+     * @param fromContext
+     * @param to
+     * @param toContext
+     * @param currentChanges
+     * @param codenotationConstraints
+     * @return
+     */
     @Override
-    public boolean unifyBis(Context fromContext, Unifiable to, Context toContext, List<ContextualTerm> currentChanges, CodenotationConstraints codenotationConstraints) {
-        return false
+    public boolean attemptUnification(Context fromContext, Unifiable to, Context toContext, List<ContextualTerm> currentChanges, CodenotationConstraints codenotationConstraints) {
+        return false;
     }
 
     @Override
     public Unifiable build(Context context) {
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return this.getName();
     }
 }

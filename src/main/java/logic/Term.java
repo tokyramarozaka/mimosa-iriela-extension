@@ -1,7 +1,6 @@
 package logic;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -11,7 +10,6 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter
-@EqualsAndHashCode
 @ToString
 public abstract class Term implements Unifiable{
     private String name;
@@ -20,7 +18,7 @@ public abstract class Term implements Unifiable{
     public boolean unify(Context fromContext, Unifiable to, Context toContext) {
         List<ContextualTerm> lst = new ArrayList<>();
 
-        boolean res = unifyBis(fromContext,to,toContext,lst);
+        boolean res = attemptUnification(fromContext,to,toContext,lst);
 
         if (!res) {
             for (ContextualTerm var:lst) {
@@ -35,7 +33,7 @@ public abstract class Term implements Unifiable{
     public boolean unify(Context fromContext, Unifiable to, Context toContext, CodenotationConstraints cdn) {
         List<ContextualTerm> lst = new ArrayList<>();
 
-        boolean res = unifyBis(fromContext,to,toContext,lst,cdn);
+        boolean res = attemptUnification(fromContext,to,toContext,lst,cdn);
 
         if (!res) {
             for (ContextualTerm var:lst) {
@@ -46,11 +44,14 @@ public abstract class Term implements Unifiable{
         return res;
     }
 
-    public abstract boolean unifyBis(Context fromContext, Unifiable to, Context toContext,
-                             List<ContextualTerm> currentChanges);
+    public abstract boolean attemptUnification(Context fromContext, Unifiable to, Context toContext,
+                                               List<ContextualTerm> currentChanges);
 
-    public abstract boolean unifyBis(Context fromContext, Unifiable to, Context toContext,
-                             List<ContextualTerm> currentChanges,
-                                     CodenotationConstraints codenotationConstraints);
+    public abstract boolean attemptUnification(Context fromContext, Unifiable to, Context toContext,
+                                               List<ContextualTerm> currentChanges,
+                                               CodenotationConstraints codenotationConstraints);
 
+    public boolean sameName(Term term){
+        return this.name.equals(term.getName());
+    }
 }

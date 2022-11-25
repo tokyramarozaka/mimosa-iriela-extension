@@ -4,6 +4,8 @@ import logic.Constant;
 import logic.Term;
 import logic.Variable;
 
+import java.security.InvalidParameterException;
+
 public class BlockFactory {
     public static Constant createConstant(String blockName){
         return new Constant("Block "+blockName);
@@ -18,6 +20,8 @@ public class BlockFactory {
             return createConstant(blockName);
         }else if (type.equals("VARIABLE")){
             return createVariable(blockName);
+        }else{
+            throw new InvalidParameterException("Block must either be a variable or a Constant");
         }
     }
 }

@@ -5,9 +5,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * An action representation based on the STRIPS paradigm. It needs a :
@@ -19,13 +24,12 @@ import java.util.List;
  */
 @AllArgsConstructor
 @Getter
-@ToString
 @EqualsAndHashCode
 public class Action extends LogicalEntity{
     private String name;
     private ActionPrecondition preconditions;
     private ActionConsequence consequences;
-
+    private final Logger logger = LogManager.getLogger(Action.class);
     public List<LogicalInstance> possibleInstances(Situation targetSituation){
         List<Context> contexts = new ArrayList<>();
 
@@ -37,7 +41,6 @@ public class Action extends LogicalEntity{
          * and its superior born is the precondition's size
          */
         possibleInstancesRecursive(this.preconditions.getAtoms(),targetSituation, contexts);
-
         return contexts
                 .stream()
                 .map(context -> new LogicalInstance(this, context))
@@ -96,4 +99,34 @@ public class Action extends LogicalEntity{
         return new Action(this.name, this.preconditions.copy(), this.consequences.copy());
     }
 
+    @Override
+    public String getLabel() {
+        return this.getName();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        Set<Term> distinctTerms = new HashSet<>();
+
+        this.getPreconditions().getAtoms().forEach(precondition -> {
+            distinctTerms.addAll(precondition.getPredicate().getTerms());
+        });
+
+        stringBuilder
+                .append(this.name)
+                .append("(");
+
+        int actionTermsCount = 0;
+        for(Term eachTerm : distinctTerms){
+            stringBuilder.append(eachTerm);
+            if (actionTermsCount++ < distinctTerms.size() - 1){
+                stringBuilder.append(" , ");
+            }
+        }
+
+        stringBuilder.append(")");
+
+        return stringBuilder.toString();
+    }
 }

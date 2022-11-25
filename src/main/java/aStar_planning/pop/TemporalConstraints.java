@@ -18,4 +18,8 @@ public class TemporalConstraints extends Graphic {
     public boolean isCoherent() {
         return false;
     }
+
+    public boolean isBefore(Step step, PlanElement element) {
+        return false;
+    }
 }

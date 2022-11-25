@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Getter
 @ToString
 @EqualsAndHashCode
-public class PopSituation implements PartiallyOrderedElement {
+public class PopSituation implements PlanElement {
     private int id;
     private static final AtomicInteger sequence = new AtomicInteger(0);
 

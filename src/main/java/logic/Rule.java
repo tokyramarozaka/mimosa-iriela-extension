@@ -1,5 +1,7 @@
 package logic;
 
+import logic.automated_theorem_proving.ClauseSet;
+import logic.mapper.ConstraintMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -17,7 +19,16 @@ public class Rule extends LogicalEntity{
     }
 
     public boolean isApplied(Constraint toTest){
-        return ;
+        ClauseSet unitClauses = new ClauseSet();
+        ClauseSet compositeClauses = new ClauseSet();
+
+        //unitClauses.add(ConstraintMapper.toClause(toTest));
+
+        toTest.getContextualAtoms().forEach(proposition -> {
+
+        });
+
+        return true;
     }
 
     @Override
@@ -28,5 +39,10 @@ public class Rule extends LogicalEntity{
     @Override
     public LogicalEntity copy() {
         return null;
+    }
+
+    @Override
+    public String getLabel() {
+        return this.name;
     }
 }

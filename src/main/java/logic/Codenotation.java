@@ -1,5 +1,6 @@
 package logic;
 
+import logic.utils.ContextChange;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -25,4 +26,19 @@ public class Codenotation {
     private boolean isCodenotation;
     private ContextualTerm leftContextualTerm;
     private ContextualTerm rightContextualTerm;
+
+    public Codenotation updateContext(ContextChange contextChange) {
+        return new Codenotation(
+                this.isCodenotation,
+                contextChange.getReplacement(leftContextualTerm),
+                contextChange.getReplacement(rightContextualTerm)
+        );
+    }
+
+    public boolean matches(Codenotation other) {
+        return (this.leftContextualTerm.equals(other.getLeftContextualTerm()) &&
+                this.rightContextualTerm.equals(other.getRightContextualTerm())) ||
+                    ((this.leftContextualTerm.equals(other.getRightContextualTerm())) &&
+                        (this.rightContextualTerm.equals(other.getLeftContextualTerm())));
+    }
 }

@@ -5,33 +5,65 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cb108de8-9a9d-453e-8c4c-86aa24a0e7fc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/normative_pop/NormativePopPlanningProblem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/mapper/PredicatesMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/logic/mapper/SituationMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/planning/Situation.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/backward_IT/BlocksWorld_Backward_IT.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/backward_IT/Graph_Backwards_IT.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/forward_IT/BlocksWorld_Forward_IT.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/forward_IT/Graph_Forward_IT.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/pop_IT/ColoredBlocks_IT.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/testUtils/ActionFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/testUtils/BlockFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/testUtils/Blocks.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/testUtils/GoalFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/testUtils/PredicateFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/testUtils/SituationFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/logic/mapper/ConstraintMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/log4j2.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/testUtils/GoalFactory2.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar/AStarResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar/AStarResolver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar/Operator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar/Operator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/backward/BackwardPlanningProblem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/backward/BackwardPlanningProblem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/forward/ForwardPlanningProblem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/forward/ForwardPlanningProblem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/OpenConditionResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/OpenConditionResolver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PartialOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PartialOrder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PartiallyOrderedElement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PlanElement.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Plan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Plan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PlanModification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PlanModification.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PopPlanningProblem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PopPlanningProblem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PopSituation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PopSituation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Step.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Step.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/StepDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/StepDetails.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/TemporalConstraints.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/TemporalConstraints.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Threat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Threat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/ThreatResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/ThreatResolver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/exception/EmptyClauseException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/exception/EmptyClauseException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/graph/Link.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/graph/Link.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Action.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Action.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Atom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Atom.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Codenotation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Codenotation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/CodenotationConstraints.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/CodenotationConstraints.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Constant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Constant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Constraint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Constraint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Context.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Context.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/ContextPair.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/ContextPair.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/ContextualPredicate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/ContextualPredicate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/ContextualTerm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/ContextualTerm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Goal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Goal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/LogicalEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/LogicalEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/LogicalInstance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/LogicalInstance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Predicate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Predicate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Rule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Rule.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/logic/Situation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Situation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Term.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Term.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Unifiable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Unifiable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Variable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Variable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/automated_theorem_proving/Clause.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/automated_theorem_proving/Clause.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/automated_theorem_proving/ClauseSet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/automated_theorem_proving/ClauseSet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/mapper/ContextMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/mapper/ContextMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/mapper/GoalMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/mapper/GoalMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/mapper/PredicatesMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/mapper/PredicatesMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/mapper/RuleMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/mapper/RuleMapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/logic/utils/ContextChange.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/utils/ContextChange.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/planning/Problem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/planning/Problem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/time/Interval.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/time/Interval.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/popIT/ColoredBlocks_IT.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/forward_IT/BlocksWorld_Forward_IT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/forward_IT/BlocksWorld_Forward_IT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/pop_IT/ColoredBlocks_IT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/pop_IT/ColoredBlocks_IT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/testUtils/ActionFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/testUtils/ActionFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/testUtils/BlockFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/testUtils/BlockFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/testUtils/Blocks.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/testUtils/Blocks.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/testUtils/GoalFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/testUtils/GoalFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/testUtils/PredicateFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/testUtils/PredicateFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/testUtils/SituationFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/testUtils/SituationFactory.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +81,10 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$PROJECT_DIR$/../../../../Program Files/Java/jdk-17.0.2/lib/src.zip!/java.base/java/lang/String.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$PROJECT_DIR$/../../../../Program Files/Java/jdk-17.0.2/lib/src.zip!/java.base/java/lang/StringLatin1.java" root0="SKIP_INSPECTION" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -72,7 +108,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Global Libraries&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;LogHighlighting&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -81,6 +117,93 @@
       <recent name="aStar_planning.pop" />
       <recent name="logic" />
     </key>
+  </component>
+  <component name="RunManager" selected="JUnit.BlocksWorld_Forward_IT.shouldStackThreeAbstractBlocks">
+    <configuration name="BlocksWorld_Forward_IT" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="forward_IT.BlocksWorld_Forward_IT" />
+      <module name="Iriela" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="forward_IT.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BlocksWorld_Forward_IT" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Iriela" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="forward_IT.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="forward_IT" />
+      <option name="MAIN_CLASS_NAME" value="forward_IT.BlocksWorld_Forward_IT" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BlocksWorld_Forward_IT.shouldReturnEmptyPlan" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Iriela" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="forward_IT.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="forward_IT" />
+      <option name="MAIN_CLASS_NAME" value="forward_IT.BlocksWorld_Forward_IT" />
+      <option name="METHOD_NAME" value="shouldReturnEmptyPlan" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BlocksWorld_Forward_IT.shouldStackThreeAbstractBlocks" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Iriela" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="forward_IT.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="forward_IT" />
+      <option name="MAIN_CLASS_NAME" value="forward_IT.BlocksWorld_Forward_IT" />
+      <option name="METHOD_NAME" value="shouldStackThreeAbstractBlocks" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BlocksWorld_Forward_IT.shouldStackThreeConcreteBlocks" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Iriela" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="forward_IT.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="forward_IT" />
+      <option name="MAIN_CLASS_NAME" value="forward_IT.BlocksWorld_Forward_IT" />
+      <option name="METHOD_NAME" value="shouldStackThreeConcreteBlocks" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.BlocksWorld_Forward_IT.shouldStackThreeAbstractBlocks" />
+        <item itemvalue="JUnit.BlocksWorld_Forward_IT" />
+        <item itemvalue="JUnit.BlocksWorld_Forward_IT.shouldReturnEmptyPlan" />
+        <item itemvalue="JUnit.BlocksWorld_Forward_IT.shouldStackThreeConcreteBlocks" />
+        <item itemvalue="Application.BlocksWorld_Forward_IT" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -138,7 +261,36 @@
       <workItem from="1667546312080" duration="5331000" />
       <workItem from="1667713690745" duration="1231000" />
       <workItem from="1667756464433" duration="1439000" />
-      <workItem from="1667816456375" duration="5465000" />
+      <workItem from="1667816456375" duration="6129000" />
+      <workItem from="1667885307012" duration="6421000" />
+      <workItem from="1667902249534" duration="599000" />
+      <workItem from="1667929322792" duration="2543000" />
+      <workItem from="1668106682234" duration="612000" />
+      <workItem from="1668184331308" duration="1314000" />
+      <workItem from="1668226739616" duration="7017000" />
+      <workItem from="1668306016562" duration="12904000" />
+      <workItem from="1668408399203" duration="825000" />
+      <workItem from="1668420502794" duration="595000" />
+      <workItem from="1668422378621" duration="3683000" />
+      <workItem from="1668444807652" duration="3726000" />
+      <workItem from="1668488259099" duration="1515000" />
+      <workItem from="1668490679434" duration="6033000" />
+      <workItem from="1668504879044" duration="1608000" />
+      <workItem from="1668594357760" duration="4457000" />
+      <workItem from="1668620224801" duration="8187000" />
+      <workItem from="1668683651950" duration="595000" />
+      <workItem from="1668772709269" duration="693000" />
+      <workItem from="1668776497747" duration="65000" />
+      <workItem from="1668799760930" duration="1270000" />
+      <workItem from="1668844072719" duration="598000" />
+      <workItem from="1669038667963" duration="11879000" />
+      <workItem from="1669101314379" duration="6051000" />
+      <workItem from="1669131413159" duration="5144000" />
+      <workItem from="1669220505468" duration="6368000" />
+      <workItem from="1669237841255" duration="2697000" />
+      <workItem from="1669258186455" duration="2338000" />
+      <workItem from="1669280813943" duration="3520000" />
+      <workItem from="1669367709789" duration="2759000" />
     </task>
     <servers />
   </component>

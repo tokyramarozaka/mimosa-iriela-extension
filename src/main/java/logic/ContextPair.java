@@ -7,11 +7,20 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @EqualsAndHashCode
-@ToString
 public class ContextPair {
     private Variable variable;
     private ContextualTerm contextualTerm;
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(this.variable);
+        stringBuilder.append(" ==> ");
+        stringBuilder.append(this.contextualTerm);
+
+        return stringBuilder.toString();
+    }
 }

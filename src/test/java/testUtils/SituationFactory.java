@@ -1,6 +1,5 @@
 package testUtils;
 
-import logic.Constant;
 import logic.Predicate;
 import logic.Situation;
 import logic.mapper.SituationMapper;

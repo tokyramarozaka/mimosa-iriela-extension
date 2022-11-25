@@ -3,7 +3,9 @@ package aStar_planning.backward;
 import aStar.AStarProblem;
 import aStar.Operator;
 import aStar.State;
+import logic.Action;
 import logic.Constraint;
+import logic.Goal;
 import logic.LogicalInstance;
 import logic.Rule;
 import logic.Situation;
@@ -13,6 +15,13 @@ import java.util.List;
 
 public class BackwardPlanningProblem extends Problem implements AStarProblem {
     private List<Rule> rules;
+
+    public BackwardPlanningProblem(Situation initialSituation, List<Action> possibleActions,
+                                   Goal goal, List<Rule> rules) {
+        super(initialSituation, possibleActions, goal);
+        this.rules = rules;
+    }
+
     @Override
     public State getInitialState() {
         return this.getGoal();

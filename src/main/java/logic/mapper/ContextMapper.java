@@ -4,7 +4,12 @@ import logic.CodenotationConstraints;
 import logic.Context;
 
 public class ContextMapper {
-    public static CodenotationConstraints toCodenotationConstraint(Context context){
-
-    }
+    /**
+     * TODO : convert context to codenotation constraint
+     * @param context
+     * @return
+     */
+//    public static CodenotationConstraints toCodenotationConstraint(Context context){
+//
+//    }
 }

@@ -9,7 +9,6 @@ import logic.ActionPrecondition;
 import logic.Atom;
 import logic.CodenotationConstraints;
 import logic.Context;
-import logic.ContextualAtom;
 import logic.ContextualPredicate;
 import logic.Goal;
 import logic.LogicalInstance;
@@ -80,7 +79,7 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
         );
 
         LogicalInstance finalStep = new LogicalInstance(
-                this.requiringAction(this.getGoal().getPropositions(), "final"),
+                this.requiringAction(this.getGoal().getGoalPropositions(), "final"),
                 new Context()
         );
 
@@ -99,15 +98,16 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
         );
     }
 
-    public Action requiringAction(List<ContextualAtom> propositions, String actionName){
-        return new Action(
-                actionName,
-                new ActionPrecondition(propositions
-                        .stream()
-                        .map(proposition -> proposition.getAtom())
-                        .toList()),
-                new ActionConsequence()
-        );
+    public Action requiringAction(List<Atom> propositions, String actionName){
+//        return new Action(
+//                actionName,
+//                new ActionPrecondition(propositions
+//                        .stream()
+//                        .map(proposition -> proposition.getAtom())
+//                        .toList()),
+//                new ActionConsequence()
+//        );
+        return null;
     }
     @Override
     public State getInitialState() {

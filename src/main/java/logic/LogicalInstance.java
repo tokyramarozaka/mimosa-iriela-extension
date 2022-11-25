@@ -8,7 +8,6 @@ import lombok.ToString;
 
 @AllArgsConstructor
 @Getter
-@ToString
 @EqualsAndHashCode
 public class LogicalInstance implements Operator {
     private Context context;
@@ -19,5 +18,19 @@ public class LogicalInstance implements Operator {
     public LogicalInstance(LogicalEntity logicalEntity, Context context){
         this.logicalEntity = logicalEntity;
         this.context = context;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(this.getLogicalEntity().build(this.context));
+
+        return stringBuilder.toString();
+    }
+
+    @Override
+    public String getName() {
+        return this.getLogicalEntity().getLabel();
     }
 }

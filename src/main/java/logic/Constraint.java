@@ -13,7 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @ToString
-@Slf4j
 public class Constraint extends Graphic implements State {
     private List<ContextualAtom> contextualAtoms;
 
@@ -52,7 +51,7 @@ public class Constraint extends Graphic implements State {
 
         for (ContextualAtom constraintAtom : this.getContextualAtoms()) {
             for (Action possibleAction : possibleActions) {
-                contributingInstances.addAll(possibleAction.getProducingInstances(constraintAtom));
+                //contributingInstances.addAll(possibleAction.getProducingInstances(constraintAtom));
             }
         }
 

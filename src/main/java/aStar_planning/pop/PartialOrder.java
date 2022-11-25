@@ -10,6 +10,6 @@ import lombok.ToString;
 @Getter
 @EqualsAndHashCode
 public class PartialOrder {
-    private PartiallyOrderedElement firstElement;
-    private PartiallyOrderedElement secondElement;
+    private PlanElement firstElement;
+    private PlanElement secondElement;
 }

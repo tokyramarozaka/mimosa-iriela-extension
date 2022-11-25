@@ -10,8 +10,19 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @EqualsAndHashCode
-@ToString
 public class ContextualTerm {
     private Context context;
     private Term term;
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("Context_");
+        stringBuilder.append(this.getContext().getId());
+        stringBuilder.append(":");
+        stringBuilder.append(this.getTerm());
+
+        return stringBuilder.toString();
+    }
 }

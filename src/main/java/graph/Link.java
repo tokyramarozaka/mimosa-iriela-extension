@@ -12,4 +12,9 @@ public class Link implements Operator {
     private Node from;
     private Node to;
     private Object content;
+
+    @Override
+    public String getName() {
+        return this.toString();
+    }
 }

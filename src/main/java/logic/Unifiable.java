@@ -2,9 +2,9 @@ package logic;
 
 
 public interface Unifiable {
-    boolean unify(Context currentContext, Unifiable other, Context otherContext);
+    boolean unify(Context fromContext, Unifiable to, Context toContext);
 
-    boolean unify(Context currentContext, Unifiable other, Context otherContext, CodenotationConstraints codenotationConstraint);
+    boolean unify(Context fromContext, Unifiable to, Context toContext, CodenotationConstraints codenotationConstraint);
 
     Unifiable build(Context context);
 }

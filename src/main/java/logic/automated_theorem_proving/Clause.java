@@ -38,4 +38,14 @@ public class Clause extends LogicalEntity {
 
         return new Clause(builtAtoms);
     }
+
+    @Override
+    public LogicalEntity copy() {
+        return new Clause(this.atoms.stream().toList());
+    }
+
+    @Override
+    public String getLabel() {
+        return this.toString();
+    }
 }
