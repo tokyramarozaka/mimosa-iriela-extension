@@ -69,7 +69,8 @@ public class Situation implements State {
                 }
             }
             if (!wasNegated) {
-                toAdd.add(new ContextualPredicate(new Context(),(Predicate)belief.getPredicate().build(belief.getContext())));
+                toAdd.add(new ContextualPredicate(
+                        new Context(),(Predicate)belief.getPredicate().build(belief.getContext())));
             }
         }
 

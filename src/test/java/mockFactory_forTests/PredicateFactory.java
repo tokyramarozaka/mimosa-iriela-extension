@@ -1,4 +1,4 @@
-package testUtils;
+package mockFactory_forTests;
 
 import logic.Predicate;
 import logic.Term;

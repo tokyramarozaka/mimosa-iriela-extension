@@ -1,4 +1,4 @@
-package testUtils;
+package mockFactory_forTests;
 
 import logic.Action;
 import logic.ActionConsequence;
@@ -8,7 +8,6 @@ import logic.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class ActionFactory {
     public static ActionPrecondition stackPreconditions(Variable block1, Variable block2){

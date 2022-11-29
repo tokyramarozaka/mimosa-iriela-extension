@@ -1,4 +1,4 @@
-package testUtils;
+package mockFactory_forTests;
 
 import logic.Goal;
 import logic.Predicate;
@@ -7,12 +7,12 @@ import logic.mapper.PredicatesMapper;
 import java.util.Arrays;
 import java.util.List;
 
-import static testUtils.Blocks.A;
-import static testUtils.Blocks.B;
-import static testUtils.Blocks.C;
-import static testUtils.Blocks.X;
-import static testUtils.Blocks.Y;
-import static testUtils.Blocks.Z;
+import static mockFactory_forTests.Blocks.A;
+import static mockFactory_forTests.Blocks.B;
+import static mockFactory_forTests.Blocks.C;
+import static mockFactory_forTests.Blocks.X;
+import static mockFactory_forTests.Blocks.Y;
+import static mockFactory_forTests.Blocks.Z;
 
 public class GoalFactory {
     public static Goal threeBlocks_ABC_stacked(){

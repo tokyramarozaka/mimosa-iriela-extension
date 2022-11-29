@@ -20,23 +20,30 @@ import org.apache.logging.log4j.Logger;
 public class ContextualPredicate {
     private Context context;
     private Predicate predicate;
-    private static final Logger logger = LogManager.getLogger("Situation verification");
+    private static final Logger logger = LogManager.getLogger("ContextualPredicate");
 
     public boolean isVerified(Situation toTest) {
         for (ContextualPredicate toTestContextualPredicate : toTest.getContextualPredicates()) {
             if(toTestContextualPredicate.getPredicate().unify(
-                    toTestContextualPredicate.getContext(), this.getPredicate(),this.getContext()
+                    toTestContextualPredicate.getContext().copy(),
+                    this.getPredicate(),
+                    this.getContext().copy()
             )){
-                return true;
+                 return true;
             }
         }
 
-        logger.info("Not verified : "+this);
         return false;
     }
 
     @Override
     public String toString() {
-        return this.predicate.build(this.context).toString();
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(this.predicate)
+                .append("\n")
+                .append(this.context);
+
+        return stringBuilder.toString();
     }
 }

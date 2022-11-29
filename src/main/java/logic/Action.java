@@ -29,7 +29,9 @@ public class Action extends LogicalEntity{
     private String name;
     private ActionPrecondition preconditions;
     private ActionConsequence consequences;
+
     private final Logger logger = LogManager.getLogger(Action.class);
+
     public List<LogicalInstance> possibleInstances(Situation targetSituation){
         List<Context> contexts = new ArrayList<>();
 

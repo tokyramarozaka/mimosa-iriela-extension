@@ -79,14 +79,13 @@ public class Context {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append("Context_");
-        stringBuilder.append(this.id);
-        stringBuilder.append("(\n");
+        stringBuilder.append("Context_")
+                .append(this.id)
+                .append("(\n");
 
-        stringBuilder.append("\t");
-        this.contextPairs.forEach(stringBuilder::append);
+        this.contextPairs.forEach(pair -> stringBuilder.append("\t"+pair+"\n"));
 
-        stringBuilder.append("\n)");
+        stringBuilder.append(")");
 
         return stringBuilder.toString();
     }

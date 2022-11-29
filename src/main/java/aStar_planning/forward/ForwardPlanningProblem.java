@@ -49,7 +49,7 @@ public class ForwardPlanningProblem extends Problem implements AStarProblem {
     @Override
     public State apply(Operator operator, State state) {
         logger.info("APPLYING "+operator);
-        logger.info("GOT RESULT : "+((Situation)state).applyActionInstance((LogicalInstance)operator));
+        logger.info("GOT :"+((Situation)state).applyActionInstance((LogicalInstance)operator));
         return ((Situation)state).applyActionInstance((LogicalInstance)operator);
     }
 
