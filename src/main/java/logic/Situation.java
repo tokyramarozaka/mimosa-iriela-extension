@@ -30,6 +30,11 @@ public class Situation implements State {
         return allActionInstances;
     }
 
+    /**
+     * TODO : refactor the code so that it is more comprehensible
+     * @param actionInstance
+     * @return
+     */
     public Situation applyActionInstance(LogicalInstance actionInstance){
         List<ContextualPredicate> resultingWorld = new ArrayList<>();
         Action action = (Action) actionInstance.getLogicalEntity();
@@ -103,8 +108,7 @@ public class Situation implements State {
         return (double) goal.getGoalPropositions()
                 .stream()
                 .filter(proposition -> !new ContextualAtom(goal.getGoalContext(), proposition)
-                        .isVerified(this)
-                )
+                                            .isVerified(this))
                 .count();
     }
 

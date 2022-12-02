@@ -1,7 +1,6 @@
 package logic;
 
 import logic.automated_theorem_proving.ClauseSet;
-import logic.mapper.ConstraintMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;

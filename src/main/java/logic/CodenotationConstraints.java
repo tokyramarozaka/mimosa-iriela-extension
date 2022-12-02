@@ -6,7 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A set of codenotations
@@ -58,4 +60,9 @@ public class CodenotationConstraints {
                 .count() == 0;
     }
 
+    public CodenotationConstraints copy(){
+        return new CodenotationConstraints(
+                new ArrayList<>(this.getCodenotations())
+        );
+    }
 }

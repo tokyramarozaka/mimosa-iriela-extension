@@ -4,6 +4,8 @@ import logic.Action;
 import logic.ActionConsequence;
 import logic.ActionPrecondition;
 import logic.Atom;
+import logic.CodenotationConstraints;
+import logic.ContextualAtom;
 import logic.LogicalInstance;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -31,8 +33,35 @@ public class Step implements PlanElement {
 
         return action.getConsequences();
     }
-    
-    public boolean destroys(Step step) {
+    public boolean asserts(ContextualAtom proposition,
+                           CodenotationConstraints codenotationConstraints)
+    {
+        for (Atom consequence : this.getActionPreconditions().getAtoms()) {
+            ContextualAtom consequenceInstance = new ContextualAtom(
+                    this.getActionInstance().getContext(), consequence);
+
+            if(assertsProposition(consequenceInstance, proposition, codenotationConstraints)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean assertsProposition(ContextualAtom proposition, ContextualAtom otherProposition,
+                                       CodenotationConstraints codenotationConstraints){
+        CodenotationConstraints temp = codenotationConstraints.copy();
+
+        return proposition.getAtom().isNegation() == otherProposition.getAtom().isNegation()
+                && otherProposition.getAtom().getPredicate()
+                    .unify(
+                            this.getActionInstance().getContext(),
+                            proposition.getAtom().getPredicate(),
+                            proposition.getContext()
+                    );
+    }
+
+    public boolean isThreatening(Step step) {
         for (Atom consequence : this.getActionConsequences().getAtoms()) {
             List<Atom> destroyedPreconditions = step.getActionPreconditions().getAtoms()
                     .stream()

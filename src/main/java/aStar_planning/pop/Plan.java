@@ -19,9 +19,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode
@@ -48,7 +48,7 @@ public class Plan implements State {
 
         List<Step> stepsExceptInitialStep = this.steps
                 .stream()
-                .filter(step -> isNotInitialStep(step))
+                .filter(step -> !isInitialStep(step))
                 .toList();
 
         for(Step step : stepsExceptInitialStep) {
@@ -60,54 +60,75 @@ public class Plan implements State {
         }
     }
 
-    private boolean isNotInitialStep(Step step) {
+    private boolean isInitialStep(Step step) {
         Action stepAction = ((Action) step.getActionInstance().getLogicalEntity());
 
-        return !Objects.equals(stepAction.getName(),"initial");
+        return Objects.equals(stepAction.getName(),"initial");
     }
 
     private List<Flaw> getOpenConditions(Step step) {
         List<Flaw> openConditions = new ArrayList<>();
-//
-//        for (Atom precondition : step.getActionPreconditions().getAtoms()) {
-//            if(!isAsserted(precondition, step.getActionInstance().getContext()),
-//                getPrecedingSituation(step))
-//            {
-//                openConditions.add(buildOpenCondition(precondition, step));
-//            }
-//        }
+
+        for (Atom precondition : step.getActionPreconditions().getAtoms()) {
+            ContextualAtom preconditionInstance = new ContextualAtom(
+                    step.getActionInstance().getContext(), precondition
+            );
+
+            if(!isAsserted(preconditionInstance,temporalConstraints.getPrecedingSituation(step))){
+                openConditions.add(buildOpenCondition(precondition, step));
+            }
+        }
 
         return openConditions;
     }
 
-//    private boolean isAsserted(Atom precondition, Context context, PopSituation situation) {
-////        return allStepsBefore(situation)
-////                .stream()
-////                .
-//    }
-
-    /**
-     * TODO
-     */
-//    private OpenCondition buildOpenCondition(Atom missingPrecondition, Step step) {
-//        return new OpenCondition(StepDetails.getPrecedingSituation(step, this),
-//                new ContextualAtom(new Context(), missingPrecondition));
-//    }
-
-    /**
-     * TODO
-     * @return
-     */
-    private Threat buildThreat(){
-        return null;
+    private boolean isAsserted(ContextualAtom proposition, PopSituation situation) {
+        return false;
     }
 
     /**
-     * TODO
+     * Builds an open condition based on which precondition is missing for a given step in its
+     * preceding situation
+     * @param missingPrecondition
      * @param step
      * @return
      */
-    private List<Flaw> getThreats(Step step) {
+    private OpenCondition buildOpenCondition(Atom missingPrecondition, Step step) {
+        return new OpenCondition(
+                temporalConstraints.getPrecedingSituation(step),
+                new ContextualAtom(step.getActionInstance().getContext(), missingPrecondition)
+        );
+    }
+
+    /**
+     * Build a threat describing which step threatens which step's precondition
+     * @return
+     */
+    private Threat buildThreat(Step destroyer, Step threatened, ContextualAtom precondition){
+        return new Threat(
+                this.temporalConstraints.getPrecedingSituation(threatened),
+                precondition,
+                destroyer
+        );
+    }
+
+    /**
+     * Retrieves all the threats regarding a given step
+     * @param toCheck : the step to check for threats
+     * @return a list of all threats regarding the step to check.
+     */
+    private List<Flaw> getThreats(Step toCheck) {
+        return this.steps
+                .stream()
+                .filter(step -> this.getTemporalConstraints().isBefore(step, toCheck))
+                .filter(previousStep -> previousStep.isThreatening(toCheck))
+                .map(threat -> buildThreat(
+                        threat, toCheck, getThreatenedPrecondition(threat,toCheck)
+                ))
+                .collect(Collectors.toList());
+    }
+
+    private ContextualAtom getThreatenedPrecondition(Step threat, Step toCheck) {
         return null;
     }
 
@@ -120,7 +141,7 @@ public class Plan implements State {
     }
 
     /**
-     * TODO :
+     * TODO : A method to resolve a Flaw depending on its type : Open condition or Threat ?
      */
 //    private List<Operator> resolve(Flaw flaw){
 //        if(flaw instanceof OpenCondition){
@@ -157,8 +178,9 @@ public class Plan implements State {
     }
 
     /**
-     * TODO
-     * @return
+     * TODO: Determines if a plan is executable : all step preconditions are necessarily true in
+     * their preceding situation respectively
+     * @return true if the plan is executable, false otherwise
      */
     public boolean isExecutable() {
         return true;

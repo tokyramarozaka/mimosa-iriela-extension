@@ -8,7 +8,6 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter
-@ToString
 public class RuleConclusions {
     private List<Atom> conclusions;
 
@@ -16,5 +15,16 @@ public class RuleConclusions {
         return new RuleConclusions(
                 this.conclusions.stream().map(conclusion -> conclusion.build(context)).toList()
         );
+    }
+
+    /**
+     * TODO : represent into string a rule for backward planning
+     * @return
+     */
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        return stringBuilder.toString();
     }
 }

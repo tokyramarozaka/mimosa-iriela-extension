@@ -5,17 +5,17 @@ import logic.Action;
 import logic.Goal;
 import logic.Situation;
 import lombok.ToString;
-import norms.Norm;
+import norms.RegulativeNorm;
 
 import java.util.List;
 
 @ToString
 public class NormativePopPlanningProblem extends PopPlanningProblem {
-    private List<Norm> norms;
+    private List<RegulativeNorm> regulativeNorms;
 
     public NormativePopPlanningProblem(Situation initialSituation, List<Action> possibleActions,
-                                       Goal goal, List<Norm> norms) {
+                                       Goal goal, List<RegulativeNorm> regulativeNorms) {
         super(initialSituation, possibleActions, goal);
-        this.norms = norms;
+        this.regulativeNorms = regulativeNorms;
     }
 }

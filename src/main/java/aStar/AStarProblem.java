@@ -69,7 +69,7 @@ public interface AStarProblem {
      * @param solutionSteps : the raw transitions of the planning, first transition is at the bottom, last step is on top.
      * @return the set of ordered Transitions that attains the desired State
      */
-    public List<Operator> getSolution(List<Operator> solutionSteps);
+    public List<Operator> getSolution(List<Operator> solutionOperators);
 
     /**
      * Displays the solution in a convenient formatted String

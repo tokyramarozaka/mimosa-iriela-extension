@@ -8,11 +8,21 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
-@ToString
-@EqualsAndHashCode
 public class OpenCondition implements Flaw{
     private PopSituation situation;
     private ContextualAtom proposition;
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder
+                .append("OPEN CONDITION : ")
+                .append(this.proposition)
+                .append(" IN ")
+                .append(this.situation);
+
+        return stringBuilder.toString();
+    }
 }
