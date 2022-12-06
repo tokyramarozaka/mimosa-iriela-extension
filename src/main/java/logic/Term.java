@@ -10,7 +10,6 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter
-@ToString
 public abstract class Term implements Unifiable{
     private String name;
 
@@ -30,14 +29,15 @@ public abstract class Term implements Unifiable{
     }
 
     @Override
-    public boolean unify(Context fromContext, Unifiable to, Context toContext, CodenotationConstraints cdn) {
+    public boolean unify(Context fromContext, Unifiable to, Context toContext,
+                         CodenotationConstraints cc) {
         List<ContextualTerm> lst = new ArrayList<>();
 
-        boolean res = attemptUnification(fromContext,to,toContext,lst,cdn);
+        boolean res = attemptUnification(fromContext,to,toContext,lst,cc);
 
         if (!res) {
-            for (ContextualTerm var:lst) {
-                var.getContext().unlink((Variable)var.getTerm());
+            for (ContextualTerm linkedVariable : lst) {
+                cc.unlink(linkedVariable);
             }
         }
 
@@ -53,5 +53,10 @@ public abstract class Term implements Unifiable{
 
     public boolean sameName(Term term){
         return this.name.equals(term.getName());
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

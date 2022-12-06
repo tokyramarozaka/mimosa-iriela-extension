@@ -19,13 +19,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BlocksWorld_Pop_IT {
-    private final Constant blockA = (Constant) BlockFactory.create("CONSTANT","A");
-    private final Constant blockB = (Constant) BlockFactory.create("CONSTANT","B");
-    private final Constant blockC = (Constant) BlockFactory.create("CONSTANT","C");
-    private final Constant blockD = (Constant) BlockFactory.create("CONSTANT","D");
-    private final Constant blockE = (Constant) BlockFactory.create("CONSTANT","E");
-    private final Constant blockF = (Constant) BlockFactory.create("CONSTANT","F");
-
     /**
      * TODO : write the correct assertions for these tests
      */
@@ -41,13 +34,8 @@ public class BlocksWorld_Pop_IT {
         );
 
         AStarResolver resolver = new AStarResolver(problem);
-        List<Operator> solutionPlan = resolver.findSolution();
+        List<Operator> solutionPlan = resolver.
 
-        assertEquals(solutionPlan.size(),4,"Plan should have 4 actions");
-        assertEquals(solutionPlan.get(0).getName(),"take");
-        assertEquals(solutionPlan.get(1).getName(),"stack");
-        assertEquals(solutionPlan.get(2).getName(),"take");
-        assertEquals(solutionPlan.get(3).getName(),"stack");
     }
 
     @Test
@@ -80,4 +68,12 @@ public class BlocksWorld_Pop_IT {
         AStarResolver resolver = new AStarResolver(problem);
         List<Operator> solutionPlan = resolver.findSolution();
     }
+
+    @Test
+    public void shouldRecognizeInvalidPlan(){
+
+    }
+
+    @Test
+    public void should
 }

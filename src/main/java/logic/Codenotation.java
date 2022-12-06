@@ -21,7 +21,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @EqualsAndHashCode
-@ToString
 public class Codenotation {
     private boolean isCodenotation;
     private ContextualTerm leftContextualTerm;
@@ -40,5 +39,14 @@ public class Codenotation {
                 this.rightContextualTerm.equals(other.getRightContextualTerm())) ||
                     ((this.leftContextualTerm.equals(other.getRightContextualTerm())) &&
                         (this.rightContextualTerm.equals(other.getLeftContextualTerm())));
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder()
+                .append(this.leftContextualTerm)
+                .append(isCodenotation ? " == " : " != ")
+                .append(this.rightContextualTerm)
+                .toString();
     }
 }

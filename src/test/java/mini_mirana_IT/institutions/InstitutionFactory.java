@@ -6,7 +6,6 @@ import mini_mirana_IT.actions.NorthernActions;
 import mini_mirana_IT.actions.SouthernActions;
 import mini_mirana_IT.actions.VillageActions;
 import mini_mirana_IT.norms.RegulativeNorms_ForEcologist;
-import mini_mirana_IT.norms.RegulativeNorms_ForHousehold;
 import mini_mirana_IT.norms.RegulativeNorms_ForNorthern;
 import mini_mirana_IT.norms.RegulativeNorms_ForProvider;
 import mini_mirana_IT.norms.RegulativeNorms_ForVillager;
@@ -51,7 +50,7 @@ public class InstitutionFactory {
 
     public static Institution northernInstitution(){
         Map<Role, List<Norm>> northernNorms = new HashMap<>(Map.of(
-                new Role("nothern"), RegulativeNorms_ForNorthern
+                new Role("nothern"), RegulativeNorms_ForNorthern.allRegulativeNorms()
         ));
 
         return new Institution("North", northernNorms, NorthernActions.allActions());

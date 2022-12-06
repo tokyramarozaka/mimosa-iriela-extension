@@ -14,7 +14,7 @@ public class Constant extends Term{
     }
 
     @Override
-    public boolean unify(Context fromContext, Unifiable to, Context toContext, CodenotationConstraints codenotationConstraint) {
+    public boolean unify(Context fromContext, Unifiable to, Context toContext, CodenotationConstraints cc) {
         return false;
     }
 

@@ -15,6 +15,10 @@ import java.util.List;
  * TODO : describe all regulative norms for the "Provider" role in Household
  */
 public class RegulativeNorms_ForProvider {
+    /**
+     * TODO : write all norms preconditions and consequences
+     * @return
+     */
     private static NormConditions obligatedToProvideMeat_Conditions(){
 
     }

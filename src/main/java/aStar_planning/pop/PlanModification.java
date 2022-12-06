@@ -5,6 +5,7 @@ import logic.CodenotationConstraints;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.ArrayList;
@@ -12,17 +13,18 @@ import java.util.List;
 
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @ToString
 @Builder
 public class PlanModification implements Operator {
     private List<PopSituation> addedSituations;
     private Step addedStep;
-    private CodenotationConstraints addedCodenotationConstraints;
-    private TemporalConstraints addedTemporalConstraints;
+    private CodenotationConstraints addedCc;
+    private TemporalConstraints addedTc;
 
-    public PlanModification(TemporalConstraints addedTemporalConstraints){
-        this.addedTemporalConstraints = addedTemporalConstraints;
+    public PlanModification(TemporalConstraints addedTc){
+        this.addedTc = addedTc;
     }
 
     /**
@@ -35,9 +37,9 @@ public class PlanModification implements Operator {
         List<Step> allNewSteps = new ArrayList<>(oldPlan.getSteps());
 
         CodenotationConstraints allNewCodenotationConstraints = new CodenotationConstraints(
-                new ArrayList<>(oldPlan.getCodenotationConstraints().getCodenotations()));
+                new ArrayList<>(oldPlan.getCc().getCodenotations()));
         TemporalConstraints allNewTemporalConstraints = new TemporalConstraints(
-                oldPlan.getTemporalConstraints().getPartialOrders());
+                oldPlan.getTc().getPartialOrders());
 
         if(addedSituations != null){
            allNewSituations.addAll(addedSituations);
@@ -45,13 +47,13 @@ public class PlanModification implements Operator {
         if(addedStep != null){
             allNewSteps.add(addedStep);
         }
-        if(addedCodenotationConstraints != null){
+        if(addedCc != null){
             allNewCodenotationConstraints.getCodenotations()
-                    .addAll(this.addedCodenotationConstraints.getCodenotations());
+                    .addAll(this.addedCc.getCodenotations());
         }
-        if(addedTemporalConstraints != null){
+        if(addedTc != null){
             allNewTemporalConstraints.getPartialOrders()
-                    .addAll(this.addedTemporalConstraints.getPartialOrders());
+                    .addAll(this.addedTc.getPartialOrders());
         }
 
         return new Plan(allNewSituations, allNewSteps, allNewCodenotationConstraints,

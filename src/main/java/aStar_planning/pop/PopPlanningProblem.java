@@ -18,6 +18,7 @@ import lombok.ToString;
 import planning.Problem;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -28,87 +29,9 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
     public PopPlanningProblem(Situation initialSituation, List<Action> possibleActions,
                               Goal goal){
         super(initialSituation, possibleActions, goal);
-        buildInitialPlan();
+        this.initialPlan = PlanInitializer.constructInitialPlan(initialSituation, goal);
     }
 
-    private void buildInitialPlan() {
-        List<PopSituation> initialAndFinalSituations = this.buildInitialSituations();
-        List<Step> initialAndFinalSteps = this.buildDummySteps();
-
-        CodenotationConstraints initialCodenotationConstraints = new CodenotationConstraints();
-        TemporalConstraints initialTemporalConstraints = this
-                .buildInitialTemporalConstraints(initialAndFinalSituations, initialAndFinalSteps);
-
-        this.initialPlan = new Plan(initialAndFinalSituations, initialAndFinalSteps,
-                initialCodenotationConstraints, initialTemporalConstraints);
-    }
-
-    private TemporalConstraints buildInitialTemporalConstraints(List<PopSituation> situations,
-                                                                List<Step> steps) {
-        List<PartialOrder> partialOrders = new ArrayList<>();
-
-        PopSituation initialSituation = situations.get(0);
-        PopSituation finalSituation = situations.get(1);
-        Step initialStep = steps.get(0);
-        Step finalStep = steps.get(1);
-
-        partialOrders.add(new PartialOrder(initialStep, initialSituation));
-        partialOrders.add(new PartialOrder(initialSituation, finalSituation));
-        partialOrders.add(new PartialOrder(finalSituation, finalStep));
-
-        return new TemporalConstraints(partialOrders);
-    }
-
-    private List<PopSituation> buildInitialSituations(){
-        PopSituation initialSituation = new PopSituation(), finalSituation = new PopSituation();
-
-        List<PopSituation> dummySituations = new ArrayList<>();
-        dummySituations.add(initialSituation);
-        dummySituations.add(finalSituation);
-
-        return dummySituations;
-    }
-
-    private List<Step> buildDummySteps(){
-        List<Step> dummySteps = new ArrayList<>();
-
-        LogicalInstance initialStep = new LogicalInstance(
-                this.producingAction(this.getInitialSituation().getContextualPredicates(),
-                        "initial"),
-                new Context()
-        );
-
-        LogicalInstance finalStep = new LogicalInstance(
-                this.requiringAction(this.getGoal().getGoalPropositions(), "final"),
-                new Context()
-        );
-
-        return dummySteps;
-    }
-
-    public Action producingAction(List<ContextualPredicate> propositions, String actionName){
-        return new Action(
-                actionName,
-                new ActionPrecondition(),
-                new ActionConsequence(propositions
-                        .stream()
-                        .map(proposition -> new Atom(false, proposition.getPredicate()))
-                        .toList()
-                )
-        );
-    }
-
-    public Action requiringAction(List<Atom> propositions, String actionName){
-//        return new Action(
-//                actionName,
-//                new ActionPrecondition(propositions
-//                        .stream()
-//                        .map(proposition -> proposition.getAtom())
-//                        .toList()),
-//                new ActionConsequence()
-//        );
-        return null;
-    }
     @Override
     public State getInitialState() {
         return this.initialPlan;
@@ -121,7 +44,7 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
 
     @Override
     public List<Operator> getOptions(State state) {
-        return ((Plan)state).possibleModifications();
+        return ((Plan)state).allPossibleModifications(this.getPossibleActions());
     }
 
     @Override
@@ -144,13 +67,26 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
         return ((Plan)state).isCoherent();
     }
 
+    /**
+     * TODO : Extract the set of action instances from the partial-order planning process
+     * @param solutionSteps : the set of actions to carry out to resolve the planning problem.
+     * @return
+     */
     @Override
     public List<Operator> getSolution(List<Operator> solutionSteps) {
-        return null;
+        Collections.reverse(solutionSteps);
+        return solutionSteps;
     }
 
     @Override
     public String showSolution(List<Operator> solutionSteps) {
-        return null;
+        Plan plan = this.getInitialPlan();
+
+        solutionSteps.forEach(
+            operator -> this.getInitialPlan().applyPlanModification((PlanModification) operator)
+        );
+
+        return plan.toString();
     }
+
 }
