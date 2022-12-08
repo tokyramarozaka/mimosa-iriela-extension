@@ -130,8 +130,8 @@ public class Plan implements State {
         return this.cc.isCoherent() && this.tc.isCoherent();
     }
 
-    public State applyPlanModification(PlanModification operator) {
-        return operator.apply(this);
+    public State applyPlanModification(Operator operator) {
+        return ((PlanModification)operator).apply(this);
     }
 
     private boolean isInitialStep(Step step) {

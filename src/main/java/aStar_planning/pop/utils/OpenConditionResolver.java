@@ -2,13 +2,18 @@ package aStar_planning.pop.utils;
 
 import aStar.Operator;
 import aStar_planning.pop.components.OpenCondition;
+import aStar_planning.pop.components.PartialOrder;
 import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop.components.Step;
 import aStar_planning.pop.components.TemporalConstraints;
 import aStar_planning.pop.mapper.PlanModificationMapper;
 import logic.Action;
+import logic.Atom;
 import logic.CodenotationConstraints;
+import logic.Context;
+import logic.ContextualAtom;
+import logic.LogicalInstance;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,33 +73,76 @@ public class OpenConditionResolver {
      * This method does not include the temporal constraints which defines its partial order in the
      * plan
      * @param openCondition : the open condition we are resolving
-     * @param possibleActions
+     * @param possibleActions : the set of possible actions to choose from
      * @return the set of possible steps which would allow to solve the flaw
      */
     public static List<Operator> byCreation(Plan plan, OpenCondition openCondition, List<Action>
                                             possibleActions){
         List<Operator> possibleModifications = new ArrayList<>();
 
-        for (Action possibleAction : possibleActions) {
-            getAssertingInstances.forEach(instance -> {
+        searchSolvingStep(plan, openCondition, possibleActions)
+            .forEach(solvingStep -> {
                 PopSituation newStepEntry = new PopSituation();
                 PopSituation newStepExit = new PopSituation();
-                Step newStep = new Step(instance);
 
                 possibleModifications.add(PlanModificationMapper.from(
                     Arrays.asList(newStepEntry, newStepExit),
-                    newStep,
-                    instance.getAssertingCc(),
-
+                    solvingStep,
+                    solvingStep.getAssertingCodenotations(openCondition.getProposition()),
+                    insertStepBetween(solvingStep, newStepEntry, newStepExit, openCondition)
                 ));
             });
-        }
+
         return possibleModifications;
     }
 
-    private TemporalConstraints wrapStep(PopSituation entry, PopSituation exit){
+    public static List<Step> searchSolvingStep(Plan plan, OpenCondition openCondition,
+                                               List<Action> possibleActions)
+    {
 
     }
 
+    private static TemporalConstraints insertStepBetween(
+            Step newStep,
+            PopSituation newStepEntry,
+            PopSituation newStepExit,
+            OpenCondition openCondition
+    ){
+        List<PartialOrder> partialOrders = new ArrayList<>();
 
+        partialOrders.addAll(wrapStep(newStep, newStepEntry, newStepExit));
+        partialOrders.addAll(TemporalConstraintsBuilder.placeBefore(newStepExit, openCondition.getSituation()));
+
+        return new TemporalConstraints(partialOrders);
+    }
+
+    private static List<PartialOrder> wrapStep(Step toWrap, PopSituation entry, PopSituation exit){
+        return Arrays.asList(
+                new PartialOrder(entry, toWrap),
+                new PartialOrder(toWrap, exit)
+        );
+    }
+
+    //TODO
+    private static List<LogicalInstance> getAssertingInstances(Action action, Plan plan,
+                                                               OpenCondition openCondition) {
+        CodenotationConstraints assertingCodenotations = new CodenotationConstraints();
+        ContextualAtom toAssert = openCondition.getProposition();
+
+        for(Atom consequence : action.getConsequences().getAtoms()) {
+            if (toAssert.getAtom().isNegation() == consequence.isNegation() &&
+                    consequence.getPredicate().unify(
+                            new Context(),
+                            toAssert.getAtom().getPredicate(),
+                            toAssert.getContext(),
+                            assertingCodenotations)
+            ){
+                return assertingCodenotations;
+            } else {
+                assertingCodenotations = new CodenotationConstraints();
+            }
+        }
+
+        return assertingCodenotations;
+    }
 }

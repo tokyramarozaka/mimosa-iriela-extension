@@ -63,13 +63,15 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
     }
 
     /**
-     * TODO : Extract the set of action instances from the partial-order planning process
-     * @param solutionSteps : the set of actions to carry out to resolve the planning problem.
+     * TODO : Extract a set of action instances to execute from the partial-order planning process
+     * @param solutionSteps : the set of plan modifications resolving the planning problem.
      * @return
      */
     @Override
     public List<Operator> getSolution(List<Operator> solutionSteps) {
         Collections.reverse(solutionSteps);
+
+
         return solutionSteps;
     }
 
@@ -84,4 +86,13 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
         return plan.toString();
     }
 
+    public Plan getFinalPlan(List<Operator> allModifications){
+        Plan plan = this.getInitialPlan();
+
+        for (Operator operator : allModifications) {
+            plan = (Plan) this.getInitialPlan().applyPlanModification(operator);
+        }
+
+        return plan;
+    }
 }

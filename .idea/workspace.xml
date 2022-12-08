@@ -5,19 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cb108de8-9a9d-453e-8c4c-86aa24a0e7fc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/mapper/NodeFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/utils/TemporalConstraintsBuilder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/pop_IT/BlocksWorld_Pop_UT.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar/AStarProblem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar/AStarProblem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/OpenConditionResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/OpenConditionResolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PartialOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PartialOrder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Plan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Plan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PlanElement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PlanElement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Step.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Step.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/TemporalConstraints.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/TemporalConstraints.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/ThreatResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/ThreatResolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Codenotation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Codenotation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/norms/ConstitutiveNorm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/norms/ConstitutiveNorm.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/pop_IT/BlocksWorld_Pop_IT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/pop_IT/BlocksWorld_Pop_IT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PopPlanningProblem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PopPlanningProblem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/Plan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/Plan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/mapper/PlanModificationMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/mapper/PlanModificationMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/utils/OpenConditionResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/utils/OpenConditionResolver.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,20 +45,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/IRIELA/Desktop/HEI__Exams/ExamenFinal_PROG2/Mihary/travel-agency-api&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Global Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;LogHighlighting&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/IRIELA/Desktop/HEI__Exams/ExamenFinal_PROG2/Mihary/travel-agency-api",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Global Libraries",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="aStar_planning.pop" />
@@ -265,7 +259,7 @@
       <workItem from="1670403425888" duration="17017000" />
       <workItem from="1670435355153" duration="1851000" />
       <workItem from="1670470652829" duration="596000" />
-      <workItem from="1670487401741" duration="1507000" />
+      <workItem from="1670487401741" duration="16442000" />
     </task>
     <servers />
   </component>
