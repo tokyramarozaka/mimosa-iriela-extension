@@ -1,4 +1,4 @@
-package aStar_planning.pop;
+package aStar_planning.pop.components;
 
 import graph.Node;
 import logic.Graphic;
@@ -41,6 +41,10 @@ public class TemporalConstraints extends Graphic {
                 .getContent();
     }
 
+    /**
+     * TODO : Remove all redundant constraints.
+     * @param changes
+     */
     public void deleteRedundancies_onPlanModification(PlanModification changes){
 
     }

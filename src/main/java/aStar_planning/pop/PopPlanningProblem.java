@@ -3,21 +3,16 @@ package aStar_planning.pop;
 import aStar.AStarProblem;
 import aStar.Operator;
 import aStar.State;
+import aStar_planning.pop.components.Plan;
+import aStar_planning.pop.components.PlanModification;
+import aStar_planning.pop.utils.PlanInitializer;
 import logic.Action;
-import logic.ActionConsequence;
-import logic.ActionPrecondition;
-import logic.Atom;
-import logic.CodenotationConstraints;
-import logic.Context;
-import logic.ContextualPredicate;
 import logic.Goal;
-import logic.LogicalInstance;
 import logic.Situation;
 import lombok.Getter;
 import lombok.ToString;
 import planning.Problem;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

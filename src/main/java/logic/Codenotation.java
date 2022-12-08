@@ -49,4 +49,9 @@ public class Codenotation {
                 .append(this.rightContextualTerm)
                 .toString();
     }
+
+    public Codenotation reverse() {
+        return new Codenotation(!this.isCodenotation, this.getLeftContextualTerm(),
+                this.getRightContextualTerm());
+    }
 }

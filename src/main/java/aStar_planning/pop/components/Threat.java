@@ -1,4 +1,4 @@
-package aStar_planning.pop;
+package aStar_planning.pop.components;
 
 import logic.ContextualAtom;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 @Builder
-public class Threat implements Flaw{
+public class Threat implements Flaw {
     private Step destroyer;
     private Step threatened;
     private PopSituation situation;

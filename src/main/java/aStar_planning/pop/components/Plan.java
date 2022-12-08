@@ -1,7 +1,9 @@
-package aStar_planning.pop;
+package aStar_planning.pop.components;
 
 import aStar.Operator;
 import aStar.State;
+import aStar_planning.pop.utils.OpenConditionResolver;
+import aStar_planning.pop.utils.ThreatResolver;
 import logic.Action;
 import logic.Atom;
 import logic.CodenotationConstraints;
@@ -41,13 +43,13 @@ public class Plan implements State {
     }
 
     /**
-     * (Re)computes all the flaws of the plan : its open conditions and its threats
+     * (Re)computes all the flaws of the plan's steps : its open conditions and its threats
      */
     public void evaluateFlaws(){
         this.flaws = new HashSet<>();
 
         for(Step step : this.steps) {
-            this.getStepThreats(step)
+            this.getThreats(step)
                     .forEach(threat -> this.flaws.add(threat));
 
             this.getOpenConditions(step)
@@ -91,7 +93,7 @@ public class Plan implements State {
     private List<Operator> resolve(OpenCondition openCondition, List<Action> possibleActions) {
         List<Operator> resolvers = new ArrayList<>();
 
-        resolvers.addAll(OpenConditionResolver.byDemotion(openCondition, this));
+        resolvers.addAll(OpenConditionResolver.byPromotion(this, openCondition));
         resolvers.addAll(OpenConditionResolver.byCodenotation(this, openCondition));
         resolvers.addAll(OpenConditionResolver.byCreation(this,openCondition, possibleActions)
         );
@@ -99,11 +101,18 @@ public class Plan implements State {
         return resolvers;
     }
 
+    /**
+     * Return all the plan modifications which resolves the given threat
+     * @param threat : the threat to resolve describing which step is threatening which step's
+     *               precondition
+     * @return a set of plan modifications that remove the threat once applied.
+     */
     private List<Operator> resolve(Threat threat){
         List<Operator> resolvers = new ArrayList<>();
 
-        resolvers.addAll(ThreatResolver.byPromotion(threat, this));
-        resolvers.addAll(ThreatResolver.byDemotion(threat, this));
+        resolvers.addAll(ThreatResolver.byDestroyerDemotion(this, threat));
+        resolvers.addAll(ThreatResolver.byNonCodenotation(this, threat));
+        resolvers.addAll(ThreatResolver.byRestablishingStep(this, threat));
 
         return resolvers;
     }
@@ -111,7 +120,7 @@ public class Plan implements State {
     /**
      * Determines if a plan is executable : all step preconditions are necessarily true in
      * their preceding situation respectively (there is no open condition and no threat)
-     * @return true if the plan is executable, false otherwise
+     * @return true if the plan is executable, i.e. has no more flaw, false otherwise
      */
     public boolean isExecutable() {
         return this.flaws.size() == 0;
@@ -124,12 +133,18 @@ public class Plan implements State {
     public State applyPlanModification(PlanModification operator) {
         return operator.apply(this);
     }
+
     private boolean isInitialStep(Step step) {
         Action stepAction = ((Action) step.getActionInstance().getLogicalEntity());
 
         return Objects.equals(stepAction.getName(),"initial");
     }
 
+    /**
+     * Retrieves all the open conditions for a given step.
+     * @param step
+     * @return
+     */
     private List<Flaw> getOpenConditions(Step step) {
         List<Flaw> openConditions = new ArrayList<>();
 
@@ -182,7 +197,7 @@ public class Plan implements State {
      * @param toCheck : the step to check for threats
      * @return a list of all threats regarding the step to check.
      */
-    private List<Flaw> getStepThreats(Step toCheck) {
+    private List<Flaw> getThreats(Step toCheck) {
         return this.steps
                 .stream()
                 .filter(step -> this.getTc().isBefore(step, toCheck))
@@ -211,15 +226,24 @@ public class Plan implements State {
         return null;
     }
 
-    public List<Step> searchSolvingStep(OpenCondition openCondition, List<Action> possibleActions) {
-        List<Step> solvingSteps = new ArrayList<>();
+    public boolean isBefore(PlanElement leftElement, PlanElement rightElement){
+        return this.tc.isBefore(leftElement,rightElement);
+    }
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
 
-        possibleActions.forEach(possibleAction -> {
-            solvingSteps.addAll(
-                possibleSolvingInstances(possibleAction, openCondition.getProposition())
-            );
-        });
+        stringBuilder
+                .append("PLAN\n--\n")
+                .append("SITUATIONS\n")
+                .append(this.situations)
+                .append("STEPS\n")
+                .append(this.steps)
+                .append("CODENOTATIONS :\n")
+                .append(this.cc)
+                .append("TEMPORAL CONSTRAINTS :\n")
+                .append(this.tc);
 
-        return solvingSteps;
+        return stringBuilder.toString();
     }
 }

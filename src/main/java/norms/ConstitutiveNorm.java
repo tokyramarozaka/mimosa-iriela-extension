@@ -15,7 +15,7 @@ public class ConstitutiveNorm extends LogicalEntity implements Norm{
 
     @Override
     public LogicalEntity copy() {
-        return null;
+        return new ConstitutiveNorm(this.source, this.target);
     }
 
     @Override

@@ -1,5 +1,11 @@
-package aStar_planning.pop;
+package aStar_planning.pop.mapper;
 
+import aStar_planning.pop.components.PartialOrder;
+import aStar_planning.pop.components.Plan;
+import aStar_planning.pop.components.PlanModification;
+import aStar_planning.pop.components.PopSituation;
+import aStar_planning.pop.components.Step;
+import aStar_planning.pop.components.TemporalConstraints;
 import logic.CodenotationConstraints;
 
 import java.util.ArrayList;

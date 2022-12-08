@@ -66,7 +66,7 @@ public interface AStarProblem {
      * Determines the correct order of the transitions of the solutions
      * Since transitions are added progressively throughout the search, i.e. last transition is on top, first one is at the bottom,
      * It is in some cases (Forward, Pop...) necessary to return to the first added transition by reversing the list of transitions
-     * @param solutionSteps : the raw transitions of the planning, first transition is at the bottom, last step is on top.
+     * @param solutionOperators : the raw transitions of the planning, first transition is at the bottom, last step is on top.
      * @return the set of ordered Transitions that attains the desired State
      */
     public List<Operator> getSolution(List<Operator> solutionOperators);

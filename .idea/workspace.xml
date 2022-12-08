@@ -5,24 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cb108de8-9a9d-453e-8c4c-86aa24a0e7fc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PlanInitializer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PlanModificationMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/mapper/NodeFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar/AStarProblem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar/AStarProblem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/OpenConditionResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/OpenConditionResolver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PartialOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PartialOrder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Plan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Plan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PlanModification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PlanModification.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PopPlanningProblem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PopPlanningProblem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PlanElement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PlanElement.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Step.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Step.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Threat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/Threat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/TemporalConstraints.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/TemporalConstraints.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/ThreatResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/ThreatResolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/planBuilder/SituationBuilder.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/planBuilder/TemporalConstraintBuilder.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/logic/Codenotation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Codenotation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/CodenotationConstraints.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/CodenotationConstraints.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Constant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Constant.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Term.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Term.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/institutions/InstitutionFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/institutions/InstitutionFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/norms/RegulativeNorms_ForProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/norms/RegulativeNorms_ForProvider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/norms/ConstitutiveNorm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/norms/ConstitutiveNorm.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/pop_IT/BlocksWorld_Pop_IT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/pop_IT/BlocksWorld_Pop_IT.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -266,7 +260,12 @@
       <workItem from="1670097992233" duration="598000" />
       <workItem from="1670190760596" duration="740000" />
       <workItem from="1670231302642" duration="13519000" />
-      <workItem from="1670318892229" duration="2881000" />
+      <workItem from="1670318892229" duration="10870000" />
+      <workItem from="1670360280297" duration="1309000" />
+      <workItem from="1670403425888" duration="17017000" />
+      <workItem from="1670435355153" duration="1851000" />
+      <workItem from="1670470652829" duration="596000" />
+      <workItem from="1670487401741" duration="1507000" />
     </task>
     <servers />
   </component>

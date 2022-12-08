@@ -1,4 +1,4 @@
-package aStar_planning.pop;
+package aStar_planning.pop.components;
 
 import logic.Action;
 import logic.ActionConsequence;
@@ -11,10 +11,8 @@ import logic.LogicalInstance;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 
 import java.util.List;
-import java.util.function.Predicate;
 
 @AllArgsConstructor
 @Getter
@@ -56,7 +54,7 @@ public class Step implements PlanElement {
             ContextualAtom consequenceInstance = new ContextualAtom(
                     this.getActionInstance().getContext(), consequence);
 
-            if(assertsProposition(consequenceInstance, proposition, codenotationConstraints)){
+            if(asserts(consequenceInstance, proposition, codenotationConstraints)){
                 return true;
             }
         }
@@ -64,8 +62,8 @@ public class Step implements PlanElement {
         return false;
     }
 
-    private boolean assertsProposition(ContextualAtom proposition, ContextualAtom otherProposition,
-                                       CodenotationConstraints codenotationConstraints){
+    private boolean asserts(ContextualAtom proposition, ContextualAtom otherProposition,
+                            CodenotationConstraints codenotationConstraints){
         CodenotationConstraints temp = codenotationConstraints.copy();
 
         return proposition.getAtom().isNegation() == otherProposition.getAtom().isNegation()
@@ -143,15 +141,39 @@ public class Step implements PlanElement {
                 );
     }
 
+    public CodenotationConstraints getAssertingCodenotations(ContextualAtom toAssert) {
+        CodenotationConstraints assertingCodenotations = new CodenotationConstraints();
+
+        for(Atom consequence : this.getActionConsequences().getAtoms()) {
+            if (toAssert.getAtom().isNegation() == consequence.isNegation() &&
+                    consequence.getPredicate().unify(
+                            this.getActionInstance().getContext(),
+                            toAssert.getAtom().getPredicate(),
+                            toAssert.getContext(),
+                            assertingCodenotations)
+            ){
+                return assertingCodenotations;
+            } else {
+                assertingCodenotations = new CodenotationConstraints();
+            }
+        }
+
+        return assertingCodenotations;
+    }
+
+    public boolean isTheInitialStep(){
+        return this.getActionInstance().getName().equals("initial");
+    }
+
+    public boolean isTheFinalStep(){
+        return this.getActionInstance().getName().equals("final");
+    }
+
     @Override
     public String toString() {
         return this.getActionInstance()
                 .getLogicalEntity()
                 .build(this.getActionInstance().getContext())
                 .toString();
-    }
-
-    public CodenotationConstraints getAssertingCodenotations(ContextualAtom toAssert) {
-        return null;
     }
 }

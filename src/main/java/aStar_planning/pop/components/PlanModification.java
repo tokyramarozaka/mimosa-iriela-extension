@@ -1,4 +1,4 @@
-package aStar_planning.pop;
+package aStar_planning.pop.components;
 
 import aStar.Operator;
 import logic.CodenotationConstraints;
