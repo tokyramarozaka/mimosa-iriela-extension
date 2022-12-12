@@ -5,7 +5,7 @@ The end-goal is to write a planning problem, with a set of institutions and orga
 
 # ⚙ Tools
 
-This extension requires : 
+This extension requires the following tools : 
 
 `Java 11 or higher`
 
@@ -24,6 +24,16 @@ The tool is based upon the Partial-Order Planner (POP), which refines a plan unt
 `Missing prohibition` 
 
 `Missing permission`
+
+# 🧪 Test model
+
+To illustrate the type of problem this tool can solve, we propose a toy model on a single agent, whose goal is to feed his family. Its possible actions are defined by the organizations it is a part of : 
+- hunt
+- harvest
+- cut 
+- move
+
+![alt text](https://github.com/tokyramarozaka/mimosa-extension/blob/master/Proof%20of%20concept.drawio%20(5).png)
 
 # 🎤 Contributions
 
