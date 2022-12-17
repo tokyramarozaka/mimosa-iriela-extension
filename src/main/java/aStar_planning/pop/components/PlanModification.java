@@ -1,7 +1,8 @@
 package aStar_planning.pop.components;
 
 import aStar.Operator;
-import logic.CodenotationConstraints;
+import constraints.CodenotationConstraints;
+import constraints.TemporalConstraints;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,11 +1,13 @@
-package logic;
+package constraints;
 
+import logic.ContextualTerm;
 import logic.utils.ContextChange;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+
+import java.util.List;
 
 
 /**
@@ -34,11 +36,29 @@ public class Codenotation {
         );
     }
 
+    /**
+     * Checks if this given codenotation matches to another. Meaning that they both have the same
+     * left and right terms. Their orders are not considered.
+     * @param other : the codenotation to compare this one to.
+     * @return true if codenotations matches, and false otherwise.
+     */
     public boolean matches(Codenotation other) {
         return (this.leftContextualTerm.equals(other.getLeftContextualTerm()) &&
                 this.rightContextualTerm.equals(other.getRightContextualTerm())) ||
                     ((this.leftContextualTerm.equals(other.getRightContextualTerm())) &&
                         (this.rightContextualTerm.equals(other.getLeftContextualTerm())));
+    }
+
+    /**
+     * Checks if any of the codenotations from a codenotation list matches the current codenotation
+     * @param other : an array list of codenotation we want to check for potential matching
+     * @return true if any of the codenotations from the list (<i>other</i>) matches, and false
+     * otherwise.
+     */
+    public boolean matchesAny(List<Codenotation> other){
+        return other.stream()
+                .filter(codenotation -> codenotation.matches(this))
+                .count() > 0;
     }
 
     @Override

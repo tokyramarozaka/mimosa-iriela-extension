@@ -1,6 +1,6 @@
 package logic.mappers;
 
-import logic.CodenotationConstraints;
+import constraints.CodenotationConstraints;
 import logic.Constraint;
 import logic.Context;
 import logic.ContextualAtom;

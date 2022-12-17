@@ -1,7 +1,7 @@
 package logic.utils;
 
-import logic.Codenotation;
-import logic.CodenotationConstraints;
+import constraints.Codenotation;
+import constraints.CodenotationConstraints;
 import logic.Context;
 import logic.ContextualTerm;
 import lombok.AllArgsConstructor;

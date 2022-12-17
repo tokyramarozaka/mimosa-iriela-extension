@@ -1,17 +1,17 @@
 package aStar_planning.pop.utils;
 
 import aStar.Operator;
-import aStar_planning.pop.components.PartialOrder;
+import constraints.PartialOrder;
 import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PlanModification;
 import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop.components.Step;
-import aStar_planning.pop.components.TemporalConstraints;
+import constraints.TemporalConstraints;
 import aStar_planning.pop.components.Threat;
 import aStar_planning.pop.mapper.PlanModificationMapper;
 import logic.Atom;
-import logic.Codenotation;
-import logic.CodenotationConstraints;
+import constraints.Codenotation;
+import constraints.CodenotationConstraints;
 
 import java.util.ArrayList;
 import java.util.Arrays;

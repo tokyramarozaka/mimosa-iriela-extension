@@ -1,11 +1,16 @@
-package aStar_planning.pop.components;
+package constraints;
 
+import aStar_planning.pop.components.PlanElement;
+import aStar_planning.pop.components.PlanModification;
+import aStar_planning.pop.components.PopSituation;
+import aStar_planning.pop.components.Step;
 import graph.Node;
 import logic.Graphic;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -51,5 +56,18 @@ public class TemporalConstraints extends Graphic {
 
     public boolean isAfter(Step step, PopSituation situation) {
         return !isBefore(step, situation);
+    }
+
+    public List<PartialOrder> getConcernedConstraints(Step toPlace) {
+        List<PartialOrder> concernedConstraints = new ArrayList<>();
+
+        for (PartialOrder partialOrder : this.partialOrders) {
+            if (partialOrder.getFirstElement().equals(toPlace) ||
+                    partialOrder.getSecondElement().equals(toPlace)) {
+                        concernedConstraints.add(partialOrder);
+            }
+        }
+
+        return concernedConstraints;
     }
 }

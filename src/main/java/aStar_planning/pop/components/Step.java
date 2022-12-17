@@ -4,7 +4,7 @@ import logic.Action;
 import logic.ActionConsequence;
 import logic.ActionPrecondition;
 import logic.Atom;
-import logic.CodenotationConstraints;
+import constraints.CodenotationConstraints;
 import logic.Context;
 import logic.ContextualAtom;
 import logic.LogicalInstance;

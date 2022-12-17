@@ -4,16 +4,17 @@ import aStar.Operator;
 import aStar.State;
 import aStar_planning.pop.utils.OpenConditionResolver;
 import aStar_planning.pop.utils.ThreatResolver;
+import constraints.PartialOrder;
+import constraints.TemporalConstraints;
 import logic.Action;
 import logic.Atom;
-import logic.CodenotationConstraints;
+import constraints.CodenotationConstraints;
 import logic.Context;
 import logic.ContextualAtom;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -21,6 +22,15 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * A plan is a sequence of situations, steps, codenotation constraints, and temporal constraints.
+ * <ul>
+ *     <li>Situations : discrete points of the plan arranged by a set of temporal constraints </li>
+ *     <li>Steps : action instances which can be arranged through a set of temporal constraints</li>
+ *     <li>Codenotation constraints : variable bindings of the plan</li>
+ *     <li>Temporal constraints : arrangement of all steps and situations inside of the plan </li>
+ * </ul>
+ */
 @AllArgsConstructor
 @Getter
 @EqualsAndHashCode
@@ -32,9 +42,9 @@ public class Plan implements State {
     private TemporalConstraints tc;
     private Set<Flaw> flaws;
 
-    public Plan(List<PopSituation> situations, List<Step> steps,
-                CodenotationConstraints cc,
-                TemporalConstraints tc) {
+    public Plan(List<PopSituation> situations, List<Step> steps, CodenotationConstraints cc,
+                TemporalConstraints tc)
+    {
         this.situations = situations;
         this.steps = steps;
         this.cc = cc;
@@ -49,11 +59,9 @@ public class Plan implements State {
         this.flaws = new HashSet<>();
 
         for(Step step : this.steps) {
-            this.getThreats(step)
-                    .forEach(threat -> this.flaws.add(threat));
+            this.getThreats(step).forEach(threat -> this.flaws.add(threat));
 
-            this.getOpenConditions(step)
-                    .forEach(openCondition -> this.flaws.add(openCondition));
+            this.getOpenConditions(step).forEach(openCondition -> this.flaws.add(openCondition));
         }
     }
 
@@ -72,31 +80,30 @@ public class Plan implements State {
     /**
      * Resolves a flaw depending on its type. A list of possible actions is required to resolve
      * open conditions as some action instances might be created.
-     * @param flaw
-     * @return
+     * @param toSolve : the flaw which we want to solve
+     * @return the list of plan modifications we can make to solve the given flaw.
      */
-    private List<Operator> resolve(Flaw flaw, List<Action> possibleActions){
-        if(flaw instanceof OpenCondition){
-            return resolve((OpenCondition) flaw, possibleActions);
-        }else if(flaw instanceof Threat){
-            return resolve((Threat) flaw);
+    private List<Operator> resolve(Flaw toSolve, List<Action> possibleActions){
+        if(toSolve instanceof OpenCondition){
+            return resolve((OpenCondition) toSolve, possibleActions);
+        }else if(toSolve instanceof Threat){
+            return resolve((Threat) toSolve);
         }
 
         throw new UnsupportedOperationException("This type of flaw is not implemented yet");
     }
 
     /**
-     * Resolves an open condition
+     * Resolves an open condition using different strategies.
      * @param openCondition: the step precondition to be satisfied in its preceding step
-     * @return the list of plan modifications which would remove the given open condition
+     * @return the list of plan modifications which would solve the given open condition
      */
     private List<Operator> resolve(OpenCondition openCondition, List<Action> possibleActions) {
         List<Operator> resolvers = new ArrayList<>();
 
         resolvers.addAll(OpenConditionResolver.byPromotion(this, openCondition));
         resolvers.addAll(OpenConditionResolver.byCodenotation(this, openCondition));
-        resolvers.addAll(OpenConditionResolver.byCreation(this,openCondition, possibleActions)
-        );
+        resolvers.addAll(OpenConditionResolver.byCreation(this,openCondition,possibleActions));
 
         return resolvers;
     }
@@ -126,12 +133,25 @@ public class Plan implements State {
         return this.flaws.size() == 0;
     }
 
+    /**
+     * Checks if the current plan is coherent. A plan is coherent, iff :
+     * <ul>
+     *     <li>The set of codenotation constraints are coherent (not contradictory)</li>
+     *     <li>The set of temporal constraints are coherent (not contradictory and not cyclic)</li>
+     * </ul>
+     * @return true if the plan is coherent, false otherwise.
+     */
     public boolean isCoherent() {
         return this.cc.isCoherent() && this.tc.isCoherent();
     }
 
-    public State applyPlanModification(Operator operator) {
-        return ((PlanModification)operator).apply(this);
+    /**
+     * Apply a set of modifications on a plan, and returns the resulting plan
+     * @param toApply : the plan modification to be applied
+     * @return the plan resulting from the applied modifications.
+     */
+    public State applyPlanModification(Operator toApply) {
+        return ((PlanModification)toApply).apply(this);
     }
 
     private boolean isInitialStep(Step step) {
@@ -142,8 +162,8 @@ public class Plan implements State {
 
     /**
      * Retrieves all the open conditions for a given step.
-     * @param step
-     * @return
+     * @param step : the step to analyze
+     * @return all open conditions regarding a specific step
      */
     private List<Flaw> getOpenConditions(Step step) {
         List<Flaw> openConditions = new ArrayList<>();
@@ -161,8 +181,16 @@ public class Plan implements State {
         return openConditions;
     }
 
+    /**
+     * TODO : Checks if a given proposition is necessarily true in a given situation
+     * @param proposition : the proposition to check
+     * @param situation : the situation where it needs to be checked.
+     * @return true if the proposition is necessarily true in the given situation, false otherwise
+     */
     private boolean isAsserted(ContextualAtom proposition, PopSituation situation) {
-        return false;
+        return this.steps.stream()
+                .filter(step -> this.tc.isBefore(step, situation))
+                .anyMatch(step -> step.asserts(proposition, this.cc));
     }
 
     /**
@@ -180,8 +208,8 @@ public class Plan implements State {
     }
 
     /**
-     * Build a threat describing what step threatens antoher step's precondition
-     * @return
+     * Build a threat describing what step threatens another step's precondition
+     * @return a threat describing the destroyer, the threatened, and the destroyed precondition
      */
     private Threat buildThreat(Step destroyer, Step threatened, ContextualAtom precondition){
         return new Threat(
@@ -226,6 +254,12 @@ public class Plan implements State {
         return null;
     }
 
+    /**
+     * Checks if a given element is preceding the other element.
+     * @param leftElement : the preceding element
+     * @param rightElement : the next element
+     * @return true if left element is before the right element.
+     */
     public boolean isBefore(PlanElement leftElement, PlanElement rightElement){
         return this.tc.isBefore(leftElement,rightElement);
     }
@@ -245,5 +279,53 @@ public class Plan implements State {
                 .append(this.tc);
 
         return stringBuilder.toString();
+    }
+
+    /**
+     * TODO : Build a set of total order plan to execute using the partial-order of the plan
+     * and its bindings
+     * @return a sequence of action instance for the agent to execute.
+     */
+    public List<Operator> createInstance() {
+        List<Operator> planActions = new ArrayList<>();
+
+        this.steps.forEach(step -> {
+            this.place(step, planActions);
+        });
+
+        return planActions;
+    }
+
+    /**
+     * TODO : places the step into the set of actions with total order.
+     * @param toPlace the step we want to place into the plan
+     * @param toExecute : the list where we want to add the current plan
+     */
+    private void place(Step toPlace, List<Operator> toExecute){
+        this.tc.getConcernedConstraints(toPlace).forEach(partialOrder -> {
+
+        });
+    }
+
+    /**
+     * TODO : determines if the element to add should be added at the start of the plan, in
+     * between, or at the end of the plan
+     */
+    private void putOrShiftElement(Step toPlace, List<Operator> operators, PartialOrder partialOrder){
+        // If the total ordered action set is empty, just insert it.
+        if (operators.isEmpty()){
+            operators.add(toPlace.getActionInstance());
+            return;
+        }
+
+        // If the element to place is set to be before another element, put it before it, if any
+        if (partialOrder.getFirstElement().equals(toPlace)){
+            int otherIndex = operators.indexOf(partialOrder.getSecondElement());
+            operators.add(otherIndex,toPlace.getActionInstance());
+        }else if (partialOrder.getSecondElement().equals(toPlace)) {
+            // If the element must be after a specific element, put it after it, if any.
+            int otherIndex = operators.indexOf(partialOrder.getFirstElement());
+            operators.add(otherIndex + 1, toPlace.getActionInstance());
+        }
     }
 }

@@ -21,7 +21,6 @@ import java.util.Set;
  */
 @AllArgsConstructor
 @Getter
-@EqualsAndHashCode
 public class Action extends LogicalEntity{
     private String name;
     private ActionPrecondition preconditions;
@@ -29,9 +28,14 @@ public class Action extends LogicalEntity{
 
     private final Logger logger = LogManager.getLogger(Action.class);
 
+    /**
+     * Returns all the possible instances of a given action in a target situation based on its
+     * preconditions
+     * @param targetSituation : the situation to check if any instance of the action is possible.
+     * @return a list of action instances, executable in the target situation
+     */
     public List<LogicalInstance> possibleInstances(Situation targetSituation){
         List<Context> contexts = new ArrayList<>();
-
         contexts.add(new Context());
 
         /*
@@ -40,6 +44,7 @@ public class Action extends LogicalEntity{
          * and its superior born is the precondition's size
          */
         possibleInstancesRecursive(this.preconditions.getAtoms(),targetSituation, contexts);
+
         return contexts
                 .stream()
                 .map(context -> new LogicalInstance(this, context))
@@ -47,8 +52,8 @@ public class Action extends LogicalEntity{
     }
 
     /**
-     * Recursive algorithms to get all contexts from each branch,
-     * the recursion stops when we have treated all the precondition's predicates
+     * Recursive algorithms to get all contexts from each branch, the recursion stops when we have
+     * treated all the precondition's predicates
      * @param precondition
      * @param beliefs
      * @param contexts

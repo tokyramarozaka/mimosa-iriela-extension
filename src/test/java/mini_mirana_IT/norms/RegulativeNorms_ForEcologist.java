@@ -1,11 +1,11 @@
 package mini_mirana_IT.norms;
 
-import norms.DeonticOperator;
-import norms.Norm;
-import norms.NormConditions;
-import norms.NormConsequences;
-import norms.NormativeAction;
-import norms.RegulativeNorm;
+import aStar_planning.normative_pop.norms.DeonticOperator;
+import aStar_planning.normative_pop.norms.Norm;
+import aStar_planning.normative_pop.norms.NormConditions;
+import aStar_planning.normative_pop.norms.NormConsequences;
+import aStar_planning.normative_pop.norms.NormativeAction;
+import aStar_planning.normative_pop.norms.RegulativeNorm;
 
 import java.util.ArrayList;
 import java.util.Arrays;

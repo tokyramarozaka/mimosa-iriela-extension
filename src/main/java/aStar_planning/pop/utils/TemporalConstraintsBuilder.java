@@ -1,9 +1,9 @@
 package aStar_planning.pop.utils;
 
-import aStar_planning.pop.components.PartialOrder;
+import constraints.PartialOrder;
 import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop.components.Step;
-import aStar_planning.pop.components.TemporalConstraints;
+import constraints.TemporalConstraints;
 
 import java.util.ArrayList;
 import java.util.Arrays;

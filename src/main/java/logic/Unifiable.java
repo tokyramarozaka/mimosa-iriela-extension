@@ -1,6 +1,8 @@
 package logic;
 
 
+import constraints.CodenotationConstraints;
+
 public interface Unifiable {
     boolean unify(Context fromContext, Unifiable to, Context toContext);
 

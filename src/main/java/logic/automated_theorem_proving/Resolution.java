@@ -2,7 +2,7 @@ package logic.automated_theorem_proving;
 
 import exception.EmptyClauseException;
 import logic.Atom;
-import logic.CodenotationConstraints;
+import constraints.CodenotationConstraints;
 import logic.Context;
 import logic.LogicalInstance;
 import logic.utils.ContextChange;

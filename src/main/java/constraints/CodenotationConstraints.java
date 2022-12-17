@@ -1,10 +1,13 @@
-package logic;
+package constraints;
 
 import aStar.AStarResolver;
 import aStar_planning.graph_planning.GraphForwardPlanningProblem;
 import exception.NoPlanFoundException;
+import logic.Context;
+import logic.ContextualTerm;
+import logic.Graphic;
+import logic.Variable;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -20,13 +23,13 @@ import java.util.stream.Collectors;
  *     <li>Non-codenotations forbidding the binding between two terms.</li>
  * </ul>
  *
- * @see logic.Codenotation
+ * @see Codenotation
  */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @ToString
-public class CodenotationConstraints extends Graphic{
+public class CodenotationConstraints extends Graphic {
     private List<Codenotation> codenotations;
 
     /**
@@ -65,7 +68,6 @@ public class CodenotationConstraints extends Graphic{
 
             try{
                 loopPlanningProblem.findSolution();
-
                 return true;
             }catch(NoPlanFoundException exception){
                 return false;
@@ -76,18 +78,40 @@ public class CodenotationConstraints extends Graphic{
     }
 
     /**
-     * TODO : Check if there are any contradictions in the current codenotation constraints
+     * Check if there are any contradictions in the current codenotation constraints. Formally,
+     * a contradiction when you have for both terms A and B : A == B and A != B at the same time.
+     * Codenotation being a commutative relation, order does not matter, as A == B is equal to
+     * B == A.
      * @return true if there are any contradictions, false otherwise.
      */
     private boolean hasNoContradictions() {
-        List<Codenotation> codenotationsOnly = this.codenotations
-                .stream()
-                .filter(Codenotation::isCodenotation)
-                .collect(Collectors.toList());
+        List<Codenotation> allCodenotations = this.allCodenotations();
+        List<Codenotation> allNonCodenotations = this.allNonCodenotations();
 
-        List<Codenotation> nonCodenotationsOnly = this.codenotations
+        return allNonCodenotations
+                .stream()
+                .anyMatch(nonCodenotation -> nonCodenotation.matchesAny(allCodenotations));
+    }
+
+    /**
+     * Returns the sublist of all codenotations only from the current codenotation constraint
+     * @return all codenotations from the current codenotation constraint
+     */
+    private List<Codenotation> allCodenotations(){
+        return this.codenotations
                 .stream()
                 .filter(codenotation -> codenotation.isCodenotation())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Returns the sublist of all non-codenotations only from the current codenotation constraint
+     * @return all non-codenotations from the current codenotations constraint
+     */
+    private List<Codenotation> allNonCodenotations(){
+        return this.codenotations
+                .stream()
+                .filter(codenotation -> !codenotation.isCodenotation())
                 .collect(Collectors.toList());
     }
 

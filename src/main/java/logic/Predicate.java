@@ -1,5 +1,6 @@
 package logic;
 
+import constraints.CodenotationConstraints;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

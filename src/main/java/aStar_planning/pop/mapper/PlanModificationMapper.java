@@ -1,12 +1,10 @@
 package aStar_planning.pop.mapper;
 
-import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PlanModification;
 import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop.components.Step;
-import aStar_planning.pop.components.TemporalConstraints;
-import aStar_planning.pop.utils.TemporalConstraintsBuilder;
-import logic.CodenotationConstraints;
+import constraints.TemporalConstraints;
+import constraints.CodenotationConstraints;
 
 import java.util.List;
 
@@ -66,5 +64,4 @@ public class PlanModificationMapper {
                 .addedTc(tc)
                 .build();
     }
-
 }

@@ -1,5 +1,8 @@
 package logic;
 
+import constraints.Codenotation;
+import constraints.CodenotationConstraints;
+
 import java.util.List;
 
 public class Variable extends Term{

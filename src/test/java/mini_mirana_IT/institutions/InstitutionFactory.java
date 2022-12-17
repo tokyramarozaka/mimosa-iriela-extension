@@ -9,9 +9,9 @@ import mini_mirana_IT.norms.RegulativeNorms_ForEcologist;
 import mini_mirana_IT.norms.RegulativeNorms_ForNorthern;
 import mini_mirana_IT.norms.RegulativeNorms_ForProvider;
 import mini_mirana_IT.norms.RegulativeNorms_ForVillager;
-import norms.Institution;
-import norms.Norm;
-import norms.Role;
+import aStar_planning.normative_pop.norms.Institution;
+import aStar_planning.normative_pop.norms.Norm;
+import aStar_planning.normative_pop.norms.Role;
 
 import java.util.ArrayList;
 import java.util.HashMap;

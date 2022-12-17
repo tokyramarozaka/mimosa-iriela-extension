@@ -5,17 +5,27 @@ import aStar.Operator;
 import aStar.State;
 import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PlanModification;
+import aStar_planning.pop.components.Step;
 import aStar_planning.pop.utils.PlanInitializer;
 import logic.Action;
 import logic.Goal;
+import logic.LogicalInstance;
 import logic.Situation;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import planning.Problem;
 
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * A planning problem according to the Partial-Order Planning specification, where a state is
+ * represented by a plan and the operators are plan modifications to resolve flaws within the plan.
+ * When there is a plan without any flaws, the planning problem is solved. And a total order
+ * sequenc of actions can be drawn out of the resulting plan.
+ */
+@NoArgsConstructor
 @Getter
 @ToString
 public class PopPlanningProblem extends Problem implements AStarProblem{
@@ -71,8 +81,9 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
     public List<Operator> getSolution(List<Operator> solutionSteps) {
         Collections.reverse(solutionSteps);
 
+        Plan finalPlan = getFinalPlan(solutionSteps);
 
-        return solutionSteps;
+        return finalPlan.createInstance();
     }
 
     @Override

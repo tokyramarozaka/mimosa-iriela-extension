@@ -4,16 +4,17 @@ import logic.Action;
 import logic.ActionConsequence;
 import logic.ActionPrecondition;
 import logic.Atom;
-import norms.NormConditions;
-import norms.NormConsequences;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Describes all the actions related to the village institution
+ */
 public class VillageActions {
     private static ActionPrecondition registerPreconditions(){
-
+        return new ActionPrecondition();
     }
 
     private static ActionConsequence registerConsequences(){

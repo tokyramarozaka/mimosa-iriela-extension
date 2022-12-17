@@ -1,6 +1,6 @@
 package mini_mirana_IT.norms;
 
-import norms.Norm;
+import aStar_planning.normative_pop.norms.Norm;
 
 import java.util.List;
 

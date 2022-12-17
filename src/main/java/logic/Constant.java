@@ -1,5 +1,7 @@
 package logic;
 
+import constraints.CodenotationConstraints;
+
 import java.util.List;
 
 

@@ -1,4 +1,4 @@
-package norms;
+package aStar_planning.normative_pop.norms;
 
 import logic.Context;
 import logic.LogicalEntity;

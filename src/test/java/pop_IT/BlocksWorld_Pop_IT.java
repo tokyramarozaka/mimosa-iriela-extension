@@ -4,6 +4,7 @@ import aStar.AStarProblem;
 import aStar.AStarResolver;
 import aStar.Operator;
 import aStar_planning.pop.PopPlanningProblem;
+import aStar_planning.pop.components.Plan;
 import logic.Action;
 import logic.Constant;
 import logic.Goal;
@@ -25,47 +26,39 @@ public class BlocksWorld_Pop_IT {
      * TODO : write the correct assertions for these tests
      */
     @Test
-    public void shouldStackThreeConcreteBlocks(){
+    public void shouldStackThreeConcreteBlocks_finalOutputTest(){
         Situation initialSituation = SituationFactory.threeBlocksOnTable();
         Goal goal = GoalFactory.threeBlocks_ABC_stacked();
         List<Action> possibleActions = ActionFactory.allActionsInBlocksWorld();
-        AStarProblem problem = new PopPlanningProblem(
-                initialSituation,
-                possibleActions,
-                goal
-        );
-
+        PopPlanningProblem problem = new PopPlanningProblem(initialSituation,possibleActions,goal);
         AStarResolver resolver = new AStarResolver(problem);
-        List<Operator> solutionOperators = resolver.findSolution();
 
-        /**
-         * TODO : check that take > stack > take > stack, the same block you take is the one you
-         * stack, and ideally the same for the next one too.
-         */
-        assertTrue(plan.isBefore(take1, stack1));
-        assertTrue(plan.isBefore(stack1, take2));
-        assertTrue(plan.isBefore(take2, stack2));
-        assertTrue(plan.isBefore(stack2, finalSituation));
+        List<Operator> planModifications = resolver.findSolution();
+        List<Operator> planInstance = problem.getSolution(planModifications);
+
+        assertEquals(planInstance.size(), 4);
+        assertEquals(planInstance.get(0).getName(),"take");
+        assertEquals(planInstance.get(1).getName(),"stack");
+        assertEquals(planInstance.get(2).getName(),"take");
+        assertEquals(planInstance.get(3).getName(),"stack");
     }
 
     @Test
-    public void shouldStackThreeAbstractBlocks(){
+    public void shouldStackThreeAbstractBlocks_finalOutputTest(){
         Situation initialSituation = SituationFactory.threeBlocksOnTable();
         Goal goal = GoalFactory.anyThreeBlocks_stacked();
         List<Action> possibleActions = ActionFactory.allActionsInBlocksWorld();
-        AStarProblem problem = new PopPlanningProblem(
-                initialSituation,
-                possibleActions,
-                goal
-        );
-
+        PopPlanningProblem problem = new PopPlanningProblem(initialSituation,possibleActions,goal);
         AStarResolver resolver = new AStarResolver(problem);
-        List<Operator> solutionPlan = resolver.findSolution();
 
-        /**
-         * TODO : check that take > stack > take > stack, the same block you take is the one you
-         * stack, and ideally the same for the next one too.
-         */
+        List<Operator> planModifications = resolver.findSolution();
+        List<Operator> planInstance = problem.getSolution(planModifications);
+
+        assertEquals(planInstance.size(), 4);
+        assertEquals(planInstance.get(0).getName(),"take");
+        assertEquals(planInstance.get(1).getName(),"stack");
+        assertEquals(planInstance.get(2).getName(),"take");
+        assertEquals(planInstance.get(3).getName(),"stack");
     }
 
 
@@ -82,13 +75,7 @@ public class BlocksWorld_Pop_IT {
 
         AStarResolver resolver = new AStarResolver(problem);
         List<Operator> solutionPlan = resolver.findSolution();
+
+        assertTrue(solutionPlan.isEmpty());
     }
-
-    @Test
-    public void shouldRecognizeInvalidPlan(){
-
-    }
-
-    @Test
-    public void should
 }

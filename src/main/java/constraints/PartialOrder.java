@@ -1,5 +1,6 @@
-package aStar_planning.pop.components;
+package constraints;
 
+import aStar_planning.pop.components.PlanElement;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

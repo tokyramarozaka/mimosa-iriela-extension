@@ -2,19 +2,17 @@ package aStar_planning.pop.utils;
 
 import aStar.Operator;
 import aStar_planning.pop.components.OpenCondition;
-import aStar_planning.pop.components.PartialOrder;
+import constraints.PartialOrder;
 import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop.components.Step;
-import aStar_planning.pop.components.TemporalConstraints;
+import constraints.TemporalConstraints;
 import aStar_planning.pop.mapper.PlanModificationMapper;
 import logic.Action;
 import logic.Atom;
-import logic.CodenotationConstraints;
 import logic.Context;
 import logic.ContextualAtom;
 import logic.LogicalInstance;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,21 +42,25 @@ public class OpenConditionResolver {
     }
 
     /**
-     * TODO : determines all the operators which requires some step, called "establisher" to be put
-     * before the open condition in order to solve it.
+     * Determines all the operators which requires some step, called "establisher" to be put before
+     * the open condition in order to solve it.
      * @param plan : the plan in which we resolve the open condition
      * @param openCondition : the open condition to resolve
      * @return the list of all possible plan modifications which will resolve the open condition.
      */
     public static List<Operator> byPromotion(Plan plan, OpenCondition openCondition) {
         List<Operator> planModifications = new ArrayList<>();
-        CodenotationConstraints changes = new CodenotationConstraints();
 
         potentialEstablishers(plan,openCondition)
                 .stream()
-                .filter(establisher -> plan.getCc().wouldBeValid())
+                .forEach(potentialEstablisher -> {
+                    TemporalConstraints temporalChange = new TemporalConstraints(Arrays.asList(
+                        new PartialOrder(potentialEstablisher, openCondition.getSituation())
+                    ));
+                    planModifications.add(PlanModificationMapper.from(temporalChange));
+                });
 
-        return Arrays.asList(PlanModificationMapper.from(changes));
+        return planModifications;
     }
 
     private static List<Step> potentialEstablishers(Plan plan, OpenCondition openCondition){
@@ -77,10 +79,11 @@ public class OpenConditionResolver {
      * @return the set of possible steps which would allow to solve the flaw
      */
     public static List<Operator> byCreation(Plan plan, OpenCondition openCondition, List<Action>
-                                            possibleActions){
+                                            possibleActions)
+    {
         List<Operator> possibleModifications = new ArrayList<>();
 
-        searchSolvingStep(plan, openCondition, possibleActions)
+        getSolvingSteps(plan, openCondition, possibleActions)
             .forEach(solvingStep -> {
                 PopSituation newStepEntry = new PopSituation();
                 PopSituation newStepExit = new PopSituation();
@@ -96,12 +99,38 @@ public class OpenConditionResolver {
         return possibleModifications;
     }
 
-    public static List<Step> searchSolvingStep(Plan plan, OpenCondition openCondition,
-                                               List<Action> possibleActions)
+    /**
+     * Returns the list of all steps we could create from the set of possible actions to resolve
+     * a given precondition
+     * @param plan : the concerned plan
+     * @param openCondition : the open condition we are aiming to resolve
+     * @param possibleActions : the set of possbile actions for the agent at the current moment
+     * @return : the list of steps created to solve a given open condition
+     */
+    public static List<Step> getSolvingSteps(Plan plan, OpenCondition openCondition,
+                                             List<Action> possibleActions)
     {
+        List<Step> solvingSteps = new ArrayList<>();
 
+        possibleActions.forEach(possibleAction -> {
+            getAssertingInstances(possibleAction, openCondition).forEach(instance -> {
+                solvingSteps.add(new Step(instance));
+            });
+        });
+
+        return solvingSteps;
     }
 
+    /**
+     * Provides the necessary temporal constraints to add a new step to insert into the plan, with
+     * its wrapping steps (before and after the step). The added step must be added before the
+     * new step.
+     * @param newStep : the step to insert into the plan
+     * @param newStepEntry : the situation preceding the new step
+     * @param newStepExit : the situation following the new step
+     * @param openCondition : the flaw we want to resolve.
+     * @return the temporal constraints needed to insert a step and its wrapping situations
+     */
     private static TemporalConstraints insertStepBetween(
             Step newStep,
             PopSituation newStepEntry,
@@ -111,11 +140,20 @@ public class OpenConditionResolver {
         List<PartialOrder> partialOrders = new ArrayList<>();
 
         partialOrders.addAll(wrapStep(newStep, newStepEntry, newStepExit));
-        partialOrders.addAll(TemporalConstraintsBuilder.placeBefore(newStepExit, openCondition.getSituation()));
+        partialOrders.addAll(TemporalConstraintsBuilder.placeBefore(newStepExit,
+                openCondition.getSituation()));
 
         return new TemporalConstraints(partialOrders);
     }
 
+    /**
+     * Wraps a step with a situation preceding the step, and another following it.
+     * @param toWrap : the step to wrap situations around;
+     * @param entry : the situation before the step
+     * @param exit : the situation after the step
+     * @return the temporal orders describing that both situations are placed before and after
+     * the step.
+     */
     private static List<PartialOrder> wrapStep(Step toWrap, PopSituation entry, PopSituation exit){
         return Arrays.asList(
                 new PartialOrder(entry, toWrap),
@@ -123,26 +161,31 @@ public class OpenConditionResolver {
         );
     }
 
-    //TODO
-    private static List<LogicalInstance> getAssertingInstances(Action action, Plan plan,
-                                                               OpenCondition openCondition) {
-        CodenotationConstraints assertingCodenotations = new CodenotationConstraints();
+    /**
+     * Returns all the instances of a given action which would resolve an open condition by
+     * asserting the missing precondition
+     * @param action : the action we want to seek the asserting instances
+     * @param openCondition : the given open condition we want to resolve
+     * @return the list of all action instances resolving the given open condition
+     */
+    public static List<LogicalInstance> getAssertingInstances(Action action,
+                                                              OpenCondition openCondition)
+    {
+        List<LogicalInstance> assertingInstances = new ArrayList<>();
         ContextualAtom toAssert = openCondition.getProposition();
 
         for(Atom consequence : action.getConsequences().getAtoms()) {
+            Context temp = new Context();
             if (toAssert.getAtom().isNegation() == consequence.isNegation() &&
                     consequence.getPredicate().unify(
-                            new Context(),
+                            temp,
                             toAssert.getAtom().getPredicate(),
-                            toAssert.getContext(),
-                            assertingCodenotations)
+                            toAssert.getContext())
             ){
-                return assertingCodenotations;
-            } else {
-                assertingCodenotations = new CodenotationConstraints();
+                assertingInstances.add(new LogicalInstance(action, temp));
             }
         }
 
-        return assertingCodenotations;
+        return assertingInstances;
     }
 }
