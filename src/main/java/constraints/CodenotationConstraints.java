@@ -3,11 +3,12 @@ package constraints;
 import aStar.AStarResolver;
 import aStar_planning.graph_planning.GraphForwardPlanningProblem;
 import exception.NoPlanFoundException;
+import graph.Graph;
+import graph.Node;
 import logic.Context;
 import logic.ContextualTerm;
 import logic.Graphic;
 import logic.Variable;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -25,12 +26,68 @@ import java.util.stream.Collectors;
  *
  * @see Codenotation
  */
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @ToString
 public class CodenotationConstraints extends Graphic {
     private List<Codenotation> codenotations;
+
+    public CodenotationConstraints(List<Codenotation> codenotations){
+        super(new Graph(new ArrayList<>()));
+        this.codenotations = codenotations;
+    }
+
+    public CodenotationConstraints(){
+        super(new Graph(new ArrayList<>()));
+        this.codenotations = new ArrayList<>();
+    }
+
+    private boolean nodeEqualsToCodenotation(Node node, ContextualTerm codenotationPart){
+        return node.getName().equals(codenotationPart.toString());
+    }
+    /**
+     * Initialize the list of nodes of the graph representation of this set of constraint.
+     * @return
+     */
+    public List<Node> initializeNodes() {
+        List<Node> nodes = new ArrayList<Node>();
+
+        this.codenotations
+                .stream()
+                .filter(codenotation -> codenotation.isCodenotation())
+                .forEach(codenotation -> {
+                    addIfNotPresent(nodes, codenotation);
+                });
+
+        return nodes;
+    }
+
+    private void addIfNotPresent(List<Node> nodes, Codenotation codenotation){
+        if (nodes.stream().noneMatch(node -> nodeEqualsToCodenotation(node,codenotation.getLeft())))
+        {
+            nodes.add(codenotation.toNodes().get(0));
+        }
+
+        if (nodes.stream().noneMatch(node -> nodeEqualsToCodenotation(node,codenotation.getRight()))
+        ){
+            nodes.add(codenotation.toNodes().get(1));
+        }
+    }
+
+    /**
+     * Initializes the links of the codenotation graph representation. Nodes must be initialized
+     * before linking them.
+     */
+    public void initializeLinks() {
+        List<Codenotation> codenotations = this.getCodenotations()
+                .stream()
+                .filter(c -> c.isCodenotation())
+                .collect(Collectors.toList());
+
+        for(Codenotation codenotation : codenotations) {
+            this.getGraph().getContainingNode(codenotation.getLeft())
+                    .link(this.getGraph().getContainingNode(codenotation.getRight()));
+        }
+    }
 
     /**
      * Checks if the current codenotation constraints are coherent : meaning that there is no
@@ -55,6 +112,7 @@ public class CodenotationConstraints extends Graphic {
      * @return true if the current codenotation constraints have no cycles, false otherwise.
      */
     private boolean hasNoCycles() {
+        this.updateGraph();
         List<Codenotation> codenotationsOnly = this.getCodenotations()
                 .stream()
                 .filter(codenotation -> codenotation.isCodenotation())
@@ -62,8 +120,8 @@ public class CodenotationConstraints extends Graphic {
 
         for (Codenotation codenotation : codenotationsOnly) {
             AStarResolver loopPlanningProblem = new AStarResolver(new GraphForwardPlanningProblem(
-                    this.getGraph().getContainingNode(codenotation.getRightContextualTerm()),
-                    this.getGraph().getContainingNode(codenotation.getLeftContextualTerm())
+                    this.getGraph().getContainingNode(codenotation.getRight()),
+                    this.getGraph().getContainingNode(codenotation.getLeft())
             ));
 
             try{
@@ -75,6 +133,11 @@ public class CodenotationConstraints extends Graphic {
         }
 
         return false;
+    }
+
+    private void updateGraph() {
+        this.setGraph(new Graph(this.initializeNodes()));
+        this.initializeLinks();
     }
 
     /**
@@ -130,10 +193,10 @@ public class CodenotationConstraints extends Graphic {
 
         return this.codenotations
                 .stream()
-                .filter(codenotation -> codenotation.getLeftContextualTerm().equals(source))
+                .filter(codenotation -> codenotation.getLeft().equals(source))
                 .findFirst()
                 .get()
-                .getRightContextualTerm();
+                .getRight();
     }
 
     /**
@@ -148,7 +211,7 @@ public class CodenotationConstraints extends Graphic {
 
         return this.codenotations
                 .stream()
-                .filter(codenotation -> codenotation.getLeftContextualTerm().equals(toTest)
+                .filter(codenotation -> codenotation.getLeft().equals(toTest)
                     && codenotation.isCodenotation())
                 .count() > 0;
     }
@@ -160,7 +223,7 @@ public class CodenotationConstraints extends Graphic {
      */
     public boolean unlink(ContextualTerm toRemove){
         return this.getCodenotations().removeIf(
-                codenotation -> codenotation.getLeftContextualTerm().equals(toRemove)
+            codenotation -> codenotation.getLeft().equals(toRemove)
         );
     }
     /**

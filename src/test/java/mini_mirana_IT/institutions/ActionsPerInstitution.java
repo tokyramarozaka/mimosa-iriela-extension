@@ -13,23 +13,23 @@ import java.util.List;
  * TODO : describe actions per institutions
  */
 public class ActionsPerInstitution {
-    public List<Action> household(){
-        return HouseholdActions.allActions();
-    }
-
-    public List<Action> village(){
-        return VillageActions.allActions();
-    }
-
-    public List<Action> ecology(){
-        return EcologyActions.allActions();
-    }
-
-    public List<Action> northern(){
-        return NorthernActions.allActions();
-    }
-
-    public List<Action> southern(){
-        return SouthernActions.allActions();
-    }
+//    public List<Action> household(){
+//        return HouseholdActions.allActions();
+//    }
+//
+//    public List<Action> village(){
+//        return VillageActions.allActions();
+//    }
+//
+//    public List<Action> ecology(){
+//        return EcologyActions.allActions();
+//    }
+//
+//    public List<Action> northern(){
+//        return NorthernActions.allActions();
+//    }
+//
+//    public List<Action> southern(){
+//        return SouthernActions.allActions();
+//    }
 }

@@ -23,4 +23,12 @@ public class Node implements State {
         this.links = links;
         this.content = null;
     }
+
+    public void link(Node target){
+        this.links.add(new Link(this, target, null));
+    }
+
+    public void link(Node target, Object content){
+        this.links.add(new Link(this, target, content));
+    }
 }

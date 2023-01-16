@@ -5,59 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cb108de8-9a9d-453e-8c4c-86aa24a0e7fc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/test/java/pop_IT/mock/MockCodenotationsConstraints.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/pop_IT/mock/MockPlan.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/pop_IT/mock/MockStep.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/pop_IT/mock/MockTemporalConstraints.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/normative_pop/NormativePopPlanningProblem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/normative_pop/NormativePopPlanningProblem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PopPlanningProblem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PopPlanningProblem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/PartialOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/constraints/PartialOrder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/Plan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/Plan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/PlanModification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/PlanModification.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/Step.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/Step.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/TemporalConstraints.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/constraints/TemporalConstraints.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/mapper/PlanModificationMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/mapper/PlanModificationMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mylogger.log" beforeDir="false" afterPath="$PROJECT_DIR$/mylogger.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/utils/OpenConditionResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/utils/OpenConditionResolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/utils/PlanInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/utils/PlanInitializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/utils/TemporalConstraintsBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/utils/TemporalConstraintsBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/utils/ThreatResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/utils/ThreatResolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Action.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Action.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Codenotation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/constraints/Codenotation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/CodenotationConstraints.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/constraints/CodenotationConstraints.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Constant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Constant.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/LogicalInstance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/LogicalInstance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Predicate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Predicate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Term.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Term.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Unifiable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Unifiable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Variable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Variable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/automated_theorem_proving/Resolution.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/automated_theorem_proving/Resolution.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/mappers/GoalMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/mappers/GoalMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/utils/ContextChange.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/utils/ContextChange.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/norms/ConstitutiveNorm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/normative_pop/norms/ConstitutiveNorm.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/norms/DeonticOperator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/normative_pop/norms/DeonticOperator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/norms/Institution.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/normative_pop/norms/Institution.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/norms/Norm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/normative_pop/norms/Norm.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/norms/NormConditions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/normative_pop/norms/NormConditions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/norms/NormConsequences.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/normative_pop/norms/NormConsequences.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/norms/NormativeAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/normative_pop/norms/NormativeAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/norms/NormativeProposition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/normative_pop/norms/NormativeProposition.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/norms/Organization.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/normative_pop/norms/Organization.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/norms/RegulativeNorm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/normative_pop/norms/RegulativeNorm.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/norms/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/normative_pop/norms/Role.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/planning/Problem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/planning/Problem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/constraints/Codenotation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/constraints/Codenotation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/constraints/CodenotationConstraints.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/constraints/CodenotationConstraints.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/constraints/TemporalConstraints.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/constraints/TemporalConstraints.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/graph/Node.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/graph/Node.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Graphic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Graphic.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/actions/EcologyActions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/actions/EcologyActions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/actions/HouseholdActions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/actions/HouseholdActions.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/actions/VillageActions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/actions/VillageActions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/institutions/ActionsPerInstitution.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/institutions/ActionsPerInstitution.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/institutions/InstitutionFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/institutions/InstitutionFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/norms/ConstitutiveNormFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/norms/ConstitutiveNormFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/norms/RegulativeNorms_ForEcologist.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/norms/RegulativeNorms_ForEcologist.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/norms/RegulativeNorms_ForNorthern.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/norms/RegulativeNorms_ForNorthern.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/norms/RegulativeNorms_ForProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/norms/RegulativeNorms_ForProvider.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/norms/RegulativeNorms_ForVillager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/norms/RegulativeNorms_ForVillager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/organizations/Organizations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/organizations/Organizations.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/organizations/RoleFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/mini_mirana_IT/organizations/RoleFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/pop_IT/BlocksWorld_Pop_IT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/pop_IT/BlocksWorld_Pop_IT.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/pop_IT/BlocksWorld_Pop_UT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/pop_IT/BlocksWorld_Pop_UT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/pop_IT/mock/MockPlan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/pop_IT/mock/MockPlan.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +69,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Global Libraries&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.packagesearch.PackageSearchGeneralConfigurable&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -114,23 +81,15 @@
       <recent name="logic" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.BlocksWorld_Forward_IT">
-    <configuration name="BlocksWorld_Forward_IT" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="forward_IT.BlocksWorld_Forward_IT" />
+  <component name="RunManager" selected="JUnit.BlocksWorld_Pop_UT">
+    <configuration name="BlocksWorld_Forward_IT" type="JUnit" factoryName="JUnit" activateToolWindowBeforeRun="false" temporary="true" nameIsGenerated="true">
       <module name="Iriela" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="forward_IT.*" />
+          <option name="PATTERN" value="mini_mirana_IT.*" />
           <option name="ENABLED" value="true" />
+          <option name="INCLUDE" value="false" />
         </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="BlocksWorld_Forward_IT" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="Iriela" />
-      <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="forward_IT.*" />
           <option name="ENABLED" value="true" />
@@ -138,10 +97,12 @@
       </extension>
       <option name="PACKAGE_NAME" value="forward_IT" />
       <option name="MAIN_CLASS_NAME" value="forward_IT.BlocksWorld_Forward_IT" />
+      <option name="METHOD_NAME" value="" />
       <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="wholeProject" />
+      </option>
+      <method v="2" />
     </configuration>
     <configuration name="BlocksWorld_Forward_IT.shouldReturnEmptyPlan" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Iriela" />
@@ -191,13 +152,36 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="BlocksWorld_Pop_UT" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Iriela" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="pop_IT.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="pop_IT" />
+      <option name="MAIN_CLASS_NAME" value="pop_IT.BlocksWorld_Pop_UT" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.forward_IT.BlocksWorld_Forward_IT" />
+      <item itemvalue="JUnit.BlocksWorld_Pop_UT" />
+      <item itemvalue="JUnit.BlocksWorld_Forward_IT" />
+      <item itemvalue="JUnit.BlocksWorld_Forward_IT.shouldReturnEmptyPlan" />
+      <item itemvalue="JUnit.BlocksWorld_Forward_IT.shouldStackThreeAbstractBlocks" />
+      <item itemvalue="JUnit.BlocksWorld_Forward_IT.shouldStackThreeConcreteBlocks" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.BlocksWorld_Pop_UT" />
         <item itemvalue="JUnit.BlocksWorld_Forward_IT" />
-        <item itemvalue="JUnit.BlocksWorld_Forward_IT.shouldStackThreeAbstractBlocks" />
         <item itemvalue="JUnit.BlocksWorld_Forward_IT.shouldReturnEmptyPlan" />
         <item itemvalue="JUnit.BlocksWorld_Forward_IT.shouldStackThreeConcreteBlocks" />
-        <item itemvalue="Application.BlocksWorld_Forward_IT" />
+        <item itemvalue="JUnit.BlocksWorld_Forward_IT.shouldStackThreeAbstractBlocks" />
       </list>
     </recent_temporary>
   </component>
@@ -318,7 +302,26 @@
       <workItem from="1671187018491" duration="4048000" />
       <workItem from="1671229015090" duration="597000" />
       <workItem from="1671257089292" duration="103000" />
-      <workItem from="1671257898001" duration="2305000" />
+      <workItem from="1671257898001" duration="2839000" />
+      <workItem from="1671533684700" duration="6000" />
+      <workItem from="1671907973165" duration="744000" />
+      <workItem from="1671992184317" duration="599000" />
+      <workItem from="1672047921394" duration="598000" />
+      <workItem from="1672061107511" duration="1800000" />
+      <workItem from="1672158687077" duration="1040000" />
+      <workItem from="1672213634708" duration="3305000" />
+      <workItem from="1672218186569" duration="3615000" />
+      <workItem from="1672500000133" duration="704000" />
+      <workItem from="1672555599769" duration="3071000" />
+      <workItem from="1673074993001" duration="647000" />
+      <workItem from="1673356663480" duration="596000" />
+      <workItem from="1673423037766" duration="7104000" />
+      <workItem from="1673501223639" duration="658000" />
+      <workItem from="1673524209370" duration="595000" />
+      <workItem from="1673531813563" duration="598000" />
+      <workItem from="1673614267713" duration="9746000" />
+      <workItem from="1673671873719" duration="9968000" />
+      <workItem from="1673880799281" duration="595000" />
     </task>
     <servers />
   </component>
@@ -335,5 +338,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

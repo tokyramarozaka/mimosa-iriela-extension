@@ -4,11 +4,6 @@ import aStar.AStarProblem;
 import aStar.Operator;
 import aStar_planning.pop.PopPlanningProblem;
 import aStar_planning.pop.components.Plan;
-import aStar_planning.pop.components.PlanModification;
-import mock_blocks.ActionFactory;
-import mock_blocks.GoalFactory;
-import mock_blocks.SituationFactory;
-import org.apache.logging.log4j.core.util.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import pop_IT.mock.MockPlan;
@@ -21,17 +16,19 @@ import java.util.List;
 public class BlocksWorld_Pop_UT {
     @Test
     public void shouldDetect__threeTakes_asOptionsWhen_onTable_ABC(){
-        Plan someInitialPlan = MockPlan.someInitialPlan();
+        Plan someInitialPlan = MockPlan.plan_withThreeFreeBlocks_to_stackedBlocks();
 
         PopPlanningProblem problem = new PopPlanningProblem();
         List<Operator> options = problem.getOptions(someInitialPlan);
 
-        Assertions.assertTrue(options.containsAll(take1, take2, take3));
+        Assertions.assertEquals("take", options.get(0).getName());
+        Assertions.assertEquals("take", options.get(1).getName());
+        Assertions.assertEquals("take", options.get(2).getName());
     }
 
     @Test
     public void shouldDetect__anInvalidState(){
-        Plan someInvalidState = MockPlan.planWithInvalidCc();
+        Plan someInvalidState = MockPlan.planWithInvalidCc__hasContradiction();
         Plan anotherInvalidState = MockPlan.planWithInvalidTc();
 
         AStarProblem problem = new PopPlanningProblem();
@@ -40,27 +37,11 @@ public class BlocksWorld_Pop_UT {
         Assertions.assertFalse(problem.isValid(anotherInvalidState));
     }
 
+    // TODO : test open conditions
     @Test
     public void shouldDetect__allOpenConditions(){
+        Plan somePlan = MockPlan.plan_withThreeFreeBlocks_to_stackedBlocks();
 
-    }
-
-    @Test
-    public void shouldDetect__allThreats(){
-
-    }
-
-    @Test
-    public void shouldDetect__anExecutablePlan(){
-        Plan someExecutablePlan = MockPlan.executablePlanWith_ABC_stacked();
-
-        AStarProblem problem = new PopPlanningProblem(
-                SituationFactory.threeBlocksOnTable(),
-                ActionFactory.allActionsInBlocksWorld(),
-                GoalFactory.threeBlocks_ABC_stacked()
-        );
-
-        Assertions.assertTrue(problem.isFinal(someExecutablePlan));
     }
 
     @Test

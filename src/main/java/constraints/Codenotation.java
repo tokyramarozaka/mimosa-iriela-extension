@@ -1,5 +1,6 @@
 package constraints;
 
+import graph.Node;
 import logic.ContextualTerm;
 import logic.utils.ContextChange;
 import lombok.AllArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -25,14 +27,14 @@ import java.util.List;
 @EqualsAndHashCode
 public class Codenotation {
     private boolean isCodenotation;
-    private ContextualTerm leftContextualTerm;
-    private ContextualTerm rightContextualTerm;
+    private ContextualTerm left;
+    private ContextualTerm right;
 
     public Codenotation updateContext(ContextChange contextChange) {
         return new Codenotation(
                 this.isCodenotation,
-                contextChange.getReplacement(leftContextualTerm),
-                contextChange.getReplacement(rightContextualTerm)
+                contextChange.getReplacement(left),
+                contextChange.getReplacement(right)
         );
     }
 
@@ -43,10 +45,10 @@ public class Codenotation {
      * @return true if codenotations matches, and false otherwise.
      */
     public boolean matches(Codenotation other) {
-        return (this.leftContextualTerm.equals(other.getLeftContextualTerm()) &&
-                this.rightContextualTerm.equals(other.getRightContextualTerm())) ||
-                    ((this.leftContextualTerm.equals(other.getRightContextualTerm())) &&
-                        (this.rightContextualTerm.equals(other.getLeftContextualTerm())));
+        return (this.left.equals(other.getLeft()) &&
+                this.right.equals(other.getRight())) ||
+                    ((this.left.equals(other.getRight())) &&
+                        (this.right.equals(other.getLeft())));
     }
 
     /**
@@ -64,14 +66,29 @@ public class Codenotation {
     @Override
     public String toString() {
         return new StringBuilder()
-                .append(this.leftContextualTerm)
+                .append(this.left)
                 .append(isCodenotation ? " == " : " != ")
-                .append(this.rightContextualTerm)
+                .append(this.right)
                 .toString();
     }
 
     public Codenotation reverse() {
-        return new Codenotation(!this.isCodenotation, this.getLeftContextualTerm(),
-                this.getRightContextualTerm());
+        return new Codenotation(
+                !this.isCodenotation,
+                this.getLeft(),
+                this.getRight()
+        );
+    }
+
+    /**
+     * Converts this codenotation to nodes for graphs, there are two nodes to be produced to
+     * represent the left and right terms of the codenotation.
+     * @return a list of nodes representing the codenotation
+     */
+    public List<Node> toNodes(){
+        return List.of(
+                new Node(this.getLeft().toString(), new ArrayList<>(), this.getLeft()),
+                new Node(this.getRight().toString(), new ArrayList<>(), this.getRight())
+        );
     }
 }

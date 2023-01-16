@@ -23,18 +23,20 @@ public class EcologyActions {
         world.getZones().forEach((name, content) -> {
 
         });
+
+        return null;
     }
 
-    public static Action growResource(){
+    public static Action growResource(World world){
         return new Action(
                  "Grow",
-                growResource_Preconditions(),
-                growResource_Consequences()
+                growResource_Preconditions(world),
+                growResource_Consequences(world)
         );
     }
-    public static List<Action> allActions(){
+    public static List<Action> allActions(World world){
         return new ArrayList<>(Arrays.asList(
-                growResource()
+                growResource(world)
         ));
     }
 }

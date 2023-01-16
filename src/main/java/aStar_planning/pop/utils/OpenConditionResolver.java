@@ -63,6 +63,12 @@ public class OpenConditionResolver {
         return planModifications;
     }
 
+    /**
+     * Get all the potential steps which could produce the given open condition in the plan
+     * @param plan : the plan we are working in
+     * @param openCondition : the open condition that needs to be resolved
+     * @return
+     */
     private static List<Step> potentialEstablishers(Plan plan, OpenCondition openCondition){
         return plan.getSteps()
                 .stream()
