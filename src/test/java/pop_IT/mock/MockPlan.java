@@ -18,6 +18,8 @@ import logic.Variable;
 import mock_blocks.ActionFactory;
 import mock_blocks.GoalFactory;
 import mock_blocks.SituationFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +30,8 @@ import java.util.List;
  * on the tedious process of building some sample plans.
  */
 public class MockPlan {
+    private final static Logger logger = LogManager.getLogger(MockPlan.class);
+
     private static List<Step> someSteps_StackAndDrop(){
         List<Step> steps = new ArrayList<>();
 
@@ -105,6 +109,7 @@ public class MockPlan {
     public static Plan plan_withThreeFreeBlocks_to_stackedBlocks() {
         Situation initialSituation = SituationFactory.threeBlocksOnTable();
         Goal goal = GoalFactory.threeBlocks_ABC_stacked();
+
         return PlanInitializer.constructInitialPlan(initialSituation, goal);
     }
 }

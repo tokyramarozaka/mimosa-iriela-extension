@@ -72,7 +72,7 @@ public class ThreatResolver {
                         plan, step, threat.getDestroyer(), threat.getThreatened()
                 );
 
-                planModifications.add(PlanModificationMapper.from(temporalChanges));
+                planModifications.add(PlanModificationMapper.from(threat, temporalChanges));
             }
         }
 
@@ -109,7 +109,7 @@ public class ThreatResolver {
             }
         }
 
-        return Arrays.asList(PlanModificationMapper.from(changes));
+        return Arrays.asList(PlanModificationMapper.from(threat, changes));
     }
 
     /**

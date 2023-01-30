@@ -15,6 +15,8 @@ import logic.ContextualPredicate;
 import logic.Goal;
 import logic.LogicalInstance;
 import logic.Situation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,8 @@ import java.util.List;
  * </ul>
  */
 public class PlanInitializer {
+    private final static Logger logger = LogManager.getLogger(PlanInitializer.class);
+
     /**
      * Returns the initial plan, with the needed situations, steps, and constraints
      * @param initialSituation : the initial situation to fetch all the propositions that are
@@ -79,6 +83,9 @@ public class PlanInitializer {
                 finalAction(goal.getGoalPropositions()),
                 new Context()
         );
+
+        dummySteps.add(new Step(initialStep));
+        dummySteps.add(new Step(finalStep));
 
         return dummySteps;
     }

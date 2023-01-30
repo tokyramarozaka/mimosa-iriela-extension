@@ -2,6 +2,7 @@ package aStar_planning.pop.utils;
 
 import aStar.Operator;
 import aStar_planning.pop.components.OpenCondition;
+import constraints.CodenotationConstraints;
 import constraints.PartialOrder;
 import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PopSituation;
@@ -37,7 +38,7 @@ public class OpenConditionResolver {
                         .asserts(openCondition.getProposition(), plan.getCc()))
                 .map(assertingStep -> assertingStep
                         .getAssertingCodenotations(openCondition.getProposition()))
-                .map(codenotations -> PlanModificationMapper.from(codenotations))
+                .map(codenotations -> PlanModificationMapper.from(openCondition, codenotations))
                 .collect(Collectors.toList());
     }
 
@@ -52,13 +53,13 @@ public class OpenConditionResolver {
         List<Operator> planModifications = new ArrayList<>();
 
         potentialEstablishers(plan,openCondition)
-                .stream()
-                .forEach(potentialEstablisher -> {
-                    TemporalConstraints temporalChange = new TemporalConstraints(Arrays.asList(
-                        new PartialOrder(potentialEstablisher, openCondition.getSituation())
-                    ));
-                    planModifications.add(PlanModificationMapper.from(temporalChange));
-                });
+            .stream()
+            .forEach(potentialEstablisher -> {
+                TemporalConstraints temporalChange = new TemporalConstraints(Arrays.asList(
+                    new PartialOrder(potentialEstablisher, openCondition.getSituation())
+                ));
+                planModifications.add(PlanModificationMapper.from(openCondition, temporalChange));
+            });
 
         return planModifications;
     }
@@ -95,6 +96,7 @@ public class OpenConditionResolver {
                 PopSituation newStepExit = new PopSituation();
 
                 possibleModifications.add(PlanModificationMapper.from(
+                    openCondition,
                     Arrays.asList(newStepEntry, newStepExit),
                     solvingStep,
                     solvingStep.getAssertingCodenotations(openCondition.getProposition()),
@@ -174,14 +176,15 @@ public class OpenConditionResolver {
      * @param openCondition : the given open condition we want to resolve
      * @return the list of all action instances resolving the given open condition
      */
-    public static List<LogicalInstance> getAssertingInstances(Action action,
-                                                              OpenCondition openCondition)
-    {
+    public static List<LogicalInstance> getAssertingInstances(
+            Action action,
+            OpenCondition openCondition
+    ){
         List<LogicalInstance> assertingInstances = new ArrayList<>();
         ContextualAtom toAssert = openCondition.getProposition();
+        Context temp = new Context();
 
         for(Atom consequence : action.getConsequences().getAtoms()) {
-            Context temp = new Context();
             if (toAssert.getAtom().isNegation() == consequence.isNegation() &&
                     consequence.getPredicate().unify(
                             temp,
@@ -192,6 +195,7 @@ public class OpenConditionResolver {
             }
         }
 
+        logger.info("Context is : "+temp);
         return assertingInstances;
     }
 }

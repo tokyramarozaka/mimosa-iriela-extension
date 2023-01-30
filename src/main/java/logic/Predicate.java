@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +18,13 @@ import java.util.List;
 public class Predicate implements Unifiable{
     private String name;
     private List<Term> terms;
+    private final static Logger logger = LogManager.getLogger(Predicate.class);
 
     @Override
     public boolean unify(Context fromContext, Unifiable to, Context toContext) {
         List<ContextualTerm> changes = new ArrayList<>();
-        Boolean unifyAttemptSuccess = attemptUnify(fromContext,to,toContext,changes);
+
+        Boolean unifyAttemptSuccess = attemptUnification(fromContext,to,toContext,changes);
 
         if(!unifyAttemptSuccess){
             for (ContextualTerm change : changes) {
@@ -31,7 +35,61 @@ public class Predicate implements Unifiable{
         return unifyAttemptSuccess;
     }
 
-    private Boolean attemptUnify(Context fromContext, Unifiable to, Context toContext, List<ContextualTerm> changes) {
+    /**
+     * Attemps an unification using the codenotations constraints instead of the context
+     * @param fromContext : this predicates context
+     * @param to : the other term we are unifying it with, supposedly another predicate
+     * @param toContext : the context of the other term (predicate)
+     * @param codenotationConstraint : the set of bindings between variables
+     * @return true if the unification succeeds, false otherwise.
+     */
+    @Override
+    public boolean unify(Context fromContext, Unifiable to, Context toContext,
+                         CodenotationConstraints codenotationConstraint) {
+        List<ContextualTerm> changes = new ArrayList<>();
+
+        boolean res = attemptUnification(fromContext,to,toContext,changes,codenotationConstraint);
+
+        if (!res) {
+            for (ContextualTerm linkedVariable : changes) {
+                codenotationConstraint.unlink(linkedVariable);
+            }
+        }
+
+        return res;
+    }
+
+    private boolean attemptUnification(Context fromContext,
+                                       Unifiable to,
+                                       Context toContext,
+                                       List<ContextualTerm> changes,
+                                       CodenotationConstraints codenotationConstraint
+    ){
+        if (!(to instanceof Predicate)){
+            return false;
+        }
+
+        Predicate toPredicate = (Predicate) to;
+
+        if (!this.sameName(toPredicate)){
+            return false;
+        }
+
+        int index = 0;
+        for (Term term : this.getTerms()) {
+            if (!term.attemptUnification(fromContext, toPredicate.getTerms().get(index++),
+                    toContext, changes, codenotationConstraint)
+            ){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private Boolean attemptUnification(Context fromContext, Unifiable to, Context toContext,
+                                       List<ContextualTerm> changes)
+    {
         if (!(to instanceof Predicate)){
             return false;
         }
@@ -44,27 +102,14 @@ public class Predicate implements Unifiable{
 
         int index = 0;
         for(Term term:this.getTerms()){
-            if (!term.attemptUnification(
-                    fromContext,toPredicate.getTerms().get(index++),toContext,changes)) {
-                        return false;
+            if (!term.attemptUnification(fromContext,toPredicate.getTerms().get(index++),toContext,
+                    changes)
+            ){
+                 return false;
             }
         }
 
         return true;
-    }
-
-    /**
-     * TODO : unification through codenotation constraints
-     * @param fromContext
-     * @param to
-     * @param toContext
-     * @param codenotationConstraint
-     * @return
-     */
-    @Override
-    public boolean unify(Context fromContext, Unifiable to, Context toContext,
-                         CodenotationConstraints codenotationConstraint) {
-        return false;
     }
 
     @Override

@@ -15,6 +15,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -41,6 +44,7 @@ public class Plan implements State {
     private CodenotationConstraints cc;
     private TemporalConstraints tc;
     private Set<Flaw> flaws;
+    private final static Logger logger = LogManager.getLogger(Plan.class);
 
     public Plan(List<PopSituation> situations, List<Step> steps, CodenotationConstraints cc,
                 TemporalConstraints tc)
@@ -49,7 +53,12 @@ public class Plan implements State {
         this.steps = steps;
         this.cc = cc;
         this.tc = tc;
+        this.tc.updateGraph();
         this.evaluateFlaws();
+    }
+
+    private static boolean isNotFinalStep(Step step) {
+        return !step.getActionInstance().getName().equals("final");
     }
 
     /**
@@ -167,8 +176,9 @@ public class Plan implements State {
      */
     private List<Flaw> getOpenConditions(Step step) {
         List<Flaw> openConditions = new ArrayList<>();
+        List<Atom> stepPreconditions = step.getActionPreconditions().getAtoms();
 
-        for (Atom precondition : step.getActionPreconditions().getAtoms()) {
+        for (Atom precondition : stepPreconditions) {
             ContextualAtom preconditionInstance = new ContextualAtom(
                     step.getActionInstance().getContext(), precondition
             );
@@ -187,10 +197,35 @@ public class Plan implements State {
      * @param situation : the situation where it needs to be checked.
      * @return true if the proposition is necessarily true in the given situation, false otherwise
      */
-    private boolean isAsserted(ContextualAtom proposition, PopSituation situation) {
+    public boolean isAsserted(ContextualAtom proposition, PopSituation situation) {
+        for(Step establisher : getEstablishers(proposition, situation)){
+            for(Step destroyer : getDestroyers(proposition, situation)){
+                var postEstablisher = this.tc.getFollowingSituation(establisher);
+                var postDestroyer = this.tc.getFollowingSituation((destroyer));
+
+                if(this.isBefore(postEstablisher, postDestroyer)){
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    private List<Step> getDestroyers(ContextualAtom proposition, PopSituation situation) {
         return this.steps.stream()
-                .filter(step -> this.tc.isBefore(step, situation))
-                .anyMatch(step -> step.asserts(proposition, this.cc));
+                .filter(step -> !this.tc.isAfter(step, situation))
+                .filter(step -> step.destroys(proposition, this.getCc()))
+                .collect(Collectors.toList());
+    }
+
+    private List<Step> getEstablishers(ContextualAtom proposition, PopSituation situation) {
+        return this.steps.stream()
+                .filter(Plan::isNotFinalStep)
+                .filter(step -> this.isBefore(this.tc.getFollowingSituation(step),situation))
+                .filter(step -> step.asserts(proposition,this.getCc()))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -228,7 +263,7 @@ public class Plan implements State {
     private List<Flaw> getThreats(Step toCheck) {
         return this.steps
                 .stream()
-                .filter(step -> this.getTc().isBefore(step, toCheck))
+                .filter(step -> this.isBefore(step, toCheck))
                 .filter(previousStep -> previousStep.isThreatening(toCheck))
                 .map(threat -> buildThreat(
                         threat, toCheck, getThreatenedPrecondition(threat,toCheck)
@@ -263,22 +298,26 @@ public class Plan implements State {
     public boolean isBefore(PlanElement leftElement, PlanElement rightElement){
         return this.tc.isBefore(leftElement,rightElement);
     }
+
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder
-                .append("PLAN\n--\n")
-                .append("SITUATIONS\n")
+        String thisPlan = stringBuilder
+                .append("PLAN\n")
+                .append("--SITUATIONS\n")
                 .append(this.situations)
-                .append("STEPS\n")
+                .append("\n--STEPS\n")
                 .append(this.steps)
-                .append("CODENOTATIONS :\n")
+                .append("\n--CODENOTATIONS :\n")
                 .append(this.cc)
-                .append("TEMPORAL CONSTRAINTS :\n")
-                .append(this.tc);
+                .append("\n--TEMPORAL CONSTRAINTS :\n")
+                .append(this.tc)
+                .append("\n--FLAWS : \n")
+                .append(this.flaws)
+                .toString();
 
-        return stringBuilder.toString();
+        return thisPlan;
     }
 
     /**

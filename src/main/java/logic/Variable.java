@@ -2,6 +2,8 @@ package logic;
 
 import constraints.Codenotation;
 import constraints.CodenotationConstraints;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
@@ -9,6 +11,7 @@ public class Variable extends Term{
     public Variable(String name) {
         super(name);
     }
+    private final static Logger logger = LogManager.getLogger(Variable.class);
 
     @Override
     public boolean attemptUnification(Context fromContext, Unifiable to, Context toContext,
@@ -34,7 +37,7 @@ public class Variable extends Term{
     public boolean attemptUnification(Context fromContext, Unifiable to, Context toContext,
                                       List<ContextualTerm> currentChanges,
                                       CodenotationConstraints codenotationConstraints
-    ) {
+    ){
         if (!codenotationConstraints.isCoherent()){
             return false;
         }

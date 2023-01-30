@@ -9,7 +9,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @EqualsAndHashCode
-@ToString
 public class ContextualAtom {
     private Context context;
     private Atom atom;
@@ -23,5 +22,14 @@ public class ContextualAtom {
 
     public ContextualPredicate toContextualPredicate(){
         return new ContextualPredicate(this.getContext(),this.getAtom().getPredicate());
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(this.atom.build(this.context));
+
+        return stringBuilder.toString();
     }
 }

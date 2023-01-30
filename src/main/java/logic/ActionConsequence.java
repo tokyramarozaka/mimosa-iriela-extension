@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,12 +17,15 @@ import java.util.List;
  * </ul>
  */
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode
 public class ActionConsequence {
     private List<Atom> atoms;
+
+    public ActionConsequence(){
+        this.atoms = new ArrayList<>();
+    }
 
     public ActionConsequence build(Context context){
         return new ActionConsequence(

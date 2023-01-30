@@ -1,5 +1,6 @@
 package aStar_planning.pop.components;
 
+import graph.Node;
 import logic.Action;
 import logic.ActionConsequence;
 import logic.ActionPrecondition;
@@ -11,7 +12,10 @@ import logic.LogicalInstance;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -19,6 +23,7 @@ import java.util.List;
 @EqualsAndHashCode
 public class Step implements PlanElement {
     private LogicalInstance actionInstance;
+    private final static Logger logger = LogManager.getLogger(Step.class);
 
     /**
      * A shortcut to access the step's preconditions
@@ -42,19 +47,43 @@ public class Step implements PlanElement {
 
     /**
      * Checks if the current step makes the given proposition necessarily true in its preceding
-     * situation.
+     * situation. If true, we say that the current step ASSERTS the proposition
      * @param proposition : the proposition to check if it is asserted by the current step or not
-     * @param codenotationConstraints : codenotations constraints describing variable bindings
-     * @return
+     * @param cc : codenotations constraints describing variable bindings
+     * @return true if the given proposition is asserted by the current step
      */
-    public boolean asserts(ContextualAtom proposition,
-                           CodenotationConstraints codenotationConstraints)
-    {
-        for (Atom consequence : this.getActionPreconditions().getAtoms()) {
+    public boolean asserts(ContextualAtom proposition,CodenotationConstraints cc){
+        for (Atom consequence : this.getActionConsequences().getAtoms()) {
+            CodenotationConstraints tempCc = cc.copy();
             ContextualAtom consequenceInstance = new ContextualAtom(
-                    this.getActionInstance().getContext(), consequence);
+                    actionInstance.getContext(), consequence
+            );
 
-            if(asserts(consequenceInstance, proposition, codenotationConstraints)){
+            if (proposition.getAtom().isNegation() == consequenceInstance.getAtom().isNegation() &&
+                    canUnifyPropositions(consequenceInstance, proposition, tempCc))
+            {
+                        return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Determines if the current step destroys a given proposition without adding any other bindings
+     * @param proposition : the proposition to check
+     * @param cc : the current codenotation contraint of the plan.
+     * @return true if this step destroys the given proposition and false otherwise.
+     */
+    public boolean destroys(ContextualAtom proposition, CodenotationConstraints cc){
+        for (Atom consequence : this.getActionPreconditions().getAtoms()) {
+            CodenotationConstraints tempCc = cc.copy();
+            ContextualAtom consequenceInstance = new ContextualAtom(
+                    this.actionInstance.getContext(), consequence
+            );
+
+            if (proposition.getAtom().isNegation() != consequenceInstance.getAtom().isNegation() &&
+                    canUnifyPropositions(consequenceInstance, proposition, tempCc)) {
                 return true;
             }
         }
@@ -62,16 +91,23 @@ public class Step implements PlanElement {
         return false;
     }
 
-    private boolean asserts(ContextualAtom proposition, ContextualAtom otherProposition,
-                            CodenotationConstraints codenotationConstraints){
-        CodenotationConstraints temp = codenotationConstraints.copy();
-
-        return proposition.getAtom().isNegation() == otherProposition.getAtom().isNegation()
-                && otherProposition.getAtom().getPredicate().unify(
+    /**
+     * Check if two predicates can be unified
+     * @param consequenceInstance
+     * @param proposition
+     * @param tempCc
+     * @return
+     */
+    private boolean canUnifyPropositions(
+            ContextualAtom consequenceInstance,
+            ContextualAtom proposition,
+            CodenotationConstraints tempCc
+    ){
+        return consequenceInstance.getAtom().getPredicate().unify(
                         this.getActionInstance().getContext(),
                         proposition.getAtom().getPredicate(),
                         proposition.getContext(),
-                        temp
+                        tempCc
                 );
     }
 
@@ -108,37 +144,23 @@ public class Step implements PlanElement {
      * current bindings in the codenotation constraints
      * @param context
      * @param precondition
-     * @param codenotationConstraints
+     * @param cc
      * @return
      */
-    public boolean destroys(Context context, Atom precondition, CodenotationConstraints
-                            codenotationConstraints)
-    {
+    public boolean destroys(Context context, Atom precondition, CodenotationConstraints cc){
         ContextualAtom proposition = new ContextualAtom(context, precondition);
 
         for (Atom consequence : this.getActionConsequences().getAtoms()) {
             ContextualAtom consequenceInstance = new ContextualAtom(
                     this.getActionInstance().getContext(), consequence);
 
-            if(destroys(consequenceInstance, proposition, codenotationConstraints)){
+            if(consequence.isNegation() != proposition.getAtom().isNegation() &&
+                    canUnifyPropositions(consequenceInstance, proposition, cc)){
                 return true;
             }
         }
 
         return false;
-    }
-
-    public boolean destroys(ContextualAtom consequence, ContextualAtom otherProposition,
-                                       CodenotationConstraints codenotationConstraints){
-        CodenotationConstraints temp = codenotationConstraints.copy();
-
-        return consequence.getAtom().isNegation() && !otherProposition.getAtom().isNegation()
-                && otherProposition.getAtom().getPredicate().unify(
-                    this.getActionInstance().getContext(),
-                    consequence.getAtom().getPredicate(),
-                    consequence.getContext(),
-                    temp
-                );
     }
 
     public CodenotationConstraints getAssertingCodenotations(ContextualAtom toAssert) {
@@ -175,5 +197,10 @@ public class Step implements PlanElement {
                 .getLogicalEntity()
                 .build(this.getActionInstance().getContext())
                 .toString();
+    }
+
+    @Override
+    public Node toNode() {
+        return new Node(this.toString(), new ArrayList<>(), this);
     }
 }

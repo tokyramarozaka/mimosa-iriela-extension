@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,12 +14,15 @@ import java.util.List;
  * to check if an action can be executed in a certain situation.
  */
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @ToString
 @EqualsAndHashCode
 public class ActionPrecondition {
     private List<Atom> atoms;
+
+    public ActionPrecondition(){
+        this.atoms = new ArrayList<>();
+    }
 
     public ActionPrecondition build(Context context) {
         return new ActionPrecondition(

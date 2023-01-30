@@ -20,7 +20,12 @@ public class AStarResolver {
     public AStarResolver(AStarProblem problem){
         this.problem = problem;
     }
-    
+
+    /**
+     * Returns the list of operators which would allow to go from one state to a final state
+     * @return the list of Operators in a given order to reach a final state (if any).
+     * @throws NoPlanFoundException : no final state was found
+     */
     public List<Operator> findSolution() throws NoPlanFoundException {
         open.add(new ProblemState(null, problem.getInitialState(), null, 0,
                 problem.evaluateState(problem.getInitialState())));
@@ -63,7 +68,6 @@ public class AStarResolver {
         }
 
         if (solutionState == null) {
-            logger.info("No plans were found");
             throw new NoPlanFoundException();
         }
 

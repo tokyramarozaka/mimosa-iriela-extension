@@ -8,10 +8,13 @@ import lombok.Setter;
 import lombok.ToString;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @ToString
 public abstract class Graphic {
     private Graph graph;
+
+    public Graphic(){
+        this.graph = new Graph();
+    }
 }

@@ -19,14 +19,11 @@ import java.util.List;
 @ToString
 @Builder
 public class PlanModification implements Operator {
+    private Flaw targetFlaw;
     private List<PopSituation> addedSituations;
     private Step addedStep;
     private CodenotationConstraints addedCc;
     private TemporalConstraints addedTc;
-
-    public PlanModification(TemporalConstraints addedTc){
-        this.addedTc = addedTc;
-    }
 
     /**
      * Applies this plan modification to a given plan, and returns the resulting plan

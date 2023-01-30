@@ -2,6 +2,7 @@ package logic;
 
 import constraints.CodenotationConstraints;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 
 
 @AllArgsConstructor
+@EqualsAndHashCode
 @Getter
 public abstract class Term implements Unifiable{
     private String name;

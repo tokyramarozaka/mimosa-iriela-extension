@@ -34,17 +34,32 @@ public class Constant extends Term{
     }
 
     /**
-     * TODO : implement the unification of constant with CodenotationConstraints
-     * @param fromContext
-     * @param to
-     * @param toContext
-     * @param currentChanges
-     * @param codenotationConstraints
-     * @return
+     * Attemps an unification of the constant with another term
+     * @param fromContext : the context of this constant
+     * @param to : the other term we want to unify it with
+     * @param toContext : the other term's context
+     * @param currentChanges : the current changes accumulated so far
+     * @param codenotationConstraints : the bindings used to make the unification happen.
+     * @return true if the unification succeeds and false otherwise
      */
     @Override
-    public boolean attemptUnification(Context fromContext, Unifiable to, Context toContext, List<ContextualTerm> currentChanges, CodenotationConstraints codenotationConstraints) {
-        return false;
+    public boolean attemptUnification(
+            Context fromContext,
+            Unifiable to,
+            Context toContext,
+            List<ContextualTerm> currentChanges,
+            CodenotationConstraints codenotationConstraints
+    ){
+        if (to instanceof Constant){
+            return this.sameName((Term) to);
+        }
+        if (to instanceof Variable){
+            return ((Variable)to).attemptUnification(toContext, this, fromContext,
+                    currentChanges,codenotationConstraints);
+        }
+
+        throw new UnsupportedOperationException(
+                "Only variables and constants unifications are supported.");
     }
 
     @Override

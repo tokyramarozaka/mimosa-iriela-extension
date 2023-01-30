@@ -4,23 +4,42 @@ import aStar_planning.pop.components.PlanElement;
 import aStar_planning.pop.components.PlanModification;
 import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop.components.Step;
+import graph.Graph;
+import graph.Link;
 import graph.Node;
 import logic.Graphic;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @ToString
 public class TemporalConstraints extends Graphic {
     private List<PartialOrder> partialOrders;
 
+    private final static Logger logger = LogManager.getLogger(TemporalConstraints.class);
+
+    public TemporalConstraints(){
+        super();
+        this.partialOrders = new ArrayList<>();
+        updateGraph();
+    }
+
+    public TemporalConstraints(List<PartialOrder> partialOrders){
+        super();
+        this.partialOrders = partialOrders;
+        updateGraph();
+    }
+
+    /**
+     * Checks if the graph has no cycles which would cause an infinite loop
+     * @return true if the graph has no cycles, and false otherwise.
+     */
     public boolean isCoherent() {
         return !this.getGraph().hasCycles();
     }
@@ -36,12 +55,23 @@ public class TemporalConstraints extends Graphic {
         return this.getGraph().pathExists(startingNode, endingNode);
     }
 
+    /**
+     * Return the situation preceding a given step in the plan.
+     * @param step : the step we want to check.
+     * @return the single situation preceding the step
+     */
     public PopSituation getPrecedingSituation(Step step){
         return (PopSituation) this.getGraph()
                 .getPrecedingNode(this.getGraph().getContainingNode(step))
                 .getContent();
     }
 
+    /**
+     * Returns the situation following a given step in this temporal constraint using the graph
+     * representation
+     * @param step : the step whose preceding situation is wanted
+     * @return the situation right before the step in the partial order.
+     */
     public PopSituation getFollowingSituation(Step step){
         return (PopSituation) this.getGraph()
                 .getFollowingNode(this.getGraph().getContainingNode(step))
@@ -60,16 +90,74 @@ public class TemporalConstraints extends Graphic {
         return !isBefore(step, situation);
     }
 
-    public List<PartialOrder> getConcernedConstraints(Step toPlace) {
+    /**
+     * Returns the list of all partial orders which concerns a given step either the step being
+     * on the left side or right side of the constraint.
+     * @param target : the referred step
+     * @return a list of partial order including the given step either on the left or the right
+     */
+    public List<PartialOrder> getConcernedConstraints(Step target) {
         List<PartialOrder> concernedConstraints = new ArrayList<>();
 
         for (PartialOrder partialOrder : this.partialOrders) {
-            if (partialOrder.getFirstElement().equals(toPlace) ||
-                    partialOrder.getSecondElement().equals(toPlace)) {
+            if (partialOrder.getFirstElement().equals(target) ||
+                    partialOrder.getSecondElement().equals(target)) {
                         concernedConstraints.add(partialOrder);
             }
         }
 
         return concernedConstraints;
+    }
+
+    public void updateGraph(){
+        List<Node> updatedNodes = this.initializeNodes();
+        this.setGraph(new Graph(updatedNodes));
+        this.initializeNodeLinks();
+    }
+
+    /**
+     * (Re)Initializes all the nodes of this temporal constraints graphical representation.
+     *
+     * @return the list of all nodes to representing each partially ordered element
+     */
+    private List<Node> initializeNodes(){
+        List<Node> nodes = new ArrayList<>();
+
+        this.partialOrders.forEach(temporalOrder -> {
+            Node left = temporalOrder.getFirstElement().toNode();
+            Node right = temporalOrder.getSecondElement().toNode();
+
+            if (!nodes.contains(left)) nodes.add(left);
+
+            if (!nodes.contains(right)) nodes.add(right);
+        });
+
+        return nodes;
+    }
+
+    /**
+     * Initializes all the links of each node in the graph representation of the temporal constraint
+     * TODO : find a better algorithm to generate all the links
+     */
+    private void initializeNodeLinks(){
+        this.getGraph()
+                .getNodes()
+                .forEach(node -> node.getLinks().addAll(allLinkOfNode(node, this.getGraph())));
+    }
+
+    /**
+     * Retrieves all the links related to the given node in the given graph
+     * @param node : the target node we want to retrieve all links for
+     * @param graph : the graph which contains all the nodes so that we can create links between
+     *              existing nodes.
+     * @return all links of a given node.
+     */
+    private List<Link> allLinkOfNode(Node node, Graph graph){
+
+        return this.getPartialOrders()
+                .stream()
+                .filter(partialOrder -> partialOrder.getFirstElement().toNode().getName().equals(node.getName()))
+                .map(partialOrder -> partialOrder.toLink(graph))
+                .collect(Collectors.toList());
     }
 }
