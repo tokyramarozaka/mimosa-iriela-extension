@@ -150,8 +150,6 @@ public class Plan implements State {
      * @return true if the plan is coherent, false otherwise.
      */
     public boolean isCoherent() {
-        logger.info("CC COHERENCE CHECK : "+this.cc.isCoherent());
-        logger.info("TC COHERENCE CHECK : "+this.tc.isCoherent());
         return this.cc.isCoherent() && this.tc.isCoherent();
     }
 
@@ -262,14 +260,37 @@ public class Plan implements State {
      * @return a list of all threats regarding the step to check.
      */
     private List<Flaw> getThreats(Step toCheck) {
-        return this.steps
-                .stream()
-                .filter(step -> this.isBefore(step, toCheck))
-                .filter(previousStep -> previousStep.isThreatening(toCheck))
-                .map(threat -> buildThreat(
-                        threat, toCheck, getThreatenedPrecondition(threat,toCheck)
-                ))
-                .collect(Collectors.toList());
+        List<Flaw> list = new ArrayList<>();
+
+        for (Step step : this.steps) {
+            if (this.isBefore(step, toCheck) && step.isThreatening(toCheck)) {
+                if (!isRestablished(getThreatenedPrecondition(step, toCheck), step, toCheck)) {
+                    Threat newThreat = buildThreat(
+                            step, toCheck, getThreatenedPrecondition(step, toCheck)
+                    );
+
+                    list.add(newThreat);
+                }
+            }
+        }
+
+        return list;
+    }
+
+    /**
+     * TODO : refactor this code
+     * @param proposition
+     * @param destroyer
+     * @param destroyedStep
+     * @return
+     */
+    private boolean isRestablished(ContextualAtom proposition, Step destroyer, Step destroyedStep) {
+        return this.steps.stream()
+                .filter(step -> step.asserts(proposition, this.getCc()))
+                .filter(restablisher -> !restablisher.equals(destroyedStep) && !restablisher.equals(destroyer))
+                .filter(restablisher -> tc.isBefore(destroyer, restablisher) && tc.isBefore(restablisher,destroyedStep))
+                .findFirst()
+                .isPresent();
     }
 
     /**

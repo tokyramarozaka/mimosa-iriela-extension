@@ -9,17 +9,6 @@
       <change beforePath="$PROJECT_DIR$/mylogger.log" beforeDir="false" afterPath="$PROJECT_DIR$/mylogger.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PopPlanningProblem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PopPlanningProblem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/Plan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/Plan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/Step.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/Step.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/utils/OpenConditionResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/utils/OpenConditionResolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/utils/ThreatResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/utils/ThreatResolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/constraints/CodenotationConstraints.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/constraints/CodenotationConstraints.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/graph/Graph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/graph/Graph.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/graph/Node.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/graph/Node.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Action.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Action.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Constant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Constant.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/logic/Variable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/logic/Variable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/pop_IT/BlocksWorld_Pop_IT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/pop_IT/BlocksWorld_Pop_IT.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/pop_IT/BlocksWorld_Pop_UT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/pop_IT/BlocksWorld_Pop_UT.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -339,7 +328,7 @@
       <workItem from="1675098338659" duration="8742000" />
       <workItem from="1675142051452" duration="8916000" />
       <workItem from="1675167653602" duration="63000" />
-      <workItem from="1675269309385" duration="12360000" />
+      <workItem from="1675269309385" duration="13413000" />
     </task>
     <servers />
   </component>
