@@ -2,7 +2,6 @@ package aStar_planning.pop.utils;
 
 import aStar.Operator;
 import aStar_planning.pop.components.OpenCondition;
-import constraints.CodenotationConstraints;
 import constraints.PartialOrder;
 import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PopSituation;
@@ -14,6 +13,9 @@ import logic.Atom;
 import logic.Context;
 import logic.ContextualAtom;
 import logic.LogicalInstance;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,6 +25,8 @@ import java.util.stream.Collectors;
  * Describes all the methods used to resolve an open condition within a given plan.
  */
 public class OpenConditionResolver {
+    private static final Logger logger = LogManager.getLogger(OpenConditionResolver.class);
+
     /**
      * TODO : resolve an open condition by adding a codenotation constraint to an existing step
      * @param plan : the plan in which we want to resolve the open condition
@@ -90,7 +94,7 @@ public class OpenConditionResolver {
     {
         List<Operator> possibleModifications = new ArrayList<>();
 
-        getSolvingSteps(plan, openCondition, possibleActions)
+        getSolvingSteps(openCondition, possibleActions)
             .forEach(solvingStep -> {
                 PopSituation newStepEntry = new PopSituation();
                 PopSituation newStepExit = new PopSituation();
@@ -99,8 +103,8 @@ public class OpenConditionResolver {
                     openCondition,
                     Arrays.asList(newStepEntry, newStepExit),
                     solvingStep,
-                    solvingStep.getAssertingCodenotations(openCondition.getProposition()),
-                    insertStepBetween(solvingStep, newStepEntry, newStepExit, openCondition)
+                    solvingStep.toCodenotation(plan.getCc()),
+                    insertNewStepBetween(plan,solvingStep,newStepEntry,newStepExit,openCondition)
                 ));
             });
 
@@ -110,14 +114,14 @@ public class OpenConditionResolver {
     /**
      * Returns the list of all steps we could create from the set of possible actions to resolve
      * a given precondition
-     * @param plan : the concerned plan
      * @param openCondition : the open condition we are aiming to resolve
-     * @param possibleActions : the set of possbile actions for the agent at the current moment
+     * @param possibleActions : the set of possible actions for the agent at the current moment
      * @return : the list of steps created to solve a given open condition
      */
-    public static List<Step> getSolvingSteps(Plan plan, OpenCondition openCondition,
-                                             List<Action> possibleActions)
-    {
+    public static List<Step> getSolvingSteps(
+            OpenCondition openCondition,
+            List<Action> possibleActions
+    ){
         List<Step> solvingSteps = new ArrayList<>();
 
         possibleActions.forEach(possibleAction -> {
@@ -139,7 +143,8 @@ public class OpenConditionResolver {
      * @param openCondition : the flaw we want to resolve.
      * @return the temporal constraints needed to insert a step and its wrapping situations
      */
-    private static TemporalConstraints insertStepBetween(
+    private static TemporalConstraints insertNewStepBetween(
+            Plan plan,
             Step newStep,
             PopSituation newStepEntry,
             PopSituation newStepExit,
@@ -147,9 +152,19 @@ public class OpenConditionResolver {
     ){
         List<PartialOrder> partialOrders = new ArrayList<>();
 
+        // Adds the temporal constraints of the step and its entry and exit situations
         partialOrders.addAll(wrapStep(newStep, newStepEntry, newStepExit));
-        partialOrders.addAll(TemporalConstraintsBuilder.placeBefore(newStepExit,
-                openCondition.getSituation()));
+
+        // Adds the exit situation before the following step
+        partialOrders.addAll(TemporalConstraintsBuilder.placeBefore(
+                newStepExit,
+                openCondition.getSituation())
+        );
+
+        // Put the entry situation before the new step's entry situation, to link it all together
+        partialOrders.add(new PartialOrder(
+            plan.getTc().getFollowingSituation(plan.getInitialStep()), newStepEntry
+        ));
 
         return new TemporalConstraints(partialOrders);
     }
@@ -195,7 +210,6 @@ public class OpenConditionResolver {
             }
         }
 
-        logger.info("Context is : "+temp);
         return assertingInstances;
     }
 }

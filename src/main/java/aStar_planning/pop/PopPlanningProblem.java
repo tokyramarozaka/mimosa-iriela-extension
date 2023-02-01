@@ -14,6 +14,8 @@ import logic.Situation;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import planning.Problem;
 
 import java.util.Collections;
@@ -30,6 +32,7 @@ import java.util.List;
 @ToString
 public class PopPlanningProblem extends Problem implements AStarProblem{
     private Plan initialPlan;
+    private final static Logger logger = LogManager.getLogger(PopPlanningProblem.class);
 
     public PopPlanningProblem(Situation initialSituation, List<Action> possibleActions,
                               Goal goal){
@@ -49,16 +52,23 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
 
     @Override
     public List<Operator> getOptions(State state) {
+        logger.info("GET OPTIONS FOR : "+state);
+        logger.info("\nOPTIONS ARE : ");
+        ((Plan)state).allPossibleModifications(this.getPossibleActions()).forEach(e -> {
+            logger.info("\n--> OPTION # 1 "+e);
+        });
         return ((Plan)state).allPossibleModifications(this.getPossibleActions());
     }
 
     @Override
     public State apply(Operator operator, State state) {
-        return ((Plan)state).applyPlanModification((PlanModification)operator);
+        logger.info("APPLYING "+operator+". GOT "+((Plan)state).applyPlanModification(operator));
+        return ((Plan)state).applyPlanModification(operator);
     }
 
     @Override
     public double evaluateState(State state) {
+        logger.info("HEURISTIC : "+((Plan)state).getFlaws().size());
         return ((Plan)state).getFlaws().size();
     }
 
@@ -69,6 +79,7 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
 
     @Override
     public boolean isValid(State state) {
+        logger.info("IS VALID ? "+((Plan)state).isCoherent());
         return ((Plan)state).isCoherent();
     }
 

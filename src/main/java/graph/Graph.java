@@ -1,5 +1,6 @@
 package graph;
 
+import aStar.AStarProblem;
 import aStar.AStarResolver;
 import aStar_planning.graph_planning.GraphForwardPlanningProblem;
 import exception.NoPlanFoundException;
@@ -10,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @ToString
@@ -48,28 +48,13 @@ public class Graph {
 
     public boolean hasCycles(){
         for (Node node : this.nodes) {
-            if(this.cyclicPathExists(node)){
+            if(node.hasRecursiveLink()){
+                logger.info("Cycle found for "+node);
                 return true;
             }
         }
 
         return false;
-    }
-
-    /**
-     * Checks if there is a cycle within the temporal constraint from one node to itself.
-     * @param node : the starting node
-     * @return true if there is a path from one node to itself, false otherwise
-     */
-    private boolean cyclicPathExists(Node node) {
-        try{
-            AStarResolver search = new AStarResolver(new GraphForwardPlanningProblem(node, node));
-            search.findSolution();
-        }catch(NoPlanFoundException exception){
-            return false;
-        }
-
-        return true;
     }
 
     public Node getPrecedingNode(Node node) {

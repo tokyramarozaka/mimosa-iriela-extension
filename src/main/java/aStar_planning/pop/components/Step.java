@@ -1,5 +1,6 @@
 package aStar_planning.pop.components;
 
+import constraints.Codenotation;
 import graph.Node;
 import logic.Action;
 import logic.ActionConsequence;
@@ -8,6 +9,7 @@ import logic.Atom;
 import constraints.CodenotationConstraints;
 import logic.Context;
 import logic.ContextualAtom;
+import logic.ContextualTerm;
 import logic.LogicalInstance;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -59,7 +61,7 @@ public class Step implements PlanElement {
                     actionInstance.getContext(), consequence
             );
 
-            if (proposition.getAtom().isNegation() == consequenceInstance.getAtom().isNegation() &&
+            if (proposition.getAtom().isNegation() == consequence.isNegation() &&
                     canUnifyPropositions(consequenceInstance, proposition, tempCc))
             {
                         return true;
@@ -202,5 +204,18 @@ public class Step implements PlanElement {
     @Override
     public Node toNode() {
         return new Node(this.toString(), new ArrayList<>(), this);
+    }
+
+    public CodenotationConstraints toCodenotation(CodenotationConstraints toUpdate) {
+        List<Codenotation> updates = new ArrayList<>(toUpdate.getCodenotations());
+
+        this.getActionInstance().getContext().getContextPairs().forEach(pair -> {
+            var left = new ContextualTerm(this.getActionInstance().getContext(),pair.getVariable());
+            var right = pair.getContextualTerm();
+
+            updates.add(new Codenotation(true, left, right));
+        });
+
+        return new CodenotationConstraints(updates);
     }
 }

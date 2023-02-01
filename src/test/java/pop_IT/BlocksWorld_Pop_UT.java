@@ -94,8 +94,7 @@ public class BlocksWorld_Pop_UT {
         PlanModification otherOption = (PlanModification) options.get(1);
 
         Plan nextPlan = (Plan) problem.apply(someOption, someInitialPlan);
-        logger.info("option 1 : "+someOption);
-        logger.info("option 2 : "+otherOption);
+        logger.info("AFTER : " + nextPlan);
 
         assertFalse(nextPlan.getFlaws().contains(someOption.getTargetFlaw()));
         assertTrue(nextPlan.getFlaws().contains(otherOption.getTargetFlaw()));

@@ -11,16 +11,6 @@ public class Constant extends Term{
     }
 
     @Override
-    public boolean unify(Context fromContext, Unifiable to, Context toContext) {
-        return false;
-    }
-
-    @Override
-    public boolean unify(Context fromContext, Unifiable to, Context toContext, CodenotationConstraints cc) {
-        return false;
-    }
-
-    @Override
     public boolean attemptUnification(Context fromContext, Unifiable to, Context toContext, List<ContextualTerm> currentChanges) {
         if (to instanceof Constant){
             return this.sameName((Term) to);

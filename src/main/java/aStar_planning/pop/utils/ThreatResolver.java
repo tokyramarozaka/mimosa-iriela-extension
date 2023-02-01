@@ -12,6 +12,8 @@ import aStar_planning.pop.mapper.PlanModificationMapper;
 import logic.Atom;
 import constraints.Codenotation;
 import constraints.CodenotationConstraints;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
  * Describes all the methods to resolve a threat in any given plan
  */
 public class ThreatResolver {
+    private Logger logger = LogManager.getLogger(ThreatResolver.class);
     /**
      * Return the list of all possible plan modifications to resolve a given threat by
      * putting the threatened step before the destroyer

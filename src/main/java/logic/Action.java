@@ -110,27 +110,27 @@ public class Action extends LogicalEntity{
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        Set<Term> distinctTerms = new HashSet<>();
+        int i = 0;
+        List<Term> terms = new ArrayList<>();
 
-        this.getPreconditions().getAtoms().forEach(precondition -> {
-            distinctTerms.addAll(precondition.getPredicate().getTerms());
-        });
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getName());
+        sb.append("(");
 
-        stringBuilder
-                .append(this.name)
-                .append("(");
-
-        int actionTermsCount = 0;
-        for(Term eachTerm : distinctTerms){
-            stringBuilder.append(eachTerm);
-            if (actionTermsCount++ < distinctTerms.size() - 1){
-                stringBuilder.append(" , ");
-            }
+        for(Atom p : (this.getPreconditions().getAtoms())) {
+            p.getPredicate().getTerms().forEach(term -> {
+                if(!terms.contains(term))
+                    terms.add(term);
+            });
         }
 
-        stringBuilder.append(")");
+        for(Term term : terms) {
+            sb.append(term);
+            if (i++ < terms.size()-1)
+                sb.append(",");
+        }
 
-        return stringBuilder.toString();
+        sb.append(")");
+        return sb.toString();
     }
 }

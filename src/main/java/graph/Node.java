@@ -1,6 +1,10 @@
 package graph;
 
+import aStar.AStarProblem;
+import aStar.AStarResolver;
 import aStar.State;
+import aStar_planning.graph_planning.GraphForwardPlanningProblem;
+import exception.NoPlanFoundException;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -32,6 +36,23 @@ public class Node implements State {
         this.links.add(new Link(this, target, content));
     }
 
+    public boolean hasRecursiveLink(){
+        AStarProblem searchCycleProblem;
+        AStarResolver problemResolver;
+
+        for (Link link : this.getLinks()) {
+            searchCycleProblem = new GraphForwardPlanningProblem(link.getTo(), this);
+            problemResolver = new AStarResolver(searchCycleProblem);
+
+            try{
+                problemResolver.findSolution();
+                return true;
+            }catch (NoPlanFoundException e) {
+                return false;
+            }
+        }
+        return false;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

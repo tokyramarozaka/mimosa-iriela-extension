@@ -2,6 +2,7 @@ package constraints;
 
 import aStar.AStarResolver;
 import aStar_planning.graph_planning.GraphForwardPlanningProblem;
+import aStar_planning.pop.components.Plan;
 import exception.NoPlanFoundException;
 import graph.Graph;
 import graph.Node;
@@ -12,6 +13,8 @@ import logic.Variable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +33,8 @@ import java.util.stream.Collectors;
 @ToString
 public class CodenotationConstraints extends Graphic {
     private List<Codenotation> codenotations;
+    private final static Logger logger = LogManager.getLogger(CodenotationConstraints.class);
+
 
     public CodenotationConstraints(List<Codenotation> codenotations){
         super(new Graph(new ArrayList<>()));
@@ -113,10 +118,7 @@ public class CodenotationConstraints extends Graphic {
      */
     private boolean hasNoCycles() {
         this.updateGraph();
-        List<Codenotation> codenotationsOnly = this.getCodenotations()
-                .stream()
-                .filter(codenotation -> codenotation.isCodenotation())
-                .toList();
+        List<Codenotation> codenotationsOnly = this.allCodenotations();
 
         for (Codenotation codenotation : codenotationsOnly) {
             AStarResolver loopPlanningProblem = new AStarResolver(new GraphForwardPlanningProblem(
@@ -126,9 +128,9 @@ public class CodenotationConstraints extends Graphic {
 
             try{
                 loopPlanningProblem.findSolution();
-                return true;
-            }catch(NoPlanFoundException exception){
                 return false;
+            }catch(NoPlanFoundException exception){
+                return true;
             }
         }
 
@@ -153,7 +155,7 @@ public class CodenotationConstraints extends Graphic {
 
         return allNonCodenotations
                 .stream()
-                .anyMatch(nonCodenotation -> nonCodenotation.matchesAny(allCodenotations));
+                .noneMatch(nonCodenotation -> nonCodenotation.matchesAny(allCodenotations));
     }
 
     /**

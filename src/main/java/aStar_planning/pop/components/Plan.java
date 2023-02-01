@@ -34,10 +34,8 @@ import java.util.stream.Collectors;
  *     <li>Temporal constraints : arrangement of all steps and situations inside of the plan </li>
  * </ul>
  */
-@AllArgsConstructor
 @Getter
 @EqualsAndHashCode
-@Builder
 public class Plan implements State {
     private List<PopSituation> situations;
     private List<Step> steps;
@@ -46,6 +44,7 @@ public class Plan implements State {
     private Set<Flaw> flaws;
     private final static Logger logger = LogManager.getLogger(Plan.class);
 
+    @Builder
     public Plan(List<PopSituation> situations, List<Step> steps, CodenotationConstraints cc,
                 TemporalConstraints tc)
     {
@@ -151,6 +150,8 @@ public class Plan implements State {
      * @return true if the plan is coherent, false otherwise.
      */
     public boolean isCoherent() {
+        logger.info("CC COHERENCE CHECK : "+this.cc.isCoherent());
+        logger.info("TC COHERENCE CHECK : "+this.tc.isCoherent());
         return this.cc.isCoherent() && this.tc.isCoherent();
     }
 
@@ -233,7 +234,7 @@ public class Plan implements State {
      * preceding situation
      * @param missingPrecondition : the open condition which is not necessarily true
      * @param step : the bearer of the open condition
-     * @return
+     * @return an open condition stating the missing precondition for which step
      */
     private OpenCondition buildOpenCondition(Atom missingPrecondition, Step step) {
         return new OpenCondition(
@@ -299,27 +300,6 @@ public class Plan implements State {
         return this.tc.isBefore(leftElement,rightElement);
     }
 
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        String thisPlan = stringBuilder
-                .append("PLAN\n")
-                .append("--SITUATIONS\n")
-                .append(this.situations)
-                .append("\n--STEPS\n")
-                .append(this.steps)
-                .append("\n--CODENOTATIONS :\n")
-                .append(this.cc)
-                .append("\n--TEMPORAL CONSTRAINTS :\n")
-                .append(this.tc)
-                .append("\n--FLAWS : \n")
-                .append(this.flaws)
-                .toString();
-
-        return thisPlan;
-    }
-
     /**
      * TODO : Build a set of total order plan to execute using the partial-order of the plan
      * and its bindings
@@ -366,5 +346,41 @@ public class Plan implements State {
             int otherIndex = operators.indexOf(partialOrder.getFirstElement());
             operators.add(otherIndex + 1, toPlace.getActionInstance());
         }
+    }
+
+    /**
+     * Retrieves the initial step within the plan by using its reserved name.
+     *
+     * @see aStar_planning.pop.utils.PlanInitializer for more details on dummy steps naming
+     * convention as "initial" and "final"
+     *
+     * @return a step whose name is `initial`.
+     */
+    public Step getInitialStep() {
+        return this.steps.stream()
+                .filter(step -> step.getActionInstance().getName().equals("initial"))
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        String thisPlan = stringBuilder
+                .append("PLAN\n")
+                .append("--SITUATIONS\n")
+                .append(this.situations)
+                .append("\n--STEPS\n")
+                .append(this.steps)
+                .append("\n--CODENOTATIONS :\n")
+                .append(this.cc)
+                .append("\n--TEMPORAL CONSTRAINTS :\n")
+                .append(this.tc)
+                .append("\n--FLAWS : \n")
+                .append(this.flaws)
+                .toString();
+
+        return thisPlan;
     }
 }

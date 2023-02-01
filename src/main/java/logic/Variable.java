@@ -49,7 +49,8 @@ public class Variable extends Term{
         if (codenotationConstraints.isLinked(this, fromContext)){
             ContextualTerm variableLink = codenotationConstraints.getLink(this, fromContext);
 
-            return variableLink.getTerm().unify(variableLink.getContext(),to,toContext);
+            return variableLink.getTerm()
+                    .unify(variableLink.getContext(),to,toContext,codenotationConstraints);
         }
 
         Codenotation codenotationToAdd = new Codenotation(
