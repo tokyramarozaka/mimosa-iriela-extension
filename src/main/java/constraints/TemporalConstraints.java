@@ -22,8 +22,6 @@ import java.util.stream.Collectors;
 public class TemporalConstraints extends Graphic {
     private List<PartialOrder> partialOrders;
 
-    private final static Logger logger = LogManager.getLogger(TemporalConstraints.class);
-
     public TemporalConstraints(){
         super();
         this.partialOrders = new ArrayList<>();
@@ -86,8 +84,20 @@ public class TemporalConstraints extends Graphic {
 
     }
 
-    public boolean isAfter(Step step, PopSituation situation) {
-        return !isBefore(step, situation);
+    /**
+     * Checks if an element (left) is after another element (right) according to the current
+     * temporal constraints
+     * @param left
+     * @param right
+     * @return
+     */
+    public boolean isAfter(PlanElement left, PlanElement right) {
+        if (left.equals(right))
+            return false;
+        return this.getGraph().isLinkedTo(
+                getGraph().getContainingNode(right),
+                getGraph().getContainingNode(left)
+        );
     }
 
     /**

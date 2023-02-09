@@ -46,8 +46,8 @@ public class Plan implements State {
 
     @Builder
     public Plan(List<PopSituation> situations, List<Step> steps, CodenotationConstraints cc,
-                TemporalConstraints tc)
-    {
+                TemporalConstraints tc
+    ){
         this.situations = situations;
         this.steps = steps;
         this.cc = cc;
@@ -260,21 +260,13 @@ public class Plan implements State {
      * @return a list of all threats regarding the step to check.
      */
     private List<Flaw> getThreats(Step toCheck) {
-        List<Flaw> list = new ArrayList<>();
+        List<Flaw> threats = new ArrayList<>();
 
-        for (Step step : this.steps) {
-            if (this.isBefore(step, toCheck) && step.isThreatening(toCheck)) {
-                if (!isRestablished(getThreatenedPrecondition(step, toCheck), step, toCheck)) {
-                    Threat newThreat = buildThreat(
-                            step, toCheck, getThreatenedPrecondition(step, toCheck)
-                    );
+        toCheck.getActionPreconditions().getAtoms().forEach(precondition -> {
 
-                    list.add(newThreat);
-                }
-            }
-        }
+        });
 
-        return list;
+        return threats;
     }
 
     /**
@@ -287,10 +279,10 @@ public class Plan implements State {
     private boolean isRestablished(ContextualAtom proposition, Step destroyer, Step destroyedStep) {
         return this.steps.stream()
                 .filter(step -> step.asserts(proposition, this.getCc()))
-                .filter(restablisher -> !restablisher.equals(destroyedStep) && !restablisher.equals(destroyer))
-                .filter(restablisher -> tc.isBefore(destroyer, restablisher) && tc.isBefore(restablisher,destroyedStep))
-                .findFirst()
-                .isPresent();
+                .filter(restablisher -> !restablisher.equals(destroyedStep)
+                        && !restablisher.equals(destroyer))
+                .anyMatch(restablisher -> tc.isBefore(destroyer, restablisher)
+                        && tc.isBefore(restablisher,destroyedStep));
     }
 
     /**
@@ -311,6 +303,12 @@ public class Plan implements State {
         return null;
     }
 
+    private List<Step> getDestroyers(ContextualAtom proposition, PopSituation situation){
+        return this.steps.stream()
+                .filter(potentialDestroyer -> !tc.isAfter(potentialDestroyer,situation))
+                .filter(step -> step.destroys(proposition, this.getCc()))
+                .collect(Collectors.toList());
+    }
     /**
      * Checks if a given element is preceding the other element.
      * @param leftElement : the preceding element
@@ -327,47 +325,10 @@ public class Plan implements State {
      * @return a sequence of action instance for the agent to execute.
      */
     public List<Operator> createInstance() {
-        List<Operator> planActions = new ArrayList<>();
-
-        this.steps.forEach(step -> {
-            this.place(step, planActions);
-        });
-
-        return planActions;
+        // TODO
+        throw new RuntimeException("Not yet implemented");
     }
 
-    /**
-     * TODO : places the step into the set of actions with total order.
-     * @param toPlace the step we want to place into the plan
-     * @param toExecute : the list where we want to add the current plan
-     */
-    private void place(Step toPlace, List<Operator> toExecute){
-        this.tc.getConcernedConstraints(toPlace).forEach(partialOrder -> {
-
-        });
-    }
-
-    /**
-     * TODO : determines if the element to add should be added at the start of the plan, in
-     * between, or at the end of the plan
-     */
-    private void putOrShiftElement(Step toPlace, List<Operator> operators, PartialOrder partialOrder){
-        // If the total ordered action set is empty, just insert it.
-        if (operators.isEmpty()){
-            operators.add(toPlace.getActionInstance());
-            return;
-        }
-
-        // If the element to place is set to be before another element, put it before it, if any
-        if (partialOrder.getFirstElement().equals(toPlace)){
-            int otherIndex = operators.indexOf(partialOrder.getSecondElement());
-            operators.add(otherIndex,toPlace.getActionInstance());
-        }else if (partialOrder.getSecondElement().equals(toPlace)) {
-            // If the element must be after a specific element, put it after it, if any.
-            int otherIndex = operators.indexOf(partialOrder.getFirstElement());
-            operators.add(otherIndex + 1, toPlace.getActionInstance());
-        }
-    }
 
     /**
      * Retrieves the initial step within the plan by using its reserved name.

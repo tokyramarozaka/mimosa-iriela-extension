@@ -7,8 +7,10 @@
     <list default="true" id="cb108de8-9a9d-453e-8c4c-86aa24a0e7fc" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mylogger.log" beforeDir="false" afterPath="$PROJECT_DIR$/mylogger.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PopPlanningProblem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PopPlanningProblem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/Plan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/Plan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/PlanModification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/PlanModification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/Step.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/Step.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/constraints/TemporalConstraints.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/constraints/TemporalConstraints.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +67,7 @@
       <recent name="logic" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.BlocksWorld_Pop_IT.shouldStackThreeConcreteBlocks_finalOutputTest">
+  <component name="RunManager" selected="JUnit.BlocksWorld_Pop_IT">
     <configuration name="BlocksWorld_Forward_IT" type="JUnit" factoryName="JUnit" activateToolWindowBeforeRun="false" temporary="true" nameIsGenerated="true">
       <module name="Iriela" />
       <extension name="coverage">
@@ -88,18 +90,17 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="BlocksWorld_Forward_IT.shouldReturnEmptyPlan" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="BlocksWorld_Pop_IT" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Iriela" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="forward_IT.*" />
+          <option name="PATTERN" value="pop_IT.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="forward_IT" />
-      <option name="MAIN_CLASS_NAME" value="forward_IT.BlocksWorld_Forward_IT" />
-      <option name="METHOD_NAME" value="shouldReturnEmptyPlan" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="PACKAGE_NAME" value="pop_IT" />
+      <option name="MAIN_CLASS_NAME" value="pop_IT.BlocksWorld_Pop_IT" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -153,19 +154,19 @@
     </configuration>
     <list>
       <item itemvalue="Application.forward_IT.BlocksWorld_Forward_IT" />
+      <item itemvalue="JUnit.BlocksWorld_Pop_IT" />
       <item itemvalue="JUnit.BlocksWorld_Pop_IT.shouldStackThreeConcreteBlocks_finalOutputTest" />
       <item itemvalue="JUnit.BlocksWorld_Pop_UT.shouldDetect__threeTakes_asOptionsWhen_onTable_ABC" />
       <item itemvalue="JUnit.BlocksWorld_Pop_UT" />
       <item itemvalue="JUnit.BlocksWorld_Forward_IT" />
-      <item itemvalue="JUnit.BlocksWorld_Forward_IT.shouldReturnEmptyPlan" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.BlocksWorld_Pop_IT" />
         <item itemvalue="JUnit.BlocksWorld_Pop_IT.shouldStackThreeConcreteBlocks_finalOutputTest" />
         <item itemvalue="JUnit.BlocksWorld_Pop_UT" />
         <item itemvalue="JUnit.BlocksWorld_Forward_IT" />
         <item itemvalue="JUnit.BlocksWorld_Pop_UT.shouldDetect__threeTakes_asOptionsWhen_onTable_ABC" />
-        <item itemvalue="JUnit.BlocksWorld_Forward_IT.shouldReturnEmptyPlan" />
       </list>
     </recent_temporary>
   </component>
@@ -328,7 +329,9 @@
       <workItem from="1675098338659" duration="8742000" />
       <workItem from="1675142051452" duration="8916000" />
       <workItem from="1675167653602" duration="63000" />
-      <workItem from="1675269309385" duration="13413000" />
+      <workItem from="1675269309385" duration="14128000" />
+      <workItem from="1675705304576" duration="804000" />
+      <workItem from="1675960677458" duration="7754000" />
     </task>
     <servers />
   </component>

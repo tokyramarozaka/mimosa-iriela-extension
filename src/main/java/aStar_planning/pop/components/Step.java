@@ -114,27 +114,23 @@ public class Step implements PlanElement {
     }
 
     /**
-     * Checks if the current step is threatening the precondition(s) of another step
-     * TODO : make it work with codenotations constraints instead
-     * @param step
+     * Checks if the current step is threatening a certain proposition. Mainly used to check if
+     * the precondition of another it is threatening another step
+     * @param proposition: the proposition we want to check if it is threatened or not.
+     * @param cc: the codenotation constraints or variable bindings used for unification.
      * @return
      */
-    public boolean isThreatening(Step step) {
-        for (Atom consequence : this.getActionConsequences().getAtoms()) {
-            List<Atom> destroyedPreconditions = step.getActionPreconditions().getAtoms()
-                    .stream()
-                    .filter(precondition -> precondition.getPredicate()
-                            .sameName(consequence.getPredicate()))
-                    .filter(precondition -> precondition.isNegation() != consequence.isNegation()
-                        && consequence.getPredicate().unify(
+    public boolean isThreatening(ContextualAtom proposition, CodenotationConstraints cc) {
+        for(Atom consequence : this.getActionConsequences().getAtoms()) {
+            CodenotationConstraints unifyingCdn = cc.copy();
+            if(proposition.getAtom().isNegation()!=consequence.isNegation() &&
+                    consequence.getPredicate().unify(
                             this.getActionInstance().getContext(),
-                            precondition.getPredicate(),
-                            step.getActionInstance().getContext()
-                        )
+                            proposition.getAtom().getPredicate(),
+                            proposition.getContext(),
+                            unifyingCdn
                     )
-                    .toList();
-
-            if (destroyedPreconditions.size() > 0){
+            ){
                 return true;
             }
         }

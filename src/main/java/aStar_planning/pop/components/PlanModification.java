@@ -2,6 +2,7 @@ package aStar_planning.pop.components;
 
 import aStar.Operator;
 import constraints.CodenotationConstraints;
+import constraints.PartialOrder;
 import constraints.TemporalConstraints;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +12,7 @@ import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @AllArgsConstructor
@@ -37,7 +39,7 @@ public class PlanModification implements Operator {
         CodenotationConstraints allNewCodenotationConstraints = new CodenotationConstraints(
                 new ArrayList<>(oldPlan.getCc().getCodenotations()));
         TemporalConstraints allNewTemporalConstraints = new TemporalConstraints(
-                oldPlan.getTc().getPartialOrders());
+                new ArrayList<>(oldPlan.getTc().getPartialOrders()));
 
         if(addedSituations != null){
            allNewSituations.addAll(addedSituations);
