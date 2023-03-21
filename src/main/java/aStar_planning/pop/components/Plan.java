@@ -415,11 +415,4 @@ public class Plan implements State {
 
         return thisPlan;
     }
-
-    public static void main(String[] args) {
-        logger.info("Hello world");
-        logger.debug("Hello world");
-        logger.warn("Hello world");
-        logger.error("Hello world");
-    }
 }
