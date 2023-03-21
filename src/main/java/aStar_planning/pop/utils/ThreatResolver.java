@@ -45,7 +45,7 @@ public class ThreatResolver {
             new PartialOrder(threatenedExitSituation, destroyerEntrySituation)
         ));
 
-        PlanModification destroyerDemotion = new PlanModification()
+        PlanModification destroyerDemotion = PlanModification
                 .builder()
                 .targetFlaw(threat)
                 .addedTc(temporalChanges)

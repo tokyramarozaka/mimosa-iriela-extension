@@ -314,7 +314,7 @@ public class Plan implements State {
      * @param proposition
      * @param destroyer
      * @param destroyedStep
-     * @return
+     * @return true if the proposition is restablished, and false otherwise
      */
     private boolean isRestablished(ContextualAtom proposition, Step destroyer, Step destroyedStep) {
         return this.steps.stream()
@@ -414,5 +414,12 @@ public class Plan implements State {
                 .toString();
 
         return thisPlan;
+    }
+
+    public static void main(String[] args) {
+        logger.info("Hello world");
+        logger.debug("Hello world");
+        logger.warn("Hello world");
+        logger.error("Hello world");
     }
 }
