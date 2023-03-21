@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString
 @Builder
 public class PlanModification implements Operator {
     private Flaw targetFlaw;
@@ -63,5 +62,18 @@ public class PlanModification implements Operator {
     @Override
     public String getName() {
         return this.toString();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        return builder
+                .append("Plan Modification to resolve : "+this.getTargetFlaw())
+                .append(addedStep == null ? "" : "\nAdded : \n\t"+this.addedStep)
+                .append(addedSituations == null ? "" : "\nAdded : \n\t"+this.addedSituations)
+                .append(addedCc == null ? "" : "\nAdded : \n\t"+this.addedCc)
+                .append(addedTc == null ? "" : "\nAdded : \n\t"+this.addedTc)
+                .toString();
     }
 }

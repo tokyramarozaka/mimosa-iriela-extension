@@ -7,9 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * A partial order between two elements describing that the first element should be before the
  * second element.
@@ -18,20 +15,20 @@ import java.util.List;
 @Getter
 @EqualsAndHashCode
 public class PartialOrder {
-    private PlanElement firstElement;
-    private PlanElement secondElement;
+    private PlanElement before;
+    private PlanElement after;
 
     public Link toLink(Graph graph){
         return new Link(
-            graph.getContainingNode(this.firstElement), graph.getContainingNode(this.secondElement)
+            graph.getContainingNode(this.before), graph.getContainingNode(this.after)
         );
     }
     @Override
     public String toString() {
         return new StringBuilder()
-                .append(this.firstElement)
+                .append(this.before)
                 .append(" < ")
-                .append(this.secondElement)
+                .append(this.after)
                 .toString();
     }
 }

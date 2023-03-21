@@ -17,4 +17,18 @@ public class Threat implements Flaw {
     private Step threatened;
     private PopSituation situation;
     private ContextualAtom proposition;
+
+    @Override
+    public String toString(){
+        StringBuilder stringBuilder = new StringBuilder();
+
+        return stringBuilder
+                .append("THREAT : ")
+                .append(this.destroyer)
+                .append(" THREATENS ")
+                .append(this.proposition)
+                .append(" IN ")
+                .append(this.threatened)
+                .toString();
+    }
 }

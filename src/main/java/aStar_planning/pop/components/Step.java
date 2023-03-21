@@ -78,14 +78,15 @@ public class Step implements PlanElement {
      * @return true if this step destroys the given proposition and false otherwise.
      */
     public boolean destroys(ContextualAtom proposition, CodenotationConstraints cc){
-        for (Atom consequence : this.getActionPreconditions().getAtoms()) {
+        for (Atom consequence : this.getActionConsequences().getAtoms()) {
             CodenotationConstraints tempCc = cc.copy();
             ContextualAtom consequenceInstance = new ContextualAtom(
                     this.actionInstance.getContext(), consequence
             );
 
             if (proposition.getAtom().isNegation() != consequenceInstance.getAtom().isNegation() &&
-                    canUnifyPropositions(consequenceInstance, proposition, tempCc)) {
+                    canUnifyPropositions(consequenceInstance,proposition,tempCc)
+            ){
                 return true;
             }
         }

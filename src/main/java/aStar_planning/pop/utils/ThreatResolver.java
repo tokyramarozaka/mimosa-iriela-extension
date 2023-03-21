@@ -47,6 +47,7 @@ public class ThreatResolver {
 
         PlanModification destroyerDemotion = new PlanModification()
                 .builder()
+                .targetFlaw(threat)
                 .addedTc(temporalChanges)
                 .build();
 

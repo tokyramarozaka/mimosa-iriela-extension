@@ -10,8 +10,6 @@ import graph.Node;
 import logic.Graphic;
 import lombok.Getter;
 import lombok.ToString;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,15 +84,17 @@ public class TemporalConstraints extends Graphic {
 
     /**
      * Checks if an element (left) is after another element (right) according to the current
-     * temporal constraints
-     * @param left
-     * @param right
-     * @return
+     * temporal constraints by using its graphical representation
+     * @param left : the latter step which is after the right element
+     * @param right : the former step which is before the left element
+     * @return true if left > right temporally, and false otherwise
      */
     public boolean isAfter(PlanElement left, PlanElement right) {
-        if (left.equals(right))
+        if (left.equals(right)) {
             return false;
-        return this.getGraph().isLinkedTo(
+        }
+
+        return this.getGraph().pathExists(
                 getGraph().getContainingNode(right),
                 getGraph().getContainingNode(left)
         );
@@ -110,8 +110,8 @@ public class TemporalConstraints extends Graphic {
         List<PartialOrder> concernedConstraints = new ArrayList<>();
 
         for (PartialOrder partialOrder : this.partialOrders) {
-            if (partialOrder.getFirstElement().equals(target) ||
-                    partialOrder.getSecondElement().equals(target)) {
+            if (partialOrder.getBefore().equals(target) ||
+                    partialOrder.getAfter().equals(target)) {
                         concernedConstraints.add(partialOrder);
             }
         }
@@ -134,8 +134,8 @@ public class TemporalConstraints extends Graphic {
         List<Node> nodes = new ArrayList<>();
 
         this.partialOrders.forEach(temporalOrder -> {
-            Node left = temporalOrder.getFirstElement().toNode();
-            Node right = temporalOrder.getSecondElement().toNode();
+            Node left = temporalOrder.getBefore().toNode();
+            Node right = temporalOrder.getAfter().toNode();
 
             if (!nodes.contains(left)) nodes.add(left);
 
@@ -166,7 +166,7 @@ public class TemporalConstraints extends Graphic {
 
         return this.getPartialOrders()
                 .stream()
-                .filter(partialOrder -> partialOrder.getFirstElement().toNode().getName().equals(node.getName()))
+                .filter(partialOrder -> partialOrder.getBefore().toNode().getName().equals(node.getName()))
                 .map(partialOrder -> partialOrder.toLink(graph))
                 .collect(Collectors.toList());
     }

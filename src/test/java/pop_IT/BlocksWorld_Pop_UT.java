@@ -1,5 +1,6 @@
 package pop_IT;
 
+import aStar.AStarResolver;
 import aStar.Operator;
 import aStar_planning.pop.PopPlanningProblem;
 import aStar_planning.pop.components.Flaw;
@@ -7,9 +8,12 @@ import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PlanModification;
 import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop.components.Step;
+import constraints.PartialOrder;
+import graph.Node;
 import logic.Atom;
 import logic.Context;
 import logic.ContextualAtom;
+import logic.LogicalInstance;
 import mock_blocks.ActionFactory;
 import mock_blocks.GoalFactory;
 import mock_blocks.PredicateFactory;
@@ -98,6 +102,38 @@ public class BlocksWorld_Pop_UT {
 
         assertFalse(nextPlan.getFlaws().contains(someOption.getTargetFlaw()));
         assertTrue(nextPlan.getFlaws().contains(otherOption.getTargetFlaw()));
+    }
+
+    @Test
+    public void plan__creatSolutionInstance_ok(){
+        AStarResolver resolver = new AStarResolver(problem);
+
+        List<Operator> solutionOperators = resolver.findSolution();
+        Plan partialOrder_solutionPlan = problem.getFinalPlan(solutionOperators);
+        List<LogicalInstance> totalOrder_solutionPlan = partialOrder_solutionPlan.createInstance();
+
+        for (int i = 0; i < totalOrder_solutionPlan.size(); i++) {
+            LogicalInstance previous = totalOrder_solutionPlan.get(i);
+            LogicalInstance next = totalOrder_solutionPlan.get(i+1);
+
+            Step previous_toStep = getContainingStep(partialOrder_solutionPlan, previous);
+            Step next_toStep = getContainingStep(partialOrder_solutionPlan, next);
+
+            assertTrue(partialOrder_solutionPlan.getTc().isBefore(previous_toStep, next_toStep));
+        }
+    }
+
+    private Step getContainingStep(Plan plan, LogicalInstance actionInstance){
+        return plan.getTc()
+                .getGraph()
+                .getNodes()
+                .stream()
+                .filter(node ->  node.getContent() instanceof Step &&
+                            ((Step) node.getContent()).getActionInstance().equals(actionInstance))
+                .map(Node::getContent)
+                .map(object -> (Step)object)
+                .findFirst()
+                .get();
     }
 
     /**

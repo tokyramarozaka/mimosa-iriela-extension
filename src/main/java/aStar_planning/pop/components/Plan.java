@@ -4,14 +4,13 @@ import aStar.Operator;
 import aStar.State;
 import aStar_planning.pop.utils.OpenConditionResolver;
 import aStar_planning.pop.utils.ThreatResolver;
-import constraints.PartialOrder;
 import constraints.TemporalConstraints;
 import logic.Action;
 import logic.Atom;
 import constraints.CodenotationConstraints;
 import logic.Context;
 import logic.ContextualAtom;
-import lombok.AllArgsConstructor;
+import logic.LogicalInstance;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -19,6 +18,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -62,12 +63,15 @@ public class Plan implements State {
 
     /**
      * (Re)computes all the flaws of the plan's steps : its open conditions and its threats
+     * Note that the initial step cannot have any threats since it is the first step.
      */
     public void evaluateFlaws(){
         this.flaws = new HashSet<>();
 
         for(Step step : this.steps) {
-            this.getThreats(step).forEach(threat -> this.flaws.add(threat));
+            if(!isInitialStep(step)) {
+                this.getThreats(step).forEach(threat -> this.flaws.add(threat));
+            }
 
             this.getOpenConditions(step).forEach(openCondition -> this.flaws.add(openCondition));
         }
@@ -191,34 +195,45 @@ public class Plan implements State {
     }
 
     /**
-     * TODO : Checks if a given proposition is necessarily true in a given situation
+     * Checks if a given proposition is necessarily true in a given situation
      * @param proposition : the proposition to check
      * @param situation : the situation where it needs to be checked.
      * @return true if the proposition is necessarily true in the given situation, false otherwise
      */
     public boolean isAsserted(ContextualAtom proposition, PopSituation situation) {
-        for(Step establisher : getEstablishers(proposition, situation)){
-            for(Step destroyer : getDestroyers(proposition, situation)){
-                var postEstablisher = this.tc.getFollowingSituation(establisher);
-                var postDestroyer = this.tc.getFollowingSituation((destroyer));
-
-                if(this.isBefore(postEstablisher, postDestroyer)){
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        return false;
+//        for(Step establisher : getEstablishers(proposition, situation)){
+//            for(Step destroyer : getDestroyers(proposition, situation)){
+//                var postEstablisher = this.tc.getFollowingSituation(establisher);
+//                var postDestroyer = this.tc.getFollowingSituation((destroyer));
+//
+//                if(this.isBefore(postEstablisher, postDestroyer)){
+//                    return false;
+//                }
+//            }
+//            return true;
+//        }
+        return getEstablishers(proposition, situation).size() > 0;
     }
 
+    /**
+     * Return all the steps which destroys (or threaten) a given proposition in a given situation
+     * @param proposition : the proposition we want to check
+     * @param situation : the situation in which we want to check if it has been destroyed
+     * @return the list of all steps which can destroy a given proposition in a given situation
+     */
     private List<Step> getDestroyers(ContextualAtom proposition, PopSituation situation) {
         return this.steps.stream()
-                .filter(step -> !this.tc.isAfter(step, situation))
+                .filter(step -> !this.tc.isBefore(situation, step))
                 .filter(step -> step.destroys(proposition, this.getCc()))
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Get all the steps which establishes a given proposition in a given situation
+     * @param proposition : the proposition to establish
+     * @param situation : the situation in which the proposition needs to be established
+     * @return a list of steps which all establishes the proposition in the situation
+     */
     private List<Step> getEstablishers(ContextualAtom proposition, PopSituation situation) {
         return this.steps.stream()
                 .filter(Plan::isNotFinalStep)
@@ -262,8 +277,30 @@ public class Plan implements State {
     private List<Flaw> getThreats(Step toCheck) {
         List<Flaw> threats = new ArrayList<>();
 
+        logger.info("Getting threats for "+toCheck);
         toCheck.getActionPreconditions().getAtoms().forEach(precondition -> {
+            ContextualAtom preconditionProposition = new ContextualAtom(
+                    toCheck.getActionInstance().getContext(), precondition
+            );
 
+            List<Step> destroyers = getDestroyers(
+                    preconditionProposition,
+                    tc.getPrecedingSituation(toCheck)
+            );
+            logger.info(precondition + " FOUND DESTROYERS : "+destroyers);
+
+            for (Step destroyer : destroyers) {
+                logger.info("(*)" + destroyer + "IS RESTABLISHED : " +
+                        isRestablished(preconditionProposition, destroyer, toCheck));
+                if(!isRestablished(preconditionProposition, destroyer, toCheck)){
+                    threats.add(new Threat(
+                            destroyer,
+                            toCheck,
+                            tc.getPrecedingSituation(toCheck),
+                            preconditionProposition
+                    ));
+                }
+            }
         });
 
         return threats;
@@ -271,6 +308,9 @@ public class Plan implements State {
 
     /**
      * TODO : refactor this code
+     * Check if a given proposition is restablished between a destroyer and the destroyed step.
+     * Meaning there is a step `restablisher`, where destroyer < destroyed step, and
+     * destroyer < restablisher < destroyed step
      * @param proposition
      * @param destroyer
      * @param destroyedStep
@@ -282,7 +322,7 @@ public class Plan implements State {
                 .filter(restablisher -> !restablisher.equals(destroyedStep)
                         && !restablisher.equals(destroyer))
                 .anyMatch(restablisher -> tc.isBefore(destroyer, restablisher)
-                        && tc.isBefore(restablisher,destroyedStep));
+                        && tc.isBefore(restablisher, destroyedStep));
     }
 
     /**
@@ -303,20 +343,14 @@ public class Plan implements State {
         return null;
     }
 
-    private List<Step> getDestroyers(ContextualAtom proposition, PopSituation situation){
-        return this.steps.stream()
-                .filter(potentialDestroyer -> !tc.isAfter(potentialDestroyer,situation))
-                .filter(step -> step.destroys(proposition, this.getCc()))
-                .collect(Collectors.toList());
-    }
     /**
      * Checks if a given element is preceding the other element.
-     * @param leftElement : the preceding element
-     * @param rightElement : the next element
+     * @param left : the preceding element
+     * @param right : the next element
      * @return true if left element is before the right element.
      */
-    public boolean isBefore(PlanElement leftElement, PlanElement rightElement){
-        return this.tc.isBefore(leftElement,rightElement);
+    public boolean isBefore(PlanElement left, PlanElement right){
+        return this.tc.isBefore(left,right);
     }
 
     /**
@@ -324,9 +358,25 @@ public class Plan implements State {
      * and its bindings
      * @return a sequence of action instance for the agent to execute.
      */
-    public List<Operator> createInstance() {
-        // TODO
-        throw new RuntimeException("Not yet implemented");
+    public List<LogicalInstance> createInstance() {
+            List<LogicalInstance> planActions = new ArrayList<>();
+            List<Step> allSteps = new ArrayList<>();
+            List<CodenotationConstraints>  cc = Collections.singletonList(this.cc);
+            allSteps.add(this.getInitialStep());
+            allSteps.sort(new Comparator<Step>() {
+                @Override
+                public int compare(Step o1, Step o2) {
+                    return extractInt(String.valueOf(o1)) - extractInt(String.valueOf(o2));
+                }
+                int extractInt(String s) {
+                    String num = s.replaceAll("\\D", "");
+                    return num.isEmpty() ? 0 : Integer.parseInt(num);
+                }
+            });
+
+            allSteps.add(this.steps.stream().filter(Step::isTheFinalStep).toList().get(0));
+
+            return planActions;
     }
 
 

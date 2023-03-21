@@ -7,10 +7,17 @@
     <list default="true" id="cb108de8-9a9d-453e-8c4c-86aa24a0e7fc" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mylogger.log" beforeDir="false" afterPath="$PROJECT_DIR$/mylogger.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PopPlanningProblem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/PopPlanningProblem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/Plan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/Plan.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/PlanModification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/PlanModification.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/Step.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/Step.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/Threat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/components/Threat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/utils/ThreatResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aStar_planning/pop/utils/ThreatResolver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/constraints/PartialOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/constraints/PartialOrder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/constraints/TemporalConstraints.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/constraints/TemporalConstraints.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/graph/Graph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/graph/Graph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j2.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/log4j2.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/pop_IT/BlocksWorld_Pop_UT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/pop_IT/BlocksWorld_Pop_UT.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +74,7 @@
       <recent name="logic" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.BlocksWorld_Pop_IT">
+  <component name="RunManager" selected="JUnit.BlocksWorld_Pop_UT">
     <configuration name="BlocksWorld_Forward_IT" type="JUnit" factoryName="JUnit" activateToolWindowBeforeRun="false" temporary="true" nameIsGenerated="true">
       <module name="Iriela" />
       <extension name="coverage">
@@ -162,9 +169,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.BlocksWorld_Pop_UT" />
         <item itemvalue="JUnit.BlocksWorld_Pop_IT" />
         <item itemvalue="JUnit.BlocksWorld_Pop_IT.shouldStackThreeConcreteBlocks_finalOutputTest" />
-        <item itemvalue="JUnit.BlocksWorld_Pop_UT" />
         <item itemvalue="JUnit.BlocksWorld_Forward_IT" />
         <item itemvalue="JUnit.BlocksWorld_Pop_UT.shouldDetect__threeTakes_asOptionsWhen_onTable_ABC" />
       </list>
@@ -331,7 +338,27 @@
       <workItem from="1675167653602" duration="63000" />
       <workItem from="1675269309385" duration="14128000" />
       <workItem from="1675705304576" duration="804000" />
-      <workItem from="1675960677458" duration="7754000" />
+      <workItem from="1675960677458" duration="10936000" />
+      <workItem from="1675999333490" duration="1579000" />
+      <workItem from="1676016863671" duration="2403000" />
+      <workItem from="1676092293348" duration="7943000" />
+      <workItem from="1676270128575" duration="598000" />
+      <workItem from="1676272868206" duration="601000" />
+      <workItem from="1676471805038" duration="6683000" />
+      <workItem from="1676544052307" duration="636000" />
+      <workItem from="1676612436417" duration="1126000" />
+      <workItem from="1676910201269" duration="598000" />
+      <workItem from="1677144718952" duration="757000" />
+      <workItem from="1677500828161" duration="595000" />
+      <workItem from="1677664444595" duration="6000" />
+      <workItem from="1678263636612" duration="23000" />
+      <workItem from="1678302792003" duration="989000" />
+      <workItem from="1678546849536" duration="1897000" />
+      <workItem from="1678947507283" duration="28000" />
+      <workItem from="1679136650383" duration="596000" />
+      <workItem from="1679208792884" duration="605000" />
+      <workItem from="1679296965166" duration="10177000" />
+      <workItem from="1679321702105" duration="8411000" />
     </task>
     <servers />
   </component>

@@ -35,6 +35,12 @@ public class Graph {
                 .orElse(null);
     }
 
+    /**
+     * Checks if a path exists from one node to another
+     * @param start : the starting node
+     * @param goal : the target node
+     * @return true if there is a path between the two nodes and false otherwise
+     */
     public boolean pathExists(Node start, Node goal){
         try{
             AStarResolver search = new AStarResolver(new GraphForwardPlanningProblem(start,goal));

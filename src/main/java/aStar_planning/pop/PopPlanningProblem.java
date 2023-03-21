@@ -5,11 +5,9 @@ import aStar.Operator;
 import aStar.State;
 import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PlanModification;
-import aStar_planning.pop.components.Step;
 import aStar_planning.pop.utils.PlanInitializer;
 import logic.Action;
 import logic.Goal;
-import logic.LogicalInstance;
 import logic.Situation;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +18,8 @@ import planning.Problem;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * A planning problem according to the Partial-Order Planning specification, where a state is
@@ -52,18 +52,20 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
 
     @Override
     public List<Operator> getOptions(State state) {
-        logger.info("GET OPTIONS FOR : "+state);
-        logger.info("\nOPTIONS ARE : ");
+        AtomicInteger i = new AtomicInteger();
+        logger.info("\n___GET OPTIONS___");
+        logger.info("CURRENT STATE : "+state);
+        logger.info("\n\t___OPTIONS ARE___");
         ((Plan)state).allPossibleModifications(this.getPossibleActions()).forEach(e -> {
-            logger.info("\n--> OPTION # 1 "+e);
+            logger.info("\n--> OPTION #"+(i.incrementAndGet())+" : " +e);
         });
         return ((Plan)state).allPossibleModifications(this.getPossibleActions());
     }
 
     @Override
     public State apply(Operator operator, State state) {
-        logger.info("APPLYING "+operator);
-        logger.info("\nGOT "+((Plan)state).applyPlanModification(operator));
+        logger.info("\n___APPLYING___ "+operator);
+        logger.info("\n___GOT___ "+((Plan)state).applyPlanModification(operator));
         return ((Plan)state).applyPlanModification(operator);
     }
 
@@ -80,7 +82,7 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
 
     @Override
     public boolean isValid(State state) {
-        logger.info("IS VALID ? "+((Plan)state).isCoherent());
+        logger.info("PLAN IS VALID : "+((Plan)state).isCoherent());
         return ((Plan)state).isCoherent();
     }
 
@@ -95,7 +97,9 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
 
         Plan finalPlan = getFinalPlan(solutionSteps);
 
-        return finalPlan.createInstance();
+        return finalPlan.createInstance().stream()
+                .map(instance -> (Operator)instance)
+                .collect(Collectors.toList());
     }
 
     @Override
