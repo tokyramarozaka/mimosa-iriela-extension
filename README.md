@@ -1,7 +1,11 @@
 # 🔎 Overview
-A normative extension of the agent-based modeling platform MIMOSA. This extension aims at agents to be able to represent and reason about regulativeNorms. We categorize regulativeNorms in 3 types : obligations, prohibitions, and permission according to Ostrom &amp; Crawford. 
+A normative extension of the agent-based modeling platform MIMOSA. This extension aims at agents to be able to represent and reason about norms which can be : Regulative Norms, or Constitutive Norms. Regulative Norms tells the agent what ought to (not) be done in certain situations, while Constitutive Norms binds existing resources to concepts via a "count as" relation. 
 
-The end-goal is to write a planning problem, with a set of institutions and organizations which endows regulativeNorms to its members, and see how they affect the agent's behavior. 
+In this project we have 3 types of Regulative Norms : obligations, prohibitions, and permission according to Ostrom &amp; Crawford. 
+
+The end-goal is to be able to describe a planning problem with norms with a dedicated language (DOMAIN-SPECIFIC LANGUAGE), which are endowed by its organizations through the various roles that the agent must fulfill, and see how it affects its behavior. 
+
+We use automated planning internally to resolve the planning problem afterwards which is extended to account for norms.
 
 # ⚙ Tools
 
@@ -17,13 +21,15 @@ This extension requires the following tools :
 
 # 🖋 Theoric background
 
-The tool is based upon the Partial-Order Planner (POP), which refines a plan until it becomes executable. In addition to the standard types of flaws, we propose three other types of flaws relative to regulativeNorms, and their resolvers.
+The tool is based upon the Partial-Order Planner (POP), which refines a plan until it becomes executable and fulfill all the agent's goals. We start off by having a plan with just the initial and final situation, which will be improved by resolving its "flaws". In addition to the standard types of flaws, we propose three other types of flaws relative to regulativeNorms, and their resolvers.
 
 `Missing obligation`
 
 `Missing prohibition` 
 
 `Missing permission`
+
+This will allow agents to have a clear mean to comply / circumvent / violate a norm. 
 
 # 🧪 Test model
 
