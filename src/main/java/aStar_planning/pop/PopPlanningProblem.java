@@ -93,13 +93,7 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
      */
     @Override
     public List<Operator> getSolution(List<Operator> solutionSteps) {
-        Collections.reverse(solutionSteps);
-
-        Plan finalPlan = getFinalPlan(solutionSteps);
-
-        return finalPlan.createInstance().stream()
-                .map(instance -> (Operator)instance)
-                .collect(Collectors.toList());
+        return solutionSteps;
     }
 
     @Override
@@ -111,15 +105,5 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
         );
 
         return plan.toString();
-    }
-
-    public Plan getFinalPlan(List<Operator> allModifications){
-        Plan plan = this.getInitialPlan();
-
-        for (Operator operator : allModifications) {
-            plan = (Plan) this.getInitialPlan().applyPlanModification(operator);
-        }
-
-        return plan;
     }
 }

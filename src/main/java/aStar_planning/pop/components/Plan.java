@@ -224,7 +224,7 @@ public class Plan implements State {
      */
     private List<Step> getDestroyers(ContextualAtom proposition, PopSituation situation) {
         return this.steps.stream()
-                .filter(step -> this.tc.isBefore(step, situation))
+                .filter(step -> !this.tc.isBefore(situation, step))
                 .filter(step -> step.destroys(proposition, this.getCc()))
                 .collect(Collectors.toList());
     }

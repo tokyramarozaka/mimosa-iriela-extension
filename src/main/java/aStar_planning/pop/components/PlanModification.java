@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +24,7 @@ public class PlanModification implements Operator {
     private Step addedStep;
     private CodenotationConstraints addedCc;
     private TemporalConstraints addedTc;
-
+    private final static Logger logger = LogManager.getLogger(PlanModification.class);
     /**
      * Applies this plan modification to a given plan, and returns the resulting plan
      * @param oldPlan : the plan to be updated
@@ -51,7 +53,7 @@ public class PlanModification implements Operator {
             this.addedTc.getPartialOrders().forEach(partialOrder -> {
                 if (allNewTemporalConstraints.getPartialOrders()
                         .stream()
-                        .anyMatch(existing -> !existing.toString().equals(partialOrder.toString()))
+                        .noneMatch(existing -> existing.toString().equals(partialOrder.toString()))
                 ){
                     allNewTemporalConstraints.getPartialOrders().add(partialOrder);
                 }

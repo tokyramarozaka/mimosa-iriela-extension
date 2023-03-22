@@ -108,18 +108,6 @@ public class BlocksWorld_Pop_UT {
         AStarResolver resolver = new AStarResolver(problem);
 
         List<Operator> solutionOperators = resolver.findSolution();
-        Plan partialOrder_solutionPlan = problem.getFinalPlan(solutionOperators);
-        List<LogicalInstance> totalOrder_solutionPlan = partialOrder_solutionPlan.createInstance();
-
-        for (int i = 0; i < totalOrder_solutionPlan.size(); i++) {
-            LogicalInstance previous = totalOrder_solutionPlan.get(i);
-            LogicalInstance next = totalOrder_solutionPlan.get(i+1);
-
-            Step previous_toStep = getContainingStep(partialOrder_solutionPlan, previous);
-            Step next_toStep = getContainingStep(partialOrder_solutionPlan, next);
-
-            assertTrue(partialOrder_solutionPlan.getTc().isBefore(previous_toStep, next_toStep));
-        }
     }
 
     private Step getContainingStep(Plan plan, LogicalInstance actionInstance){

@@ -59,8 +59,11 @@ public class OpenConditionResolver {
         potentialEstablishers(plan,openCondition)
             .stream()
             .forEach(potentialEstablisher -> {
+                PopSituation situationPostEstablisher = plan.getTc()
+                        .getFollowingSituation(potentialEstablisher);
+
                 TemporalConstraints temporalChange = new TemporalConstraints(Arrays.asList(
-                    new PartialOrder(potentialEstablisher, openCondition.getSituation())
+                    new PartialOrder(situationPostEstablisher, openCondition.getSituation())
                 ));
                 planModifications.add(PlanModificationMapper.from(openCondition, temporalChange));
             });

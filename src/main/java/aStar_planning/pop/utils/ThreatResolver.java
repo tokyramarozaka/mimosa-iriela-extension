@@ -92,7 +92,6 @@ public class ThreatResolver {
      * threat
      */
     public static List<Operator> byNonCodenotation(Plan plan, Threat threat){
-        List<Operator> planModifications = new ArrayList<>();
         CodenotationConstraints temp = plan.getCc().copy();
 
         CodenotationConstraints changes = new CodenotationConstraints();
@@ -113,6 +112,9 @@ public class ThreatResolver {
             }
         }
 
+        if (changes.getCodenotations().size() == 0){
+            return new ArrayList<>();
+        }
         return Arrays.asList(PlanModificationMapper.from(threat, changes));
     }
 

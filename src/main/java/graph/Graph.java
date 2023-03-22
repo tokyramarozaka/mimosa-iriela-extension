@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -51,6 +52,12 @@ public class Graph {
         return true;
     }
 
+    /**
+     * Verifies if the graph has cycles meaning that you can go from one node and find your way
+     * back. This is not desirable as it will lead to infinite loops in searches if the heuristic
+     * is not good enough.
+     * @return
+     */
     public boolean hasCycles(){
         for (Node node : this.nodes) {
             if(node.hasRecursiveLink()){
@@ -75,5 +82,15 @@ public class Graph {
             return null;
         }
         return node.getLinks().get(0).getTo();
+    }
+
+    public List<Link> getLinks() {
+        List<Link> links = new ArrayList<>();
+
+        this.nodes.forEach(node -> {
+            node.getLinks().forEach(link -> links.add(link));
+        });
+
+        return links;
     }
 }

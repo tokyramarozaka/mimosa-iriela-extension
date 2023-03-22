@@ -1,5 +1,10 @@
 package aStar;
 
+import lombok.AllArgsConstructor;
+import lombok.ToString;
+
+import java.util.PriorityQueue;
+
 /**
  * A problem state represents a state that needs to be sorted using a heurstic function f
  * It is considered a problem since it needs to be explored, therefore, we need to tell how
@@ -46,5 +51,6 @@ public class ProblemState implements Comparable<ProblemState> {
     public int compareTo(ProblemState o) {
         return Double.compare(this.getF(), o.getF());
     }
+
 }
 
