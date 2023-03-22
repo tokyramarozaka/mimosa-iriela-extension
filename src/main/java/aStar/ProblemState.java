@@ -1,4 +1,10 @@
 package aStar;
+
+/**
+ * A problem state represents a state that needs to be sorted using a heurstic function f
+ * It is considered a problem since it needs to be explored, therefore, we need to tell how
+ * high is it in the priority queue of all pending states.
+ */
 public class ProblemState implements Comparable<ProblemState> {
     private ProblemState parent;
     private State state;
@@ -6,7 +12,13 @@ public class ProblemState implements Comparable<ProblemState> {
     double g;
     double h;
 
-    public ProblemState(ProblemState parent, State world, Operator appliedOperator, double g, double h) {
+    public ProblemState(
+            ProblemState parent,
+            State world,
+            Operator appliedOperator,
+            double g,
+            double h
+    ){
         this.parent = parent;
         this.state = world;
         this.appliedOperator = appliedOperator;

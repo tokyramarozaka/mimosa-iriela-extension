@@ -1,9 +1,5 @@
 package mini_mirana_IT.organizations;
 
-import mini_mirana_IT.institutions.InstitutionFactory;
-import mini_mirana_IT.norms.ConstitutiveNormFactory;
-import aStar_planning.normative_pop.norms.Organization;
-
 /**
  * TODO : Describe all the organizations of the model
  */

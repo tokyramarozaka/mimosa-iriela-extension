@@ -1,16 +1,6 @@
 package mini_mirana_IT.norms;
 
 
-import aStar_planning.normative_pop.norms.DeonticOperator;
-import aStar_planning.normative_pop.norms.Norm;
-import aStar_planning.normative_pop.norms.NormConditions;
-import aStar_planning.normative_pop.norms.NormConsequences;
-import aStar_planning.normative_pop.norms.RegulativeNorm;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * TODO : describe all regulative norms for the "Provider" role in Household
  */

@@ -1,7 +1,7 @@
 package mini_mirana_IT.norms;
 
 import mini_mirana_IT.organizations.RoleFactory;
-import aStar_planning.normative_pop.norms.ConstitutiveNorm;
+import graph.aStar_planning.normative_pop.norms.ConstitutiveNorm;
 
 import java.util.ArrayList;
 import java.util.Arrays;

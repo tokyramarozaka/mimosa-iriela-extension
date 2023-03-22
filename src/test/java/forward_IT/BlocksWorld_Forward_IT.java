@@ -3,7 +3,7 @@ package forward_IT;
 import aStar.AStarProblem;
 import aStar.AStarResolver;
 import aStar.Operator;
-import aStar_planning.forward.ForwardPlanningProblem;
+import graph.aStar_planning.forward.ForwardPlanningProblem;
 import logic.Action;
 import logic.Goal;
 import logic.Situation;

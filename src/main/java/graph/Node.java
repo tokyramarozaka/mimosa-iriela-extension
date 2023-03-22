@@ -3,10 +3,9 @@ package graph;
 import aStar.AStarProblem;
 import aStar.AStarResolver;
 import aStar.State;
-import aStar_planning.graph_planning.GraphForwardPlanningProblem;
+import graph.aStar_planning.graph_planning.GraphForwardPlanningProblem;
 import exception.NoPlanFoundException;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 

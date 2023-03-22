@@ -3,7 +3,7 @@ package backward_IT;
 import aStar.AStarProblem;
 import aStar.AStarResolver;
 import aStar.Operator;
-import aStar_planning.backward.BackwardPlanningProblem;
+import graph.aStar_planning.backward.BackwardPlanningProblem;
 import logic.Action;
 import logic.Goal;
 import logic.Rule;

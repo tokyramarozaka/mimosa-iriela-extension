@@ -40,6 +40,7 @@ public class ActionFactory {
         List<Atom> preconditions = new ArrayList<>();
 
         preconditions.add(new Atom(false, PredicateFactory.onTable(block)));
+        preconditions.add(new Atom(false, PredicateFactory.free(block)));
         preconditions.add(new Atom(false, PredicateFactory.emptyArm));
 
         return new ActionPrecondition(preconditions);
@@ -86,11 +87,12 @@ public class ActionFactory {
     public static ActionConsequence takeConsequences(Variable block){
         List<Atom> consequences = new ArrayList<>();
 
+        consequences.add(new Atom(false, PredicateFactory.hold(block)));
+
         consequences.add(new Atom(true, PredicateFactory.free(block)));
         consequences.add(new Atom(true, PredicateFactory.emptyArm));
         consequences.add(new Atom(true, PredicateFactory.onTable(block)));
 
-        consequences.add(new Atom(false, PredicateFactory.hold(block)));
 
         return new ActionConsequence(consequences);
     }

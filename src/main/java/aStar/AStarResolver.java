@@ -27,8 +27,13 @@ public class AStarResolver {
      * @throws NoPlanFoundException : no final state was found
      */
     public List<Operator> findSolution() throws NoPlanFoundException {
-        open.add(new ProblemState(null, problem.getInitialState(), null, 0,
-                problem.evaluateState(problem.getInitialState())));
+        open.add(new ProblemState(
+                null,
+                problem.getInitialState(),
+                null,
+                0,
+                problem.evaluateState(problem.getInitialState())
+        ));
 
         boolean found = false;
         ProblemState solutionState = null;
@@ -49,9 +54,11 @@ public class AStarResolver {
                 State nextState = problem.apply(option, candidate.getState());
 
                 ProblemState successor = new ProblemState(
-                        candidate,nextState, option,
+                        candidate,nextState,
+                        option,
                         candidate.g + problem.evaluateOperator(option),
-                        problem.evaluateState(nextState));
+                        problem.evaluateState(nextState)
+                );
 
                 if(problem.isValid(nextState)) {
                     if (problem.isFinal(nextState)) {

@@ -2,13 +2,12 @@ package pop_IT;
 
 import aStar.AStarResolver;
 import aStar.Operator;
-import aStar_planning.pop.PopPlanningProblem;
-import aStar_planning.pop.components.Flaw;
-import aStar_planning.pop.components.Plan;
-import aStar_planning.pop.components.PlanModification;
-import aStar_planning.pop.components.PopSituation;
-import aStar_planning.pop.components.Step;
-import constraints.PartialOrder;
+import graph.aStar_planning.pop.PopPlanningProblem;
+import graph.aStar_planning.pop.utils.components.Flaw;
+import graph.aStar_planning.pop.utils.components.Plan;
+import graph.aStar_planning.pop.utils.components.PlanModification;
+import graph.aStar_planning.pop.utils.components.PopSituation;
+import graph.aStar_planning.pop.utils.components.Step;
 import graph.Node;
 import logic.Atom;
 import logic.Context;
@@ -57,7 +56,7 @@ public class BlocksWorld_Pop_UT {
     }
 
     @Test
-    public void shouldDetect__allOpenConditions(){
+    public void getOpenConditions_ok(){
         Plan initialPlan = problem.getInitialPlan();
         Set<Flaw> initialFlaws = initialPlan.getFlaws();
 
@@ -65,7 +64,7 @@ public class BlocksWorld_Pop_UT {
     }
 
     @Test
-    public void shouldDetect__twoStackings_asOptionsWhen_ABC_onTable(){
+    public void getOptions_ok(){
         Plan someInitialPlan = MockPlan.plan_withThreeFreeBlocks_to_stackedBlocks();
         List<Operator> options = problem.getOptions(someInitialPlan);
 
@@ -82,7 +81,7 @@ public class BlocksWorld_Pop_UT {
     }
 
     @Test
-    public void shouldDetect__anInvalidState(){
+    public void isValid_ok(){
         Plan someInvalidState = MockPlan.planWithInvalidCc__hasContradiction();
         Plan anotherInvalidState = MockPlan.planWithInvalidTc();
 
@@ -91,7 +90,7 @@ public class BlocksWorld_Pop_UT {
     }
 
     @Test
-    public void shouldApply__planModificationCorrectly(){
+    public void apply_ok(){
         Plan someInitialPlan = problem.getInitialPlan();
         List<Operator> options = problem.getOptions(someInitialPlan);
         PlanModification someOption = (PlanModification) options.get(0);
@@ -105,7 +104,7 @@ public class BlocksWorld_Pop_UT {
     }
 
     @Test
-    public void plan__creatSolutionInstance_ok(){
+    public void findSolution_ok(){
         AStarResolver resolver = new AStarResolver(problem);
 
         List<Operator> solutionOperators = resolver.findSolution();

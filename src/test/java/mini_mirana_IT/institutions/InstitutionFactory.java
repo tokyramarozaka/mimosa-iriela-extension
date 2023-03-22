@@ -1,23 +1,5 @@
 package mini_mirana_IT.institutions;
 
-import mini_mirana_IT.actions.EcologyActions;
-import mini_mirana_IT.actions.HouseholdActions;
-import mini_mirana_IT.actions.NorthernActions;
-import mini_mirana_IT.actions.SouthernActions;
-import mini_mirana_IT.actions.VillageActions;
-import mini_mirana_IT.norms.RegulativeNorms_ForEcologist;
-import mini_mirana_IT.norms.RegulativeNorms_ForNorthern;
-import mini_mirana_IT.norms.RegulativeNorms_ForProvider;
-import mini_mirana_IT.norms.RegulativeNorms_ForVillager;
-import aStar_planning.normative_pop.norms.Institution;
-import aStar_planning.normative_pop.norms.Norm;
-import aStar_planning.normative_pop.norms.Role;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * TODO : build these mocks
  */

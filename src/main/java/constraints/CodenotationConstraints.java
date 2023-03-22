@@ -1,8 +1,7 @@
 package constraints;
 
 import aStar.AStarResolver;
-import aStar_planning.graph_planning.GraphForwardPlanningProblem;
-import aStar_planning.pop.components.Plan;
+import graph.aStar_planning.graph_planning.GraphForwardPlanningProblem;
 import exception.NoPlanFoundException;
 import graph.Graph;
 import graph.Node;
@@ -11,7 +10,6 @@ import logic.ContextualTerm;
 import logic.Graphic;
 import logic.Variable;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
