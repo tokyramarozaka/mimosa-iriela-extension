@@ -3,7 +3,7 @@ package graph;
 import aStar.AStarProblem;
 import aStar.AStarResolver;
 import aStar.State;
-import graph.aStar_planning.graph_planning.GraphForwardPlanningProblem;
+import aStar_planning.graph_planning.GraphForwardPlanningProblem;
 import exception.NoPlanFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

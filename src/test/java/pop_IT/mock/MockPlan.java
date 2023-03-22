@@ -1,10 +1,10 @@
 package pop_IT.mock;
 
-import graph.aStar_planning.pop.utils.components.Plan;
-import graph.aStar_planning.pop.utils.components.PlanElement;
-import graph.aStar_planning.pop.utils.components.PopSituation;
-import graph.aStar_planning.pop.utils.components.Step;
-import graph.aStar_planning.pop.utils.PlanInitializer;
+import aStar_planning.pop.components.Plan;
+import aStar_planning.pop.components.PlanElement;
+import aStar_planning.pop.components.PopSituation;
+import aStar_planning.pop.components.Step;
+import aStar_planning.pop.utils.PlanInitializer;
 import constraints.Codenotation;
 import constraints.CodenotationConstraints;
 import constraints.PartialOrder;

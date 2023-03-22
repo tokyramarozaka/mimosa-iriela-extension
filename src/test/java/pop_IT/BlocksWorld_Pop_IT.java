@@ -2,7 +2,7 @@ package pop_IT;
 
 import aStar.AStarResolver;
 import aStar.Operator;
-import graph.aStar_planning.pop.PopPlanningProblem;
+import aStar_planning.pop.PopPlanningProblem;
 import mock_blocks.ActionFactory;
 import mock_blocks.GoalFactory;
 import mock_blocks.SituationFactory;

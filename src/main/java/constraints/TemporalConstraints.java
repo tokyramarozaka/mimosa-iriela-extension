@@ -1,9 +1,9 @@
 package constraints;
 
-import graph.aStar_planning.pop.utils.components.PlanElement;
-import graph.aStar_planning.pop.utils.components.PlanModification;
-import graph.aStar_planning.pop.utils.components.PopSituation;
-import graph.aStar_planning.pop.utils.components.Step;
+import aStar_planning.pop.components.PlanElement;
+import aStar_planning.pop.components.PlanModification;
+import aStar_planning.pop.components.PopSituation;
+import aStar_planning.pop.components.Step;
 import graph.Graph;
 import graph.Link;
 import graph.Node;

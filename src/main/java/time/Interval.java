@@ -1,6 +1,6 @@
 package time;
 
-import graph.aStar_planning.pop.utils.components.PopSituation;
+import aStar_planning.pop.components.PopSituation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;

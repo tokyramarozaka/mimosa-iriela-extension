@@ -2,12 +2,12 @@ package pop_IT;
 
 import aStar.AStarResolver;
 import aStar.Operator;
-import graph.aStar_planning.pop.PopPlanningProblem;
-import graph.aStar_planning.pop.utils.components.Flaw;
-import graph.aStar_planning.pop.utils.components.Plan;
-import graph.aStar_planning.pop.utils.components.PlanModification;
-import graph.aStar_planning.pop.utils.components.PopSituation;
-import graph.aStar_planning.pop.utils.components.Step;
+import aStar_planning.pop.PopPlanningProblem;
+import aStar_planning.pop.components.Flaw;
+import aStar_planning.pop.components.Plan;
+import aStar_planning.pop.components.PlanModification;
+import aStar_planning.pop.components.PopSituation;
+import aStar_planning.pop.components.Step;
 import graph.Node;
 import logic.Atom;
 import logic.Context;

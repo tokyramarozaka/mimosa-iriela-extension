@@ -1,6 +1,6 @@
 package constraints;
 
-import graph.aStar_planning.pop.utils.components.PlanElement;
+import aStar_planning.pop.components.PlanElement;
 import graph.Graph;
 import graph.Link;
 import lombok.AllArgsConstructor;

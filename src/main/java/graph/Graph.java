@@ -1,7 +1,7 @@
 package graph;
 
 import aStar.AStarResolver;
-import graph.aStar_planning.graph_planning.GraphForwardPlanningProblem;
+import aStar_planning.graph_planning.GraphForwardPlanningProblem;
 import exception.NoPlanFoundException;
 import lombok.Getter;
 import lombok.ToString;
