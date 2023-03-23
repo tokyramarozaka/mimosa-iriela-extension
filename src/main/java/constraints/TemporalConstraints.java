@@ -1,7 +1,5 @@
 package constraints;
 
-import aStar.AStarResolver;
-import aStar_planning.graph_planning.GraphForwardPlanningProblem;
 import aStar_planning.pop.components.PlanElement;
 import aStar_planning.pop.components.PlanModification;
 import aStar_planning.pop.components.PopSituation;
@@ -181,190 +179,25 @@ public class TemporalConstraints extends Graphic {
                 .collect(Collectors.toList());
     }
 
-
     /**
-     * Deletes all redundant temporal orders from the plan. A redundancy can be defined as follows :
-     * if A < B, and B < C, then you don't need to state that A < C anymore since it can de deducted
-     * @param addedStep : the potentially added step (can be null)
-     * @param addedTc : the added temporal constraint when modifying the plan (can be null also)
-     * @param oldTc : the current temporal constraint where we will delete redundancies
+     * Remove all the redundancies in the current temporal constraints.
      */
-    public void deleteRedundancies(
-            Step addedStep,
-            TemporalConstraints addedTc,
-            TemporalConstraints oldTc
-    ){
-        // If we don't add any new step then check if there is a new Temporal constraint
-        if (addedStep == null) {
-            // If there is no new temporal constraint there is no new redundancy at all
-            if (addedTc == null) {
-                return;
-            }
+    public void refactorTemporalConstraints() {
+        List<PartialOrder> result = new ArrayList<>(this.getPartialOrders());
 
-            for (PartialOrder temporalOrder : addedTc.getPartialOrders()) {
-                if(oldTc.getGraph().getContainingNode(temporalOrder.getAfter()) == null){
-                    System.out.println(temporalOrder.getAfter() + " is not in the graph.");
-                    System.out.println("TC : "+this);
-                    System.out.println("Graph is " + oldTc.getGraph());
+        for (int i = 0; i < result.size() - 1; i++) {
+            PartialOrder currentPartialOrder = result.get(i);
+
+            for (int j = i + 1; j < result.size(); j++) {
+                PartialOrder otherPartialOrder = result.get(j);
+                if (currentPartialOrder.getAfter().equals(otherPartialOrder.getAfter())) {
+                    result.remove(currentPartialOrder);
+                    i--;
+                    break;
                 }
-                // We retrieve both edges of the temporal order (both are Situations, no step added)
-                PopSituation target = (PopSituation) oldTc.getGraph()
-                        .getContainingNode(temporalOrder.getAfter())
-                        .getContent();
-
-                PopSituation source = (PopSituation) oldTc.getGraph()
-                        .getContainingNode(temporalOrder.getBefore())
-                        .getContent();
-
-                // We remove any previous direct link which could have happened beforehand
-                // Because this one is more explicit than the previous one
-                deletePreviousRedundancies(source, target, temporalOrder, oldTc);
-
-                // We remove any direct link which could have happened after the temporal order
-                deleteFollowingRedundancies(source, target, temporalOrder, oldTc);
             }
-        } else {
-            // If we added a new step we check for redundancies in the span where it is being added
-            deleteRedundanciesFromNewStep(addedStep, addedTc, oldTc);
         }
-    }
 
-
-    /**
-     * Deletes all redundance before the addition of the temporal constraint : we verify that there
-     * is no temporal order before the left element which has become redundant. For instance : we
-     * have A < B, and we add C < B, if we can prove that A < C, then A < B is redundant
-     *
-     * @param source
-     * @param target
-     * @param temporalOrder
-     * @param oldTc
-     */
-    private void deletePreviousRedundancies(
-            PopSituation source,
-            PopSituation target,
-            PartialOrder temporalOrder,
-            TemporalConstraints oldTc
-    ) {
-        // We are going to verify all the OTHER links that leads to that target element
-        oldTc.getGraph().getLinks()
-                .stream()
-                .filter(link -> link.getTo().getContent().equals(target))
-                .forEach(linkToTarget -> {
-                    // Do they have a path to the source element (which leads to the target element by the way)
-                    AStarResolver searchInChain = new AStarResolver(
-                            new GraphForwardPlanningProblem(
-                                    linkToTarget.getFrom(),
-                                    oldTc.getGraph().getContainingNode(source))
-                    );
-
-                    try {
-                        searchInChain.findSolution();
-
-                        // If yes, then delete it, we don't need it anymore, as we have the source as intermediate to the target
-                        this.getPartialOrders().removeIf(t ->
-                                t.getBefore().equals(linkToTarget.getFrom().getContent())
-                                        && t.getAfter().equals(linkToTarget.getTo().getContent())
-                        );
-
-                        this.updateGraph();
-                    } catch (Exception e) {
-                        // If there is no direct link : do nothing
-                    }
-                });
-    }
-
-    /**
-     * Deletes the redundances after adding a new temporal constraint. This deletes every redundant
-     * link after the added temporal order. For instance : If we have A < B, and we added A < C,
-     * then A to B is redundant if we have C < B (B is reachable from C)
-     *
-     * @param source
-     * @param target
-     * @param temporalOrder
-     * @param oldTc
-     */
-    private void deleteFollowingRedundancies(
-            PopSituation source,
-            PopSituation target,
-            PartialOrder temporalOrder,
-            TemporalConstraints oldTc
-    ) {
-        // We are going to verify all the links from the source of the temporal order
-        // to see if they are redundant
-        oldTc.getGraph().getLinks()
-                .stream()
-                .filter(link -> link.getFrom().getContent().equals(source))
-                .forEach(linkFromSource -> {
-                    // Is the new temporal order reaching the element which the source is linked to ?
-                    AStarResolver searchInChain = new AStarResolver(
-                            new GraphForwardPlanningProblem(oldTc.getGraph().getContainingNode(target), oldTc.getGraph().getContainingNode(linkFromSource.getTo())));
-
-                    try {
-                        searchInChain.findSolution();
-
-                        // If yes, then delete it, we don't need it anymore, as we have the target as intermediate
-                        this.getPartialOrders().removeIf(t ->
-                                t.getBefore().equals(oldTc.getGraph().getContainingNode(source).getContent())
-                                        && t.getAfter().equals(linkFromSource.getTo().getContent()));
-                        this.updateGraph();
-                    } catch (Exception e) {
-                        // If there is no direct link : do nothing
-                    }
-                });
-    }
-
-    /**
-     * Delete all redundances from adding a new step : this deletes any direct link between
-     * the two situations at both ends of the new step (preceding its entry situation, and after its exit situation)
-     *
-     * @param addedStep
-     * @param addedTc
-     * @param oldTc
-     */
-    private void deleteRedundanciesFromNewStep(
-            Step addedStep,
-            TemporalConstraints addedTc,
-            TemporalConstraints oldTc
-    ) {
-        // Let's take back all the situations around the step
-        PopSituation beforeStep = addedTc.getPrecedingSituation(addedStep);
-        PopSituation afterStep = addedTc.getFollowingSituation(addedStep);
-
-        // Check the boundaries in between which the step has been inserted
-        PopSituation leftBoundary = (PopSituation) addedTc.getPartialOrders()
-                .stream()
-                .filter(temporalOrder -> temporalOrder.getAfter().equals(beforeStep))
-                .findFirst()
-                .get()
-                .getBefore();
-
-        PopSituation rightBoundary = (PopSituation) addedTc.getPartialOrders()
-                .stream()
-                .filter(temporalOrder -> temporalOrder.getBefore().equals(afterStep))
-                .findFirst()
-                .get()
-                .getAfter();
-
-        AStarResolver searchDirectLink = new AStarResolver(
-                new GraphForwardPlanningProblem(
-                        oldTc.getGraph().getContainingNode(leftBoundary),
-                        oldTc.getGraph().getContainingNode(rightBoundary)
-                )
-        );
-
-        // Try to find a direct link between the boundaries if there is any
-        try {
-            searchDirectLink.findSolution();
-
-            // Remove the direct link if there is any
-            this.getPartialOrders().removeIf(t -> t.getBefore().equals(leftBoundary)
-                    && t.getAfter().equals(rightBoundary));
-
-            // Update the graph accordingly
-            this.updateGraph();
-        } catch (Exception e) {
-            // If there is no direct path : Do nothing
-        }
+        this.partialOrders = result;
     }
 }

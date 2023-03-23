@@ -29,8 +29,7 @@ public class GoalFactory {
     public static Goal anyThreeBlocks_stacked() {
         List<Predicate> predicateList = Arrays.asList(
                 new Predicate("on", Arrays.asList(X,Y)),
-                new Predicate("on", Arrays.asList(Y,Z)),
-                new Predicate("onTable", Arrays.asList(Z))
+                new Predicate("on", Arrays.asList(Y,Z))
         );
 
         return PredicatesMapper.toGoal(predicateList);

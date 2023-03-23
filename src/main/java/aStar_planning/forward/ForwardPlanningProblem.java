@@ -9,11 +9,14 @@ import logic.LogicalInstance;
 import logic.Situation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import outputs.PlanningOutput;
+import outputs.TotalOrderPlan;
 import planning.Problem;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ForwardPlanningProblem extends Problem implements AStarProblem {
     private static final Logger logger = LogManager.getLogger(ForwardPlanningProblem.class);
@@ -76,13 +79,7 @@ public class ForwardPlanningProblem extends Problem implements AStarProblem {
     }
 
     @Override
-    public String showSolution(List<Operator> solutionPlan) {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        solutionPlan.forEach(step -> {
-            stringBuilder.append("\n\t").append(step);
-        });
-
-        return stringBuilder.toString();
+    public PlanningOutput outputPlan(State finalState, List<Operator> solutionOperators) {
+        return new TotalOrderPlan(solutionOperators);
     }
 }

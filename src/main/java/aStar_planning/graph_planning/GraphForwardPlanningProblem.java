@@ -7,6 +7,8 @@ import graph.Link;
 import graph.Node;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import outputs.PlanningOutput;
+import outputs.TotalOrderPlan;
 
 import java.util.Collections;
 import java.util.List;
@@ -64,24 +66,7 @@ public class GraphForwardPlanningProblem implements AStarProblem {
     }
 
     @Override
-    public String showSolution(List<Operator> solutionSteps) {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append("Plan steps are :\n");
-
-        int i = 1;
-        for(Operator step : solutionSteps) {
-            stringBuilder.append("Step ")
-                    .append(i++)
-                    .append(" : ")
-                    .append(step)
-                    .append("\n");
-        }
-
-        if(solutionSteps.isEmpty()){
-            return "A plan is not necessary at the current time";
-        }
-
-        return stringBuilder.toString();
+    public PlanningOutput outputPlan(State finalState, List<Operator> solutionOperators) {
+        return new TotalOrderPlan(solutionOperators);
     }
 }

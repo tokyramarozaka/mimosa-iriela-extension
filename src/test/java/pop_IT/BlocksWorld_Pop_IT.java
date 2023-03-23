@@ -8,6 +8,7 @@ import mock_blocks.GoalFactory;
 import mock_blocks.SituationFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import outputs.PlanningOutput;
 
 import java.util.List;
 
@@ -26,9 +27,21 @@ public class BlocksWorld_Pop_IT {
         );
     }
     @Test
-    public void shouldStackThreeConcreteBlocks_finalOutputTest(){
+    public void outputPlan_ok(){
         AStarResolver resolver = new AStarResolver(problem);
 
-        List<Operator> planModifications = resolver.findSolution();
+        PlanningOutput output = resolver.outputSolutionPlan();
+    }
+
+    @Test
+    public void outputPlan_ifGoalHasUngroundedVariables_ok(){
+        PopPlanningProblem abstractProblem = new PopPlanningProblem(
+                SituationFactory.threeBlocksOnTable(),
+                ActionFactory.allActionsInBlocksWorld(),
+                GoalFactory.anyThreeBlocks_stacked()
+        );
+        AStarResolver resolver = new AStarResolver(abstractProblem);
+
+        PlanningOutput output = resolver.outputSolutionPlan();
     }
 }

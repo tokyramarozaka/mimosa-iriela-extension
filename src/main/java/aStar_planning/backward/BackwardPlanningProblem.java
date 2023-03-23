@@ -9,6 +9,8 @@ import logic.Goal;
 import logic.LogicalInstance;
 import logic.Rule;
 import logic.Situation;
+import outputs.PlanningOutput;
+import outputs.TotalOrderPlan;
 import planning.Problem;
 
 import java.util.List;
@@ -63,8 +65,7 @@ public class BackwardPlanningProblem extends Problem implements AStarProblem {
     }
 
     @Override
-    public String showSolution(List<Operator> solutionSteps) {
-        return null;
+    public PlanningOutput outputPlan(State finalState, List<Operator> solutionOperators) {
+        return new TotalOrderPlan(solutionOperators);
     }
-
 }

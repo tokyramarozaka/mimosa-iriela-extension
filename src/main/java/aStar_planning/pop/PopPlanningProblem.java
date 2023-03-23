@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import outputs.PartialOrderPlan;
+import outputs.PlanningOutput;
 import planning.Problem;
 
 import java.util.Collections;
@@ -86,24 +88,22 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
         return ((Plan)state).isCoherent();
     }
 
-    /**
-     * TODO : Extract a set of action instances to execute from the partial-order planning process
-     * @param solutionSteps : the set of plan modifications resolving the planning problem.
-     * @return
-     */
     @Override
     public List<Operator> getSolution(List<Operator> solutionSteps) {
         return solutionSteps;
     }
 
     @Override
-    public String showSolution(List<Operator> solutionSteps) {
-        Plan plan = this.getInitialPlan();
+    public PlanningOutput outputPlan(State finalState, List<Operator> solutionOperators) {
+        Plan solutionPlan = (Plan) finalState;
+        solutionPlan.removeRedundantTemporalConstraints();
+        PlanningOutput output = new PartialOrderPlan(solutionPlan);
 
-        solutionSteps.forEach(
-            operator -> this.getInitialPlan().applyPlanModification((PlanModification) operator)
-        );
+        logger.info("=".repeat(100));
+        logger.info("\tFINAL OUTPUT");
+        logger.info("=".repeat(100));
+        logger.info(output);
 
-        return plan.toString();
+        return output;
     }
 }

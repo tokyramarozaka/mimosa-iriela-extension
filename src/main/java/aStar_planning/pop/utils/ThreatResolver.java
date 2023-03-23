@@ -35,6 +35,11 @@ public class ThreatResolver {
     public static List<Operator> byDestroyerDemotion(Plan plan, Threat threat) {
         List<Operator> planModifications = new ArrayList<>();
 
+        // If it is the final step, it cannot be put before the destroyer: it must be the last step
+        if (threat.getThreatened().getActionInstance().getName().equals("final")){
+            return planModifications;
+        }
+
         PopSituation threatenedExitSituation = plan.getTc()
                 .getFollowingSituation(threat.getThreatened());
 

@@ -108,6 +108,8 @@ public class BlocksWorld_Pop_UT {
         AStarResolver resolver = new AStarResolver(problem);
 
         List<Operator> solutionOperators = resolver.findSolution();
+
+        assertEquals(6, solutionOperators.size());
     }
 
     private Step getContainingStep(Plan plan, LogicalInstance actionInstance){

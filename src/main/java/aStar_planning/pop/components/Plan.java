@@ -11,7 +11,6 @@ import logic.Atom;
 import constraints.CodenotationConstraints;
 import logic.Context;
 import logic.ContextualAtom;
-import logic.LogicalInstance;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -19,8 +18,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -202,17 +199,6 @@ public class Plan implements State {
      * @return true if the proposition is necessarily true in the given situation, false otherwise
      */
     public boolean isAsserted(ContextualAtom proposition, PopSituation situation) {
-//        for(Step establisher : getEstablishers(proposition, situation)){
-//            for(Step destroyer : getDestroyers(proposition, situation)){
-//                var postEstablisher = this.tc.getFollowingSituation(establisher);
-//                var postDestroyer = this.tc.getFollowingSituation((destroyer));
-//
-//                if(this.isBefore(postEstablisher, postDestroyer)){
-//                    return false;
-//                }
-//            }
-//            return true;
-//        }
         return getEstablishers(proposition, situation).size() > 0;
     }
 
@@ -288,13 +274,8 @@ public class Plan implements State {
                     preconditionProposition,
                     tc.getPrecedingSituation(toCheck)
             );
-//            if(destroyers.size() > 0) {
-//                logger.info(precondition + " FOUND DESTROYERS : "+destroyers);
-//            }
 
             for (Step destroyer : destroyers) {
-//                logger.info("\t\t(*)" + destroyer + "IS RESTABLISHED : " +
-//                       isRestablished(preconditionProposition, destroyer, toCheck));
                 if(!isRestablished(preconditionProposition, destroyer, toCheck)){
                     threats.add(new Threat(
                             destroyer,
@@ -357,29 +338,16 @@ public class Plan implements State {
     }
 
     /**
-     * TODO : Build a set of total order plan to execute using the partial-order of the plan
-     * and its bindings
-     * @return a sequence of action instance for the agent to execute.
+     * Explicit the temporal constraints of the plan by deleting any redundant partial order in
+     * the current plan.
+     *
+     * For instance, a partial order may say that : A < D, and a few others states that A < B,
+     * B < C, and B < D. We can therefore delete A < D, as it can be deducted from the other
+     * temporal constraints which are way more explicit
+     *
      */
-    public List<LogicalInstance> createInstance() {
-            List<LogicalInstance> planActions = new ArrayList<>();
-            List<Step> allSteps = new ArrayList<>();
-            List<CodenotationConstraints>  cc = Collections.singletonList(this.cc);
-            allSteps.add(this.getInitialStep());
-            allSteps.sort(new Comparator<Step>() {
-                @Override
-                public int compare(Step o1, Step o2) {
-                    return extractInt(String.valueOf(o1)) - extractInt(String.valueOf(o2));
-                }
-                int extractInt(String s) {
-                    String num = s.replaceAll("\\D", "");
-                    return num.isEmpty() ? 0 : Integer.parseInt(num);
-                }
-            });
-
-            allSteps.add(this.steps.stream().filter(Step::isTheFinalStep).toList().get(0));
-
-            return planActions;
+    public void removeRedundantTemporalConstraints(){
+        this.getTc().refactorTemporalConstraints();
     }
 
 

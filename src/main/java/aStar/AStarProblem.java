@@ -1,5 +1,7 @@
 package aStar;
 
+import outputs.PlanningOutput;
+
 import java.util.List;
 
 /**
@@ -76,12 +78,13 @@ public interface AStarProblem {
      *                          last step is on top.
      * @return the set of ordered Operators that attains the desired State
      */
-     Object getSolution(State finalState, List<Operator> solutionOperators);
+     List<Operator> getSolution(List<Operator> solutionOperators);
 
     /**
      * Displays the solution in a convenient formatted String
-     * @param solutionSteps
-     * @return a set of operators in a readable way
+     * @param finalState: the final State attained after the state space search
+     * @param solutionOperators: the operators used during state space search
+     * @return the representation of the plan that can be deducted.
      */
-    String showSolution(List<Operator> solutionSteps);
+    PlanningOutput outputPlan(State finalState, List<Operator> solutionOperators);
 }
