@@ -3,78 +3,85 @@ package aStar;
 import java.util.List;
 
 /**
- * Defines an A* star problem
- * and the essential methods of a problem
- * @author Tokimahery
+ * Defines an A* star problem and the essential methods that must be detailed to solve it as a
+ * State-space search.
  *
+ * @author Tokimahery Ramarozaka
  */
 public interface AStarProblem {
     /**
-     * Provides a mean to get the starting point we are coming from
-     * @return the inital State of the Problem
+     * Provides a mean to get the initial State which is the first state we are starting our state-
+     * space search
+     * @return the initial State of the Problem
      */
-    public State getInitialState();
+    State getInitialState();
 
 
     /**
-     * Checks if a State is final or not
+     * Checks if a State is final or not, meaning that the State resolves the planning problem
      * @param state
      * @return
      */
-    public boolean isFinal(State state);
+    boolean isFinal(State state);
 
     /**
-     * Returns a list of all possible transitions in a given state
-     * @param state
-     * @return
+     * Returns a list of all possible Operators in a given State, this allows us to branch one State
+     * into new ones and keep exploring the State-space.
+     * @param state : the State we want to branch out
+     * @return the set of applicable operators on the given State
      */
-    public List<Operator> getOptions(State state);
+    List<Operator> getOptions(State state);
 
     /**
-     * Apply a operator to a State and returns the resulting State
+     * Apply an operator to a State and returns the next State
      * @param operator : the operator to apply
      * @param state : the state to apply the operator to
-     * @return
+     * @return the next State after the Operator has been applied
      */
-    public State apply(Operator operator, State state);
+    State apply(Operator operator, State state);
 
     /**
-     * Returns a double indicating the distance between a State and the goal
-     * The lower the distance, the closer it is,
-     * And the sooner it will be considered in the planning process
+     * Returns a double indicating the distance separating a State from being a final State.The
+     * lower the distance, the closer it is. And the sooner it will be explored. In other words:
+     * "less is better". This ensures that we explore the most promising States first.
      * @param state : the state to be evaluated
-     * @return
+     * @return the distance of the State from being a final State.
      */
-    public double evaluateState(State state);
+    double evaluateState(State state);
 
     /**
-     * Evaluates the cost of an operator
-     * It is used in processing which ProblemState in A* is processed first alongside heuristic distance
-     * @param operator
-     * @return
+     * Returns the cost of an Operator, meaning that applying certain operators might cost more
+     * than others. The lesser the cost, the better. This ensures that we explore the less costly
+     * States first
+     *
+     * @param operator : the operator to be evaluated
+     * @return a double indicating the total cost of applying the given Operator
      */
-    public double evaluateOperator(Operator operator);
+    double evaluateOperator(Operator operator);
 
     /**
-     * Determines if a state is valid. In the case it is invalid, it is thrown out of the search space
+     * Determines if a State is valid. In the case it is invalid, it is thrown out of the search space
      * @param state
      * @return
      */
-    public boolean isValid(State state);
+     boolean isValid(State state);
 
     /**
      * Determines the correct order of the transitions of the solutions
-     * Since transitions are added progressively throughout the search, i.e. last transition is on top, first one is at the bottom,
-     * It is in some cases (Forward, Pop...) necessary to return to the first added transition by reversing the list of transitions
-     * @param solutionOperators : the raw transitions of the planning, first transition is at the bottom, last step is on top.
-     * @return the set of ordered Transitions that attains the desired State
+     * Since transitions are added progressively throughout the search, i.e. last transition is on
+     * top, first one is at the bottom. It is in some cases (Forward, Pop...) necessary to return to
+     * the first added transition by reversing the list of transitions
+     *
+     * @param solutionOperators : the solution operators, first transition is at the bottom,
+     *                          last step is on top.
+     * @return the set of ordered Operators that attains the desired State
      */
-    public List<Operator> getSolution(List<Operator> solutionOperators);
+     Object getSolution(State finalState, List<Operator> solutionOperators);
 
     /**
      * Displays the solution in a convenient formatted String
      * @param solutionSteps
      * @return a set of operators in a readable way
      */
-    public String showSolution(List<Operator> solutionSteps);
+    String showSolution(List<Operator> solutionSteps);
 }
