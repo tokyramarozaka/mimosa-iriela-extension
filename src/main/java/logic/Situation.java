@@ -55,7 +55,7 @@ public class Situation implements State {
                     negates = true;
                 }
             };
-            // If no belief was negated by it, then the atom is a whole new predicate to Add into the new State
+            // If no belief was negated by it, then the atom is a new predicate to Add into the new State
             if (!negates) {
                 toAdd.add(new ContextualPredicate(actionInstance.getContext(),atom.getPredicate()));
             }

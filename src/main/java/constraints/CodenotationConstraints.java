@@ -233,10 +233,16 @@ public class CodenotationConstraints extends Graphic {
      * @return true, if the codenotation does not break the current constraint, false otherwise.
      */
     public boolean isAllowed(Codenotation toAdd) {
+//        logger.info("\nChecking if : \n\t"+toAdd+"\nis allowed in \n\t" + this.getCodenotations() +
+//                " : "+(this.codenotations
+//                .stream()
+//                .filter(codenotation -> codenotation.matches(toAdd)
+//                        && toAdd.isCodenotation() != codenotation.isCodenotation())
+//                .count() == 0)+"\n");
         return this.codenotations
                 .stream()
                 .filter(codenotation -> codenotation.matches(toAdd)
-                        && toAdd.isCodenotation() != toAdd.isCodenotation())
+                        && toAdd.isCodenotation() != codenotation.isCodenotation())
                 .count() == 0;
     }
 

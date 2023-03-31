@@ -17,14 +17,8 @@ public class RuleConclusions {
         );
     }
 
-    /**
-     * TODO : represent into string a rule for backward planning
-     * @return
-     */
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        return stringBuilder.toString();
+        return String.valueOf(this.getConclusions());
     }
 }

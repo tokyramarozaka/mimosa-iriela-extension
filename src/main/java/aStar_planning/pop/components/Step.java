@@ -62,9 +62,9 @@ public class Step implements PlanElement {
             );
 
             if (proposition.getAtom().isNegation() == consequence.isNegation() &&
-                    canUnifyPropositions(consequenceInstance, proposition, tempCc))
-            {
-                        return true;
+                    canUnifyPropositions(consequenceInstance, proposition, tempCc)
+            ){
+                return true;
             }
         }
 
@@ -113,7 +113,7 @@ public class Step implements PlanElement {
                         proposition.getAtom().getPredicate(),
                         proposition.getContext(),
                         tempCc
-                );
+        );
     }
 
     /**

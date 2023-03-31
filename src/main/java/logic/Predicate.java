@@ -15,18 +15,18 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @EqualsAndHashCode
-public class Predicate implements Unifiable{
+public class Predicate implements Unifiable {
+    private final static Logger logger = LogManager.getLogger(Predicate.class);
     private String name;
     private List<Term> terms;
-    private final static Logger logger = LogManager.getLogger(Predicate.class);
 
     @Override
     public boolean unify(Context fromContext, Unifiable to, Context toContext) {
         List<ContextualTerm> changes = new ArrayList<>();
 
-        Boolean unifyAttemptSuccess = attemptUnification(fromContext,to,toContext,changes);
+        Boolean unifyAttemptSuccess = attemptUnification(fromContext, to, toContext, changes);
 
-        if(!unifyAttemptSuccess){
+        if (!unifyAttemptSuccess) {
             for (ContextualTerm change : changes) {
                 change.getContext().unlink((Variable) change.getTerm());
             }
@@ -37,18 +37,23 @@ public class Predicate implements Unifiable{
 
     /**
      * Attemps an unification using the codenotations constraints instead of the context
-     * @param fromContext : this predicates context
-     * @param to : the other term we are unifying it with, supposedly another predicate
-     * @param toContext : the context of the other term (predicate)
+     *
+     * @param fromContext            : this predicates context
+     * @param to                     : the other term we are unifying it with, supposedly another predicate
+     * @param toContext              : the context of the other term (predicate)
      * @param codenotationConstraint : the set of bindings between variables
      * @return true if the unification succeeds, false otherwise.
      */
     @Override
-    public boolean unify(Context fromContext, Unifiable to, Context toContext,
-                         CodenotationConstraints codenotationConstraint) {
+    public boolean unify(
+            Context fromContext,
+            Unifiable to,
+            Context toContext,
+            CodenotationConstraints codenotationConstraint
+    ) {
         List<ContextualTerm> changes = new ArrayList<>();
 
-        boolean res = attemptUnification(fromContext,to,toContext,changes,codenotationConstraint);
+        boolean res = attemptUnification(fromContext, to, toContext, changes, codenotationConstraint);
 
         if (!res) {
             for (ContextualTerm linkedVariable : changes) {
@@ -59,19 +64,20 @@ public class Predicate implements Unifiable{
         return res;
     }
 
-    private boolean attemptUnification(Context fromContext,
-                                       Unifiable to,
-                                       Context toContext,
-                                       List<ContextualTerm> changes,
-                                       CodenotationConstraints codenotationConstraint
+    private boolean attemptUnification(
+            Context fromContext,
+            Unifiable to,
+            Context toContext,
+            List<ContextualTerm> changes,
+            CodenotationConstraints codenotationConstraint
     ){
-        if (!(to instanceof Predicate)){
+        if (!(to instanceof Predicate)) {
             return false;
         }
 
         Predicate toPredicate = (Predicate) to;
 
-        if (!this.sameName(toPredicate)){
+        if (!this.sameName(toPredicate)) {
             return false;
         }
 
@@ -79,7 +85,7 @@ public class Predicate implements Unifiable{
         for (Term term : this.getTerms()) {
             if (!term.attemptUnification(fromContext, toPredicate.getTerms().get(index++),
                     toContext, changes, codenotationConstraint)
-            ){
+            ) {
                 return false;
             }
         }
@@ -88,24 +94,23 @@ public class Predicate implements Unifiable{
     }
 
     private Boolean attemptUnification(Context fromContext, Unifiable to, Context toContext,
-                                       List<ContextualTerm> changes)
-    {
-        if (!(to instanceof Predicate)){
+                                       List<ContextualTerm> changes) {
+        if (!(to instanceof Predicate)) {
             return false;
         }
 
         Predicate toPredicate = (Predicate) to;
 
-        if (!this.sameName(toPredicate)){
+        if (!this.sameName(toPredicate)) {
             return false;
         }
 
         int index = 0;
-        for(Term term:this.getTerms()){
-            if (!term.attemptUnification(fromContext,toPredicate.getTerms().get(index++),toContext,
+        for (Term term : this.getTerms()) {
+            if (!term.attemptUnification(fromContext, toPredicate.getTerms().get(index++), toContext,
                     changes)
-            ){
-                 return false;
+            ) {
+                return false;
             }
         }
 
@@ -117,9 +122,9 @@ public class Predicate implements Unifiable{
         return new Predicate(
                 this.name,
                 this.terms
-                    .stream()
-                    .map(term -> (Term) term.build(context))
-                    .toList()
+                        .stream()
+                        .map(term -> (Term) term.build(context))
+                        .toList()
         );
     }
 
@@ -137,9 +142,9 @@ public class Predicate implements Unifiable{
                 .append("(");
 
         Integer termsCount = 0;
-        for(Term term : distinctTerms){
+        for (Term term : distinctTerms) {
             stringBuilder.append(term);
-            if (termsCount++ < distinctTerms.size() - 1){
+            if (termsCount++ < distinctTerms.size() - 1) {
                 stringBuilder.append(",");
             }
         }

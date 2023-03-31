@@ -16,6 +16,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import settings.Keywords;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -56,7 +57,7 @@ public class Plan implements State {
     }
 
     private static boolean isNotFinalStep(Step step) {
-        return !step.getActionInstance().getName().equals("final");
+        return !step.getActionInstance().getName().equals(Keywords.POP_FINAL_STEP);
     }
 
     /**
@@ -68,10 +69,10 @@ public class Plan implements State {
 
         for(Step step : this.steps) {
             if(!isInitialStep(step)) {
-                this.getThreats(step).forEach(threat -> this.flaws.add(threat));
+                this.flaws.addAll(this.getThreats(step));
             }
 
-            this.getOpenConditions(step).forEach(openCondition -> this.flaws.add(openCondition));
+            this.flaws.addAll(this.getOpenConditions(step));
         }
     }
 
@@ -167,7 +168,7 @@ public class Plan implements State {
     private boolean isInitialStep(Step step) {
         Action stepAction = ((Action) step.getActionInstance().getLogicalEntity());
 
-        return Objects.equals(stepAction.getName(),"initial");
+        return Objects.equals(stepAction.getName(),Keywords.POP_INITIAL_STEP);
     }
 
     /**
@@ -361,7 +362,7 @@ public class Plan implements State {
      */
     public Step getInitialStep() {
         return this.steps.stream()
-                .filter(step -> step.getActionInstance().getName().equals("initial"))
+                .filter(step -> step.getActionInstance().getName().equals(Keywords.POP_INITIAL_STEP))
                 .findFirst()
                 .orElse(null);
     }

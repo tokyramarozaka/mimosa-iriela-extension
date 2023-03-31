@@ -38,8 +38,9 @@ public class OpenConditionResolver {
         return plan.getSteps()
                 .stream()
                 .filter(step -> plan.getTc().isBefore(step, openCondition.getSituation()))
-                .filter(precedingStep -> precedingStep
-                        .asserts(openCondition.getProposition(), plan.getCc()))
+                .filter(precedingStep -> precedingStep.asserts(
+                        openCondition.getProposition(),
+                        plan.getCc()))
                 .map(assertingStep -> assertingStep
                         .getAssertingCodenotations(openCondition.getProposition()))
                 .map(codenotations -> PlanModificationMapper.from(openCondition, codenotations))
@@ -92,13 +93,14 @@ public class OpenConditionResolver {
      * @param possibleActions : the set of possible actions to choose from
      * @return the set of possible steps which would allow to solve the flaw
      */
-    public static List<Operator> byCreation(Plan plan, OpenCondition openCondition, List<Action>
-                                            possibleActions)
-    {
+    public static List<Operator> byCreation(
+            Plan plan,
+            OpenCondition openCondition, List<Action>
+            possibleActions
+    ){
         List<Operator> possibleModifications = new ArrayList<>();
 
-        getSolvingSteps(openCondition, possibleActions)
-            .forEach(solvingStep -> {
+        getSolvingSteps(openCondition, possibleActions).forEach(solvingStep -> {
                 PopSituation newStepEntry = new PopSituation();
                 PopSituation newStepExit = new PopSituation();
 
@@ -109,7 +111,7 @@ public class OpenConditionResolver {
                     solvingStep.toCodenotation(plan.getCc()),
                     insertNewStepBetween(plan,solvingStep,newStepEntry,newStepExit,openCondition)
                 ));
-            });
+        });
 
         return possibleModifications;
     }

@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * TODO : A generator for mock plans for unit tests on Partial-Order Planning. Allows abstraction
+ * A generator for mock plans for unit tests on Partial-Order Planning. Allows abstraction
  * on the tedious process of building some sample plans.
  */
 public class MockPlan {

@@ -1,5 +1,6 @@
 package aStar_planning.pop.utils;
 
+import constraints.Codenotation;
 import constraints.PartialOrder;
 import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PopSituation;
@@ -12,14 +13,18 @@ import logic.Atom;
 import constraints.CodenotationConstraints;
 import logic.Context;
 import logic.ContextualPredicate;
+import logic.ContextualTerm;
 import logic.Goal;
 import logic.LogicalInstance;
 import logic.Situation;
+import logic.Term;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import settings.Keywords;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * A tool to start Partial-Order Planning with some initial plan, namely :
@@ -34,16 +39,19 @@ public class PlanInitializer {
 
     /**
      * Returns the initial plan, with the needed situations, steps, and constraints
+     *
      * @param initialSituation : the initial situation to fetch all the propositions that are
      *                         necessarily true in the starting dummy situation
-     * @param goal: the goal which are converted as preconditions of the final step of the plan
+     * @param goal:            the goal which are converted as preconditions of the final step of the plan
      * @return an initial plan to begin working with Partial-Order Planning
      */
     public static Plan constructInitialPlan(Situation initialSituation, Goal goal) {
         List<PopSituation> initialAndFinalSituations = buildDummySituations();
         List<Step> initialAndFinalSteps = buildDummySteps(initialSituation, goal);
 
-        CodenotationConstraints initialCodenotationConstraints = new CodenotationConstraints();
+        Context goalContext = initialAndFinalSteps.get(1).getActionInstance().getContext();
+        CodenotationConstraints initialCodenotationConstraints = buildInitialCc(goal,goalContext);
+
         TemporalConstraints initialTemporalConstraints = buildInitialTemporalConstraints(
                 initialAndFinalSituations,
                 initialAndFinalSteps
@@ -53,7 +61,7 @@ public class PlanInitializer {
                 initialCodenotationConstraints, initialTemporalConstraints);
     }
 
-    private static List<PopSituation> buildDummySituations(){
+    private static List<PopSituation> buildDummySituations() {
         PopSituation initialSituation = new PopSituation(), finalSituation = new PopSituation();
 
         List<PopSituation> dummySituations = new ArrayList<>();
@@ -66,12 +74,13 @@ public class PlanInitializer {
     /**
      * Returns both the initial step which asserts the initial situation, and the last step which
      * requires the goal as preconditions
+     *
      * @param initialSituation : the initial situation to fetch the initial step's consequences
-     * @param goal : the goal to build the preconditions of the final dummy step
+     * @param goal             : the goal to build the preconditions of the final dummy step
      * @return a List of steps, where <b>the element at 0 is the initial step</b> and <b> the
      * element at 1 is the last step</b>
      */
-    private static List<Step> buildDummySteps(Situation initialSituation, Goal goal){
+    private static List<Step> buildDummySteps(Situation initialSituation, Goal goal) {
         List<Step> dummySteps = new ArrayList<>();
 
         LogicalInstance initialStep = new LogicalInstance(
@@ -92,12 +101,13 @@ public class PlanInitializer {
 
     /**
      * Builds the initial Action to assert the propositions of the initial situation
+     *
      * @param propositions : the propositions to use as consequences of the step
      * @return an action whose consequences assert the initial situation
      */
-    private static Action initialAction(List<ContextualPredicate> propositions){
+    private static Action initialAction(List<ContextualPredicate> propositions) {
         return new Action(
-                "initial",
+                Keywords.POP_INITIAL_STEP,
                 new ActionPrecondition(),
                 new ActionConsequence(propositions
                         .stream()
@@ -109,13 +119,17 @@ public class PlanInitializer {
 
     /**
      * Builds the final action of the plan which requires the goal as preconditions
+     *
      * @param propositions : the propositions of the goal to serve as preconditions
      * @return a dummy Action the goal to be met in the final situation of the plan
      */
-    private static Action finalAction(List<Atom> propositions){
+    private static Action finalAction(List<Atom> propositions) {
         return new Action(
-                "final",
-                new ActionPrecondition(propositions.stream().toList()),
+                Keywords.POP_FINAL_STEP,
+                new ActionPrecondition(
+                        propositions.stream().filter(proposition -> !proposition.getPredicate()
+                                .getName().equals(Keywords.CODENOTATION_OPERATOR)).toList()
+                ),
                 new ActionConsequence()
         );
     }
@@ -127,12 +141,15 @@ public class PlanInitializer {
      *     <li>the initial situation is before the final situation</li>
      *     <li>the final situation is before the final step</li>
      * </ul>
+     *
      * @param situations : the situations to be arranged
-     * @param steps : the steps to be arranged
+     * @param steps      : the steps to be arranged
      * @return a Temporal constraint on the given situations and steps for POP
      */
-    private static TemporalConstraints buildInitialTemporalConstraints(List<PopSituation> situations,
-                                                                      List<Step> steps) {
+    private static TemporalConstraints buildInitialTemporalConstraints(
+            List<PopSituation> situations,
+            List<Step> steps
+    ) {
         List<PartialOrder> partialOrders = new ArrayList<>();
 
         PopSituation initialSituation = situations.get(0);
@@ -146,5 +163,45 @@ public class PlanInitializer {
         partialOrders.add(new PartialOrder(finalSituation, finalStep));
 
         return new TemporalConstraints(partialOrders);
+    }
+
+    /**
+     * Builds the initial codenotation constraints of the plan. If any (non)codenotation is
+     * specified in the goal, then it needs to be mapped to a (non) codenotation constraint
+     * @param goal : the goal of the planning problem
+     * @param goalContext : the context of the goal that we need to set the codenotation constraint
+     * @return the initial Codenotation Constraint for POP planning-
+     */
+    private static CodenotationConstraints buildInitialCc(Goal goal, Context goalContext) {
+        List<Codenotation> initialCodenotations = new ArrayList<>();
+
+        Predicate<Atom> isCodenotationProposition = proposition -> (proposition.getPredicate()
+                .getName()
+                .equals(Keywords.CODENOTATION_OPERATOR)
+        );
+
+        goal.getGoalPropositions()
+                .stream()
+                .filter(isCodenotationProposition)
+                .forEach(proposition -> initialCodenotations.add(
+                        toCodenotation(proposition, goalContext))
+                );
+
+        return new CodenotationConstraints(initialCodenotations);
+    }
+
+    private static Codenotation toCodenotation(Atom proposition, Context goalContext) {
+        if (!proposition.getPredicate().getName().equals(Keywords.CODENOTATION_OPERATOR)) {
+            return null;
+        }
+
+        Term left = proposition.getPredicate().getTerms().get(0);
+        Term right = proposition.getPredicate().getTerms().get(1);
+
+        return new Codenotation(
+                !proposition.isNegation(),
+                new ContextualTerm(goalContext, left),
+                new ContextualTerm(goalContext, right)
+        );
     }
 }

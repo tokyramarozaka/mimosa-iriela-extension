@@ -1,8 +1,11 @@
 package mock_blocks;
 
+import logic.Atom;
+import logic.Context;
 import logic.Goal;
 import logic.Predicate;
 import logic.mappers.PredicatesMapper;
+import settings.Keywords;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,12 +30,14 @@ public class GoalFactory {
     }
 
     public static Goal anyThreeBlocks_stacked() {
-        List<Predicate> predicateList = Arrays.asList(
-                new Predicate("on", Arrays.asList(X,Y)),
-                new Predicate("on", Arrays.asList(Y,Z))
+        List<Atom> atomList = List.of(
+                new Atom(false, new Predicate("on", List.of(X,Y))),
+                new Atom(false, new Predicate("on", List.of(Y,Z))),
+                new Atom(true, new Predicate(Keywords.CODENOTATION_OPERATOR, List.of(X,Y))),
+                new Atom(true, new Predicate(Keywords.CODENOTATION_OPERATOR, List.of(Y,Z)))
         );
 
-        return PredicatesMapper.toGoal(predicateList);
+        return new Goal(new Context(), atomList);
     }
 
     public static Goal threeBlocksOnTable() {
@@ -45,4 +50,5 @@ public class GoalFactory {
 
         return PredicatesMapper.toGoal(predicateList);
     }
+
 }

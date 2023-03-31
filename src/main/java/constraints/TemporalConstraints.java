@@ -77,14 +77,6 @@ public class TemporalConstraints extends Graphic {
                 .getContent();
     }
 
-    /**
-     * TODO : Remove all redundant constraints.
-     *
-     * @param changes
-     */
-    public void deleteRedundancies_onPlanModification(PlanModification changes) {
-
-    }
 
     /**
      * Checks if an element (left) is after another element (right) according to the current
@@ -153,7 +145,6 @@ public class TemporalConstraints extends Graphic {
 
     /**
      * Initializes all the links of each node in the graph representation of the temporal constraint
-     * TODO : find a better algorithm to generate all the links
      */
     private void initializeNodeLinks() {
         this.getGraph()
@@ -180,7 +171,8 @@ public class TemporalConstraints extends Graphic {
     }
 
     /**
-     * Remove all the redundancies in the current temporal constraints.
+     * Refactor the temporal constraint by removing all the redundancies amongst the partial
+     * orders
      */
     public void refactorTemporalConstraints() {
         List<PartialOrder> result = new ArrayList<>(this.getPartialOrders());

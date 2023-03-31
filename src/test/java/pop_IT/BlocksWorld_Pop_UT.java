@@ -12,7 +12,6 @@ import graph.Node;
 import logic.Atom;
 import logic.Context;
 import logic.ContextualAtom;
-import logic.LogicalInstance;
 import mock_blocks.ActionFactory;
 import mock_blocks.GoalFactory;
 import mock_blocks.PredicateFactory;
@@ -110,19 +109,6 @@ public class BlocksWorld_Pop_UT {
         List<Operator> solutionOperators = resolver.findSolution();
 
         assertEquals(6, solutionOperators.size());
-    }
-
-    private Step getContainingStep(Plan plan, LogicalInstance actionInstance){
-        return plan.getTc()
-                .getGraph()
-                .getNodes()
-                .stream()
-                .filter(node ->  node.getContent() instanceof Step &&
-                            ((Step) node.getContent()).getActionInstance().equals(actionInstance))
-                .map(Node::getContent)
-                .map(object -> (Step)object)
-                .findFirst()
-                .get();
     }
 
     /**

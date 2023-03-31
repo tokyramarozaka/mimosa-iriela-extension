@@ -5,7 +5,7 @@ import logic.automated_theorem_proving.ClauseSet;
 
 public class RuleMapper {
     /**
-     * TODO : map rules to clauses
+     * TODO : map rules to clauses for backward planning
      * @param rule
      * @return
      */
