@@ -73,19 +73,6 @@ public class OpenConditionResolver {
     }
 
     /**
-     * Get all the potential steps which could produce the given open condition in the plan
-     * @param plan : the plan we are working in
-     * @param openCondition : the open condition that needs to be resolved
-     * @return
-     */
-    private static List<Step> potentialEstablishers(Plan plan, OpenCondition openCondition){
-        return plan.getSteps()
-                .stream()
-                .filter(step -> plan.getTc().isAfter(step, openCondition.getSituation()))
-                .filter(step -> step.asserts(openCondition.getProposition(), plan.getCc()))
-                .collect(Collectors.toList());
-    }
-    /**
      * Search through the set of possible actions for any new step to solve the open condition.
      * This method does not include the temporal constraints which defines its partial order in the
      * plan
@@ -108,7 +95,7 @@ public class OpenConditionResolver {
                     openCondition,
                     Arrays.asList(newStepEntry, newStepExit),
                     solvingStep,
-                    solvingStep.toCodenotation(plan.getCc()),
+                    solvingStep.toCodenotation(),
                     insertNewStepBetween(plan,solvingStep,newStepEntry,newStepExit,openCondition)
                 ));
         });
@@ -136,6 +123,20 @@ public class OpenConditionResolver {
         });
 
         return solvingSteps;
+    }
+
+    /**
+     * Get all the potential steps which could produce the given open condition in the plan
+     * @param plan : the plan we are working in
+     * @param openCondition : the open condition that needs to be resolved
+     * @return
+     */
+    private static List<Step> potentialEstablishers(Plan plan, OpenCondition openCondition){
+        return plan.getSteps()
+                .stream()
+                .filter(step -> plan.getTc().isAfter(step, openCondition.getSituation()))
+                .filter(step -> step.asserts(openCondition.getProposition(), plan.getCc()))
+                .collect(Collectors.toList());
     }
 
     /**

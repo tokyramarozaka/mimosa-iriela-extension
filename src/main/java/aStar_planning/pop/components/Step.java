@@ -213,8 +213,8 @@ public class Step implements PlanElement {
         return new Node(this.toString(), new ArrayList<>(), this);
     }
 
-    public CodenotationConstraints toCodenotation(CodenotationConstraints toUpdate) {
-        List<Codenotation> updates = new ArrayList<>(toUpdate.getCodenotations());
+    public CodenotationConstraints toCodenotation() {
+        List<Codenotation> updates = new ArrayList<>();
 
         this.getActionInstance().getContext().getContextPairs().forEach(pair -> {
             var left = new ContextualTerm(this.getActionInstance().getContext(),pair.getVariable());
