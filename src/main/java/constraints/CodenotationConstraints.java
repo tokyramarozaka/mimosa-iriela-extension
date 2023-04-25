@@ -8,6 +8,7 @@ import graph.Node;
 import logic.Context;
 import logic.ContextualTerm;
 import logic.Graphic;
+import logic.Term;
 import logic.Variable;
 import lombok.Getter;
 import lombok.ToString;
@@ -141,6 +142,7 @@ public class CodenotationConstraints extends Graphic {
     }
 
     /**
+     * TODO : this should detect indirect contradictions as well.
      * Check if there are any contradictions in the current codenotation constraints. Formally,
      * a contradiction when you have for both terms A and B : A == B and A != B at the same time.
      * Codenotation being a commutative relation, order does not matter, as A == B is equal to
@@ -184,7 +186,7 @@ public class CodenotationConstraints extends Graphic {
      * @param context : the source variable's context
      * @return the term linked to the source
      */
-    public ContextualTerm getLink(Variable variable, Context context) {
+    public ContextualTerm getLink(Term variable, Context context) {
         ContextualTerm source = new ContextualTerm(context,variable);
 
         if(!isLinked(variable, context)){
@@ -206,14 +208,12 @@ public class CodenotationConstraints extends Graphic {
      * @param context : the context of the source variable
      * @return true if the variable has is codenotated to another variable, false otherwise.
      */
-    public boolean isLinked(Variable variable, Context context) {
+    public boolean isLinked(Term variable, Context context) {
         ContextualTerm toTest = new ContextualTerm(context, variable);
 
         return this.codenotations
-                .stream()
-                .filter(codenotation -> codenotation.getLeft().equals(toTest)
-                    && codenotation.isCodenotation())
-                .count() > 0;
+                .stream().anyMatch(codenotation -> codenotation.getLeft().equals(toTest)
+                        && codenotation.isCodenotation());
     }
 
     /**
@@ -226,29 +226,112 @@ public class CodenotationConstraints extends Graphic {
             codenotation -> codenotation.getLeft().equals(toRemove)
         );
     }
+
+    /**
+     * Get the non-codenoted term for a given term, if any
+     * @param term
+     * @param context
+     * @return
+     */
+    public List<ContextualTerm> getNegativeLinks(Term term, Context context){
+        ContextualTerm contextualTerm = new ContextualTerm(context, term);
+        return codenotations.stream()
+                .filter(codenotation ->
+                        codenotation.getLeft().getTerm().equals(contextualTerm.getTerm())
+                        && codenotation.getLeft().getContext().equals(contextualTerm.getContext())
+                        && !codenotation.isCodenotation())
+                .map(Codenotation::getRight)
+                .collect(Collectors.toList());
+    }
+
+    public boolean isNegativelyLinked(ContextualTerm contextualTerm){
+        return this.getCodenotations().stream()
+                .anyMatch(codenotation -> codenotation.getLeft().toString().equals(contextualTerm.toString())
+                && !codenotation.isCodenotation());
+    }
     /**
      * Checks if a given (non)codenotation would make the current codenotations contradict itself.
-     * TODO : check for indirect conflicts here.
      * @param toAdd : the codenotation we want to check without adding
      * @return true, if the codenotation does not break the current constraint, false otherwise.
      */
     public boolean isAllowed(Codenotation toAdd) {
-//        logger.info("\nChecking if : \n\t"+toAdd+"\nis allowed in \n\t" + this.getCodenotations() +
-//                " : "+(this.codenotations
-//                .stream()
-//                .filter(codenotation -> codenotation.matches(toAdd)
-//                        && toAdd.isCodenotation() != codenotation.isCodenotation())
-//                .count() == 0)+"\n");
-        return this.codenotations
-                .stream()
-                .filter(codenotation -> codenotation.matches(toAdd)
-                        && toAdd.isCodenotation() != codenotation.isCodenotation())
-                .count() == 0;
+        if(this.getCodenotations().stream()
+                .anyMatch(codenotation -> codenotation.toString().equals(toAdd.toString()))
+        ){
+//            logger.info("True 1");
+            return true;
+        }
+
+        Term term = toAdd.getLeft().getTerm();
+        Context context = toAdd.getLeft().getContext();
+
+        // Check if the varible is bound
+        if(isLinked(term, context)) {
+//            logger.info("IT IS LINKED");
+            ContextualTerm link = getLink(term, context);
+            if(toAdd.isCodenotation()) {
+                if (link.getTerm() instanceof Variable) {
+                    return link.getTerm().testEqual(
+                            link.getContext(),
+                            toAdd.getRight().getTerm(),
+                            toAdd.getRight().getContext(),
+                            this
+                    );
+                } else {
+//                    logger.info("True 2");
+                    return link.getTerm().sameName(term);
+                }
+            }
+//            logger.info("Oout 3");
+            return !toAdd.getRight().getTerm().testEqual(
+                    toAdd.getRight().getContext(),
+                    link.getTerm(),
+                    link.getContext(),
+                    this
+            );
+        }
+
+        if(this.isNegativelyLinked(toAdd.getLeft())) {
+//            logger.info("IT IS NEG LINKED");
+            for (ContextualTerm nonCodenotation : getNegativeLinks(term, context)) {
+                if (toAdd.getRight().getTerm().testEqual(
+                        toAdd.getRight().getContext(),
+                        nonCodenotation.getTerm(),
+                        nonCodenotation.getContext())
+                ){
+//                    logger.info("OUT 4");
+                    return false;
+                }
+            }
+        }
+
+//        logger.info("OUT 5");
+        return true;
+//        return this.codenotations.stream()
+//                .noneMatch(
+//                        codenotation -> codenotation.matches(toAdd)
+//                        && toAdd.isCodenotation() != codenotation.isCodenotation()
+//                );
     }
 
     public CodenotationConstraints copy(){
         return new CodenotationConstraints(
                 new ArrayList<>(this.getCodenotations())
         );
+    }
+
+    /**
+     * Adds a new codenotation constraint to the set of already existing codenotation constraints.
+     * @param left : the left part of the new codenotation
+     * @param leftContext : the context of the left part of the new codenotation
+     * @param right : the right part of the new codenotation
+     * @param rightContext : the context of the right part of the new codenotation
+     */
+    public void link(Variable left, Context leftContext, Term right, Context rightContext) {
+        this.codenotations.add(new Codenotation(
+                true,
+                new ContextualTerm(leftContext, left),
+                new ContextualTerm(rightContext, right)
+        ));
     }
 }

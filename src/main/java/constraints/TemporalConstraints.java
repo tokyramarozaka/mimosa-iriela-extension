@@ -1,7 +1,6 @@
 package constraints;
 
 import aStar_planning.pop.components.PlanElement;
-import aStar_planning.pop.components.PlanModification;
 import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop.components.Step;
 import graph.Graph;
@@ -154,14 +153,11 @@ public class TemporalConstraints extends Graphic {
 
     /**
      * Retrieves all the links related to the given node in the given graph
-     *
      * @param node  : the target node we want to retrieve all links for
-     * @param graph : the graph which contains all the nodes so that we can create links between
-     *              existing nodes.
+     * @param graph : the graph containg all nodes and links
      * @return all links of a given node.
      */
     private List<Link> allLinkOfNode(Node node, Graph graph) {
-
         return this.getPartialOrders()
                 .stream()
                 .filter(partialOrder ->
@@ -171,25 +167,70 @@ public class TemporalConstraints extends Graphic {
     }
 
     /**
-     * Refactor the temporal constraint by removing all the redundancies amongst the partial
-     * orders
+     * <p>Refactor the temporal constraint by removing all the redundant partial orders using the
+     * graph of all partial orders. A partial order <i>E(1) < E(N)</i> is <i>redundant</i> if there
+     * exists within the plan a more explicit path from <i>E(1) to E(N)</i>.</p><br>
+     *
+     * <p>For example : <i>E(1) < E(2) < E(3) < ... < E(N)</i> is much more explicit than just
+     * <i>E(1) < E(N)</i>, consequently we should delete the partial order <i>E(1) < E(N)</i>.</p>
      */
     public void refactorTemporalConstraints() {
-        List<PartialOrder> result = new ArrayList<>(this.getPartialOrders());
+        List<Link> toDelete = new ArrayList<>();
 
-        for (int i = 0; i < result.size() - 1; i++) {
-            PartialOrder currentPartialOrder = result.get(i);
-
-            for (int j = i + 1; j < result.size(); j++) {
-                PartialOrder otherPartialOrder = result.get(j);
-                if (currentPartialOrder.getAfter().equals(otherPartialOrder.getAfter())) {
-                    result.remove(currentPartialOrder);
-                    i--;
-                    break;
+        for (Node node : this.getGraph().getNodes()) {
+            for (Link link : node.getLinks()) {
+                if(this.isRedundant(link, node)){
+                    toDelete.add(link);
                 }
             }
         }
 
-        this.partialOrders = result;
+        deletePartialOrdersIfLinkMatch(toDelete);
+    }
+
+    /**
+     * Determines if a link is redundant within a node. It is redundant if there is another link
+     * from the node, which will eventually lead to the same target. In this scenario, the longer
+     * the path, the more explicit it is, the clearer the plan becomes. Longer path is better.
+     * @param link : the link to check if it is redundant or not
+     * @param node : the node which the link come from
+     * @return true if link is redundant, and false otherwise.
+     */
+    private boolean isRedundant(Link link, Node node) {
+        Node target = link.getTo();
+
+        List<Link> otherLinks = node.getLinks()
+                .stream()
+                .filter(nodeLink -> !nodeLink.equals(link))
+                .toList();
+
+        for (Link otherLink : otherLinks) {
+            if (this.getGraph().pathExists(otherLink.getTo(), target)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Deletes all partial orders from the current temporal constraints which matches the given set
+     * of links in its graph, then updates the graph accordingly. As a reminder, both TemporalOrder
+     * and Link is composed of two elements :
+     * <ul>
+     *     <li>A partial order has the before element, and the after element</li>
+     *     <li>A link has a `from` node and a `to` node, which both contains elements similar to the
+     *     elements of a partial order</li>
+     * </ul>
+     * @param toDelete : the list of all redundant links which needs to be removed from the graph
+     */
+    private void deletePartialOrdersIfLinkMatch(List<Link> toDelete) {
+        toDelete.forEach(deletion -> this.partialOrders.removeIf(partialOrder ->
+                partialOrder.getBefore().equals(deletion.getFrom().getContent())
+                && partialOrder.getAfter().equals(deletion.getTo().getContent()))
+        );
+
+        this.updateGraph();
     }
 }
+

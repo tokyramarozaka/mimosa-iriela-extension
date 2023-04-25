@@ -41,7 +41,7 @@ public class Predicate implements Unifiable {
      * @param fromContext            : this predicates context
      * @param to                     : the other term we are unifying it with, supposedly another predicate
      * @param toContext              : the context of the other term (predicate)
-     * @param codenotationConstraint : the set of bindings between variables
+     * @param cc : the set of bindings between variables
      * @return true if the unification succeeds, false otherwise.
      */
     @Override
@@ -49,15 +49,15 @@ public class Predicate implements Unifiable {
             Context fromContext,
             Unifiable to,
             Context toContext,
-            CodenotationConstraints codenotationConstraint
+            CodenotationConstraints cc
     ) {
         List<ContextualTerm> changes = new ArrayList<>();
 
-        boolean res = attemptUnification(fromContext, to, toContext, changes, codenotationConstraint);
+        boolean res = attemptUnification(fromContext, to, toContext, changes, cc);
 
         if (!res) {
             for (ContextualTerm linkedVariable : changes) {
-                codenotationConstraint.unlink(linkedVariable);
+                cc.unlink(linkedVariable);
             }
         }
 
@@ -83,9 +83,11 @@ public class Predicate implements Unifiable {
 
         int index = 0;
         for (Term term : this.getTerms()) {
-            if (!term.attemptUnification(fromContext, toPredicate.getTerms().get(index++),
-                    toContext, changes, codenotationConstraint)
-            ) {
+            if (!term.attemptUnification(
+                    fromContext,
+                    toPredicate.getTerms().get(index++),
+                    toContext, changes, codenotationConstraint
+            )){
                 return false;
             }
         }

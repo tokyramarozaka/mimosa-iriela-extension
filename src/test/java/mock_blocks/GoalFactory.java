@@ -22,8 +22,8 @@ public class GoalFactory {
         List<Predicate> predicateList = Arrays.asList(
                 new Predicate("on",Arrays.asList(A,B)),
                 new Predicate("on",Arrays.asList(B,C)),
-                new Predicate("onTable", Arrays.asList(C)),
-                new Predicate("emptyArm", Arrays.asList())
+                new Predicate("onTable", List.of(C)),
+                new Predicate("emptyArm", List.of())
         );
 
         return PredicatesMapper.toGoal(predicateList);
@@ -34,7 +34,8 @@ public class GoalFactory {
                 new Atom(false, new Predicate("on", List.of(X,Y))),
                 new Atom(false, new Predicate("on", List.of(Y,Z))),
                 new Atom(true, new Predicate(Keywords.CODENOTATION_OPERATOR, List.of(X,Y))),
-                new Atom(true, new Predicate(Keywords.CODENOTATION_OPERATOR, List.of(Y,Z)))
+                new Atom(true, new Predicate(Keywords.CODENOTATION_OPERATOR, List.of(Y,Z))),
+                new Atom(true, new Predicate(Keywords.CODENOTATION_OPERATOR, List.of(X,Z)))
         );
 
         return new Goal(new Context(), atomList);

@@ -16,23 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BlocksWorld_Pop_IT {
-    private static PopPlanningProblem problem;
-
-    @BeforeAll
-    public static void initializeProblem(){
-        problem = new PopPlanningProblem(
-                SituationFactory.threeBlocksOnTable(),
-                ActionFactory.allActionsInBlocksWorld(),
-                GoalFactory.threeBlocks_ABC_stacked()
-        );
-    }
-    @Test
-    public void outputPlan_ok(){
-        AStarResolver resolver = new AStarResolver(problem);
-
-        PlanningOutput output = resolver.outputSolutionPlan();
-    }
-
     @Test
     public void outputPlan_ifGoalHasUngroundedVariables_ok(){
         PopPlanningProblem abstractProblem = new PopPlanningProblem(

@@ -53,6 +53,35 @@ public class Constant extends Term{
     }
 
     @Override
+    public boolean testEqual(Context fromContext, Term other, Context otherContext) {
+        if (other instanceof Constant)
+            return this.sameName(other);
+        else if ((other instanceof Variable) && (otherContext.isLinked((Variable)other)))
+            return testEqual(
+                    fromContext,
+                    otherContext.getLink((Variable)other).getTerm(),
+                    otherContext.getLink((Variable)other).getContext()
+            );
+        return false;
+    }
+
+    @Override
+    public boolean testEqual(Context fromContext, Term other, Context otherContext,
+                             CodenotationConstraints cc
+    ){
+        if (other instanceof Constant)
+            return this.sameName(other);
+        else if ((other instanceof Variable) && (otherContext.isLinked((Variable)other)))
+            return testEqual(
+                    fromContext,
+                    otherContext.getLink((Variable)other).getTerm(),
+                    otherContext.getLink((Variable)other).getContext(),
+                    cc
+            );
+        return false;
+    }
+
+    @Override
     public Unifiable build(Context context) {
         return this;
     }

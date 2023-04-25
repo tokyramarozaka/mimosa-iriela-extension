@@ -245,19 +245,6 @@ public class Plan implements State {
     }
 
     /**
-     * Build a threat describing what step threatens another step's precondition
-     * @return a threat describing the destroyer, the threatened, and the destroyed precondition
-     */
-    private Threat buildThreat(Step destroyer, Step threatened, ContextualAtom precondition){
-        return new Threat(
-                destroyer,
-                threatened,
-                this.tc.getPrecedingSituation(threatened),
-                precondition
-        );
-    }
-
-    /**
      * Retrieves all the threats regarding a given step
      * @param toCheck : the step to check for threats
      * @return a list of all threats regarding the step to check.
@@ -265,7 +252,6 @@ public class Plan implements State {
     private List<Flaw> getThreats(Step toCheck) {
         List<Flaw> threats = new ArrayList<>();
 
-//        logger.info("_ Getting threats for "+toCheck);
         toCheck.getActionPreconditions().getAtoms().forEach(precondition -> {
             ContextualAtom preconditionProposition = new ContextualAtom(
                     toCheck.getActionInstance().getContext(), precondition
@@ -292,13 +278,12 @@ public class Plan implements State {
     }
 
     /**
-     * TODO : refactor this code
      * Check if a given proposition is restablished between a destroyer and the destroyed step.
      * Meaning there is a step `restablisher`, where destroyer < destroyed step, and
      * destroyer < restablisher < destroyed step
-     * @param proposition
-     * @param destroyer
-     * @param destroyedStep
+     * @param proposition : the proposition to check if it was restablished
+     * @param destroyer : the step which destroyed the proposition in the plan
+     * @param destroyedStep : the step whose precondition was destroyed by the destroyer step
      * @return true if the proposition is restablished, and false otherwise
      */
     private boolean isRestablished(ContextualAtom proposition, Step destroyer, Step destroyedStep) {
@@ -329,7 +314,7 @@ public class Plan implements State {
     }
 
     /**
-     * Checks if a given element is preceding the other element.
+     * Checks if a given element is preceding the other element e.g. a step or a situation.
      * @param left : the preceding element
      * @param right : the next element
      * @return true if left element is before the right element.
@@ -371,20 +356,18 @@ public class Plan implements State {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
 
-        String thisPlan = stringBuilder
+        return stringBuilder
                 .append("PLAN\n")
                 .append("--SITUATIONS\n")
-                .append("\t"+this.situations)
+                .append("\t"+ this.situations)
                 .append("\n--STEPS\n")
-                .append("\t"+this.steps)
+                .append("\t"+ this.steps)
                 .append("\n--CODENOTATIONS :\n")
-                .append("\t"+this.cc)
+                .append("\t"+ this.cc)
                 .append("\n--TEMPORAL CONSTRAINTS :\n")
-                .append("\t"+this.tc)
+                .append("\t"+ this.tc)
                 .append("\n--FLAWS : \n")
                 .append(this.flaws)
                 .toString();
-
-        return thisPlan;
     }
 }

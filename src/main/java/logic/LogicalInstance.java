@@ -22,11 +22,7 @@ public class LogicalInstance implements Operator {
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append(this.getLogicalEntity().build(this.context));
-
-        return stringBuilder.toString();
+        return this.getLogicalEntity().build(this.context).toString();
     }
 
     @Override
