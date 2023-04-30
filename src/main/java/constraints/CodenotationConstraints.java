@@ -142,7 +142,6 @@ public class CodenotationConstraints extends Graphic {
     }
 
     /**
-     * TODO : this should detect indirect contradictions as well.
      * Check if there are any contradictions in the current codenotation constraints. Formally,
      * a contradiction when you have for both terms A and B : A == B and A != B at the same time.
      * Codenotation being a commutative relation, order does not matter, as A == B is equal to
@@ -165,7 +164,7 @@ public class CodenotationConstraints extends Graphic {
     private List<Codenotation> allCodenotations(){
         return this.codenotations
                 .stream()
-                .filter(codenotation -> codenotation.isCodenotation())
+                .filter(Codenotation::isCodenotation)
                 .collect(Collectors.toList());
     }
 

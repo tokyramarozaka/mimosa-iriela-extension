@@ -21,7 +21,7 @@ import java.util.Set;
  */
 @AllArgsConstructor
 @Getter
-public class Action extends LogicalEntity{
+public class Action extends LogicalEntity implements NormConsequences{
     private String name;
     private ActionPrecondition preconditions;
     private ActionConsequence consequences;

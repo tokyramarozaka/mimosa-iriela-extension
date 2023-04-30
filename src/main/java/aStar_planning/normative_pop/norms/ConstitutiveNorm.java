@@ -3,9 +3,11 @@ package aStar_planning.normative_pop.norms;
 import logic.Context;
 import logic.LogicalEntity;
 import lombok.AllArgsConstructor;
+import lombok.ToString;
 
 @AllArgsConstructor
-public class ConstitutiveNorm extends LogicalEntity implements Norm{
+@ToString
+public class ConstitutiveNorm extends Norm{
     private Role source;
     private Role target;
     @Override

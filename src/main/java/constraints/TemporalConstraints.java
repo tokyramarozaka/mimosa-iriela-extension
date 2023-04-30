@@ -9,7 +9,6 @@ import graph.Node;
 import logic.Graphic;
 import lombok.Getter;
 import lombok.ToString;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 @Getter
 @ToString
 public class TemporalConstraints extends Graphic {
-    private List<PartialOrder> partialOrders;
+    private final List<PartialOrder> partialOrders;
 
     public TemporalConstraints() {
         super();
@@ -80,7 +79,6 @@ public class TemporalConstraints extends Graphic {
     /**
      * Checks if an element (left) is after another element (right) according to the current
      * temporal constraints by using its graphical representation
-     *
      * @param left  : the latter step which is after the right element
      * @param right : the former step which is before the left element
      * @return true if left > right temporally, and false otherwise
@@ -97,25 +95,8 @@ public class TemporalConstraints extends Graphic {
     }
 
     /**
-     * Returns the list of all partial orders which concerns a given step either the step being
-     * on the left side or right side of the constraint.
-     *
-     * @param target : the referred step
-     * @return a list of partial order including the given step either on the left or the right
+     * Updates the graph to match the current temporal constraint.
      */
-    public List<PartialOrder> getConcernedConstraints(Step target) {
-        List<PartialOrder> concernedConstraints = new ArrayList<>();
-
-        for (PartialOrder partialOrder : this.partialOrders) {
-            if (partialOrder.getBefore().equals(target) ||
-                    partialOrder.getAfter().equals(target)) {
-                concernedConstraints.add(partialOrder);
-            }
-        }
-
-        return concernedConstraints;
-    }
-
     public void updateGraph() {
         List<Node> updatedNodes = this.initializeNodes();
         this.setGraph(new Graph(updatedNodes));
@@ -154,7 +135,7 @@ public class TemporalConstraints extends Graphic {
     /**
      * Retrieves all the links related to the given node in the given graph
      * @param node  : the target node we want to retrieve all links for
-     * @param graph : the graph containg all nodes and links
+     * @param graph : the graph containing all nodes and links
      * @return all links of a given node.
      */
     private List<Link> allLinkOfNode(Node node, Graph graph) {

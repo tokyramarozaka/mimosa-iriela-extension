@@ -11,6 +11,6 @@ import java.util.Map;
 @Getter
 public class Institution {
     private String name;
-    private Map<Role, List<Norm>> norms;
+    private NormsPerRole normsPerRole;
     private List<Action> possibleActions;
 }

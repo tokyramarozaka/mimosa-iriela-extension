@@ -45,8 +45,11 @@ public class Plan implements State {
     private final static Logger logger = LogManager.getLogger(Plan.class);
 
     @Builder
-    public Plan(List<PopSituation> situations, List<Step> steps, CodenotationConstraints cc,
-                TemporalConstraints tc
+    public Plan(
+            List<PopSituation> situations,
+            List<Step> steps,
+            CodenotationConstraints cc,
+            TemporalConstraints tc
     ){
         this.situations = situations;
         this.steps = steps;
@@ -56,7 +59,7 @@ public class Plan implements State {
         this.evaluateFlaws();
     }
 
-    private static boolean isNotFinalStep(Step step) {
+    private boolean isNotFinalStep(Step step) {
         return !step.getActionInstance().getName().equals(Keywords.POP_FINAL_STEP);
     }
 
@@ -224,7 +227,7 @@ public class Plan implements State {
      */
     private List<Step> getEstablishers(ContextualAtom proposition, PopSituation situation) {
         return this.steps.stream()
-                .filter(Plan::isNotFinalStep)
+                .filter(this::isNotFinalStep)
                 .filter(step -> this.isBefore(this.tc.getFollowingSituation(step),situation))
                 .filter(step -> step.asserts(proposition,this.getCc()))
                 .collect(Collectors.toList());
