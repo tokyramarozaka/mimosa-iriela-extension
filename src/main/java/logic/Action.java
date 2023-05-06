@@ -9,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * An action representation based on the STRIPS paradigm. It needs a :
@@ -21,7 +20,7 @@ import java.util.Set;
  */
 @AllArgsConstructor
 @Getter
-public class Action extends LogicalEntity implements NormConsequences{
+public class Action extends LogicalEntity {
     private String name;
     private ActionPrecondition preconditions;
     private ActionConsequence consequences;

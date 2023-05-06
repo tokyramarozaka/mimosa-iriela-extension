@@ -12,6 +12,8 @@ public class PartialOrderPlan implements PlanningOutput {
 
     @Override
     public String toString() {
-        return this.partialOrderPlan.toString();
+        return this.partialOrderPlan.toString()
+                .replaceAll("\\[", "[\n\t\t")
+                .replaceAll(", ",",\n\t\t");
     }
 }

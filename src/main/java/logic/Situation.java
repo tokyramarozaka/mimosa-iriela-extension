@@ -16,11 +16,11 @@ public class Situation implements State {
     private List<ContextualPredicate> contextualPredicates;
     private Context stateContext = new Context();
 
-    public Situation(List<ContextualPredicate> contextualPredicates){
+    public Situation(List<ContextualPredicate> contextualPredicates) {
         this.contextualPredicates = contextualPredicates;
     }
 
-    public List<LogicalInstance> allPossibleActionInstances(List<Action> possibleActions){
+    public List<LogicalInstance> allPossibleActionInstances(List<Action> possibleActions) {
         List<LogicalInstance> allActionInstances = new ArrayList<>();
 
         possibleActions.forEach(action -> {
@@ -32,67 +32,68 @@ public class Situation implements State {
 
     /**
      * TODO : refactor the code so that it is more comprehensible
+     *
      * @param actionInstance
      * @return
      */
-    public Situation applyActionInstance(LogicalInstance actionInstance){
-        List<ContextualPredicate> resultingWorld = new ArrayList<>();
+    public Situation applyActionInstance(LogicalInstance actionInstance) {
+        List<ContextualPredicate> toAdd = new ArrayList<>();
         Action action = (Action) actionInstance.getLogicalEntity();
 
-        List<ContextualPredicate> toAdd = new ArrayList<>();
-
         // What to add from the set of consequences ?
-        for(Atom atom: action.getConsequences().getAtoms()){
+        for (Atom atom : action.getConsequences().getAtoms()) {
             boolean negates = false;
             // To all beliefs, Is there a belief negated by the current consequence ?
-            for(ContextualPredicate belief : this.getContextualPredicates()){
+            for (ContextualPredicate belief : this.getContextualPredicates()) {
                 // If yes, it is not going to be added to the new State
-                if(atom.getPredicate().unify(
-                        actionInstance.getContext(),
-                        belief.getPredicate(),
-                        belief.getContext()
-                ) && (atom.isNegation())) {
+                if (atom.getPredicate().unify(actionInstance.getContext(), belief.getPredicate(),
+                        belief.getContext()) && (atom.isNegation())
+                ) {
                     negates = true;
                 }
-            };
+            }
             // If no belief was negated by it, then the atom is a new predicate to Add into the new State
             if (!negates) {
-                toAdd.add(new ContextualPredicate(actionInstance.getContext(),atom.getPredicate()));
+                toAdd.add(new ContextualPredicate(actionInstance.getContext(), atom.getPredicate()));
             }
         }
 
         // What to keep from the current belief ?
-        for(ContextualPredicate belief : this.getContextualPredicates()){
+        for (ContextualPredicate belief : this.getContextualPredicates()) {
             boolean wasNegated = false;
-            for (Atom consequence : action.getConsequences().getAtoms()){
-                if(consequence.getPredicate().unify(
-                        actionInstance.getContext(),
-                        belief.getPredicate(),
-                        belief.getContext()
-                ) && (consequence.isNegation())) {
+            for (Atom consequence : action.getConsequences().getAtoms()) {
+                if (consequence.getPredicate().unify(
+                        actionInstance.getContext(),belief.getPredicate(),belief.getContext())
+                        && (consequence.isNegation())
+                ){
                     wasNegated = true;
                 }
             }
             if (!wasNegated) {
                 toAdd.add(new ContextualPredicate(
-                        new Context(),(Predicate)belief.getPredicate().build(belief.getContext())));
+                        new Context(), (Predicate) belief.getPredicate().build(belief.getContext())));
             }
         }
 
-        resultingWorld.addAll(toAdd);
+        List<ContextualPredicate> resultingWorld = new ArrayList<>(toAdd);
         return new Situation(resultingWorld);
     }
 
+    /**
+     * Checks if a situation satisfies a given goal
+     * @param goal: the goal to attain with its propositions
+     * @return true if the goal is satisfied in the given situation and false otherwise
+     */
     public boolean satisfies(Goal goal) {
         Context stateContext = new Context();
         int accomplished = 0;
 
-        for(Atom goalProposition : goal.getGoalPropositions()) {
-            for(ContextualPredicate belief : this.getContextualPredicates()) {
-                if(belief.getPredicate().unify(
+        for (Atom goalProposition : goal.getGoalPropositions()) {
+            for (ContextualPredicate belief : this.getContextualPredicates()) {
+                if (belief.getPredicate().unify(
                         belief.getContext(), goalProposition.getPredicate()
-                        .build(goal.getGoalContext()),stateContext
-                )){
+                                .build(goal.getGoalContext()), stateContext
+                )) {
                     accomplished++;
                     break;
                 }
@@ -108,7 +109,7 @@ public class Situation implements State {
         return (double) goal.getGoalPropositions()
                 .stream()
                 .filter(proposition -> !new ContextualAtom(goal.getGoalContext(), proposition)
-                                            .isVerified(this))
+                        .isVerified(this))
                 .count();
     }
 
@@ -123,8 +124,8 @@ public class Situation implements State {
             stringBuilder.append(
                     contextualPredicate.getPredicate().build(contextualPredicate.getContext())
             );
-            if (i.getAndIncrement() < this.contextualPredicates.size() - 1){
-                    stringBuilder.append(" , ");
+            if (i.getAndIncrement() < this.contextualPredicates.size() - 1) {
+                stringBuilder.append(" , ");
             }
         });
 

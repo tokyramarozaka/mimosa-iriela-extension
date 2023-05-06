@@ -361,16 +361,12 @@ public class Plan implements State {
 
         return stringBuilder
                 .append("PLAN\n")
-                .append("--SITUATIONS\n")
-                .append("\t"+ this.situations)
-                .append("\n--STEPS\n")
-                .append("\t"+ this.steps)
-                .append("\n--CODENOTATIONS :\n")
-                .append("\t"+ this.cc)
-                .append("\n--TEMPORAL CONSTRAINTS :\n")
-                .append("\t"+ this.tc)
-                .append("\n--FLAWS : \n")
-                .append(this.flaws)
+                .append("--SITUATIONS\n").append("\t").append(this.situations)
+                .append("\n--STEPS\n").append("\t").append(this.steps)
+                .append("\n--CODENOTATIONS :\n").append("\t").append(this.cc)
+                .append("\n--TEMPORAL CONSTRAINTS :\n").append("\t").append(this.tc)
+                .append("\n--FLAWS :")
+                .append(this.flaws.isEmpty() ? "NONE" : this.flaws)
                 .toString();
     }
 }

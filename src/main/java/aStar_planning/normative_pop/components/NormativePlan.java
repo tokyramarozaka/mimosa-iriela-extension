@@ -1,10 +1,7 @@
 package aStar_planning.normative_pop.components;
 
-import aStar_planning.normative_pop.flaws.NormativeFlaw;
-import aStar_planning.normative_pop.flaws.NormativeFlawBuilder;
-import aStar_planning.normative_pop.norms.Norm;
-import aStar_planning.normative_pop.norms.NormsPerInterval;
-import aStar_planning.normative_pop.norms.Organization;
+import aStar_planning.normative_pop.components.norms.Norm;
+import aStar_planning.normative_pop.utils.NormsPerInterval;
 import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop.components.Step;
@@ -53,21 +50,22 @@ public class NormativePlan extends Plan {
     @Override
     public void evaluateFlaws() {
         super.evaluateFlaws();
-        this.evaluateNormativeFlaws();
+        // TODO : this.evaluateNormativeFlaws();
     }
 
     /**
+     * TODO : detect all normative flaws within the plan
      * Updates the flaw set by adding in the flaws related to norms
      */
-    private void evaluateNormativeFlaws() {
-        this.getSituations().forEach(situation -> this.getApplicableNorms(situation)
-                .forEach(applicableNorm -> {
-                    if (!applicableNorm.isApplied(situation)) {
-                        this.getFlaws().add(new NormativeFlaw(this,applicableNorm,interval));
-                    }
-                })
-        );
-    }
+//    private void evaluateNormativeFlaws() {
+//        this.getSituations().forEach(situation -> this.getApplicableNorms(situation)
+//                .forEach(applicableNorm -> {
+//                    if (!applicableNorm.isApplied(situation)) {
+//                        this.getFlaws().add(new NormativeFlaw(this,applicableNorm,interval));
+//                    }
+//                })
+//        );
+//    }
 
     @Override
     public String toString() {

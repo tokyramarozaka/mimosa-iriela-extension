@@ -6,7 +6,7 @@ import logic.Goal;
 import logic.Situation;
 import lombok.Getter;
 import lombok.ToString;
-import aStar_planning.normative_pop.norms.Organization;
+import aStar_planning.normative_pop.components.Organization;
 
 import java.util.List;
 

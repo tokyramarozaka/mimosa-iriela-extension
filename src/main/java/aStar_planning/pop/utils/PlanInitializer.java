@@ -13,11 +13,10 @@ import logic.Atom;
 import constraints.CodenotationConstraints;
 import logic.Context;
 import logic.ContextualPredicate;
-import logic.ContextualTerm;
 import logic.Goal;
 import logic.LogicalInstance;
 import logic.Situation;
-import logic.Term;
+import logic.mappers.GoalMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import settings.Keywords;
@@ -126,9 +125,9 @@ public class PlanInitializer {
     private static Action finalAction(List<Atom> propositions) {
         return new Action(
                 Keywords.POP_FINAL_STEP,
-                new ActionPrecondition(
-                        propositions.stream().filter(proposition -> !proposition.getPredicate()
-                                .getName().equals(Keywords.CODENOTATION_OPERATOR)).toList()
+                new ActionPrecondition(propositions.stream()
+                        .filter(proposition -> !proposition.getPredicate().getName()
+                                .equals(Keywords.CODENOTATION_OPERATOR)).toList()
                 ),
                 new ActionConsequence()
         );
@@ -184,24 +183,10 @@ public class PlanInitializer {
                 .stream()
                 .filter(isCodenotationProposition)
                 .forEach(proposition -> initialCodenotations.add(
-                        toCodenotation(proposition, goalContext))
+                        GoalMapper.toCodenotation(proposition, goalContext))
                 );
 
         return new CodenotationConstraints(initialCodenotations);
     }
 
-    private static Codenotation toCodenotation(Atom proposition, Context goalContext) {
-        if (!proposition.getPredicate().getName().equals(Keywords.CODENOTATION_OPERATOR)) {
-            return null;
-        }
-
-        Term left = proposition.getPredicate().getTerms().get(0);
-        Term right = proposition.getPredicate().getTerms().get(1);
-
-        return new Codenotation(
-                !proposition.isNegation(),
-                new ContextualTerm(goalContext, left),
-                new ContextualTerm(goalContext, right)
-        );
-    }
 }

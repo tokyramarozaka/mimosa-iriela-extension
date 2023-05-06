@@ -1,6 +1,6 @@
 package mini_mirana_IT.organizations;
 
-import aStar_planning.normative_pop.norms.Role;
+import aStar_planning.normative_pop.components.norms.Role;
 
 /**
  * A class to provide all the basic roles present within the model

@@ -21,7 +21,7 @@ public class BlocksWorld_Pop_IT {
         PopPlanningProblem abstractProblem = new PopPlanningProblem(
                 SituationFactory.threeBlocksOnTable(),
                 ActionFactory.allActionsInBlocksWorld(),
-                GoalFactory.anyThreeBlocks_stacked()
+                GoalFactory.anyThreeBlocks_stacked__withNonCodenotationConstraints()
         );
         AStarResolver resolver = new AStarResolver(abstractProblem);
 

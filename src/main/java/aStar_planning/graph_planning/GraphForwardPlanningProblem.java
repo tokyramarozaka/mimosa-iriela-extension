@@ -10,6 +10,7 @@ import lombok.Getter;
 import outputs.PlanningOutput;
 import outputs.TotalOrderPlan;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +33,7 @@ public class GraphForwardPlanningProblem implements AStarProblem {
 
     @Override
     public List<Operator> getOptions(State state) {
-        return ((Node)state).getLinks().stream().collect(Collectors.toList());
+        return new ArrayList<>(((Node) state).getLinks());
     }
 
     @Override
@@ -41,7 +42,9 @@ public class GraphForwardPlanningProblem implements AStarProblem {
     }
 
     /**
-     * TODO : find a heuristic for graph-based search
+     * Return the distance of a given node from the goal node. Since in a graph it is impossible to
+     * know the goal's distance, we simply leave it as 0. Leaving evaluateOperator i.e. the plan's
+     * length as the only measure to see if a plan is better than another.
      * @param state : the state to be evaluated
      * @return a double representing the distance from the goal
      */

@@ -21,8 +21,11 @@ import java.util.stream.Collectors;
 public class ForwardPlanningProblem extends Problem implements AStarProblem {
     private static final Logger logger = LogManager.getLogger(ForwardPlanningProblem.class);
 
-    public ForwardPlanningProblem(Situation initialSituation, List<Action> possibleActions,
-                                  Goal goal) {
+    public ForwardPlanningProblem(
+            Situation initialSituation,
+            List<Action> possibleActions,
+            Goal goal
+    ) {
         super(initialSituation, possibleActions, goal);
     }
 
@@ -33,33 +36,35 @@ public class ForwardPlanningProblem extends Problem implements AStarProblem {
 
     @Override
     public boolean isFinal(State state) {
-        return ((Situation)state).satisfies(this.getGoal());
+        return ((Situation) state).satisfies(this.getGoal());
     }
 
     @Override
     public List<Operator> getOptions(State state) {
-        Situation currentSituation = ((Situation)state);
+
+        logger.info(this.getGoal() + "!!!");
+        Situation currentSituation = ((Situation) state);
         List<Operator> options = new ArrayList<>();
 
         currentSituation
                 .allPossibleActionInstances(this.getPossibleActions())
                 .forEach(possibleActionInstance -> options.add(possibleActionInstance));
 
-        logger.info("GETTING OPTIONS FOR : \n\t"+state+"\nOPTIONS ARE : \n\t"+options);
+        logger.info("GETTING OPTIONS FOR : \n\t" + state + "\nOPTIONS ARE : \n\t" + options);
         return options;
     }
 
     @Override
     public State apply(Operator operator, State state) {
-        logger.info("APPLYING "+operator);
-        logger.info("GOT :"+((Situation)state).applyActionInstance((LogicalInstance)operator));
-        return ((Situation)state).applyActionInstance((LogicalInstance)operator);
+        logger.info("APPLYING " + operator);
+        logger.info("GOT :" + ((Situation) state).applyActionInstance((LogicalInstance) operator));
+        return ((Situation) state).applyActionInstance((LogicalInstance) operator);
     }
 
     @Override
     public double evaluateState(State state) {
-        logger.info("Heuristic distance : "+((Situation)state).goalDistance(this.getGoal()));
-        return ((Situation)state).goalDistance(this.getGoal());
+        logger.info("Heuristic distance : " + ((Situation) state).goalDistance(this.getGoal()));
+        return ((Situation) state).goalDistance(this.getGoal());
     }
 
     @Override
@@ -80,6 +85,13 @@ public class ForwardPlanningProblem extends Problem implements AStarProblem {
 
     @Override
     public PlanningOutput outputPlan(State finalState, List<Operator> solutionOperators) {
-        return new TotalOrderPlan(solutionOperators);
+        PlanningOutput output = new TotalOrderPlan(solutionOperators);
+
+        logger.info("=".repeat(100));
+        logger.info("\tFINAL OUTPUT");
+        logger.info("=".repeat(100));
+        logger.info(output);
+
+        return output;
     }
 }

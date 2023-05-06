@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import mock_blocks.ActionFactory;
 import mock_blocks.GoalFactory;
 import mock_blocks.SituationFactory;
+import outputs.PlanningOutput;
+import outputs.TotalOrderPlan;
 
 import java.util.List;
 
@@ -55,12 +57,12 @@ public class BlocksWorld_Forward_IT {
         AStarProblem problem = new ForwardPlanningProblem(initialSituation,possibleActions, goal);
 
         AStarResolver resolver = new AStarResolver(problem);
-        List<Operator> solutionPlan = resolver.findSolution();
+        var output = (TotalOrderPlan) resolver.outputSolutionPlan();
 
-        assertEquals(solutionPlan.size(),4,"Plan should have 4 actions");
-        assertEquals(solutionPlan.get(0).getName(),"take");
-        assertEquals(solutionPlan.get(1).getName(),"stack");
-        assertEquals(solutionPlan.get(2).getName(),"take");
-        assertEquals(solutionPlan.get(3).getName(),"stack");
+        assertEquals(output.getPlanActionInstances().size(),4,"Plan should have 4 actions");
+        assertEquals(output.getPlanActionInstances().get(0).getName(),"take");
+        assertEquals(output.getPlanActionInstances().get(1).getName(),"stack");
+        assertEquals(output.getPlanActionInstances().get(2).getName(),"take");
+        assertEquals(output.getPlanActionInstances().get(3).getName(),"stack");
     }
 }

@@ -2,7 +2,7 @@ package logic.mappers;
 
 public class ConstraintMapper {
     /**
-     * TODO
+     * TODO : map a constraint to a clause for automated theorem proving
      * @param toChange
      * @return
      */

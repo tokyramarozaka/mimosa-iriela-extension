@@ -32,6 +32,15 @@ public class GoalFactory {
     public static Goal anyThreeBlocks_stacked() {
         List<Atom> atomList = List.of(
                 new Atom(false, new Predicate("on", List.of(X,Y))),
+                new Atom(false, new Predicate("on", List.of(Y,Z)))
+        );
+
+        return new Goal(new Context(), atomList);
+    }
+
+    public static Goal anyThreeBlocks_stacked__withNonCodenotationConstraints() {
+        List<Atom> atomList = List.of(
+                new Atom(false, new Predicate("on", List.of(X,Y))),
                 new Atom(false, new Predicate("on", List.of(Y,Z))),
                 new Atom(true, new Predicate(Keywords.CODENOTATION_OPERATOR, List.of(X,Y))),
                 new Atom(true, new Predicate(Keywords.CODENOTATION_OPERATOR, List.of(Y,Z))),
@@ -40,7 +49,6 @@ public class GoalFactory {
 
         return new Goal(new Context(), atomList);
     }
-
     public static Goal threeBlocksOnTable() {
         List<Predicate> predicateList = Arrays.asList(
                 new Predicate("onTable",Arrays.asList(A)),
