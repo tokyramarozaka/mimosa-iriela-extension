@@ -7,7 +7,8 @@ import mock_logic.validation_model.norms.ConstitutiveNormFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Organizations {
+public class OrganizationFactory {
+    // TODO : build all organizations into a single list including household and exploiters
     public static List<Organization> getAllOrganizations() {
         return new ArrayList<>(List.of(
 
@@ -23,6 +24,7 @@ public class Organizations {
         ));
     }
 
+    // TODO : build organizations for exploiters only.
     public static List<Organization> getExploitersOnly() {
         return new ArrayList<>(List.of(
 
