@@ -15,9 +15,9 @@ import logic.Goal;
 import logic.LogicalInstance;
 import logic.Situation;
 import logic.Variable;
-import mock_blocks.ActionFactory;
-import mock_blocks.GoalFactory;
-import mock_blocks.SituationFactory;
+import mock_logic.blocks_world.ActionFactory;
+import mock_logic.blocks_world.GoalFactory;
+import mock_logic.blocks_world.SituationFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

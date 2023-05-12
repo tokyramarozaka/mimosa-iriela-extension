@@ -9,10 +9,10 @@ import logic.Goal;
 import logic.Rule;
 import logic.Situation;
 import org.junit.jupiter.api.Test;
-import mock_blocks.ActionFactory;
-import mock_blocks.GoalFactory;
-import mock_blocks.RulesFactory;
-import mock_blocks.SituationFactory;
+import mock_logic.blocks_world.ActionFactory;
+import mock_logic.blocks_world.GoalFactory;
+import mock_logic.blocks_world.RulesFactory;
+import mock_logic.blocks_world.SituationFactory;
 
 import java.util.List;
 

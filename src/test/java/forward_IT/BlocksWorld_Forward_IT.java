@@ -10,10 +10,9 @@ import logic.Situation;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
-import mock_blocks.ActionFactory;
-import mock_blocks.GoalFactory;
-import mock_blocks.SituationFactory;
-import outputs.PlanningOutput;
+import mock_logic.blocks_world.ActionFactory;
+import mock_logic.blocks_world.GoalFactory;
+import mock_logic.blocks_world.SituationFactory;
 import outputs.TotalOrderPlan;
 
 import java.util.List;

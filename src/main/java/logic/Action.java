@@ -21,11 +21,10 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class Action extends LogicalEntity {
+    private final Logger logger = LogManager.getLogger(Action.class);
     private String name;
     private ActionPrecondition preconditions;
     private ActionConsequence consequences;
-
-    private final Logger logger = LogManager.getLogger(Action.class);
 
     /**
      * Returns all the possible instances of a given action in a target situation based on its
@@ -33,7 +32,7 @@ public class Action extends LogicalEntity {
      * @param targetSituation : the situation to check if any instance of the action is possible.
      * @return a list of action instances, executable in the target situation
      */
-    public List<LogicalInstance> possibleInstances(Situation targetSituation){
+    public List<LogicalInstance> possibleInstances(Situation targetSituation) {
         List<Context> contexts = new ArrayList<>();
         contexts.add(new Context());
 
@@ -42,7 +41,7 @@ public class Action extends LogicalEntity {
          * The increasing function here is : f(n) n being the index of the condition,
          * and its superior born is the precondition's size
          */
-        possibleInstancesRecursive(this.preconditions.getAtoms(),targetSituation, contexts);
+        possibleInstancesRecursive(this.preconditions.getAtoms(), targetSituation, contexts);
 
         return contexts
                 .stream()
@@ -57,23 +56,26 @@ public class Action extends LogicalEntity {
      * @param beliefs
      * @param contexts
      */
-    public void possibleInstancesRecursive(List<Atom> precondition, Situation beliefs,
-                                     List<Context> contexts) {
+    public void possibleInstancesRecursive(
+            List<Atom> precondition,
+            Situation beliefs,
+            List<Context> contexts
+    ) {
         Context stateContext = new Context();
 
-        for(Atom condition : precondition) {
+        for (Atom condition : precondition) {
             List<Context> contextsToAdd = new ArrayList<>();
             List<Context> contextsToDel = new ArrayList<>();
 
-            for(Context context : contexts) {
+            for (Context context : contexts) {
                 boolean unified_once = false;
                 Context oldContext = context.copy();
 
-                for(ContextualPredicate belief : beliefs.getContextualPredicates()) {
-                    if(condition.getPredicate().unify(
+                for (ContextualPredicate belief : beliefs.getContextualPredicates()) {
+                    if (condition.getPredicate().unify(
                             context, belief.getPredicate().build(belief.getContext()), stateContext
-                    )){
-                        if(unified_once){
+                    )) {
+                        if (unified_once) {
                             contextsToAdd.add(context);
                         } else {
                             unified_once = true;
@@ -81,7 +83,7 @@ public class Action extends LogicalEntity {
                         context = oldContext.copy();
                     }
                 }
-                if (unified_once == false) {
+                if (!unified_once) {
                     contextsToDel.add(context);
                 }
             }
@@ -116,16 +118,16 @@ public class Action extends LogicalEntity {
         sb.append(this.getName());
         sb.append("(");
 
-        for(Atom p : (this.getPreconditions().getAtoms())) {
+        for (Atom p : (this.getPreconditions().getAtoms())) {
             p.getPredicate().getTerms().forEach(term -> {
-                if(!terms.contains(term))
+                if (!terms.contains(term))
                     terms.add(term);
             });
         }
 
-        for(Term term : terms) {
+        for (Term term : terms) {
             sb.append(term);
-            if (i++ < terms.size()-1)
+            if (i++ < terms.size() - 1)
                 sb.append(",");
         }
 
