@@ -47,4 +47,8 @@ public class AtomFactory {
     public static Atom isOffice(Term someZone) {
         return new Atom(false, PredicateFactory.isOffice(someZone));
     }
+
+    public static Atom haveMoney() {
+        return new Atom(false, PredicateFactory.haveMoney());
+    }
 }

@@ -5,11 +5,11 @@ import aStar_planning.pop_with_norms.NormativePopPlanningProblem;
 import java.util.ArrayList;
 
 public class PlanningProblemFactory {
-    public static NormativePopPlanningProblem haveFoodAndCoal_asProvider(){
+    public static NormativePopPlanningProblem haveFoodAndWood_asProvider(){
         return new NormativePopPlanningProblem(
-                SituationFactory. ,
+                SituationFactory.setInitialSituation(),
                 new ArrayList<>(),
-                GoalFactory. ,
+                GoalFactory.haveFoodAndWood() ,
                 OrganizationFactory.
         )
     }

@@ -50,11 +50,20 @@ public class ConstitutiveNormFactory {
     }
 
     public static List<ConstitutiveNorm> someSouthernOrganization() {
-        List<ConstitutiveNorm> constitutiveNorms = new ArrayList<>();
 
-        constitutiveNorms.addAll(Arrays.asList(
+        List<ConstitutiveNorm> constitutiveNorms = new ArrayList<>(Arrays.asList(
                 new ConstitutiveNorm(RoleFactory.BREDE_MAFANA, RoleFactory.PLANT)
         ));
+
+        return constitutiveNorms;
+    }
+
+    /**
+     * todo : agent count as provider
+     * @return
+     */
+    public static List<ConstitutiveNorm> agentCountAsProvider() {
+        List<ConstitutiveNorm> constitutiveNorms = new ArrayList<>();
 
         return constitutiveNorms;
     }

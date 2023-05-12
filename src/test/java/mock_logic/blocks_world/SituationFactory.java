@@ -14,13 +14,13 @@ public class SituationFactory {
 
     public static Situation threeBlocksOnTable(){
         List<Predicate> predicateList = Arrays.asList(
-                new Predicate("onTable", Arrays.asList(A)),
-                new Predicate("onTable", Arrays.asList(B)),
-                new Predicate("onTable", Arrays.asList(C)),
-                new Predicate("free", Arrays.asList(A)),
-                new Predicate("free", Arrays.asList(B)),
-                new Predicate("free", Arrays.asList(C)),
-                new Predicate("emptyArm", Arrays.asList())
+                new Predicate("onTable", List.of(A)),
+                new Predicate("onTable", List.of(B)),
+                new Predicate("onTable", List.of(C)),
+                new Predicate("free", List.of(A)),
+                new Predicate("free", List.of(B)),
+                new Predicate("free", List.of(C)),
+                new Predicate("emptyArm", List.of())
         );
 
         planning.Situation externalSituation = new planning.Situation(predicateList);

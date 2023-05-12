@@ -13,6 +13,7 @@ public class Iriela_IT {
     public static void initializeProblems(){
 
     }
+
     @Test
     public void shouldFollowNorms__getCompulsoryLicense_beforeHunting(){
 

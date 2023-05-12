@@ -1,34 +1,31 @@
 package mock_logic.validation_model.organizations;
 
-/**
- * TODO : Describe all the organizations of the model
- */
+import aStar_planning.pop_with_norms.components.Organization;
+import mock_logic.validation_model.institutions.InstitutionFactory;
+import mock_logic.validation_model.norms.ConstitutiveNormFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Organizations {
-//    public static Organization someEcologyOrganization(){
-//        return new Organization(
-//                InstitutionFactory.ecologyInstitution(),
-//                ConstitutiveNormFactory.someEcologyOrganization()
-//        );
-//    }
-//
-//    public static Organization someHouseholdOrganization(){
-//        return new Organization(
-//                InstitutionFactory.householdInstitution(),
-//                ConstitutiveNormFactory.someHouseholdOrganization()
-//        );
-//    }
-//
-//    public static Organization someSouthernOrganization(){
-//        return new Organization(
-//                InstitutionFactory.southernInstitution(),
-//                ConstitutiveNormFactory.someNorthernOrganization()
-//        );
-//    }
-//
-//    public static Organization someNorthernOrganization(){
-//        return new Organization(
-//                InstitutionFactory.northernInstitution(),
-//                ConstitutiveNormFactory.someSouthernOrganization()
-//        );
-//    }
+    public static List<Organization> getAllOrganizations() {
+        return new ArrayList<>(List.of(
+
+        ));
+    }
+
+    public static List<Organization> agentCountAsProvider_inHousehold() {
+        return new ArrayList<>(List.of(
+                new Organization(
+                        InstitutionFactory.householdInstitution(),
+                        ConstitutiveNormFactory.agentCountAsProvider()
+                )
+        ));
+    }
+
+    public static List<Organization> getExploitersOnly() {
+        return new ArrayList<>(List.of(
+
+        ));
+    }
 }

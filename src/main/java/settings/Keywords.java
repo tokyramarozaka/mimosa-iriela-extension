@@ -7,5 +7,5 @@ public class Keywords {
     public static final String POP_INITIAL_STEP = "initial";
     public static final String POP_FINAL_STEP = "final";
 
-    public static final Concept AGENT_CONCEPT = new Concept("self");
+    public static final Concept AGENT_CONCEPT = new Concept("agent");
 }
