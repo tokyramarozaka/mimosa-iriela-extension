@@ -6,7 +6,7 @@ import logic.mappers.SituationMapper;
 import java.util.List;
 
 public class SituationFactory {
-    public static Situation setInitialSituation(){
+    public static Situation startsAtA1_withZoneConfigurationOne(){
         List<Predicate> predicateList = ZonesConfiguration.configurationOne();
 
         predicateList.add(PredicateFactory.inZone(Zones.A1));

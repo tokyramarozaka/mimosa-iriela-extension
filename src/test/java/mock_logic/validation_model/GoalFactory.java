@@ -20,4 +20,10 @@ public class GoalFactory {
                 AtomFactory.haveMoney()
         ));
     }
+
+    public static Goal haveMoney() {
+        return new Goal(new Context(), List.of(
+                AtomFactory.haveMoney()
+        ));
+    }
 }

@@ -6,15 +6,10 @@ import mock_logic.validation_model.norms.ConstitutiveNormFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class OrganizationFactory {
-    // TODO : build all organizations into a single list including household and exploiters
-    public static List<Organization> getAllOrganizations() {
-        return new ArrayList<>(List.of(
-
-        ));
-    }
-
     public static List<Organization> agentCountAsProvider_inHousehold() {
         return new ArrayList<>(List.of(
                 new Organization(
@@ -24,10 +19,19 @@ public class OrganizationFactory {
         ));
     }
 
-    // TODO : build organizations for exploiters only.
-    public static List<Organization> getExploitersOnly() {
+    public static List<Organization> agentCountAsExploiter_inExploitation() {
         return new ArrayList<>(List.of(
-
+                new Organization(
+                        InstitutionFactory.exploitationInstitution(),
+                        ConstitutiveNormFactory.agentCountAsExploiter()
+                )
         ));
+    }
+
+    public static List<Organization> agentCountAs_providerAndExploiter() {
+        return Stream.concat(
+                agentCountAsProvider_inHousehold().stream(),
+                agentCountAsExploiter_inExploitation().stream()
+        ).collect(Collectors.toList());
     }
 }

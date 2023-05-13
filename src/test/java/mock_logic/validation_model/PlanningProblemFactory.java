@@ -8,18 +8,28 @@ import java.util.ArrayList;
 public class PlanningProblemFactory {
     public static NormativePopPlanningProblem haveFoodAndWood_asProvider(){
         return new NormativePopPlanningProblem(
-                SituationFactory.setInitialSituation(),
+                SituationFactory.startsAtA1_withZoneConfigurationOne(),
                 new ArrayList<>(),
                 GoalFactory.haveFoodAndWood() ,
                 OrganizationFactory.agentCountAsProvider_inHousehold()
-        )
+        );
     }
 
     public static NormativePopPlanningProblem haveMoney_asExploiter(){
-
+        return new NormativePopPlanningProblem(
+                SituationFactory.startsAtA1_withZoneConfigurationOne(),
+                new ArrayList<>(),
+                GoalFactory.haveMoney(),
+                OrganizationFactory.agentCountAsExploiter_inExploitation()
+        );
     }
 
     public static NormativePopPlanningProblem haveFoodCoalMoney_asProvider_asExploiter(){
-
+        return new NormativePopPlanningProblem(
+                SituationFactory.startsAtA1_withZoneConfigurationOne(),
+                new ArrayList<>(),
+                GoalFactory.haveFoodWoodMoney(),
+                OrganizationFactory.agentCountAs_providerAndExploiter()
+        );
     }
 }

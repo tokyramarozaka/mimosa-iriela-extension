@@ -23,4 +23,10 @@ public class ConstitutiveNormFactory {
             new ConstitutiveNorm(Keywords.AGENT_CONCEPT, RoleFactory.PROVIDER)
         ));
     }
+
+    public static List<ConstitutiveNorm> agentCountAsExploiter() {
+        return new ArrayList<>(List.of(
+            new ConstitutiveNorm(Keywords.AGENT_CONCEPT, RoleFactory.EXPLOITER)
+        ));
+    }
 }
