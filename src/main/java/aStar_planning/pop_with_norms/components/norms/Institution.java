@@ -5,6 +5,7 @@ import com.sun.source.tree.ReturnTree;
 import logic.Action;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,5 +39,14 @@ public class Institution {
         });
 
         return normsForRoles;
+    }
+
+    @Override
+    public String toString() {
+        return "\n" + this.name +
+                "_INSTITUTION" +
+                this.normsPerRoles +
+                "\nRELATED ACTIONS :\n\t" +
+                this.possibleActions;
     }
 }

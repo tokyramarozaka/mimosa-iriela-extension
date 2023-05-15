@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class RegulativeNorms_ForHouseholds {
+public class RegulativeNorms_ForHousehold_Providers {
     private static NormConditions prohibition_cut_inProtectedZone_conditions(){
         return new NormConditions(List.of(
                 AtomFactory.inZone(Zones.X),
@@ -26,9 +26,9 @@ public class RegulativeNorms_ForHouseholds {
         return new NormativeAction(ActionFactory.cut());
     }
 
-    public static Norm prohibition_cut_inProtectedZone(){
+    public static RegulativeNorm prohibition_cut_inProtectedZone(){
         return new RegulativeNorm(
-                "Prohibited cut in protected zone",
+                "Prohibited to cut in protected zone",
                 DeonticOperator.PROHIBITION,
                 prohibition_cut_inProtectedZone_conditions(),
                 prohibition_cut_inProtectedZone_consequences()
@@ -46,9 +46,9 @@ public class RegulativeNorms_ForHouseholds {
         return new NormativeAction(ActionFactory.move(Zones.X, Zones.Y));
     }
 
-    public static Norm prohibition_move_toSacredZone(){
+    public static RegulativeNorm prohibition_move_toSacredZone(){
         return new RegulativeNorm(
-                "Prohibited moving to a sacred zone",
+                "Prohibited to move to a sacred zone",
                 DeonticOperator.PROHIBITION,
                 prohibition_move_toSacredZone_conditions(),
                 prohibition_move_toSacredZone_consequences()
@@ -67,9 +67,9 @@ public class RegulativeNorms_ForHouseholds {
         return new NormativeAction(ActionFactory.hunt());
     }
 
-    public static Norm permission_hunt_ifLicense(){
+    public static RegulativeNorm permission_hunt_ifLicense(){
         return new RegulativeNorm(
-                "Hunt permitted under license",
+                "Permitted to hunt under license",
                 DeonticOperator.PERMISSION,
                 permission_hunt_ifLicense_conditions(),
                 permission_hunt_ifLicense_consequences()
@@ -88,16 +88,16 @@ public class RegulativeNorms_ForHouseholds {
         return new NormativeAction(ActionFactory.cut());
     }
 
-    public static Norm permission_cut_ifLicense(){
+    public static RegulativeNorm permission_cut_ifLicense(){
         return new RegulativeNorm(
-                "Cut permitted under license",
+                "Permitted to cut under license",
                 DeonticOperator.PERMISSION,
                 permission_cut_ifLicense_conditions(),
                 permission_cut_ifLicense_consequences()
         );
     }
 
-    public static List<Norm> allRegulativeNorms(){
+    public static List<RegulativeNorm> allRegulativeNorms(){
         return new ArrayList<>(Arrays.asList(
             prohibition_cut_inProtectedZone(),
             prohibition_move_toSacredZone(),

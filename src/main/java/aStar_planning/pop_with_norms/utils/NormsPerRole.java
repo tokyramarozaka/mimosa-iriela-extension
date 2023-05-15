@@ -14,8 +14,13 @@ import java.util.List;
  */
 @AllArgsConstructor
 @Getter
-@ToString
 public class NormsPerRole {
     private Role role;
     private List<RegulativeNorm> regulativeNorms;
+
+    @Override
+    public String toString() {
+        return "\n" + this.role + " :" +
+                this.regulativeNorms;
+    }
 }

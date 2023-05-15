@@ -62,12 +62,12 @@ public class RegulativeNorm extends Norm {
     @Override
     public String toString() {
         return new StringBuilder()
+                .append("\n\t")
                 .append(this.name)
                 .append("(")
                 .append(this.deonticOperator)
                 .append(")")
                 .append(" : ")
-                .append("\n\t")
                 .append(this.normConditions)
                 .append(" -> ")
                 .append(this.normConsequences)

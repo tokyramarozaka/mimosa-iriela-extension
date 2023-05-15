@@ -25,20 +25,27 @@ public class NormativePlan extends Plan {
             CodenotationConstraints cc,
             TemporalConstraints tc,
             List<Organization> organizations,
-            List<NormsPerInterval> normsPerInterval
+            List<NormsPerInterval> normsPerIntervals
     ) {
         super(situations, steps, cc, tc);
         this.organizations = organizations;
-        this.normsPerIntervals = normsPerInterval;
-    }
-
-    @Override
-    public void evaluateFlaws() {
-        super.evaluateFlaws();
+        this.evaluateActiveOrganizations();
+        this.normsPerIntervals = normsPerIntervals;
         this.evaluateNormativeFlaws();
     }
 
-    /**
+    public NormativePlan(
+            Plan plan,
+            List<Organization> organizations,
+            List<NormsPerInterval> normsPerIntervals
+    ){
+        super(plan.getSituations(), plan.getSteps(), plan.getCc(), plan.getTc());
+        this.organizations = organizations;
+        this.evaluateActiveOrganizations();
+        this.normsPerIntervals = normsPerIntervals;
+        this.evaluateNormativeFlaws();
+    }
+     /**
      * Adds to the flaw list all flaws related to regulative norms and the situation in which they
      * are not applied, namely :
      * <ul>
@@ -58,11 +65,16 @@ public class NormativePlan extends Plan {
     }
 
     /**
-     * Evaluate all active organizations in a given situation.
-     * @param situation : the situation we want to check all active organizations
+     * Evaluate all active organizations in the plan and updates its list in the plan.
      */
-    public void evaluateActiveOrganizations(PopSituation situation){
+    public void evaluateActiveOrganizations(){
+        this.activeOrganizations = new ArrayList<>();
 
+        this.getOrganizations().forEach(organization -> {
+            if(organization.hasRole(Keywords.AGENT_CONCEPT)){
+                this.activeOrganizations.add(organization);
+            }
+        });
     }
     
     /**

@@ -97,7 +97,7 @@ public class ActionFactory {
 
     public static List<Action> allActionsInHousehold() {
         return List.of(
-
+            hunt(), move(Zones.X,Zones.Y)
         );
     }
 }

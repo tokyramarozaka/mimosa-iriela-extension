@@ -1,6 +1,7 @@
 package validation_model_IT;
 
 import aStar_planning.pop_with_norms.NormativePopPlanningProblem;
+import mock_logic.validation_model.PlanningProblemFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -8,11 +9,6 @@ public class Iriela_IT {
     private NormativePopPlanningProblem haveFoodAndWood_asProvider;
     private NormativePopPlanningProblem haveFoodWoodMoney_asProvider_asExploiter;
     private NormativePopPlanningProblem haveMoney_asExploiter;
-
-    @BeforeAll
-    public static void initializeProblems(){
-
-    }
 
     @Test
     public void shouldFollowNorms__getCompulsoryLicense_beforeHunting(){

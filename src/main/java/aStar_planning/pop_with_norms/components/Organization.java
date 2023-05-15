@@ -19,7 +19,7 @@ public class Organization {
     private Institution institution;
     private List<ConstitutiveNorm> constitutiveNorms;
 
-    public List<RegulativeNorm> getRegulativeNormsByConcept(Concept concept){
+    public List<RegulativeNorm> getRegulativeNormsByConcept(Concept concept) {
         List<RegulativeNorm> regulativeNorms = new ArrayList<>();
 
         this.constitutiveNorms.stream()
@@ -30,5 +30,23 @@ public class Organization {
                 });
 
         return regulativeNorms;
+    }
+
+    /**
+     * Checks if some concept plays a role in this current organization
+     * @param someConcept : the concept which we want to check if it plays a role
+     * @return true if the concept is plays a role in the current organization, and false otherwise
+     */
+    public boolean hasRole(Concept someConcept) {
+        return this.constitutiveNorms
+                .stream()
+                .anyMatch(constitutiveNorm -> someConcept.equals(constitutiveNorm.getSource()));
+    }
+
+    @Override
+    public String toString() {
+        return this.institution+
+                "\nORGANIZATION\n\t" +
+                this.getConstitutiveNorms();
     }
 }

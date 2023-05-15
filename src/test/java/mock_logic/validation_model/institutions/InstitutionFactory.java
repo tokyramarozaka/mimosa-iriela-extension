@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class InstitutionFactory {
     public static Institution householdInstitution(){
-        List<NormsPerRole> normsPerRoles = new ArrayList<>();
+        List<NormsPerRole> normsPerRoles = NormsPerRoleFactory.householdNormsPerRoles();
         List<Action> householdActions = ActionFactory.allActionsInHousehold();
         return new Institution("HOUSEHOLD", normsPerRoles, householdActions);
     }

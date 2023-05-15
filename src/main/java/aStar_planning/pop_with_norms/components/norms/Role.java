@@ -7,4 +7,9 @@ import lombok.Getter;
 @Getter
 public class Role {
     private String name;
+
+    @Override
+    public String toString() {
+        return "ROLE_"+this.name;
+    }
 }

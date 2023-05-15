@@ -29,6 +29,6 @@ public class ConstitutiveNorm extends Norm {
 
     @Override
     public String toString() {
-        return "ConstitutiveNorm{" + source + " COUNT AS " + target + '}';
+        return source + " COUNT AS " + target;
     }
 }
