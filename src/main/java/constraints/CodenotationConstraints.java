@@ -133,7 +133,7 @@ public class CodenotationConstraints extends Graphic {
             }
         }
 
-        return false;
+        return true;
     }
 
     private void updateGraph() {

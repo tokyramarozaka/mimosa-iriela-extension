@@ -54,7 +54,6 @@ public class Predicate implements Unifiable {
         List<ContextualTerm> changes = new ArrayList<>();
 
         boolean res = attemptUnification(fromContext, to, toContext, changes, cc);
-
         if (!res) {
             for (ContextualTerm linkedVariable : changes) {
                 cc.unlink(linkedVariable);
@@ -86,7 +85,9 @@ public class Predicate implements Unifiable {
             if (!term.attemptUnification(
                     fromContext,
                     toPredicate.getTerms().get(index++),
-                    toContext, changes, codenotationConstraint
+                    toContext,
+                    changes,
+                    codenotationConstraint
             )){
                 return false;
             }

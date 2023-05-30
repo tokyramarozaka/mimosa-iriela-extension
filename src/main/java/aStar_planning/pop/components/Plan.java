@@ -225,7 +225,7 @@ public class Plan implements State {
      * @param situation : the situation in which the proposition needs to be established
      * @return a list of steps which all establishes the proposition in the situation
      */
-    private List<Step> getEstablishers(ContextualAtom proposition, PopSituation situation) {
+    public List<Step> getEstablishers(ContextualAtom proposition, PopSituation situation) {
         return this.steps.stream()
                 .filter(this::isNotFinalStep)
                 .filter(step -> this.isBefore(this.tc.getFollowingSituation(step),situation))
@@ -296,24 +296,6 @@ public class Plan implements State {
                         && !restablisher.equals(destroyer))
                 .anyMatch(restablisher -> tc.isBefore(destroyer, restablisher)
                         && tc.isBefore(restablisher, destroyedStep));
-    }
-
-    /**
-     * Retrieves which precondition is threatened between the threatener and the threatened step
-     * @param threat : the threatening step which destroys the precondition
-     * @param threatened : the step bearing the threatened precondition
-     * @return the threatened proposition
-     */
-    private ContextualAtom getThreatenedPrecondition(Step threat, Step threatened) {
-        Context threatenedContext = threatened.getActionInstance().getContext();
-
-        for (Atom precondition : threatened.getActionPreconditions().getAtoms()) {
-            if(threat.destroys(threatenedContext, precondition, this.getCc())){
-                return new ContextualAtom(threatened.getActionInstance().getContext(),precondition);
-            }
-        }
-
-        return null;
     }
 
     /**

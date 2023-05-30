@@ -25,7 +25,7 @@ public class AtomFactory {
     }
 
     public static Atom haveWood() {
-        return new Atom(false, PredicateFactory.haveCoal());
+        return new Atom(false, PredicateFactory.haveWood());
     }
 
     public static Atom isForest(Term someZone) {
@@ -38,6 +38,10 @@ public class AtomFactory {
 
     public static Atom isSacred(Term someZone) {
         return new Atom(false, PredicateFactory.isSacred(someZone));
+    }
+
+    public static Atom isNormal(Term someZone) {
+        return new Atom(false, PredicateFactory.isNormal(someZone));
     }
 
     public static Atom areNeighbors(Term someZone, Term someOtherZone) {

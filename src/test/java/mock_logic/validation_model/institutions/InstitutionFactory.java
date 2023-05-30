@@ -13,13 +13,13 @@ import java.util.List;
  * institutions :
  * <ul>
  *     <li>Household : representing all the agent needs in terms of everyday life including food and
- *     coal</li>
+ *     wood</li>
  *     <li>Exploitation : representing some regulated exploitation of a resource</li>
  * </ul>
  */
 public class InstitutionFactory {
     public static Institution householdInstitution(){
-        List<NormsPerRole> normsPerRoles = NormsPerRoleFactory.householdNormsPerRoles();
+        List<NormsPerRole> normsPerRoles = NormsPerRoleFactory.forHousehold_Provider();
         List<Action> householdActions = ActionFactory.allActionsInHousehold();
         return new Institution("HOUSEHOLD", normsPerRoles, householdActions);
     }

@@ -43,7 +43,7 @@ public class Institution {
 
     @Override
     public String toString() {
-        return "\n" + this.name +
+        return this.name +
                 "_INSTITUTION" +
                 this.normsPerRoles +
                 "\nRELATED ACTIONS :\n\t" +

@@ -91,13 +91,20 @@ public class ActionFactory {
         );
     }
 
+    public static Action dummyAction(){
+        return new Action(
+                "dummy",
+                new ActionPrecondition(),
+                new ActionConsequence()
+        );
+    }
     public static List<Action> allActionsInExploitation() {
-        return List.of(cut(), hunt(), getLicense());
+        return List.of(dummyAction(), cut(), hunt(), getLicense(), move(Zones.X, Zones.Y));
     }
 
     public static List<Action> allActionsInHousehold() {
         return List.of(
-            hunt(), move(Zones.X,Zones.Y)
+           dummyAction(), hunt(), move(Zones.X,Zones.Y)
         );
     }
 }

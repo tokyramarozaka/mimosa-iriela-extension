@@ -1,6 +1,5 @@
 package mock_logic.validation_model;
 
-import logic.Constant;
 import logic.Predicate;
 import logic.Term;
 import java.util.ArrayList;
@@ -11,8 +10,8 @@ public class PredicateFactory {
         return new Predicate("haveFood", new ArrayList<>());
     }
 
-    public static Predicate haveCoal(){
-        return new Predicate("haveCoal", new ArrayList<>());
+    public static Predicate haveWood(){
+        return new Predicate("haveWood", new ArrayList<>());
     }
 
     public static Predicate inForest(Term someForest) {

@@ -14,4 +14,17 @@ public class NormativeFlaw implements Flaw {
     private Plan plan;
     private RegulativeNorm flawedNorm;
     private PopSituation situation;
+
+    @Override
+    public String toString() {
+        String flawName =  switch(flawedNorm.getDeonticOperator()){
+            case OBLIGATION -> "\n\tMISSING OBLIGATION";
+            case PROHIBITION -> "\n\tMISSING PROHIBITION";
+            case PERMISSION -> "\n\tMISSING PERMISSION";
+        };
+
+        return flawName + " : " +
+                this.flawedNorm +
+                " IN " + this.situation;
+    }
 }

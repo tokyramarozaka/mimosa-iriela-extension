@@ -2,6 +2,7 @@ package aStar_planning.pop_with_norms.components.norms;
 
 import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop_with_norms.components.NormativePlan;
+import constraints.CodenotationConstraints;
 import logic.Atom;
 import logic.Context;
 import logic.ContextualAtom;
@@ -12,7 +13,12 @@ public class NormativeProposition extends ContextualAtom implements NormConseque
     }
 
     @Override
-    public boolean isApplied(NormativePlan plan, PopSituation situation) {
+    public boolean isApplied(NormativePlan plan, PopSituation situation, CodenotationConstraints cc) {
         return plan.isAsserted(new ContextualAtom(this.getContext(), this.getAtom()), situation);
+    }
+
+    @Override
+    public NormConsequences build(Context context) {
+        return new NormativeProposition(this.getContext(), this.getAtom().build(context));
     }
 }

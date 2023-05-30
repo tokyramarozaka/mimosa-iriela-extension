@@ -1,7 +1,9 @@
 package validation_model_IT;
 
 import aStar.AStarResolver;
+import aStar_planning.pop.components.Flaw;
 import aStar_planning.pop_with_norms.NormativePopPlanningProblem;
+import aStar_planning.pop_with_norms.components.NormativeFlaw;
 import aStar_planning.pop_with_norms.components.NormativePlan;
 import aStar_planning.pop_with_norms.components.Organization;
 import mock_logic.validation_model.PlanningProblemFactory;
@@ -19,17 +21,19 @@ public class Iriela_UT {
     @Test
     public void getActiveOrganizations_ok(){
         NormativePopPlanningProblem problem = PlanningProblemFactory.haveFoodAndWood_asProvider();
-        NormativePlan initialState = (NormativePlan) problem.getInitialState();
+        NormativePlan initialState = problem.getInitialState();
 
         List<Organization> activeOrganizations = initialState.getActiveOrganizations();
 
-        logger.info("active organizations are : " + initialState.getActiveOrganizations());
         Assertions.assertEquals(activeOrganizations.size(), 1);
         Assertions.assertTrue(activeOrganizations.get(0).hasRole(Keywords.AGENT_CONCEPT));
     }
 
     @Test
     public void evaluateNormativeFlaws_ok(){
+        NormativePopPlanningProblem problem = PlanningProblemFactory.haveFoodAndWood_asProvider();
+        NormativePlan initialState = problem.getInitialState();
 
+        logger.info(initialState);
     }
 }

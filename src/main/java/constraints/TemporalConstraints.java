@@ -213,5 +213,22 @@ public class TemporalConstraints extends Graphic {
 
         this.updateGraph();
     }
+
+    /**
+     * Returns the element following a given situation, either it be another situation, or a step.
+     * @param situation : the step we want to check for a following element
+     * @return the element following a given situation
+     * @throws NullPointerException if there is no following element to the situation
+     */
+    public PlanElement getFollowingElement(PopSituation situation) throws NullPointerException{
+        var followingElement =  this.getGraph()
+                .getFollowingNode(this.getGraph().getContainingNode(situation))
+                .getContent();
+
+        if(followingElement instanceof PopSituation){
+            return (PopSituation) followingElement;
+        }
+        return (Step) followingElement;
+    }
 }
 

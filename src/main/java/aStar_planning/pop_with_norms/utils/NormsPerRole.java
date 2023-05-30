@@ -20,7 +20,7 @@ public class NormsPerRole {
 
     @Override
     public String toString() {
-        return "\n" + this.role + " :" +
+        return "\n" + this.role + " NORMS :" +
                 this.regulativeNorms;
     }
 }

@@ -47,6 +47,8 @@ public class Organization {
     public String toString() {
         return this.institution+
                 "\nORGANIZATION\n\t" +
-                this.getConstitutiveNorms();
+                this.getConstitutiveNorms() +
+                " IN " +
+                this.getInstitution().getName();
     }
 }
