@@ -9,6 +9,8 @@ import constraints.CodenotationConstraints;
 import constraints.TemporalConstraints;
 import logic.ContextualAtom;
 import lombok.Getter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import settings.Keywords;
 
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ public class NormativePlan extends Plan {
     private final List<Organization> organizations;
     private final List<NormsPerInterval> normsPerIntervals;
     private List<Organization> activeOrganizations;
+    private final static Logger logger = LogManager.getLogger(NormativePlan.class);
 
     public NormativePlan(
             List<PopSituation> situations,
@@ -82,7 +85,6 @@ public class NormativePlan extends Plan {
 
     /**
      * Returns a list of all regulative norms applicable to a given situation of the current plan
-     *
      * @param situation : the situation in the plan we want to check out for applicable norms
      * @return a list of regulative norms applicable to the given situation
      */
@@ -130,13 +132,12 @@ public class NormativePlan extends Plan {
         this.getSteps().stream()
                 .filter(step -> this.getTc().isBefore(step, situation))
                 .forEach(precedingStep -> {
-                    System.out.println("preceding step " + precedingStep + " of " + situation);
                     precedingStep.getActionConsequences().getAtoms().forEach(consequence -> {
                         ContextualAtom toAdd = new ContextualAtom(
                                 precedingStep.getActionInstance().getContext(), consequence
                         );
 
-                        if (this.isAsserted(toAdd, situation)) {
+                        if (precedingStep.asserts(toAdd, this.getCc())) {
                             assertedPropositions.add(toAdd);
                         }
                     });
