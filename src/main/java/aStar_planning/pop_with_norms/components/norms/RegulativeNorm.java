@@ -52,7 +52,6 @@ public class RegulativeNorm extends Norm {
      * or not.
      * Keep in mind that the algorithm may vary depending on its deontic operator : OBLIGATION,
      * PROHIBITION, PERMISSION.
-     * @param step : the step we want to check if it satisfies the current normative action
      * @return true if the given step actually satisfies the normative action, false otherwise.
      */
     public boolean isSatisfiedBy(NormativePlan plan, PopSituation situation){

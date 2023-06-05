@@ -212,7 +212,7 @@ public class Plan implements State {
      * @param situation : the situation in which we want to check if it has been destroyed
      * @return the list of all steps which can destroy a given proposition in a given situation
      */
-    private List<Step> getDestroyers(ContextualAtom proposition, PopSituation situation) {
+    public List<Step> getDestroyers(ContextualAtom proposition, PopSituation situation) {
         return this.steps.stream()
                 .filter(step -> !this.tc.isBefore(situation, step))
                 .filter(step -> step.destroys(proposition, this.getCc()))
@@ -289,13 +289,25 @@ public class Plan implements State {
      * @param destroyedStep : the step whose precondition was destroyed by the destroyer step
      * @return true if the proposition is restablished, and false otherwise
      */
-    private boolean isRestablished(ContextualAtom proposition, Step destroyer, Step destroyedStep) {
+    public boolean isRestablished(ContextualAtom proposition, Step destroyer, Step destroyedStep) {
         return this.steps.stream()
                 .filter(step -> step.asserts(proposition, this.getCc()))
                 .filter(restablisher -> !restablisher.equals(destroyedStep)
                         && !restablisher.equals(destroyer))
                 .anyMatch(restablisher -> tc.isBefore(destroyer, restablisher)
                         && tc.isBefore(restablisher, destroyedStep));
+    }
+
+    public boolean isRestablished(
+            ContextualAtom proposition,
+            Step destroyer,
+            PopSituation situation
+    ){
+        return this.steps.stream()
+                .filter(step -> step.asserts(proposition, this.getCc()))
+                .filter(restablisher -> !restablisher.equals(destroyer))
+                .anyMatch(restablisher -> tc.isBefore(destroyer, restablisher)
+                    && tc.isBefore(restablisher,situation));
     }
 
     /**

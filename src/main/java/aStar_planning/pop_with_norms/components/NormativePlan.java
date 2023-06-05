@@ -1,5 +1,6 @@
 package aStar_planning.pop_with_norms.components;
 
+import aStar_planning.pop.components.PlanElement;
 import aStar_planning.pop_with_norms.components.norms.RegulativeNorm;
 import aStar_planning.pop_with_norms.utils.NormsPerInterval;
 import aStar_planning.pop.components.Plan;
@@ -19,10 +20,10 @@ import java.util.stream.Collectors;
 
 @Getter
 public class NormativePlan extends Plan {
+    private final static Logger logger = LogManager.getLogger(NormativePlan.class);
     private final List<Organization> organizations;
     private final List<NormsPerInterval> normsPerIntervals;
     private List<Organization> activeOrganizations;
-    private final static Logger logger = LogManager.getLogger(NormativePlan.class);
 
     public NormativePlan(
             List<PopSituation> situations,
@@ -85,6 +86,7 @@ public class NormativePlan extends Plan {
 
     /**
      * Returns a list of all regulative norms applicable to a given situation of the current plan
+     *
      * @param situation : the situation in the plan we want to check out for applicable norms
      * @return a list of regulative norms applicable to the given situation
      */
@@ -129,21 +131,58 @@ public class NormativePlan extends Plan {
     ) {
         List<ContextualAtom> assertedPropositions = new ArrayList<>();
 
-        this.getSteps().stream()
-                .filter(step -> this.getTc().isBefore(step, situation))
+        this.getSteps().stream().filter(step -> this.getTc().isBefore(step, situation))
                 .forEach(precedingStep -> {
-                    precedingStep.getActionConsequences().getAtoms().forEach(consequence -> {
-                        ContextualAtom toAdd = new ContextualAtom(
-                                precedingStep.getActionInstance().getContext(), consequence
-                        );
-
-                        if (precedingStep.asserts(toAdd, this.getCc())) {
-                            assertedPropositions.add(toAdd);
-                        }
-                    });
+                    assertedPropositions.addAll(getRemainingPropositions(precedingStep, situation));
                 });
 
         return assertedPropositions;
+    }
+
+    private List<ContextualAtom> getRemainingPropositions(
+            Step precedingStep,
+            PopSituation situation
+    ){
+        List<ContextualAtom> remainingPropositions = new ArrayList<>();
+
+        precedingStep.getActionConsequences().getAtoms().forEach(consequence -> {
+            ContextualAtom toAdd = new ContextualAtom(
+                    precedingStep.getActionInstance().getContext(), consequence
+            );
+
+            if (precedingStep.asserts(toAdd, this.getCc())) {
+                // TODO : check if the asserted proposition is not negated by some destroyers.
+                List<Step> destroyers = this.getSteps().stream()
+                        .filter(step -> step.destroys(toAdd, this.getCc()))
+                        .filter(destroyer -> isBetween(precedingStep, destroyer, situation))
+                        .toList();
+
+                if (destroyers.isEmpty()) {
+                    remainingPropositions.add(toAdd);
+                }
+
+                for (Step destroyer : destroyers) {
+                    if (this.isRestablished(toAdd, destroyer, situation)) {
+                        remainingPropositions.add(toAdd);
+                    }
+                }
+            }
+        });
+
+        return remainingPropositions;
+    }
+
+    /**
+     * Checks if some element in the plan is between two others. Namely, checks if the target
+     * element is between the start and the finish element.
+     * @param start : the element at the left edge of the interval we want to check
+     * @param target: the element we want to check if it is between start and finish
+     * @param finish: the element at the right edge of the interval we want to check
+     * @return true if start < target < finish, and false otherwise.
+     */
+    private boolean isBetween(PlanElement start, PlanElement target, PlanElement finish) {
+        return this.getTc().isBefore(start, target)
+                && this.getTc().isBefore(target, finish);
     }
 
     @Override
