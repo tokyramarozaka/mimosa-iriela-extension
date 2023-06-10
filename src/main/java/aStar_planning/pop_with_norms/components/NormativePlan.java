@@ -8,6 +8,7 @@ import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop.components.Step;
 import constraints.CodenotationConstraints;
 import constraints.TemporalConstraints;
+import exception.UnapplicableNormException;
 import logic.ContextualAtom;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
@@ -113,7 +114,7 @@ public class NormativePlan extends Plan {
             norm.getNormConditions().getApplicableCodenotations(this, situation);
 
             return true;
-        } catch (NullPointerException e) {
+        } catch (UnapplicableNormException e) {
             return false;
         }
     }

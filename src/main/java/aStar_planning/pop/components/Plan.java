@@ -2,14 +2,13 @@ package aStar_planning.pop.components;
 
 import aStar.Operator;
 import aStar.State;
-import aStar_planning.pop.utils.OpenConditionResolver;
+import aStar_planning.pop.resolvers.OpenConditionResolver;
 import aStar_planning.pop.utils.PlanInitializer;
-import aStar_planning.pop.utils.ThreatResolver;
+import aStar_planning.pop.resolvers.ThreatResolver;
 import constraints.TemporalConstraints;
 import logic.Action;
 import logic.Atom;
 import constraints.CodenotationConstraints;
-import logic.Context;
 import logic.ContextualAtom;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -333,7 +332,6 @@ public class Plan implements State {
         this.getTc().refactorTemporalConstraints();
     }
 
-
     /**
      * Retrieves the initial step within the plan by using its reserved name.
      *
@@ -347,6 +345,27 @@ public class Plan implements State {
                 .filter(step -> step.getActionInstance().getName().equals(Keywords.POP_INITIAL_STEP))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public Step getFinalStep() {
+        return this.steps.stream()
+                .filter(step -> step.getActionInstance().getName().equals(Keywords.POP_FINAL_STEP))
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
+     * Retrieves the initial situation in the plan, that is the first situation after the initial
+     * step. This is mainly used for testing purposes.
+     * @return the situation right after the initial dummy step
+     * @see settings.Keywords for the initial dummy step name.
+     */
+    public PopSituation getInitialSituation() {
+        return this.tc.getFollowingSituation(this.getInitialStep());
+    }
+
+    public PopSituation getFinalSituation() {
+        return this.tc.getPrecedingSituation(this.getFinalStep());
     }
 
     @Override
@@ -363,4 +382,6 @@ public class Plan implements State {
                 .append(this.flaws.isEmpty() ? "NONE" : this.flaws)
                 .toString();
     }
+
+
 }

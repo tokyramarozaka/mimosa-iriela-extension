@@ -1,4 +1,4 @@
-package aStar_planning.pop.utils;
+package aStar_planning.pop.resolvers;
 
 import aStar.Operator;
 import aStar_planning.pop.mapper.PlanModificationMapper;

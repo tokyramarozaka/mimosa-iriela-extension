@@ -41,9 +41,8 @@ public class NormativeAction extends Action implements NormConsequences{
 
         if(followingElement == null){
             return false;
-        } else if(followingElement instanceof Step){
+        } else if(followingElement instanceof Step followingStep){
             Context stateContext = new Context();
-            Step followingStep = (Step) followingElement;
 
             for (Atom normConsequence : this.getConsequences().getAtoms()) {
                 for (Atom consequence : followingStep.getActionConsequences().getAtoms()){

@@ -1,8 +1,9 @@
-package aStar_planning.pop.utils;
+package aStar_planning.pop.resolvers;
 
 import aStar.Operator;
 import aStar_planning.pop.mapper.PlanModificationMapper;
 import aStar_planning.pop.components.OpenCondition;
+import aStar_planning.pop.utils.TemporalConstraintsBuilder;
 import constraints.PartialOrder;
 import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PopSituation;

@@ -1,8 +1,6 @@
-package validation_model_IT;
+package validation_model;
 
 import aStar_planning.pop_with_norms.NormativePopPlanningProblem;
-import mock_logic.validation_model.PlanningProblemFactory;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class Iriela_IT {

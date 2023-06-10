@@ -5,16 +5,13 @@ import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop.components.Step;
 import aStar_planning.pop_with_norms.components.NormativePlan;
 import constraints.CodenotationConstraints;
-import logic.Atom;
+import exception.UnapplicableNormException;
 import logic.Context;
 import logic.LogicalEntity;
-import logic.Predicate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Getter
@@ -46,7 +43,7 @@ public class RegulativeNorm extends Norm {
     }
 
     /**
-     * TODO : checks if a given normative action is satisfied by a given step. To do this, we must
+     * Checks if a given normative action is satisfied by a given step. To do this, we must
      * first check the variable bindings that make the norm applicable using its applicability
      * conditions, then we must see if the norm's consequences are carried out by the given step
      * or not.
@@ -54,13 +51,19 @@ public class RegulativeNorm extends Norm {
      * PROHIBITION, PERMISSION.
      * @return true if the given step actually satisfies the normative action, false otherwise.
      */
-    public boolean isSatisfiedBy(NormativePlan plan, PopSituation situation){
+    public boolean isSatisfiedIn(NormativePlan plan, PopSituation situation){
         try {
             CodenotationConstraints applicableCodenotations = this.getNormConditions()
                          .getApplicableCodenotations(plan, situation);
 
-            return this.normConsequences.isApplied(plan, situation, applicableCodenotations);
-        }catch(NullPointerException e){
+            if(this.getDeonticOperator().equals(DeonticOperator.OBLIGATION)){
+                return this.normConsequences.isApplied(plan, situation, applicableCodenotations);
+            }else if(this.getDeonticOperator().equals(DeonticOperator.PROHIBITION)){
+                return !this.normConsequences.isApplied(plan, situation, applicableCodenotations);
+            }
+
+            return true;
+        }catch(UnapplicableNormException e){
             return false;
         }
     }
@@ -77,7 +80,7 @@ public class RegulativeNorm extends Norm {
         if(followingElement == null){
             return false;
         } else if(followingElement instanceof Step){
-            return this.isSatisfiedBy(plan, situation);
+            return this.isSatisfiedIn(plan, situation);
         }else if(followingElement instanceof PopSituation){
             return isApplied(plan, (PopSituation) followingElement);
         }

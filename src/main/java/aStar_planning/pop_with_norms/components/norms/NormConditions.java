@@ -5,6 +5,7 @@ import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop.components.Step;
 import aStar_planning.pop_with_norms.components.NormativePlan;
 import constraints.CodenotationConstraints;
+import exception.UnapplicableNormException;
 import logic.ActionConsequence;
 import logic.Atom;
 import logic.Context;
@@ -96,8 +97,7 @@ public class NormConditions {
             }
 
             if(!isUnifiedOnce){
-                throw new NullPointerException("No codenotations found that makes the conditions " +
-                        "of the norm complete.");
+                throw new UnapplicableNormException(this, situation);
             }
         }
 
