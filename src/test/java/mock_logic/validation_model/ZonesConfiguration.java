@@ -32,7 +32,9 @@ public class ZonesConfiguration {
                 PredicateFactory.isForest(Zones.C1),
 
                 PredicateFactory.isNormal(Zones.C2),
+
                 PredicateFactory.isNormal(Zones.C3),
+
                 PredicateFactory.isNormal(Zones.C4),
 
                 // Row D : fourth top row a.k.a. bottom row of the map

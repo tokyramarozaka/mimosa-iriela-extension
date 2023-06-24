@@ -21,9 +21,6 @@ public class RegulativeNorm extends Norm {
     private NormConditions normConditions;
     private NormConsequences normConsequences;
 
-    public boolean isApplicable(NormativePlan plan, PopSituation situation){
-        return this.normConditions.isApplicable(plan, situation);
-    }
     /**
      * Determines whether the regulative norm enforces some action that ought (not) to be done.
      * @return true if the norm enforces some action, and false if it enforces some proposition
@@ -66,6 +63,23 @@ public class RegulativeNorm extends Norm {
         }catch(UnapplicableNormException e){
             return false;
         }
+    }
+
+    /**
+     * Return the codenotation constraints that would make this norm applicable in a given situation
+     * (if any, if there is none, then an exception is thrown).
+     * @param plan : the plan within which we want to check for applicable codenotations
+     * @param situation : the situation in the plan where we want to check for applicability
+     *                  conditions
+     * @return the set of codenotations that makes the current norm applicable
+     * @throws UnapplicableNormException if there is no codenotation that would make the norm
+     * applicable.
+     */
+    public CodenotationConstraints getApplicableCodenotations (
+            NormativePlan plan,
+            PopSituation situation
+    ) throws UnapplicableNormException{
+        return this.getNormConditions().getApplicableCodenotations(plan, situation);
     }
 
     /**

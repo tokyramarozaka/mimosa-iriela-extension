@@ -17,7 +17,7 @@ public class NormativeFlaw implements Flaw {
 
     @Override
     public String toString() {
-        String flawName =  switch(flawedNorm.getDeonticOperator()){
+        String flawName = switch(flawedNorm.getDeonticOperator()){
             case OBLIGATION -> "\n\tMISSING OBLIGATION";
             case PROHIBITION -> "\n\tMISSING PROHIBITION";
             case PERMISSION -> "\n\tMISSING PERMISSION";

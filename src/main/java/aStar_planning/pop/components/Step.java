@@ -188,6 +188,10 @@ public class Step implements PlanElement {
         return new Node(this.toString(), new ArrayList<>(), this);
     }
 
+    /**
+     * Converts an action instance into codenotations based upon its context
+     * @return a set of codenotation constraints which copies the variable bindings in the context
+     */
     public CodenotationConstraints toCodenotation() {
         List<Codenotation> updates = new ArrayList<>();
 

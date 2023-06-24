@@ -111,7 +111,7 @@ public class Plan implements State {
      * @param openCondition: the step precondition to be satisfied in its preceding step
      * @return the list of plan modifications which would solve the given open condition
      */
-    private List<Operator> resolve(OpenCondition openCondition, List<Action> possibleActions) {
+    public List<Operator> resolve(OpenCondition openCondition, List<Action> possibleActions) {
         List<Operator> resolvers = new ArrayList<>();
 
         resolvers.addAll(OpenConditionResolver.byPromotion(this, openCondition));
@@ -127,7 +127,7 @@ public class Plan implements State {
      *               precondition
      * @return a set of plan modifications that remove the threat once applied.
      */
-    private List<Operator> resolve(Threat threat){
+    public List<Operator> resolve(Threat threat){
         List<Operator> resolvers = new ArrayList<>();
 
         resolvers.addAll(ThreatResolver.byDestroyerDemotion(this, threat));
@@ -196,6 +196,39 @@ public class Plan implements State {
     }
 
     /**
+     * Retrieves all the threats regarding a given step
+     * @param toCheck : the step to check for threats
+     * @return a list of all threats regarding the step to check.
+     */
+    private List<Flaw> getThreats(Step toCheck) {
+        List<Flaw> threats = new ArrayList<>();
+
+        toCheck.getActionPreconditions().getAtoms().forEach(precondition -> {
+            ContextualAtom preconditionProposition = new ContextualAtom(
+                    toCheck.getActionInstance().getContext(), precondition
+            );
+
+            List<Step> destroyers = getDestroyers(
+                    preconditionProposition,
+                    tc.getPrecedingSituation(toCheck)
+            );
+
+            for (Step destroyer : destroyers) {
+                if(!isRestablished(preconditionProposition, destroyer, toCheck)){
+                    threats.add(new Threat(
+                            destroyer,
+                            toCheck,
+                            tc.getPrecedingSituation(toCheck),
+                            preconditionProposition
+                    ));
+                }
+            }
+        });
+
+        return threats;
+    }
+
+    /**
      * Checks if a given proposition is necessarily true in a given situation
      * @param proposition : the proposition to check
      * @param situation : the situation where it needs to be checked.
@@ -246,38 +279,6 @@ public class Plan implements State {
         );
     }
 
-    /**
-     * Retrieves all the threats regarding a given step
-     * @param toCheck : the step to check for threats
-     * @return a list of all threats regarding the step to check.
-     */
-    private List<Flaw> getThreats(Step toCheck) {
-        List<Flaw> threats = new ArrayList<>();
-
-        toCheck.getActionPreconditions().getAtoms().forEach(precondition -> {
-            ContextualAtom preconditionProposition = new ContextualAtom(
-                    toCheck.getActionInstance().getContext(), precondition
-            );
-
-            List<Step> destroyers = getDestroyers(
-                    preconditionProposition,
-                    tc.getPrecedingSituation(toCheck)
-            );
-
-            for (Step destroyer : destroyers) {
-                if(!isRestablished(preconditionProposition, destroyer, toCheck)){
-                    threats.add(new Threat(
-                            destroyer,
-                            toCheck,
-                            tc.getPrecedingSituation(toCheck),
-                            preconditionProposition
-                    ));
-                }
-            }
-        });
-
-        return threats;
-    }
 
     /**
      * Check if a given proposition is restablished between a destroyer and the destroyed step.
@@ -297,6 +298,16 @@ public class Plan implements State {
                         && tc.isBefore(restablisher, destroyedStep));
     }
 
+    /**
+     * Checks if a given proposition is restablished somewhere between the destroyer step, and some
+     * situation.
+     * @param proposition : the proposition to check
+     * @param destroyer : the step which destroyed the given proposition
+     * @param situation : the situation representing the limit where we want to check for
+     *                  restablishing steps
+     * @return true if the given proposition is restablished by some other step `S` where we have :
+     *          destroyer < S < situation.
+     */
     public boolean isRestablished(
             ContextualAtom proposition,
             Step destroyer,
@@ -310,10 +321,10 @@ public class Plan implements State {
     }
 
     /**
-     * Checks if a given element is preceding the other element e.g. a step or a situation.
+     * Checks if a given element is preceding the other element (either a step or a situation).
      * @param left : the preceding element
      * @param right : the next element
-     * @return true if left element is before the right element.
+     * @return true if left element is before the right element within the partial-ordered plan.
      */
     public boolean isBefore(PlanElement left, PlanElement right){
         return this.tc.isBefore(left,right);

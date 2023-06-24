@@ -6,6 +6,7 @@ import exception.NoPlanFoundException;
 import graph.Graph;
 import graph.Node;
 import logic.Context;
+import logic.ContextPair;
 import logic.ContextualTerm;
 import logic.Graphic;
 import logic.Term;
@@ -65,17 +66,6 @@ public class CodenotationConstraints extends Graphic {
         return nodes;
     }
 
-    private void addIfNotPresent(List<Node> nodes, Codenotation codenotation){
-        if (nodes.stream().noneMatch(node -> nodeEqualsToCodenotation(node,codenotation.getLeft())))
-        {
-            nodes.add(codenotation.toNodes().get(0));
-        }
-
-        if (nodes.stream().noneMatch(node -> nodeEqualsToCodenotation(node,codenotation.getRight()))
-        ){
-            nodes.add(codenotation.toNodes().get(1));
-        }
-    }
 
     /**
      * Initializes the links of the codenotation graph representation. Nodes must be initialized
@@ -200,6 +190,18 @@ public class CodenotationConstraints extends Graphic {
                 .getRight();
     }
 
+    private void addIfNotPresent(List<Node> nodes, Codenotation codenotation){
+        if (nodes.stream().noneMatch(node -> nodeEqualsToCodenotation(node,codenotation.getLeft())))
+        {
+            nodes.add(codenotation.toNodes().get(0));
+        }
+
+        if (nodes.stream().noneMatch(node -> nodeEqualsToCodenotation(node,codenotation.getRight()))
+        ){
+            nodes.add(codenotation.toNodes().get(1));
+        }
+    }
+
     /**
      * Checks if a variable is linked according to the currentCodenotations. Note that
      * non-codenotation constraints does not count as a link.
@@ -216,12 +218,27 @@ public class CodenotationConstraints extends Graphic {
     }
 
     /**
+     * Adds a new codenotation constraint to the set of already existing codenotation constraints.
+     * @param left : the left part of the new codenotation
+     * @param leftContext : the context of the left part of the new codenotation
+     * @param right : the right part of the new codenotation
+     * @param rightContext : the context of the right part of the new codenotation
+     */
+    public void link(Variable left, Context leftContext, Term right, Context rightContext) {
+        this.codenotations.add(new Codenotation(
+                true,
+                new ContextualTerm(leftContext, left),
+                new ContextualTerm(rightContext, right)
+        ));
+    }
+
+    /**
      * Removes all bindings of the given term within the current codenotation constraints
      * @param toRemove : the term to remove
      * @return true, if any elements were removed, and false otherwise.
      */
-    public boolean unlink(ContextualTerm toRemove){
-        return this.getCodenotations().removeIf(
+    public void unlink(ContextualTerm toRemove){
+        this.getCodenotations().removeIf(
             codenotation -> codenotation.getLeft().equals(toRemove)
         );
     }
@@ -230,7 +247,7 @@ public class CodenotationConstraints extends Graphic {
      * Get the non-codenoted term for a given term, if any
      * @param term
      * @param context
-     * @return
+     * @return all non codenotation constraints amongst the current set
      */
     public List<ContextualTerm> getNegativeLinks(Term term, Context context){
         ContextualTerm contextualTerm = new ContextualTerm(context, term);
@@ -248,6 +265,7 @@ public class CodenotationConstraints extends Graphic {
                 .anyMatch(codenotation -> codenotation.getLeft().toString().equals(contextualTerm.toString())
                 && !codenotation.isCodenotation());
     }
+
     /**
      * Checks if a given (non)codenotation would make the current codenotations contradict itself.
      * @param toAdd : the codenotation we want to check without adding
@@ -257,16 +275,13 @@ public class CodenotationConstraints extends Graphic {
         if(this.getCodenotations().stream()
                 .anyMatch(codenotation -> codenotation.toString().equals(toAdd.toString()))
         ){
-//            logger.info("True 1");
             return true;
         }
 
         Term term = toAdd.getLeft().getTerm();
         Context context = toAdd.getLeft().getContext();
 
-        // Check if the varible is bound
         if(isLinked(term, context)) {
-//            logger.info("IT IS LINKED");
             ContextualTerm link = getLink(term, context);
             if(toAdd.isCodenotation()) {
                 if (link.getTerm() instanceof Variable) {
@@ -277,11 +292,10 @@ public class CodenotationConstraints extends Graphic {
                             this
                     );
                 } else {
-//                    logger.info("True 2");
                     return link.getTerm().sameName(term);
                 }
             }
-//            logger.info("Oout 3");
+
             return !toAdd.getRight().getTerm().testEqual(
                     toAdd.getRight().getContext(),
                     link.getTerm(),
@@ -291,46 +305,38 @@ public class CodenotationConstraints extends Graphic {
         }
 
         if(this.isNegativelyLinked(toAdd.getLeft())) {
-//            logger.info("IT IS NEG LINKED");
             for (ContextualTerm nonCodenotation : getNegativeLinks(term, context)) {
                 if (toAdd.getRight().getTerm().testEqual(
                         toAdd.getRight().getContext(),
                         nonCodenotation.getTerm(),
                         nonCodenotation.getContext())
                 ){
-//                    logger.info("OUT 4");
                     return false;
                 }
             }
         }
 
-//        logger.info("OUT 5");
         return true;
-//        return this.codenotations.stream()
-//                .noneMatch(
-//                        codenotation -> codenotation.matches(toAdd)
-//                        && toAdd.isCodenotation() != codenotation.isCodenotation()
-//                );
-    }
-
-    public CodenotationConstraints copy(){
-        return new CodenotationConstraints(
-                new ArrayList<>(this.getCodenotations())
-        );
     }
 
     /**
-     * Adds a new codenotation constraint to the set of already existing codenotation constraints.
-     * @param left : the left part of the new codenotation
-     * @param leftContext : the context of the left part of the new codenotation
-     * @param right : the right part of the new codenotation
-     * @param rightContext : the context of the right part of the new codenotation
+     * Fuses two codenotation constraints into a new codenotations constraint, using shallow copies
+     * of their values (meaning that they copy the original codenotations)
+     * @param other : the codenotation constraints that we want to fuse with
+     * @return codenotation constraints combining both codenotations from the current and the other
+     * codenotation constraints
      */
-    public void link(Variable left, Context leftContext, Term right, Context rightContext) {
-        this.codenotations.add(new Codenotation(
-                true,
-                new ContextualTerm(leftContext, left),
-                new ContextualTerm(rightContext, right)
-        ));
+    public CodenotationConstraints fuseWith(CodenotationConstraints other){
+        List<Codenotation> codenotations = new ArrayList<>();
+
+        codenotations.addAll(this.getCodenotations().stream().toList());
+        codenotations.addAll(other.getCodenotations().stream().toList());
+
+        return new CodenotationConstraints(codenotations);
+    }
+
+    public CodenotationConstraints copy(){
+        return new CodenotationConstraints(this.getCodenotations().stream()
+                .collect(Collectors.toList()));
     }
 }

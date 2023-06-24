@@ -1,7 +1,10 @@
 package aStar_planning.pop_with_norms.components;
 
+import aStar.Operator;
 import aStar_planning.pop.components.PlanElement;
+import aStar_planning.pop_with_norms.components.norms.DeonticOperator;
 import aStar_planning.pop_with_norms.components.norms.RegulativeNorm;
+import aStar_planning.pop_with_norms.resolvers.MissingObligationPropositionResolver;
 import aStar_planning.pop_with_norms.utils.NormsPerInterval;
 import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PopSituation;
@@ -9,6 +12,8 @@ import aStar_planning.pop.components.Step;
 import constraints.CodenotationConstraints;
 import constraints.TemporalConstraints;
 import exception.UnapplicableNormException;
+import logic.Action;
+import logic.Context;
 import logic.ContextualAtom;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
@@ -85,6 +90,14 @@ public class NormativePlan extends Plan {
         });
     }
 
+    public List<Operator> solve(NormativeFlaw normativeFlaw, List<Action> possibleActions){
+        List<Operator> operators = new ArrayList<>();
+
+        if(normativeFlaw.getFlawedNorm().getDeonticOperator().equals(DeonticOperator.OBLIGATION)){
+            operators.addAll(MissingObligationResolver)
+        }
+        return operators;
+    }
     /**
      * Returns a list of all regulative norms applicable to a given situation of the current plan
      *

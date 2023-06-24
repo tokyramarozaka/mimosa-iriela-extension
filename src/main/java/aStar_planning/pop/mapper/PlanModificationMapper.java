@@ -4,9 +4,12 @@ import aStar_planning.pop.components.Flaw;
 import aStar_planning.pop.components.PlanModification;
 import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop.components.Step;
+import aStar_planning.pop_with_norms.components.NormativeFlaw;
+import constraints.PartialOrder;
 import constraints.TemporalConstraints;
 import constraints.CodenotationConstraints;
 
+import java.time.temporal.Temporal;
 import java.util.List;
 
 /**

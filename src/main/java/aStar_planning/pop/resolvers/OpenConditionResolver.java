@@ -4,6 +4,7 @@ import aStar.Operator;
 import aStar_planning.pop.mapper.PlanModificationMapper;
 import aStar_planning.pop.components.OpenCondition;
 import aStar_planning.pop.utils.TemporalConstraintsBuilder;
+import aStar_planning.pop_with_norms.components.norms.NormConsequences;
 import constraints.PartialOrder;
 import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PopSituation;
@@ -29,7 +30,7 @@ public class OpenConditionResolver {
     private static final Logger logger = LogManager.getLogger(OpenConditionResolver.class);
 
     /**
-     * TODO : resolve an open condition by adding a codenotation constraint to an existing step
+     * Resolve an open condition by adding a codenotation constraint to an existing step
      * @param plan : the plan in which we want to resolve the open condition
      * @param openCondition : the open condition we want to resolve describing which proposition is
      *                      not necessarily true in which situation
@@ -39,11 +40,10 @@ public class OpenConditionResolver {
         return plan.getSteps()
                 .stream()
                 .filter(step -> plan.getTc().isBefore(step, openCondition.getSituation()))
-                .filter(precedingStep -> precedingStep.asserts(
-                        openCondition.getProposition(),
+                .filter(precedingStep -> precedingStep.asserts(openCondition.getProposition(),
                         plan.getCc()))
-                .map(assertingStep -> assertingStep
-                        .getAssertingCodenotations(openCondition.getProposition()))
+                .map(assertingStep -> assertingStep.getAssertingCodenotations(
+                        openCondition.getProposition()))
                 .map(codenotations -> PlanModificationMapper.from(openCondition, codenotations))
                 .collect(Collectors.toList());
     }
@@ -67,6 +67,7 @@ public class OpenConditionResolver {
                 TemporalConstraints temporalChange = new TemporalConstraints(Arrays.asList(
                     new PartialOrder(situationPostEstablisher, openCondition.getSituation())
                 ));
+
                 planModifications.add(PlanModificationMapper.from(openCondition, temporalChange));
             });
 
@@ -83,22 +84,24 @@ public class OpenConditionResolver {
      */
     public static List<Operator> byCreation(
             Plan plan,
-            OpenCondition openCondition, List<Action>
-            possibleActions
+            OpenCondition openCondition,
+            List<Action> possibleActions
     ){
         List<Operator> possibleModifications = new ArrayList<>();
 
         getSolvingSteps(openCondition, possibleActions).forEach(solvingStep -> {
                 PopSituation newStepEntry = new PopSituation();
                 PopSituation newStepExit = new PopSituation();
+                TemporalConstraints tcChanges = TemporalConstraintsBuilder.insertNewStepBetween(
+                        plan,solvingStep,newStepEntry,newStepExit,openCondition.getSituation());
 
-                possibleModifications.add(PlanModificationMapper.from(
+            possibleModifications.add(PlanModificationMapper.from(
                     openCondition,
                     Arrays.asList(newStepEntry, newStepExit),
                     solvingStep,
                     solvingStep.toCodenotation(),
-                    insertNewStepBetween(plan,solvingStep,newStepEntry,newStepExit,openCondition)
-                ));
+                    tcChanges
+            ));
         });
 
         return possibleModifications;
@@ -140,56 +143,7 @@ public class OpenConditionResolver {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Provides the necessary temporal constraints to add a new step to insert into the plan, with
-     * its wrapping steps (before and after the step). The added step must be added before the
-     * new step.
-     * @param newStep : the step to insert into the plan
-     * @param newStepEntry : the situation preceding the new step
-     * @param newStepExit : the situation following the new step
-     * @param openCondition : the flaw we want to resolve.
-     * @return the temporal constraints needed to insert a step and its wrapping situations
-     */
-    private static TemporalConstraints insertNewStepBetween(
-            Plan plan,
-            Step newStep,
-            PopSituation newStepEntry,
-            PopSituation newStepExit,
-            OpenCondition openCondition
-    ){
-        List<PartialOrder> partialOrders = new ArrayList<>();
 
-        // Adds the temporal constraints of the step and its entry and exit situations
-        partialOrders.addAll(wrapStep(newStep, newStepEntry, newStepExit));
-
-        // Adds the exit situation before the following step
-        partialOrders.addAll(TemporalConstraintsBuilder.placeBefore(
-                newStepExit,
-                openCondition.getSituation())
-        );
-
-        // Put the entry situation before the new step's entry situation, to link it all together
-        partialOrders.add(new PartialOrder(
-            plan.getTc().getFollowingSituation(plan.getInitialStep()), newStepEntry
-        ));
-
-        return new TemporalConstraints(partialOrders);
-    }
-
-    /**
-     * Wraps a step with a situation preceding the step, and another following it.
-     * @param toWrap : the step to wrap situations around;
-     * @param entry : the situation before the step
-     * @param exit : the situation after the step
-     * @return the temporal orders describing that both situations are placed before and after
-     * the step.
-     */
-    private static List<PartialOrder> wrapStep(Step toWrap, PopSituation entry, PopSituation exit){
-        return Arrays.asList(
-                new PartialOrder(entry, toWrap),
-                new PartialOrder(toWrap, exit)
-        );
-    }
 
     /**
      * Returns all the instances of a given action which would resolve an open condition by
