@@ -1,10 +1,17 @@
 package aStar_planning.pop_with_norms.components;
 
 import aStar.Operator;
+import aStar.State;
+import aStar_planning.pop.components.Flaw;
+import aStar_planning.pop.components.OpenCondition;
 import aStar_planning.pop.components.PlanElement;
+import aStar_planning.pop.components.PlanModification;
+import aStar_planning.pop.components.Threat;
 import aStar_planning.pop_with_norms.components.norms.DeonticOperator;
 import aStar_planning.pop_with_norms.components.norms.RegulativeNorm;
 import aStar_planning.pop_with_norms.resolvers.MissingObligationPropositionResolver;
+import aStar_planning.pop_with_norms.resolvers.MissingObligationResolver;
+import aStar_planning.pop_with_norms.resolvers.MissingProhibitionResolver;
 import aStar_planning.pop_with_norms.utils.NormsPerInterval;
 import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PopSituation;
@@ -90,14 +97,25 @@ public class NormativePlan extends Plan {
         });
     }
 
-    public List<Operator> solve(NormativeFlaw normativeFlaw, List<Action> possibleActions){
-        List<Operator> operators = new ArrayList<>();
-
-        if(normativeFlaw.getFlawedNorm().getDeonticOperator().equals(DeonticOperator.OBLIGATION)){
-            operators.addAll(MissingObligationResolver)
-        }
-        return operators;
+    /**
+     * Solve a normative flaw depending on its deontic operator and consequence type (either a
+     * proposition or an action that ought to be or not to be done).
+     * @param normativeFlaw : the normative flaw to be solved
+     * @param possibleActions : the set of all possible actions, necessary for solutions that
+     *                        require adding in some new action, such as adding a mandatory
+     *                        action.
+     * @return a set of plan modifications that would solve the normative flaw.
+     */
+    public List<Operator> resolve(NormativeFlaw normativeFlaw, List<Action> possibleActions){
+        return switch(normativeFlaw.getFlawedNorm().getDeonticOperator()){
+            case OBLIGATION -> MissingObligationResolver.resolve(this, normativeFlaw,
+                    possibleActions);
+            case PROHIBITION -> MissingProhibitionResolver.resolve(this, normativeFlaw);
+            default -> throw new UnsupportedOperationException("Cannot resolve deontic operator" +
+                    "in the normative flaw");
+        };
     }
+
     /**
      * Returns a list of all regulative norms applicable to a given situation of the current plan
      *
@@ -125,7 +143,6 @@ public class NormativePlan extends Plan {
     private boolean hasAnyApplicabilityCodenotations(PopSituation situation, RegulativeNorm norm) {
         try {
             norm.getNormConditions().getApplicableCodenotations(this, situation);
-
             return true;
         } catch (UnapplicableNormException e) {
             return false;
@@ -153,6 +170,11 @@ public class NormativePlan extends Plan {
         return assertedPropositions;
     }
 
+    @Override
+    public State applyPlanModification(Operator toApply) {
+        return ((PlanModification)toApply).apply(this);
+    }
+
     private List<ContextualAtom> getRemainingPropositions(
             Step precedingStep,
             PopSituation situation
@@ -165,7 +187,6 @@ public class NormativePlan extends Plan {
             );
 
             if (precedingStep.asserts(toAdd, this.getCc())) {
-                // TODO : check if the asserted proposition is not negated by some destroyers.
                 List<Step> destroyers = this.getSteps().stream()
                         .filter(step -> step.destroys(toAdd, this.getCc()))
                         .filter(destroyer -> isBetween(precedingStep, destroyer, situation))
@@ -197,6 +218,20 @@ public class NormativePlan extends Plan {
     private boolean isBetween(PlanElement start, PlanElement target, PlanElement finish) {
         return this.getTc().isBefore(start, target)
                 && this.getTc().isBefore(target, finish);
+    }
+
+    @Override
+    public List<Operator> resolve(Flaw toSolve, List<Action> possibleActions) {
+        if(toSolve instanceof OpenCondition){
+            return resolve((OpenCondition) toSolve, possibleActions);
+        }else if(toSolve instanceof Threat){
+            return resolve((Threat) toSolve);
+        }else if(toSolve instanceof NormativeFlaw){
+            return resolve((NormativeFlaw) toSolve, possibleActions);
+        }
+
+        throw new UnsupportedOperationException("Flaw type not supported yet.");
+
     }
 
     @Override

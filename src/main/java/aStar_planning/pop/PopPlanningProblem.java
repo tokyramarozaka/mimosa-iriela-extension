@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * A planning problem according to the Partial-Order Planning specification, where a state is
  * represented by a plan and the operators are plan modifications to resolve flaws within the plan.
  * When there is a plan without any flaws, the planning problem is solved. And a total order
- * sequenc of actions can be drawn out of the resulting plan.
+ * sequence of actions can be drawn out of the resulting plan.
  */
 @NoArgsConstructor
 @Getter
@@ -54,15 +54,10 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
 
     @Override
     public List<Operator> getOptions(State state) {
-        AtomicInteger i = new AtomicInteger();
-        logger.info("\n_________GET OPTIONS_________");
-        logger.info("CURRENT STATE : "+state);
-        logger.info("\n______OPTIONS ARE______");
-        ((Plan)state).allPossibleModifications(this.getPossibleActions()).forEach(e -> {
-            logger.info("\n--> OPTION #"+(i.incrementAndGet())+" : " +e);
-        });
+        logOptions(state);
         return ((Plan)state).allPossibleModifications(this.getPossibleActions());
     }
+
 
     @Override
     public State apply(Operator operator, State state) {
@@ -105,5 +100,15 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
         logger.info(output);
 
         return output;
+    }
+
+    private void logOptions(State state) {
+        AtomicInteger i = new AtomicInteger();
+        logger.info("\n_________GET OPTIONS_________");
+        logger.info("CURRENT STATE : "+ state);
+        logger.info("\n______OPTIONS ARE______");
+        ((Plan) state).allPossibleModifications(this.getPossibleActions()).forEach(e -> {
+            logger.info("\n--> OPTION #"+(i.incrementAndGet())+" : " +e);
+        });
     }
 }

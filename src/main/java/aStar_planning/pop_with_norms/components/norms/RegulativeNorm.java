@@ -10,8 +10,12 @@ import logic.Context;
 import logic.LogicalEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Getter
@@ -20,6 +24,7 @@ public class RegulativeNorm extends Norm {
     private DeonticOperator deonticOperator;
     private NormConditions normConditions;
     private NormConsequences normConsequences;
+    private final static Logger logger = LogManager.getLogger(RegulativeNorm.class);
 
     /**
      * Determines whether the regulative norm enforces some action that ought (not) to be done.
@@ -49,6 +54,7 @@ public class RegulativeNorm extends Norm {
      * @return true if the given step actually satisfies the normative action, false otherwise.
      */
     public boolean isSatisfiedIn(NormativePlan plan, PopSituation situation){
+        plan.removeRedundantTemporalConstraints();
         try {
             CodenotationConstraints applicableCodenotations = this.getNormConditions()
                          .getApplicableCodenotations(plan, situation);
@@ -89,16 +95,20 @@ public class RegulativeNorm extends Norm {
      * @return true if the norm is applied, and false otherwise.
      */
     public boolean isApplied(NormativePlan plan, PopSituation situation) {
-        PlanElement followingElement = plan.getTc().getFollowingElement(situation);
+        List<PlanElement> allFollowingElements = plan.getSteps().stream()
+                .filter(step -> plan.getTc().isBefore(situation, step))
+                .collect(Collectors.toList());
 
-        if(followingElement == null){
-            return false;
-        } else if(followingElement instanceof Step){
-            return this.isSatisfiedIn(plan, situation);
-        }else if(followingElement instanceof PopSituation){
-            return isApplied(plan, (PopSituation) followingElement);
+        for (PlanElement followingElement : allFollowingElements) {
+            if(followingElement instanceof Step){
+                if(this.isSatisfiedIn(plan, situation)){
+                    return true;
+                }
+            }
+//            else if(followingElement instanceof PopSituation){
+//                return isApplied(plan, (PopSituation) followingElement);
+//            }
         }
-
         return false;
     }
 

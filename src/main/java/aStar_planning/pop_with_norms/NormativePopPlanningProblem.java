@@ -1,6 +1,8 @@
 package aStar_planning.pop_with_norms;
 
 import aStar.AStarProblem;
+import aStar.Operator;
+import aStar.State;
 import aStar_planning.pop.PopPlanningProblem;
 import aStar_planning.pop_with_norms.components.NormativePlan;
 import logic.Action;
@@ -35,7 +37,8 @@ public class NormativePopPlanningProblem extends PopPlanningProblem {
     }
 
     @Override
-    public NormativePlan getInitialState() {
+    public State getInitialState() {
         return this.initialNormativePlan;
     }
+
 }

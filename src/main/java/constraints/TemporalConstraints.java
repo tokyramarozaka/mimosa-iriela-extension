@@ -39,6 +39,12 @@ public class TemporalConstraints extends Graphic {
         return !this.getGraph().hasCycles();
     }
 
+    /**
+     * Checks if some element1 of the plan is before some other element2 of the plan
+     * @param element1 : a situation or step
+     * @param element2 : another situation or step
+     * @return true if element1 < element2, and false otherwise
+     */
     public boolean isBefore(PlanElement element1, PlanElement element2) {
         if (element1.equals(element2)) {
             return false;

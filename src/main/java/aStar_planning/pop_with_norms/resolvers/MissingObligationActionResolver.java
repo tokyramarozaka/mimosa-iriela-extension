@@ -53,10 +53,13 @@ public class MissingObligationActionResolver {
     }
 
     public static List<Operator> byCreation(NormativePlan plan, NormativeFlaw flaw) {
+        if(flaw.getSituation().equals(plan.getFinalSituation())){
+            return new ArrayList<>();
+        }
+
         Action actionToAdd = (Action) flaw.getFlawedNorm().getNormConsequences();
         LogicalInstance addedMandatoryAction = new LogicalInstance(actionToAdd, new Context());
 
-        // todo : unify and change the context accordingly.
         CodenotationConstraints applicableCodenotations = flaw.getFlawedNorm()
                 .getApplicableCodenotations(plan, flaw.getSituation());
 

@@ -80,10 +80,9 @@ public class Context {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("Context_")
-                .append(this.id)
-                .append("(\n");
+                .append(this.id);
 
-        this.contextPairs.forEach(pair -> stringBuilder.append("\t"+pair+"\n"));
+        this.contextPairs.forEach(pair -> stringBuilder.append("\t"+pair));
 
         stringBuilder.append(")");
 

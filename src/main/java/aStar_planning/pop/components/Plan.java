@@ -96,7 +96,7 @@ public class Plan implements State {
      * @param toSolve : the flaw which we want to solve
      * @return the list of plan modifications we can make to solve the given flaw.
      */
-    private List<Operator> resolve(Flaw toSolve, List<Action> possibleActions){
+    public List<Operator> resolve(Flaw toSolve, List<Action> possibleActions){
         if(toSolve instanceof OpenCondition){
             return resolve((OpenCondition) toSolve, possibleActions);
         }else if(toSolve instanceof Threat){

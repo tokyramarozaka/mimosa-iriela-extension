@@ -93,7 +93,7 @@ public class ActionFactory {
 
     public static Action dummyAction(){
         return new Action(
-                "dummy",
+                "dummy action",
                 new ActionPrecondition(),
                 new ActionConsequence()
         );

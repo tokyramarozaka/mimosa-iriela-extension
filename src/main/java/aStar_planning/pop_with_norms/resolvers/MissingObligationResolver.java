@@ -7,18 +7,26 @@ import aStar_planning.pop_with_norms.components.norms.NormConsequences;
 import aStar_planning.pop_with_norms.components.norms.NormativeProposition;
 import logic.Action;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MissingObligationResolver {
-    public static List<Operator> byCreation(
+    public static List<Operator> resolve(
             NormativePlan plan,
             NormativeFlaw flaw,
             List<Action> possibleActions
     ){
+        List<Operator> operators = new ArrayList<>();
         NormConsequences normConsequences = flaw.getFlawedNorm().getNormConsequences();
+
         if(normConsequences.getClass().equals(NormativeProposition.class)){
-            return MissingObligationPropositionResolver.byCreation(plan, flaw, possibleActions);
+            operators.addAll(MissingObligationPropositionResolver.byCreation(plan, flaw,
+                    possibleActions));
         }
-        return MissingObligationActionResolver.byCreation(plan, flaw);
+        operators.addAll(MissingObligationActionResolver.byCreation(plan, flaw));
+
+        operators.addAll(CircumventionOperator.circumvent(plan, flaw, possibleActions));
+
+        return operators;
     }
 }

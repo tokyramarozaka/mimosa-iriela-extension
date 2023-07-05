@@ -1,5 +1,7 @@
 package validation_model;
 
+import aStar.Operator;
+import aStar_planning.pop.components.Flaw;
 import aStar_planning.pop_with_norms.NormativePopPlanningProblem;
 import aStar_planning.pop_with_norms.components.NormativeFlaw;
 import aStar_planning.pop_with_norms.components.NormativePlan;
@@ -12,7 +14,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import settings.Keywords;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class validation_model_UT {
     private static final Logger logger = LogManager.getLogger(validation_model_UT.class);
@@ -20,7 +25,7 @@ public class validation_model_UT {
     @Test
     public void getActiveOrganizations_ok() {
         NormativePopPlanningProblem problem = PlanningProblemFactory.haveFoodAndWood_asProvider();
-        NormativePlan initialState = problem.getInitialState();
+        NormativePlan initialState = (NormativePlan) problem.getInitialState();
 
         List<Organization> activeOrganizations = initialState.getActiveOrganizations();
 
@@ -31,7 +36,7 @@ public class validation_model_UT {
     @Test
     public void detectDummyObligations_ok() {
         NormativePopPlanningProblem problem = PlanningProblemFactory.haveFoodAndWood_asProvider();
-        NormativePlan initialPlan = problem.getInitialState();
+        NormativePlan initialPlan = (NormativePlan) problem.getInitialState();
 
         List<NormativeFlaw> normativeFlaws = initialPlan.getFlaws().stream()
                 .filter(flaw -> flaw instanceof NormativeFlaw)
@@ -42,6 +47,7 @@ public class validation_model_UT {
         Assertions.assertTrue(normativeFlaws.stream()
                 .allMatch(flaw -> flaw.getSituation().equals(initialPlan.getInitialSituation())
                         || flaw.getSituation().equals(initialPlan.getFinalSituation())));
+
         for (NormativeFlaw flaw : normativeFlaws) {
             Assertions.assertEquals(
                     DeonticOperator.OBLIGATION,
@@ -49,5 +55,35 @@ public class validation_model_UT {
             );
         }
         logger.info(initialPlan);
+    }
+
+    @Test
+    public void getNormativeOptions_ok() {
+        NormativePopPlanningProblem problem = PlanningProblemFactory.haveFoodAndWood_asProvider();
+        NormativePlan initialPlan = (NormativePlan) problem.getInitialState();
+
+        logger.info(problem.getOptions(initialPlan));
+    }
+
+    @Test
+    public void applyOperatorSolvesFlaw_ok() {
+        NormativePopPlanningProblem problem = PlanningProblemFactory.haveFoodAndWood_asProvider();
+        NormativePlan initialPlan = (NormativePlan) problem.getInitialState();
+        Set<Flaw> initialFlaws = new HashSet<>(initialPlan.getFlaws());
+        List<Operator> options = problem.getOptions(initialPlan);
+        logger.info("==================================== BEFORE : " + initialPlan);
+
+        for (Operator planModification : options) {
+            initialPlan = (NormativePlan) initialPlan.applyPlanModification(planModification);
+        }
+        Set<Flaw> nextFlaws = new HashSet<>(initialPlan.getFlaws());
+
+
+        logger.info("==================================== AFTER : " + initialPlan);
+        initialFlaws.stream()
+                .filter(flaw -> flaw instanceof NormativeFlaw)
+                .forEach(initialFlaw -> {
+                    Assertions.assertFalse(nextFlaws.contains(initialFlaw));
+                });
     }
 }

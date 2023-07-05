@@ -1,6 +1,7 @@
 package aStar_planning.pop.components;
 
 import aStar.Operator;
+import aStar_planning.pop_with_norms.components.NormativePlan;
 import constraints.CodenotationConstraints;
 import constraints.TemporalConstraints;
 import lombok.AllArgsConstructor;
@@ -62,6 +63,46 @@ public class PlanModification implements Operator {
 
         return new Plan(allNewSituations, allNewSteps, allNewCodenotationConstraints,
                 allNewTemporalConstraints);
+    }
+
+    public NormativePlan apply(NormativePlan oldPlan){
+        List<PopSituation> allNewSituations = new ArrayList<>(oldPlan.getSituations());
+        List<Step> allNewSteps = new ArrayList<>(oldPlan.getSteps());
+
+        CodenotationConstraints allNewCodenotationConstraints = new CodenotationConstraints(
+                new ArrayList<>(oldPlan.getCc().getCodenotations()));
+        TemporalConstraints allNewTemporalConstraints = new TemporalConstraints(
+                new ArrayList<>(oldPlan.getTc().getPartialOrders()));
+
+        if(addedSituations != null){
+            allNewSituations.addAll(addedSituations);
+        }
+        if(addedStep != null){
+            allNewSteps.add(addedStep);
+        }
+        if(addedCc != null){
+            allNewCodenotationConstraints.getCodenotations()
+                    .addAll(this.addedCc.getCodenotations());
+        }
+        if(addedTc != null){
+            this.addedTc.getPartialOrders().forEach(partialOrder -> {
+                if (allNewTemporalConstraints.getPartialOrders()
+                        .stream()
+                        .noneMatch(existing -> existing.toString().equals(partialOrder.toString()))
+                ){
+                    allNewTemporalConstraints.getPartialOrders().add(partialOrder);
+                }
+            });
+        }
+
+        return new NormativePlan(
+                allNewSituations,
+                allNewSteps,
+                allNewCodenotationConstraints,
+                allNewTemporalConstraints,
+                oldPlan.getOrganizations(),
+                oldPlan.getNormsPerIntervals()
+        );
     }
 
     @Override
