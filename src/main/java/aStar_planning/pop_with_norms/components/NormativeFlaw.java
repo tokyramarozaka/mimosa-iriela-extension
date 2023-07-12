@@ -6,7 +6,6 @@ import aStar_planning.pop.components.Flaw;
 import aStar_planning.pop.components.Plan;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import time.Interval;
 
 @AllArgsConstructor
 @Getter

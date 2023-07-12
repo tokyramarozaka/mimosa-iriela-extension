@@ -4,12 +4,9 @@ import aStar_planning.pop.components.Flaw;
 import aStar_planning.pop.components.PlanModification;
 import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop.components.Step;
-import aStar_planning.pop_with_norms.components.NormativeFlaw;
-import constraints.PartialOrder;
 import constraints.TemporalConstraints;
 import constraints.CodenotationConstraints;
 
-import java.time.temporal.Temporal;
 import java.util.List;
 
 /**
@@ -62,7 +59,7 @@ public class PlanModificationMapper {
      * @param tc : the added temporal constraints to update the partial order of the plan
      * @return a plan modification encapsulating the changes from a new step in the plan.
      */
-    public static PlanModification from(Flaw toResolve,List<PopSituation> situations, Step step,
+    public static PlanModification from(Flaw toResolve, List<PopSituation> situations, Step step,
                                         CodenotationConstraints cc, TemporalConstraints tc)
     {
         return PlanModification

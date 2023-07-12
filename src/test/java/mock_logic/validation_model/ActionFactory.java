@@ -31,15 +31,16 @@ public class ActionFactory {
         );
     }
 
-    public static ActionPrecondition huntPreconditions(Term someZone) {
+    public static ActionPrecondition fishPreconditions(Term someZone) {
         List<Atom> preconditions = new ArrayList<>();
 
-        preconditions.add(AtomFactory.inForest(someZone));
+        preconditions.add(AtomFactory.inZone(someZone));
+        preconditions.add(AtomFactory.isRiver(someZone));
 
         return new ActionPrecondition(preconditions);
     }
 
-    public static ActionConsequence huntConsequences() {
+    public static ActionConsequence fishConsequences() {
         List<Atom> consequences = new ArrayList<>();
 
         consequences.add(new Atom(false, PredicateFactory.haveFood()));
@@ -47,14 +48,14 @@ public class ActionFactory {
         return new ActionConsequence(consequences);
     }
 
-    public static Action hunt() {
-        return new Action("hunt", huntPreconditions(Zones.X), huntConsequences());
+    public static Action fish() {
+        return new Action("hunt", fishPreconditions(Zones.X), fishConsequences());
     }
 
     private static ActionPrecondition cutPreconditions(Term someZone) {
         return new ActionPrecondition(List.of(
-                AtomFactory.inZone(someZone),
-                AtomFactory.isForest(someZone)
+                AtomFactory.isForest(someZone),
+                AtomFactory.inZone(someZone)
         ));
     }
 
@@ -71,8 +72,8 @@ public class ActionFactory {
 
     private static ActionPrecondition movePreconditions(Term current, Term target) {
         return new ActionPrecondition(List.of(
-                AtomFactory.inZone(current),
-                AtomFactory.areNeighbors(current, target)
+                AtomFactory.inZone(current)
+//                AtomFactory.areNeighbors(current, target)
         ));
     }
 
@@ -83,11 +84,11 @@ public class ActionFactory {
         ));
     }
 
-    public static Action move(Term current, Term target) {
+    public static Action move() {
         return new Action(
                 "move",
-                movePreconditions(current, target),
-                moveConsequences(current, target)
+                movePreconditions(Zones.X,Zones.Y),
+                moveConsequences(Zones.X,Zones.Y)
         );
     }
 
@@ -99,12 +100,12 @@ public class ActionFactory {
         );
     }
     public static List<Action> allActionsInExploitation() {
-        return List.of(dummyAction(), cut(), hunt(), getLicense(), move(Zones.X, Zones.Y));
+        return List.of(dummyAction(), cut(), fish(), getLicense(), move());
     }
 
     public static List<Action> allActionsInHousehold() {
         return List.of(
-           dummyAction(), hunt(), move(Zones.X,Zones.Y)
+           dummyAction(), fish(), move(), cut()
         );
     }
 }

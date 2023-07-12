@@ -20,12 +20,17 @@ public class ZonesConfiguration {
                 PredicateFactory.isNormal(Zones.A4),
                 PredicateFactory.isForest(Zones.A4),
 
+
                 // Row B : second top row of the map
                 PredicateFactory.isRiver(Zones.B1),
                 PredicateFactory.isSacred(Zones.B1),
+
                 PredicateFactory.isNormal(Zones.B2),
+
                 PredicateFactory.isNormal(Zones.B3),
+
                 PredicateFactory.isNormal(Zones.B4),
+
 
                 // Row C : third top row of the map
                 PredicateFactory.isNormal(Zones.C1),
@@ -35,7 +40,8 @@ public class ZonesConfiguration {
 
                 PredicateFactory.isNormal(Zones.C3),
 
-                PredicateFactory.isNormal(Zones.C4),
+                PredicateFactory.isOffice(Zones.C4),
+
 
                 // Row D : fourth top row a.k.a. bottom row of the map
                 PredicateFactory.isForest(Zones.D1),

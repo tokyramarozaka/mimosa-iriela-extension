@@ -1,10 +1,10 @@
 package aStar_planning.pop.utils;
 
+import aStar_planning.pop.components.Step;
 import constraints.Codenotation;
 import constraints.PartialOrder;
 import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PopSituation;
-import aStar_planning.pop.components.Step;
 import constraints.TemporalConstraints;
 import logic.Action;
 import logic.ActionConsequence;

@@ -10,7 +10,6 @@ import logic.ActionConsequence;
 import logic.ActionPrecondition;
 import logic.Atom;
 import logic.Context;
-import lombok.ToString;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -62,13 +61,13 @@ public class NormativeAction extends Action implements NormConsequences{
                             followingStep.getActionInstance().getContext(),
                             cc
                     )){
-                        logger.info(this.getName() + " is applied is FALSE because : " +
-                                normConsequence + " and " + consequence + " does not match.");
+//                        logger.info(this.getName() + " is applied is FALSE because : " +
+//                                normConsequence + " and " + consequence + " does not match.");
                         return false;
                     }
                 }
             }
-            logger.info(this.getName() + " is applied is true in " + situation);
+//            logger.info(this.getName() + " is applied is true in " + situation);
             return true;
         }else if(followingElement instanceof PopSituation){
             return isApplied(plan, (PopSituation) followingElement, cc);

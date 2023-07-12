@@ -4,7 +4,6 @@ import aStar_planning.pop_with_norms.components.norms.DeonticOperator;
 import aStar_planning.pop_with_norms.components.norms.NormConditions;
 import aStar_planning.pop_with_norms.components.norms.NormConsequences;
 import aStar_planning.pop_with_norms.components.norms.NormativeAction;
-import aStar_planning.pop_with_norms.components.norms.NormativeProposition;
 import aStar_planning.pop_with_norms.components.norms.RegulativeNorm;
 import mock_logic.validation_model.ActionFactory;
 import mock_logic.validation_model.AtomFactory;
@@ -63,7 +62,7 @@ public class RegulativeNorms_ForHousehold_Providers {
     }
 
     private static NormConsequences prohibition_move_toSacredZone_consequences() {
-        return new NormativeAction(ActionFactory.move(Zones.X, Zones.Y));
+        return new NormativeAction(ActionFactory.move());
     }
 
     public static RegulativeNorm prohibition_move_toSacredZone() {
@@ -84,7 +83,7 @@ public class RegulativeNorms_ForHousehold_Providers {
     }
 
     private static NormConsequences permission_hunt_ifLicense_consequences() {
-        return new NormativeAction(ActionFactory.hunt());
+        return new NormativeAction(ActionFactory.fish());
     }
 
     public static RegulativeNorm permission_hunt_ifLicense() {
@@ -122,8 +121,8 @@ public class RegulativeNorms_ForHousehold_Providers {
                 prohibition_cut_inProtectedZone(),
                 prohibition_move_toSacredZone(),
                 permission_hunt_ifLicense(),
-                permission_cut_ifLicense(),
-                obligation_dummy_inNormalZone()
+                permission_cut_ifLicense()
+                //obligation_dummy_inNormalZone()
         ));
     }
 }

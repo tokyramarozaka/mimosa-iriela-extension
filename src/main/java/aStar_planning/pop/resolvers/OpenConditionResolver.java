@@ -4,7 +4,6 @@ import aStar.Operator;
 import aStar_planning.pop.mapper.PlanModificationMapper;
 import aStar_planning.pop.components.OpenCondition;
 import aStar_planning.pop.utils.TemporalConstraintsBuilder;
-import aStar_planning.pop_with_norms.components.norms.NormConsequences;
 import constraints.PartialOrder;
 import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PopSituation;
@@ -37,15 +36,19 @@ public class OpenConditionResolver {
      * @return the set of plan modifications to solve the given open condition.
      */
     public static List<Operator> byCodenotation(Plan plan, OpenCondition openCondition) {
-        return plan.getSteps()
-                .stream()
+        List<Operator> operators = new ArrayList<>();
+
+        plan.getSteps().stream()
                 .filter(step -> plan.getTc().isBefore(step, openCondition.getSituation()))
                 .filter(precedingStep -> precedingStep.asserts(openCondition.getProposition(),
                         plan.getCc()))
-                .map(assertingStep -> assertingStep.getAssertingCodenotations(
+                .map(assertingStep -> assertingStep.getAllAssertingCodenotations(
                         openCondition.getProposition()))
-                .map(codenotations -> PlanModificationMapper.from(openCondition, codenotations))
-                .collect(Collectors.toList());
+                .forEach(codenotationConstraintsList -> codenotationConstraintsList.forEach(
+                        codenotationConstraints -> operators.add(PlanModificationMapper
+                                .from(openCondition, codenotationConstraints))));
+
+        return operators;
     }
 
     /**
@@ -92,7 +95,7 @@ public class OpenConditionResolver {
         getSolvingSteps(openCondition, possibleActions).forEach(solvingStep -> {
                 PopSituation newStepEntry = new PopSituation();
                 PopSituation newStepExit = new PopSituation();
-                TemporalConstraints tcChanges = TemporalConstraintsBuilder.insertNewStepBetween(
+                TemporalConstraints tcChanges = TemporalConstraintsBuilder.insertNewStepBeforeSituation(
                         plan,solvingStep,newStepEntry,newStepExit,openCondition.getSituation());
 
             possibleModifications.add(PlanModificationMapper.from(

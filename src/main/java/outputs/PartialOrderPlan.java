@@ -3,7 +3,6 @@ package outputs;
 import aStar_planning.pop.components.Plan;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
 
 @AllArgsConstructor
 @Getter

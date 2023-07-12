@@ -17,7 +17,6 @@ import settings.Keywords;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class validation_model_UT {
     private static final Logger logger = LogManager.getLogger(validation_model_UT.class);
@@ -71,7 +70,6 @@ public class validation_model_UT {
         NormativePlan initialPlan = (NormativePlan) problem.getInitialState();
         Set<Flaw> initialFlaws = new HashSet<>(initialPlan.getFlaws());
         List<Operator> options = problem.getOptions(initialPlan);
-        logger.info("==================================== BEFORE : " + initialPlan);
 
         for (Operator planModification : options) {
             initialPlan = (NormativePlan) initialPlan.applyPlanModification(planModification);
@@ -79,11 +77,8 @@ public class validation_model_UT {
         Set<Flaw> nextFlaws = new HashSet<>(initialPlan.getFlaws());
 
 
-        logger.info("==================================== AFTER : " + initialPlan);
         initialFlaws.stream()
                 .filter(flaw -> flaw instanceof NormativeFlaw)
-                .forEach(initialFlaw -> {
-                    Assertions.assertFalse(nextFlaws.contains(initialFlaw));
-                });
+                .forEach(initialFlaw -> Assertions.assertFalse(nextFlaws.contains(initialFlaw)));
     }
 }

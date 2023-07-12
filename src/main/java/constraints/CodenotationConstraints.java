@@ -59,9 +59,7 @@ public class CodenotationConstraints extends Graphic {
         this.codenotations
                 .stream()
                 .filter(codenotation -> codenotation.isCodenotation())
-                .forEach(codenotation -> {
-                    addIfNotPresent(nodes, codenotation);
-                });
+                .forEach(codenotation -> addIfNotPresent(nodes, codenotation));
 
         return nodes;
     }

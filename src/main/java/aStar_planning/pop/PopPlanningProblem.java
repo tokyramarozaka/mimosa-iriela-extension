@@ -3,9 +3,9 @@ package aStar_planning.pop;
 import aStar.AStarProblem;
 import aStar.Operator;
 import aStar.State;
-import aStar_planning.pop.utils.PlanInitializer;
-import aStar_planning.pop.components.PlanModification;
 import aStar_planning.pop.components.Plan;
+import aStar_planning.pop.utils.PlanInitializer;
+import aStar_planning.pop_with_norms.components.NormativePlan;
 import logic.Action;
 import logic.Goal;
 import logic.Situation;
@@ -18,10 +18,9 @@ import outputs.PartialOrderPlan;
 import outputs.PlanningOutput;
 import planning.Problem;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 /**
  * A planning problem according to the Partial-Order Planning specification, where a state is
@@ -54,10 +53,13 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
 
     @Override
     public List<Operator> getOptions(State state) {
-        logOptions(state);
-        return ((Plan)state).allPossibleModifications(this.getPossibleActions());
-    }
+        Plan plan = (Plan) state;
 
+        List<Action> allPossibleActions = new ArrayList<>(this.getPossibleActions());
+
+        logOptions(plan, allPossibleActions); // simple log for the console
+        return plan.allPossibleModifications(allPossibleActions);
+    }
 
     @Override
     public State apply(Operator operator, State state) {
@@ -102,13 +104,15 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
         return output;
     }
 
-    private void logOptions(State state) {
-        AtomicInteger i = new AtomicInteger();
+    public void logOptions(State state, List<Action> possibleActions) {
+        Plan plan = (Plan) state;
+
+        AtomicInteger i = new AtomicInteger(0);
         logger.info("\n_________GET OPTIONS_________");
-        logger.info("CURRENT STATE : "+ state);
+        logger.info("CURRENT STATE : "+ plan);
         logger.info("\n______OPTIONS ARE______");
-        ((Plan) state).allPossibleModifications(this.getPossibleActions()).forEach(e -> {
-            logger.info("\n--> OPTION #"+(i.incrementAndGet())+" : " +e);
+        plan.allPossibleModifications(possibleActions).forEach(operator -> {
+            logger.info("\n--> OPTION #"+(i.incrementAndGet())+" : " +operator);
         });
     }
 }

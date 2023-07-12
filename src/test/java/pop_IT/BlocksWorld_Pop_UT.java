@@ -19,6 +19,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import outputs.PlanningOutput;
 import pop_IT.mock.MockPlan;
 import java.util.List;
 import java.util.Objects;
@@ -107,6 +108,7 @@ public class BlocksWorld_Pop_UT {
 
         List<Operator> solutionOperators = resolver.findSolution();
 
+        PlanningOutput output = resolver.outputSolutionPlan();
         assertEquals(6, solutionOperators.size());
     }
 

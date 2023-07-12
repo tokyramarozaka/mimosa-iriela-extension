@@ -3,8 +3,9 @@ package aStar_planning.pop.components;
 import aStar.Operator;
 import aStar.State;
 import aStar_planning.pop.resolvers.OpenConditionResolver;
-import aStar_planning.pop.utils.PlanInitializer;
 import aStar_planning.pop.resolvers.ThreatResolver;
+import aStar_planning.pop.utils.PlanInitializer;
+import constraints.Codenotation;
 import constraints.TemporalConstraints;
 import logic.Action;
 import logic.Atom;
@@ -181,13 +182,15 @@ public class Plan implements State {
     private List<Flaw> getOpenConditions(Step step) {
         List<Flaw> openConditions = new ArrayList<>();
         List<Atom> stepPreconditions = step.getActionPreconditions().getAtoms();
+        CodenotationConstraints temporaryCc = new CodenotationConstraints(new ArrayList<>(
+                this.getCc().getCodenotations()));
 
         for (Atom precondition : stepPreconditions) {
             ContextualAtom preconditionInstance = new ContextualAtom(
                     step.getActionInstance().getContext(), precondition
             );
 
-            if(!isAsserted(preconditionInstance, tc.getPrecedingSituation(step))){
+            if(!isAsserted(preconditionInstance, tc.getPrecedingSituation(step), temporaryCc)){
                 openConditions.add(buildOpenCondition(precondition, step));
             }
         }
@@ -231,13 +234,26 @@ public class Plan implements State {
     /**
      * Checks if a given proposition is necessarily true in a given situation
      * @param proposition : the proposition to check
-     * @param situation : the situation where it needs to be checked.
+     * @param situation : the situation where it needs to be checked if it is necessarily true
      * @return true if the proposition is necessarily true in the given situation, false otherwise
      */
-    public boolean isAsserted(ContextualAtom proposition, PopSituation situation) {
+    public boolean isAsserted(
+            ContextualAtom proposition,
+            PopSituation situation
+    ){
         return getEstablishers(proposition, situation).size() > 0;
     }
 
+    public boolean isAsserted(
+            ContextualAtom proposition,
+            PopSituation situation,
+            CodenotationConstraints cc
+    ){
+        return this.steps.stream()
+                .filter(this::isNotFinalStep)
+                .anyMatch(step -> this.isBefore(this.tc.getFollowingSituation(step), situation)
+                    && step.asserts(proposition, cc));
+    }
     /**
      * Return all the steps which destroys (or threaten) a given proposition in a given situation
      * @param proposition : the proposition we want to check

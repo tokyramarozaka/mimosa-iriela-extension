@@ -11,7 +11,12 @@ public class Constant extends Term{
     }
 
     @Override
-    public boolean attemptUnification(Context fromContext, Unifiable to, Context toContext, List<ContextualTerm> currentChanges) {
+    public boolean attemptUnification(
+            Context fromContext,
+            Unifiable to,
+            Context toContext,
+            List<ContextualTerm> currentChanges
+    ){
         if (to instanceof Constant){
             return this.sameName((Term) to);
         }
@@ -24,7 +29,7 @@ public class Constant extends Term{
     }
 
     /**
-     * Attemps an unification of the constant with another term
+     * Attempts an unification of the constant with another term
      * @param fromContext : the context of this constant
      * @param to : the other term we want to unify it with
      * @param toContext : the other term's context

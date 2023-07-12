@@ -7,9 +7,7 @@ import aStar_planning.pop.components.OpenCondition;
 import aStar_planning.pop.components.PlanElement;
 import aStar_planning.pop.components.PlanModification;
 import aStar_planning.pop.components.Threat;
-import aStar_planning.pop_with_norms.components.norms.DeonticOperator;
 import aStar_planning.pop_with_norms.components.norms.RegulativeNorm;
-import aStar_planning.pop_with_norms.resolvers.MissingObligationPropositionResolver;
 import aStar_planning.pop_with_norms.resolvers.MissingObligationResolver;
 import aStar_planning.pop_with_norms.resolvers.MissingProhibitionResolver;
 import aStar_planning.pop_with_norms.utils.NormsPerInterval;
@@ -20,7 +18,6 @@ import constraints.CodenotationConstraints;
 import constraints.TemporalConstraints;
 import exception.UnapplicableNormException;
 import logic.Action;
-import logic.Context;
 import logic.ContextualAtom;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
@@ -29,7 +26,6 @@ import settings.Keywords;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 public class NormativePlan extends Plan {
@@ -134,14 +130,19 @@ public class NormativePlan extends Plan {
                     .filter(norm -> hasAnyApplicabilityCodenotations(situation, norm))
                     .toList();
 
+
             applicableRegulativeNorms.addAll(toAdd);
         }
 
+//        logger.info("All regulative norms applicable are : " + applicableRegulativeNorms);
         return applicableRegulativeNorms;
     }
 
     private boolean hasAnyApplicabilityCodenotations(PopSituation situation, RegulativeNorm norm) {
         try {
+//            logger.info("=".repeat(100));
+//            logger.info(norm);
+//            logger.info("=".repeat(100));
             norm.getNormConditions().getApplicableCodenotations(this, situation);
             return true;
         } catch (UnapplicableNormException e) {
@@ -234,10 +235,28 @@ public class NormativePlan extends Plan {
 
     }
 
+    /**
+     * Return all possible actions given by the all institutions, where the agent plays a role in
+     * its organization.
+     * @return the list of all possible actions based on the agent's roles in all active
+     * institutions
+     */
+    public List<Action> getAllPossibleActionsFromInstitutions() {
+        List<Action> allPossibleActionsFromInstitutions = new ArrayList<>();
+
+        this.activeOrganizations.forEach(organization -> {
+            List<Action> toAdd = organization.getInstitution().getPossibleActions();
+            allPossibleActionsFromInstitutions.addAll(toAdd);
+        });
+
+        return allPossibleActionsFromInstitutions;
+    }
+
     @Override
     public String toString() {
         return super.toString().concat(
                 "\n--INSTITUTIONS\n" + this.activeOrganizations.toString()
         );
     }
+
 }

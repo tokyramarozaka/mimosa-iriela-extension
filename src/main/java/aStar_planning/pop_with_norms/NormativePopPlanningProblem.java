@@ -1,9 +1,9 @@
 package aStar_planning.pop_with_norms;
 
-import aStar.AStarProblem;
 import aStar.Operator;
 import aStar.State;
 import aStar_planning.pop.PopPlanningProblem;
+import aStar_planning.pop.components.Plan;
 import aStar_planning.pop_with_norms.components.NormativePlan;
 import logic.Action;
 import logic.Goal;
@@ -34,6 +34,18 @@ public class NormativePopPlanningProblem extends PopPlanningProblem {
 
     private NormativePlan constructInitialNormativePlan() {
         return new NormativePlan(this.getInitialPlan(), this.organizations, new ArrayList<>());
+    }
+
+    @Override
+    public List<Operator> getOptions(State state) {
+        NormativePlan plan = (NormativePlan) state;
+
+        List<Action> allPossibleActions = new ArrayList<>(this.getPossibleActions());
+        allPossibleActions.addAll(plan.getAllPossibleActionsFromInstitutions());
+
+
+        logOptions(plan, allPossibleActions); // simple log for the console
+        return plan.allPossibleModifications(allPossibleActions);
     }
 
     @Override

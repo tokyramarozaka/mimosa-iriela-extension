@@ -51,10 +51,11 @@ public class Step implements PlanElement {
 
     /**
      * Checks if the current step makes the given proposition necessarily true in its preceding
-     * situation. If true, we say that the current step ASSERTS the proposition
-     *
+     * situation. If true, we say that the current step ASSERTS the proposition.
+     * This version does not change the given Codenotation Constraints.
      * @param proposition : the proposition to check if it is asserted by the current step or not
-     * @param cc          : codenotations constraints describing variable bindings
+     * @param cc          : codenotations constraints describing variable bindings which will NOT
+     *                    be changed during the function as we use a copy of it.
      * @return true if the given proposition is asserted by the current step
      */
     public boolean asserts(ContextualAtom proposition, CodenotationConstraints cc) {
@@ -74,6 +75,31 @@ public class Step implements PlanElement {
         return false;
     }
 
+    /**
+     * Checks if the current step can assert the given proposition, and save the changes made to
+     * codenotation constraints that would make the assertion possible.
+     * @param proposition : the proposition to check if it is asserted
+     * @param cc : the current codenotations set in the plan(which will change if need be)
+     * @return
+     */
+    public boolean assertsWithPermanentCodenotations(
+            ContextualAtom proposition,
+            CodenotationConstraints cc
+    ){
+        for (Atom consequence : this.getActionConsequences().getAtoms()) {
+            ContextualAtom consequenceInstance = new ContextualAtom(
+                    actionInstance.getContext(), consequence
+            );
+
+            if (proposition.getAtom().isNegation() == consequence.isNegation() &&
+                    canUnifyPropositions(consequenceInstance, proposition, cc)
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
     /**
      * Determines if the current step destroys a given proposition without adding any other bindings
      *
@@ -96,21 +122,6 @@ public class Step implements PlanElement {
         }
 
         return false;
-    }
-
-    /**
-     * Checks if the current step destroys the precondition of another step, according to the
-     * current bindings in the codenotation constraints
-     *
-     * @param context
-     * @param precondition
-     * @param cc
-     * @return true if the current step destroys the given proposition, false otherwise.
-     */
-    public boolean destroys(Context context, Atom precondition, CodenotationConstraints cc) {
-        ContextualAtom proposition = new ContextualAtom(context, precondition);
-
-        return this.destroys(proposition, cc);
     }
 
     /**
@@ -164,6 +175,24 @@ public class Step implements PlanElement {
         return assertingCodenotations;
     }
 
+    public List<CodenotationConstraints> getAllAssertingCodenotations(ContextualAtom toAssert) {
+        List<CodenotationConstraints> allAssertingCodenotations = new ArrayList<>();
+
+        for (Atom consequence : this.getActionConsequences().getAtoms()) {
+            CodenotationConstraints assertingCodenotations = new CodenotationConstraints();
+            if (toAssert.getAtom().isNegation() == consequence.isNegation() &&
+                    consequence.getPredicate().unify(
+                            this.getActionInstance().getContext(),
+                            toAssert.getAtom().getPredicate(),
+                            toAssert.getContext(),
+                            assertingCodenotations)
+            ){
+                allAssertingCodenotations.add(assertingCodenotations);
+            }
+        }
+
+        return allAssertingCodenotations;
+    }
     /**
      * Checks if a step is the initial dummy step
      *
@@ -207,6 +236,6 @@ public class Step implements PlanElement {
 
     @Override
     public String toString() {
-        return this.getActionInstance().toString() + "::" + this.getActionInstance().getContext();
+        return this.getActionInstance().toString();
     }
 }

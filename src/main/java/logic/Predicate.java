@@ -16,7 +16,6 @@ import java.util.List;
 @Getter
 @EqualsAndHashCode
 public class Predicate implements Unifiable {
-    private final static Logger logger = LogManager.getLogger(Predicate.class);
     private String name;
     private List<Term> terms;
 

@@ -2,7 +2,6 @@ package aStar_planning.pop_with_norms.resolvers;
 
 import aStar.Operator;
 import aStar_planning.pop.components.OpenCondition;
-import aStar_planning.pop.components.Step;
 import aStar_planning.pop.resolvers.OpenConditionResolver;
 import aStar_planning.pop_with_norms.components.NormativeFlaw;
 import aStar_planning.pop_with_norms.components.NormativePlan;
