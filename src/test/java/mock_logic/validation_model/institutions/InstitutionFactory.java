@@ -21,12 +21,12 @@ public class InstitutionFactory {
     public static Institution householdInstitution(){
         List<NormsPerRole> normsPerRoles = NormsPerRoleFactory.forHousehold_Provider();
         List<Action> householdActions = ActionFactory.allActionsInHousehold();
-        return new Institution("HOUSEHOLD", normsPerRoles, householdActions);
+        return new Institution("HOUSEHOLD", normsPerRoles, householdActions, 9);
     }
 
     public static Institution exploitationInstitution(){
         List<NormsPerRole> normsPerRoles = new ArrayList<>();
         List<Action> exploitationActions = ActionFactory.allActionsInExploitation();
-        return new Institution("EXPLOITATION", normsPerRoles, exploitationActions);
+        return new Institution("EXPLOITATION", normsPerRoles, exploitationActions, 7);
     }
 }

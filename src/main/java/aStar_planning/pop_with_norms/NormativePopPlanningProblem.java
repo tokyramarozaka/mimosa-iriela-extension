@@ -19,7 +19,7 @@ import java.util.List;
 @ToString
 public class NormativePopPlanningProblem extends PopPlanningProblem {
     private final List<Organization> organizations;
-    private NormativePlan initialNormativePlan;
+    private final Plan initialNormativePlan;
 
     public NormativePopPlanningProblem(
             Situation initialSituation,

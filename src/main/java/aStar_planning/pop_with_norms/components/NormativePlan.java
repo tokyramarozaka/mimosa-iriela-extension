@@ -4,6 +4,7 @@ import aStar.Operator;
 import aStar.State;
 import aStar_planning.pop.components.Flaw;
 import aStar_planning.pop.components.OpenCondition;
+import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PlanElement;
 import aStar_planning.pop.components.PlanModification;
 import aStar_planning.pop.components.Threat;
@@ -11,7 +12,6 @@ import aStar_planning.pop_with_norms.components.norms.RegulativeNorm;
 import aStar_planning.pop_with_norms.resolvers.MissingObligationResolver;
 import aStar_planning.pop_with_norms.resolvers.MissingProhibitionResolver;
 import aStar_planning.pop_with_norms.utils.NormsPerInterval;
-import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop.components.Step;
 import constraints.CodenotationConstraints;
@@ -71,6 +71,7 @@ public class NormativePlan extends Plan {
      * </ul>
      */
     public void evaluateNormativeFlaws() {
+        this.convertPermissionsToProhibitions();
         this.getSituations().forEach(situation -> this.getApplicableRegulativeNorms(situation)
                 .forEach(applicableNorm -> {
                     if (!applicableNorm.isApplied(this, situation)) {
@@ -78,6 +79,12 @@ public class NormativePlan extends Plan {
                     }
                 })
         );
+    }
+
+    private void convertPermissionsToProhibitions() {
+        this.getActiveOrganizations().forEach(organization -> {
+
+        });
     }
 
     /**

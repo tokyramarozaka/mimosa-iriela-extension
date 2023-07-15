@@ -132,7 +132,7 @@ public class BlocksWorld_Pop_UT {
      * where all three blocks are on the table
      * @return the proposition that some block (C in this case) is on the table
      */
-    private static ContextualAtom getOnTableProposition(Plan plan,String blockName) {
+    private static ContextualAtom getOnTableProposition(Plan plan, String blockName) {
         Step initialStep = plan.getSteps()
                 .stream()
                 .filter(step -> step.getActionInstance().getName().equals("initial"))

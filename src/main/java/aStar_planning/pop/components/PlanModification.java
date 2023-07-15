@@ -1,7 +1,6 @@
 package aStar_planning.pop.components;
 
 import aStar.Operator;
-import aStar_planning.pop_with_norms.components.NormativePlan;
 import constraints.CodenotationConstraints;
 import constraints.TemporalConstraints;
 import lombok.AllArgsConstructor;
@@ -65,7 +64,7 @@ public class PlanModification implements Operator {
                 allNewTemporalConstraints);
     }
 
-    public NormativePlan apply(NormativePlan oldPlan){
+    public aStar_planning.pop_with_norms.components.NormativePlan apply(aStar_planning.pop_with_norms.components.NormativePlan oldPlan){
         List<PopSituation> allNewSituations = new ArrayList<>(oldPlan.getSituations());
         List<Step> allNewSteps = new ArrayList<>(oldPlan.getSteps());
 
@@ -95,7 +94,7 @@ public class PlanModification implements Operator {
             });
         }
 
-        return new NormativePlan(
+        return new aStar_planning.pop_with_norms.components.NormativePlan(
                 allNewSituations,
                 allNewSteps,
                 allNewCodenotationConstraints,

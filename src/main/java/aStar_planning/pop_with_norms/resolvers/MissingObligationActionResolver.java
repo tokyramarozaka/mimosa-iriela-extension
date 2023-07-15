@@ -22,7 +22,7 @@ public class MissingObligationActionResolver {
     public static List<PlanModification> byPromotion(NormativePlan plan, NormativeFlaw flaw) {
         List<PlanModification> operators = new ArrayList<>();
         Action mandatoryAction = (Action) flaw.getFlawedNorm().getNormConsequences();
-        PopSituation currentSituation = flaw.getSituation();
+        PopSituation currentSituation = flaw.getApplicableSituation();
 
         plan.getSteps().stream()
                 .filter(step -> step.getActionInstance().getLogicalEntity().getLabel()
@@ -53,7 +53,7 @@ public class MissingObligationActionResolver {
 
     public static List<Operator> byCreation(NormativePlan plan, NormativeFlaw flaw) {
         // if the flaw happens in the final situation no steps can be added after it
-        if (flaw.getSituation().equals(plan.getFinalSituation())) {
+        if (flaw.getApplicableSituation().equals(plan.getFinalSituation())) {
             return new ArrayList<>();
         }
 
@@ -67,16 +67,16 @@ public class MissingObligationActionResolver {
 
         // Adds the step and its wrapping situations in the plan's temporal constraints
         PopSituation situationAfterNewStep = (PopSituation) plan.getTc()
-                .getFollowingElement(flaw.getSituation());
+                .getFollowingElement(flaw.getApplicableSituation());
         TemporalConstraints addedTemporalConstraints = TemporalConstraintsBuilder
                 .insertNewStepBetweenTwoSituations(
                         plan, newStep, newStepEntry, newStepExit,
-                        flaw.getSituation(), situationAfterNewStep
+                        flaw.getApplicableSituation(), situationAfterNewStep
                 );
 
         // Adds the necessary codenotation constraints to the plan for the new step
         CodenotationConstraints applicableCodenotations = flaw.getFlawedNorm()
-                .getApplicableCodenotations(plan, flaw.getSituation());
+                .getApplicableCodenotations(plan, flaw.getApplicableSituation());
 
         return List.of(PlanModificationMapper.from(
                         flaw,

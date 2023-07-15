@@ -24,6 +24,7 @@ public class MissingObligationResolver {
                     possibleActions));
         }
         operators.addAll(MissingObligationActionResolver.byCreation(plan, flaw));
+        operators.addAll(MissingObligationActionResolver.byPromotion(plan, flaw));
 
         operators.addAll(CircumventionOperator.circumvent(plan, flaw, possibleActions));
 

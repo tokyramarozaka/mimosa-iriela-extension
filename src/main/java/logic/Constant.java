@@ -74,15 +74,16 @@ public class Constant extends Term{
     public boolean testEqual(Context fromContext, Term other, Context otherContext,
                              CodenotationConstraints cc
     ){
-        if (other instanceof Constant)
+        if (other instanceof Constant) {
             return this.sameName(other);
-        else if ((other instanceof Variable) && (otherContext.isLinked((Variable)other)))
+        }else if ((other instanceof Variable) && (otherContext.isLinked((Variable)other))) {
             return testEqual(
                     fromContext,
-                    otherContext.getLink((Variable)other).getTerm(),
-                    otherContext.getLink((Variable)other).getContext(),
+                    otherContext.getLink((Variable) other).getTerm(),
+                    otherContext.getLink((Variable) other).getContext(),
                     cc
             );
+        }
         return false;
     }
 

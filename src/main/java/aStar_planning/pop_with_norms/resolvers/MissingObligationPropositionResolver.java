@@ -40,6 +40,6 @@ public class MissingObligationPropositionResolver {
         ContextualAtom toAssert = new ContextualAtom(proposition.getContext(),
                 proposition.getAtom());
 
-        return new OpenCondition(flaw.getSituation(), toAssert);
+        return new OpenCondition(flaw.getApplicableSituation(), toAssert);
     }
 }

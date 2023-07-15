@@ -45,7 +45,7 @@ public class CircumventionOperator {
      */
     private static NormativePlan getApplicablePlan(NormativePlan plan, NormativeFlaw flaw) {
         CodenotationConstraints applicableCodenotations = flaw.getFlawedNorm()
-                .getApplicableCodenotations(plan, flaw.getSituation())
+                .getApplicableCodenotations(plan, flaw.getApplicableSituation())
                 .fuseWith(plan.getCc());
 
         return new NormativePlan(
@@ -73,7 +73,7 @@ public class CircumventionOperator {
             Atom condition
     ){
         CodenotationConstraints applicableCodenotations= flaw.getFlawedNorm()
-                .getApplicableCodenotations(plan, flaw.getSituation())
+                .getApplicableCodenotations(plan, flaw.getApplicableSituation())
                 .fuseWith(plan.getCc());
 
         ContextualAtom toAssert = new ContextualAtom(
@@ -82,7 +82,7 @@ public class CircumventionOperator {
         );
 
         OpenCondition toSolve = new OpenCondition(
-                flaw.getSituation(), toAssert
+                flaw.getApplicableSituation(), toAssert
         );
 
         return toSolve;

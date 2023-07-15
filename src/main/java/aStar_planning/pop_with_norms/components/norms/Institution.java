@@ -18,6 +18,7 @@ public class Institution {
     private String name;
     private List<NormsPerRole> normsPerRoles;
     private List<Action> possibleActions;
+    private float priority;
 
     public List<RegulativeNorm> getNormsForRole(Role role){
         try {

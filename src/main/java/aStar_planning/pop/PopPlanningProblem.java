@@ -5,7 +5,6 @@ import aStar.Operator;
 import aStar.State;
 import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.utils.PlanInitializer;
-import aStar_planning.pop_with_norms.components.NormativePlan;
 import logic.Action;
 import logic.Goal;
 import logic.Situation;

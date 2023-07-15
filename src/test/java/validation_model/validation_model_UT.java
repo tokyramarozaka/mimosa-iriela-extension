@@ -44,8 +44,8 @@ public class validation_model_UT {
 
         Assertions.assertEquals(2, normativeFlaws.size());
         Assertions.assertTrue(normativeFlaws.stream()
-                .allMatch(flaw -> flaw.getSituation().equals(initialPlan.getInitialSituation())
-                        || flaw.getSituation().equals(initialPlan.getFinalSituation())));
+                .allMatch(flaw -> flaw.getApplicableSituation().equals(initialPlan.getInitialSituation())
+                        || flaw.getApplicableSituation().equals(initialPlan.getFinalSituation())));
 
         for (NormativeFlaw flaw : normativeFlaws) {
             Assertions.assertEquals(

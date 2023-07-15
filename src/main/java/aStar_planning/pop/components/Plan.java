@@ -5,12 +5,12 @@ import aStar.State;
 import aStar_planning.pop.resolvers.OpenConditionResolver;
 import aStar_planning.pop.resolvers.ThreatResolver;
 import aStar_planning.pop.utils.PlanInitializer;
-import constraints.Codenotation;
 import constraints.TemporalConstraints;
 import logic.Action;
 import logic.Atom;
 import constraints.CodenotationConstraints;
 import logic.ContextualAtom;
+import logic.LogicalInstance;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -191,6 +192,7 @@ public class Plan implements State {
             );
 
             if(!isAsserted(preconditionInstance, tc.getPrecedingSituation(step), temporaryCc)){
+                logger.info("----> " + preconditionInstance + "is not asserted here");
                 openConditions.add(buildOpenCondition(precondition, step));
             }
         }
@@ -249,11 +251,13 @@ public class Plan implements State {
             PopSituation situation,
             CodenotationConstraints cc
     ){
+        // TODO : you should reset the codenotation constraints at some point.
         return this.steps.stream()
                 .filter(this::isNotFinalStep)
                 .anyMatch(step -> this.isBefore(this.tc.getFollowingSituation(step), situation)
-                    && step.asserts(proposition, cc));
+                    && step.assertsWithPermanentCodenotations(proposition, cc));
     }
+
     /**
      * Return all the steps which destroys (or threaten) a given proposition in a given situation
      * @param proposition : the proposition we want to check
@@ -395,6 +399,11 @@ public class Plan implements State {
         return this.tc.getPrecedingSituation(this.getFinalStep());
     }
 
+    public Optional<Step> findStepByInstance(LogicalInstance instance){
+        return this.steps.stream()
+                .filter(step -> step.getActionInstance().equals(instance))
+                .findFirst();
+    }
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
