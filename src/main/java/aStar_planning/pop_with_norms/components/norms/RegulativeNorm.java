@@ -59,13 +59,7 @@ public class RegulativeNorm extends Norm {
             CodenotationConstraints applicableCodenotations = this.getNormConditions()
                          .getApplicableCodenotations(plan, situation);
 
-            if(this.getDeonticOperator().equals(DeonticOperator.OBLIGATION)){
-                return this.normConsequences.isApplied(plan, situation, applicableCodenotations);
-            }else if(this.getDeonticOperator().equals(DeonticOperator.PROHIBITION)){
-                return !this.normConsequences.isApplied(plan, situation, applicableCodenotations);
-            }
-
-            return true;
+            return this.normConsequences.isApplied(plan, situation, applicableCodenotations);
         }catch(UnapplicableNormException e){
             return false;
         }
@@ -94,6 +88,7 @@ public class RegulativeNorm extends Norm {
      * @param situation : the situation we want to verify it in
      * @return true if the norm is applied, and false otherwise.
      */
+    @Override
     public boolean isApplied(NormativePlan plan, PopSituation situation) {
         List<PlanElement> allFollowingElements = plan.getSteps().stream()
                 .filter(step -> plan.getTc().isBefore(situation, step))
@@ -102,14 +97,23 @@ public class RegulativeNorm extends Norm {
         for (PlanElement followingElement : allFollowingElements) {
             if(followingElement instanceof Step){
                 if(this.isSatisfiedIn(plan, situation)){
-                    return true;
+                    if(this.isProhibition()){
+                        return false;
+                    }else{
+                        return true;
+                    }
                 }
             }
-//            else if(followingElement instanceof PopSituation){
-//                return isApplied(plan, (PopSituation) followingElement);
-//            }
         }
-        return false;
+        return isProhibition();
+    }
+
+    private boolean isProhibition() {
+        return this.deonticOperator.equals(DeonticOperator.PROHIBITION);
+    }
+
+    private boolean isObligation() {
+        return this.deonticOperator.equals(DeonticOperator.OBLIGATION);
     }
 
     @Override

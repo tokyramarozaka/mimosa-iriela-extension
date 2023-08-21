@@ -8,16 +8,20 @@ import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PlanElement;
 import aStar_planning.pop.components.PlanModification;
 import aStar_planning.pop.components.Threat;
+import aStar_planning.pop_with_norms.components.norms.DeonticOperator;
+import aStar_planning.pop_with_norms.components.norms.NormativeAction;
 import aStar_planning.pop_with_norms.components.norms.RegulativeNorm;
 import aStar_planning.pop_with_norms.resolvers.MissingObligationResolver;
 import aStar_planning.pop_with_norms.resolvers.MissingProhibitionResolver;
 import aStar_planning.pop_with_norms.utils.NormsPerInterval;
 import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop.components.Step;
+import aStar_planning.pop_with_norms.utils.PermissionMapper;
 import constraints.CodenotationConstraints;
 import constraints.TemporalConstraints;
 import exception.UnapplicableNormException;
 import logic.Action;
+import logic.Context;
 import logic.ContextualAtom;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
@@ -26,6 +30,8 @@ import settings.Keywords;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Getter
 public class NormativePlan extends Plan {
@@ -67,24 +73,91 @@ public class NormativePlan extends Plan {
      * <ul>
      *     <li>Missing obligations</li>
      *     <li>Missing prohibitions</li>
-     *     <li>Missing permissions</li>
+     *     <li>Missing permissions : which needs to be converted to prohibitions first</li>
      * </ul>
      */
     public void evaluateNormativeFlaws() {
-        this.convertPermissionsToProhibitions();
-        this.getSituations().forEach(situation -> this.getApplicableRegulativeNorms(situation)
-                .forEach(applicableNorm -> {
-                    if (!applicableNorm.isApplied(this, situation)) {
-                        this.getFlaws().add(new NormativeFlaw(this, applicableNorm, situation));
-                    }
-                })
-        );
+        List<RegulativeNorm> generatedProhibitions = this.convertPermissionsToProhibitions();
+
+        for (PopSituation situation : this.getSituations()) {
+            this.getApplicableRegulativeNorms(situation).forEach(applicableNorm -> {
+                //logger.info("is applicable : " + applicableNorm + " in " + situation);
+                if (isApplicable(situation, applicableNorm)) {
+                    getFlawIfNotApplied(situation, applicableNorm);
+                }
+            });
+
+            generatedProhibitions.forEach(prohibition -> {
+                //logger.info("is applicable : " + prohibition + " in " + situation);
+                if (isApplicable(situation, prohibition)) {
+                    getFlawIfNotApplied(situation, prohibition);
+                }
+            });
+        }
     }
 
-    private void convertPermissionsToProhibitions() {
-        this.getActiveOrganizations().forEach(organization -> {
+    private void getFlawIfNotApplied(PopSituation situation, RegulativeNorm applicableNorm) {
+        Context applicableContext = new Context();
 
+        if (!applicableNorm.isApplied(this, situation)) {
+            logger.debug(applicableNorm + " is not applied in " + situation);
+
+            if (applicableNorm.getDeonticOperator().equals(DeonticOperator.PROHIBITION)) {
+                applicableContext = getApplicableContext(applicableNorm, situation);
+            }
+
+            this.getFlaws().add(new NormativeFlaw(
+                    this,
+                    applicableNorm,
+                    situation,
+                    applicableContext
+            ));
+        }
+    }
+
+    private Context getApplicableContext(RegulativeNorm norm, PopSituation situation) {
+        if (norm.enforceProposition()) {
+//          TODO: norm.getNormConditions().getApplicableCodenotations(this, situation);
+        } else if (norm.enforceAction()) {
+            Action forbiddenAction = ((NormativeAction) norm.getNormConsequences());
+            logger.error(this.getSteps().stream()
+                    .filter(step -> this.getTc().isBefore(situation, step))
+                    .collect(Collectors.toList()));
+            Optional<Step> forbiddenStep = this.getSteps().stream()
+                    .filter(step -> this.getTc().isBefore(situation, step))
+                    .filter(step -> step.getActionInstance().getLogicalEntity()
+                            .equals(forbiddenAction))
+                    .findFirst();
+
+            logger.error("f step " + forbiddenStep);
+            if (forbiddenStep.isPresent()) {
+                logger.debug("Found context of forbidden action in norm " + norm + " with " + forbiddenStep.get());
+                return forbiddenStep.get().getActionInstance().getContext();
+            }
+        }
+        throw new RuntimeException("Applicable context could not be found for : " + norm);
+    }
+
+    /**
+     * Converts all permissions to prohibitions, and returns all resulting prohibitions
+     */
+    private List<RegulativeNorm> convertPermissionsToProhibitions() {
+        List<RegulativeNorm> prohibitions = new ArrayList<>();
+
+        this.getActiveOrganizations().forEach(organization -> {
+            organization.getRegulativeNormsByConcept(Keywords.AGENT_CONCEPT)
+                    .stream()
+                    .filter(this::isPermission)
+                    .forEach(permission -> prohibitions.addAll(
+                            PermissionMapper.toProhibitions(this, permission)
+                    ));
         });
+
+        return prohibitions;
+    }
+
+    private boolean isPermission(RegulativeNorm regulativeNorm) {
+        return regulativeNorm.getDeonticOperator().equals(DeonticOperator.PERMISSION);
     }
 
     /**
@@ -103,17 +176,21 @@ public class NormativePlan extends Plan {
     /**
      * Solve a normative flaw depending on its deontic operator and consequence type (either a
      * proposition or an action that ought to be or not to be done).
-     * @param normativeFlaw : the normative flaw to be solved
+     *
+     * @param normativeFlaw   : the normative flaw to be solved
      * @param possibleActions : the set of all possible actions, necessary for solutions that
      *                        require adding in some new action, such as adding a mandatory
      *                        action.
      * @return a set of plan modifications that would solve the normative flaw.
      */
-    public List<Operator> resolve(NormativeFlaw normativeFlaw, List<Action> possibleActions){
-        return switch(normativeFlaw.getFlawedNorm().getDeonticOperator()){
-            case OBLIGATION -> MissingObligationResolver.resolve(this, normativeFlaw,
+    public List<Operator> resolve(NormativeFlaw normativeFlaw, List<Action> possibleActions) {
+        return switch (normativeFlaw.getFlawedNorm().getDeonticOperator()) {
+            case OBLIGATION -> MissingObligationResolver.resolve(
+                    this,
+                    normativeFlaw,
                     possibleActions);
-            case PROHIBITION -> MissingProhibitionResolver.resolve(this, normativeFlaw);
+            case PROHIBITION -> MissingProhibitionResolver.resolve(this, normativeFlaw,
+                    possibleActions);
             default -> throw new UnsupportedOperationException("Cannot resolve deontic operator" +
                     "in the normative flaw");
         };
@@ -134,23 +211,20 @@ public class NormativePlan extends Plan {
             );
 
             List<RegulativeNorm> toAdd = allOrganizationNorms.stream()
-                    .filter(norm -> hasAnyApplicabilityCodenotations(situation, norm))
+                    .filter(norm -> isApplicable(situation, norm))
                     .toList();
-
 
             applicableRegulativeNorms.addAll(toAdd);
         }
 
-//        logger.info("All regulative norms applicable are : " + applicableRegulativeNorms);
         return applicableRegulativeNorms;
     }
 
-    private boolean hasAnyApplicabilityCodenotations(PopSituation situation, RegulativeNorm norm) {
+    private boolean isApplicable(PopSituation situation, RegulativeNorm norm) {
+        //logger.info("Checking if : " + norm + " is applicable.");
         try {
-//            logger.info("=".repeat(100));
-//            logger.info(norm);
-//            logger.info("=".repeat(100));
             norm.getNormConditions().getApplicableCodenotations(this, situation);
+            //  logger.info("=".repeat(10)+" YAY! IT IS APPLICABLE");
             return true;
         } catch (UnapplicableNormException e) {
             return false;
@@ -180,13 +254,13 @@ public class NormativePlan extends Plan {
 
     @Override
     public State applyPlanModification(Operator toApply) {
-        return ((PlanModification)toApply).apply(this);
+        return ((PlanModification) toApply).apply(this);
     }
 
     private List<ContextualAtom> getRemainingPropositions(
             Step precedingStep,
             PopSituation situation
-    ){
+    ) {
         List<ContextualAtom> remainingPropositions = new ArrayList<>();
 
         precedingStep.getActionConsequences().getAtoms().forEach(consequence -> {
@@ -218,7 +292,8 @@ public class NormativePlan extends Plan {
     /**
      * Checks if some element in the plan is between two others. Namely, checks if the target
      * element is between the start and the finish element.
-     * @param start : the element at the left edge of the interval we want to check
+     *
+     * @param start   : the element at the left edge of the interval we want to check
      * @param target: the element we want to check if it is between start and finish
      * @param finish: the element at the right edge of the interval we want to check
      * @return true if start < target < finish, and false otherwise.
@@ -230,11 +305,11 @@ public class NormativePlan extends Plan {
 
     @Override
     public List<Operator> resolve(Flaw toSolve, List<Action> possibleActions) {
-        if(toSolve instanceof OpenCondition){
+        if (toSolve instanceof OpenCondition) {
             return resolve((OpenCondition) toSolve, possibleActions);
-        }else if(toSolve instanceof Threat){
+        } else if (toSolve instanceof Threat) {
             return resolve((Threat) toSolve);
-        }else if(toSolve instanceof NormativeFlaw){
+        } else if (toSolve instanceof NormativeFlaw) {
             return resolve((NormativeFlaw) toSolve, possibleActions);
         }
 
@@ -245,6 +320,7 @@ public class NormativePlan extends Plan {
     /**
      * Return all possible actions given by the all institutions, where the agent plays a role in
      * its organization.
+     *
      * @return the list of all possible actions based on the agent's roles in all active
      * institutions
      */

@@ -41,15 +41,11 @@ public class NormConditions {
     public CodenotationConstraints getApplicableCodenotations(
             NormativePlan plan,
             PopSituation situation
-    ){
+    )throws UnapplicableNormException{
         CodenotationConstraints cc = new CodenotationConstraints();
         Context conditionContext = new Context();
 
         for (Atom condition : this.conditions) {
-//            logger.info("Getting applicable codenotations for " + condition);
-//            logger.info("All asserted propositions in " + situation + " are : " +
-//                            plan.getAllAssertedPropositions(situation));
-
             Predicate conditionPredicate = condition.getPredicate();
             boolean isUnifiedOnce = false;
 
@@ -60,7 +56,7 @@ public class NormConditions {
                         assertedProposition.getContext(),
                         cc
                 )){
-//                    logger.info("\tOK\n");
+//                    logger.info("\tOK for : "+condition+" for " + situation+"\n");
                     isUnifiedOnce = true;
                     break;
                 }
@@ -74,6 +70,7 @@ public class NormConditions {
 
         return cc;
     }
+
 
     @Override
     public String toString() {

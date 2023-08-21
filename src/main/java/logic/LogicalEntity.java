@@ -1,5 +1,8 @@
 package logic;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode
 public abstract class LogicalEntity {
     public LogicalInstance createInstance(){
         return new LogicalInstance(this, new Context());

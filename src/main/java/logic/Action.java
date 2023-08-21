@@ -20,6 +20,7 @@ import java.util.List;
  */
 @AllArgsConstructor
 @Getter
+@EqualsAndHashCode
 public class Action extends LogicalEntity {
     private final Logger logger = LogManager.getLogger(Action.class);
     private String name;

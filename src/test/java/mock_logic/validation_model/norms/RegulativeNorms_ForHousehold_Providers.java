@@ -27,7 +27,7 @@ public class RegulativeNorms_ForHousehold_Providers {
 
     private static RegulativeNorm obligation_dummy_inNormalZone(){
         return new RegulativeNorm(
-                "Dummy normative action",
+                "DUMMY",
                 DeonticOperator.OBLIGATION,
                 obligation_dummy_inNormalZone_conditions(),
                 obligation_dummy_inNormalZone_consequences()
@@ -46,7 +46,7 @@ public class RegulativeNorms_ForHousehold_Providers {
 
     public static RegulativeNorm prohibition_cut_inProtectedZone() {
         return new RegulativeNorm(
-                "Prohibited to cut in protected zone",
+                "CUT IN PROHIBITED ZONE",
                 DeonticOperator.PROHIBITION,
                 prohibition_cut_inProtectedZone_conditions(),
                 prohibition_cut_inProtectedZone_consequences()
@@ -56,7 +56,7 @@ public class RegulativeNorms_ForHousehold_Providers {
     private static NormConditions prohibition_move_toSacredZone_conditions() {
         return new NormConditions(List.of(
                 AtomFactory.inZone(Zones.X),
-                AtomFactory.areNeighbors(Zones.X, Zones.Y),
+                AtomFactory.areAdjacents(Zones.X, Zones.Y),
                 AtomFactory.isSacred(Zones.Y)
         ));
     }
@@ -67,7 +67,7 @@ public class RegulativeNorms_ForHousehold_Providers {
 
     public static RegulativeNorm prohibition_move_toSacredZone() {
         return new RegulativeNorm(
-                "Prohibited to move to a sacred zone",
+                "MOVE TO A SACRED ZONE",
                 DeonticOperator.PROHIBITION,
                 prohibition_move_toSacredZone_conditions(),
                 prohibition_move_toSacredZone_consequences()

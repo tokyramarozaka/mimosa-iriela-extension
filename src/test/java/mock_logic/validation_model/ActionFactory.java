@@ -72,8 +72,8 @@ public class ActionFactory {
 
     private static ActionPrecondition movePreconditions(Term current, Term target) {
         return new ActionPrecondition(List.of(
-                AtomFactory.inZone(current)
-//                AtomFactory.areNeighbors(current, target)
+                AtomFactory.inZone(current),
+                AtomFactory.areAdjacents(current, target)
         ));
     }
 

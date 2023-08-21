@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -104,7 +105,6 @@ public class Plan implements State {
         }else if(toSolve instanceof Threat){
             return resolve((Threat) toSolve);
         }
-
         throw new UnsupportedOperationException("This type of flaw is not implemented yet");
     }
 
@@ -192,7 +192,6 @@ public class Plan implements State {
             );
 
             if(!isAsserted(preconditionInstance, tc.getPrecedingSituation(step), temporaryCc)){
-                logger.info("----> " + preconditionInstance + "is not asserted here");
                 openConditions.add(buildOpenCondition(precondition, step));
             }
         }
@@ -251,7 +250,6 @@ public class Plan implements State {
             PopSituation situation,
             CodenotationConstraints cc
     ){
-        // TODO : you should reset the codenotation constraints at some point.
         return this.steps.stream()
                 .filter(this::isNotFinalStep)
                 .anyMatch(step -> this.isBefore(this.tc.getFollowingSituation(step), situation)

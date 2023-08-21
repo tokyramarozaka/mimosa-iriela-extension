@@ -236,7 +236,7 @@ public class Step implements PlanElement {
 
     @Override
     public String toString() {
-        return this.getActionInstance().toString() + "__" +
+        return this.getActionInstance().toString() + "::" +
                 this.getActionInstance().getContext().getId();
     }
 }

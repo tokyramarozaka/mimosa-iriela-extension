@@ -45,11 +45,11 @@ public class AtomFactory {
     }
 
     public static Atom isNormal(Term someZone) {
-        return new Atom(false, PredicateFactory.isNormal(someZone));
+        return new Atom(false, PredicateFactory.isLand(someZone));
     }
 
-    public static Atom areNeighbors(Term someZone, Term someOtherZone) {
-        return new Atom(false, PredicateFactory.areNeighbors(someZone, someOtherZone));
+    public static Atom areAdjacents(Term someZone, Term someOtherZone) {
+        return new Atom(false, PredicateFactory.areAdjacents(someZone, someOtherZone));
     }
 
     public static Atom isOffice(Term someZone) {

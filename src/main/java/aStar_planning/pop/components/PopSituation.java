@@ -1,6 +1,7 @@
 package aStar_planning.pop.components;
 
 import graph.Node;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -9,6 +10,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
+@EqualsAndHashCode
 @ToString
 public class PopSituation implements PlanElement {
     private int id;

@@ -42,11 +42,11 @@ public class PredicateFactory {
         return new Predicate("isOffice", List.of(someZone));
     }
 
-    public static Predicate isNormal(Term someZone){
+    public static Predicate isLand(Term someZone){
         return new Predicate("isNormal", List.of(someZone));
     }
 
-    public static Predicate areNeighbors(Term someZone, Term someOtherZone) {
+    public static Predicate areAdjacents(Term someZone, Term someOtherZone) {
         return new Predicate("areNeighbors", List.of(someZone, someOtherZone));
     }
 

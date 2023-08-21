@@ -9,7 +9,6 @@ import lombok.ToString;
 
 @AllArgsConstructor
 @Getter
-@ToString
 @EqualsAndHashCode
 @Builder
 public class Threat implements Flaw {
