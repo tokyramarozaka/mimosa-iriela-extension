@@ -6,8 +6,6 @@ import aStar_planning.pop.components.Step;
 import aStar_planning.pop_with_norms.components.NormativePlan;
 import constraints.CodenotationConstraints;
 import logic.Action;
-import logic.ActionConsequence;
-import logic.ActionPrecondition;
 import logic.Atom;
 import logic.Context;
 import org.apache.logging.log4j.LogManager;
@@ -16,23 +14,12 @@ import org.apache.logging.log4j.Logger;
 /**
  * A normative action is simple an action that can be the consequence of a norm
  */
-public class NormativeAction extends Action implements NormConsequences{
-    private final static Logger logger = LogManager.getLogger(NormativeAction.class);
+public class NormativeStep implements NormConsequences{
+    private Step step;
+    private final static Logger logger = LogManager.getLogger(NormativeStep.class);
 
-    public NormativeAction(
-            String name,
-            ActionPrecondition preconditions,
-            ActionConsequence consequences
-    ){
-        super(name, preconditions, consequences);
-    }
-
-    /**
-     * Builds a normative action based on an already existing action
-     * @param action : the action we want to build a normative action upon
-     */
-    public NormativeAction(Action action){
-        super(action.getName(), action.getPreconditions(), action.getConsequences());
+    public NormativeStep(Step step){
+        this.step = step;
     }
 
     @Override
@@ -41,22 +28,23 @@ public class NormativeAction extends Action implements NormConsequences{
             PopSituation situation,
             CodenotationConstraints cc
     ){
-
         PlanElement followingElement = plan.getTc().getFollowingElement(situation);
+        Action stepAction = (Action) this.step.getActionInstance().getLogicalEntity();
+        Context stepContext =  this.step.getActionInstance().getContext();
 
         if(followingElement == null){
             return false;
         } else if(followingElement instanceof Step followingStep){
-            if(!this.getName().equals(followingStep.getActionInstance().getName())){
+            if(!this.step.getActionInstance().getName()
+                    .equals(followingStep.getActionInstance().getName()))
+            {
                 return false;
             }
 
-            Context stateContext = new Context();
-
-            for (Atom normConsequence : this.getConsequences().getAtoms()) {
+            for (Atom normConsequence : stepAction.getConsequences().getAtoms()) {
                 for (Atom consequence : followingStep.getActionConsequences().getAtoms()){
                     if(!normConsequence.getPredicate().unify(
-                            stateContext,
+                            stepContext,
                             consequence.getPredicate(),
                             followingStep.getActionInstance().getContext(),
                             cc
@@ -77,8 +65,8 @@ public class NormativeAction extends Action implements NormConsequences{
     }
 
     @Override
-    public NormativeAction build(Context context){
-        return new NormativeAction((Action)super.build(context));
+    public NormativeStep build(Context context){
+        return new NormativeStep((Action)super.build(context));
     }
 
     @Override
