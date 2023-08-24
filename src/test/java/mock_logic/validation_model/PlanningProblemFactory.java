@@ -11,7 +11,7 @@ public class PlanningProblemFactory {
                 SituationFactory.mapInitialSituationToContext(),
                 new ArrayList<>(),
                 GoalFactory.haveFoodAndWood() ,
-                OrganizationFactory.agentCountAsProvider_inHousehold()
+                OrganizationFactory.householdOrganizationDetails()
         );
     }
 
@@ -20,7 +20,7 @@ public class PlanningProblemFactory {
                 SituationFactory.mapInitialSituationToContext(),
                 new ArrayList<>(),
                 GoalFactory.haveMoney(),
-                OrganizationFactory.agentCountAsExploiter_inExploitation()
+                OrganizationFactory.exploitationOrganizationDetails()
         );
     }
 
@@ -29,7 +29,7 @@ public class PlanningProblemFactory {
                 SituationFactory.mapInitialSituationToContext(),
                 new ArrayList<>(),
                 GoalFactory.haveFoodWoodMoney(),
-                OrganizationFactory.agentCountAs_providerAndExploiter()
+                OrganizationFactory.allOrganizations()
         );
     }
 }

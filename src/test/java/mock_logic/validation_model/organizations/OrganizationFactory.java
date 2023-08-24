@@ -10,28 +10,28 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class OrganizationFactory {
-    public static List<Organization> agentCountAsProvider_inHousehold() {
+    public static List<Organization> householdOrganizationDetails() {
         return new ArrayList<>(List.of(
                 new Organization(
                         InstitutionFactory.householdInstitution(),
-                        ConstitutiveNormFactory.agentCountAsProvider()
+                        ConstitutiveNormFactory.householdOrganization()
                 )
         ));
     }
 
-    public static List<Organization> agentCountAsExploiter_inExploitation() {
+    public static List<Organization> exploitationOrganizationDetails() {
         return new ArrayList<>(List.of(
                 new Organization(
                         InstitutionFactory.exploitationInstitution(),
-                        ConstitutiveNormFactory.agentCountAsExploiter()
+                        ConstitutiveNormFactory.exploitationOrganization()
                 )
         ));
     }
 
-    public static List<Organization> agentCountAs_providerAndExploiter() {
+    public static List<Organization> allOrganizations() {
         return Stream.concat(
-                agentCountAsProvider_inHousehold().stream(),
-                agentCountAsExploiter_inExploitation().stream()
+                householdOrganizationDetails().stream(),
+                exploitationOrganizationDetails().stream()
         ).collect(Collectors.toList());
     }
 }

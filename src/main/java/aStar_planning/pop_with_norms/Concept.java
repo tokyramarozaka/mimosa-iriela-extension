@@ -5,14 +5,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-@AllArgsConstructor
-@Getter
-@EqualsAndHashCode
-public class Concept {
-    private String name;
-
-    @Override
-    public String toString() {
-        return this.name;
-    }
+public interface Concept {
+    String getName();
 }

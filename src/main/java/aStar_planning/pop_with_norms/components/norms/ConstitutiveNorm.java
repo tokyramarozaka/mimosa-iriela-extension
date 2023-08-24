@@ -11,29 +11,30 @@ import lombok.ToString;
 
 @AllArgsConstructor
 @Getter
-public class ConstitutiveNorm extends Norm {
+public class ConstitutiveNorm extends Norm{
     private Concept source;
     private Role target;
-    @Override
-    public LogicalEntity build(Context context) {
-        return null;
-    }
 
     @Override
     public LogicalEntity copy() {
         return new ConstitutiveNorm(this.source, this.target);
     }
 
-    @Override
-    public String getLabel() {
-        return null;
-    }
 
     @Override
     public String toString() {
         return source + " COUNT AS " + target;
     }
 
+    @Override
+    public String getLabel() {
+        return this.toString();
+    }
+
+    @Override
+    public LogicalEntity build(Context context) {
+        return null;
+    }
 
     @Override
     public boolean isApplied(NormativePlan plan, PopSituation situation) {

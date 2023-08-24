@@ -1,31 +1,56 @@
 package mock_logic.validation_model.norms;
 
+import aStar_planning.pop_with_norms.Concept;
+import aStar_planning.pop_with_norms.components.norms.Role;
+import mock_logic.validation_model.AgentFactory;
+import mock_logic.validation_model.Zones;
 import mock_logic.validation_model.institutions.RoleFactory;
 import aStar_planning.pop_with_norms.components.norms.ConstitutiveNorm;
-import settings.Keywords;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Describes all the constitutive norms of all organizations within the model, namely :
- * <ul>
- *     <li>some Ecology organization</li>
- *     <li>some Household organization</li>
- *     <li>some Northern organization</li>
- *     <li>some Southern organization</li>
- * </ul>
- */
 public class ConstitutiveNormFactory {
-    public static List<ConstitutiveNorm> agentCountAsProvider() {
+    public static ConstitutiveNorm agentCountAsProvider() {
+        return new ConstitutiveNorm(AgentFactory.SELF, RoleFactory.PROVIDER);
+    }
+
+    public static ConstitutiveNorm agentCountAsFarmer() {
+        return new ConstitutiveNorm(AgentFactory.SELF, RoleFactory.FARMER);
+    }
+
+    public static List<ConstitutiveNorm> zonesCountAsSacred(){
         return new ArrayList<>(List.of(
-            new ConstitutiveNorm(Keywords.AGENT_CONCEPT, RoleFactory.PROVIDER)
+            countAs(Zones.C1, RoleFactory.SACRED),
+            countAs(Zones.D1, RoleFactory.SACRED),
+            countAs(Zones.D2, RoleFactory.SACRED)
         ));
     }
 
-    public static List<ConstitutiveNorm> agentCountAsExploiter() {
+    public static List<ConstitutiveNorm> zonesCountAsProtected(){
         return new ArrayList<>(List.of(
-            new ConstitutiveNorm(Keywords.AGENT_CONCEPT, RoleFactory.FARMER)
+                countAs(Zones.A3, RoleFactory.PROTECTED),
+                countAs(Zones.A4, RoleFactory.PROTECTED)
         ));
+    }
+
+    public static List<ConstitutiveNorm> householdOrganization(){
+        List<ConstitutiveNorm> allConstitutiveNorms = new ArrayList<>();
+        allConstitutiveNorms.add(agentCountAsProvider());
+
+        return allConstitutiveNorms;
+    }
+
+    public static List<ConstitutiveNorm> exploitationOrganization(){
+        List<ConstitutiveNorm> allConstitutiveNorms = new ArrayList<>();
+        allConstitutiveNorms.addAll(zonesCountAsProtected());
+        allConstitutiveNorms.addAll(zonesCountAsSacred());
+        allConstitutiveNorms.add(agentCountAsFarmer());
+
+        return allConstitutiveNorms;
+    }
+
+    private static ConstitutiveNorm countAs(Concept source, Role target){
+        return new ConstitutiveNorm(source, target);
     }
 }
