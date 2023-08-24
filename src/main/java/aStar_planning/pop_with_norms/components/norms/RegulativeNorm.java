@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Getter
 public class RegulativeNorm extends Norm {
-    private String name;
     private DeonticOperator deonticOperator;
     private NormConditions normConditions;
     private NormConsequences normConsequences;
@@ -119,7 +118,6 @@ public class RegulativeNorm extends Norm {
     @Override
     public String toString() {
         return new StringBuilder()
-                .append(this.name)
                 .append("(")
                 .append(this.deonticOperator)
                 .append(")")
@@ -133,7 +131,6 @@ public class RegulativeNorm extends Norm {
     @Override
     public LogicalEntity build(Context context) {
         return new RegulativeNorm(
-                this.name,
                 this.deonticOperator,
                 this.normConditions.build(context),
                 this.normConsequences.build(context)
@@ -143,7 +140,6 @@ public class RegulativeNorm extends Norm {
     @Override
     public LogicalEntity copy() {
         return new RegulativeNorm(
-                this.name,
                 this.deonticOperator,
                 new NormConditions(new ArrayList<>(this.normConditions.getConditions())),
                 this.getNormConsequences()
@@ -152,8 +148,6 @@ public class RegulativeNorm extends Norm {
 
     @Override
     public String getLabel() {
-        return this.name;
+        return this.toString();
     }
-
-
 }

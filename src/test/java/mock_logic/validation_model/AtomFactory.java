@@ -12,14 +12,6 @@ public class AtomFactory {
         return new Atom(false, PredicateFactory.haveFood());
     }
 
-    public static Atom inRiver(Term someRiver) {
-        return new Atom(false, PredicateFactory.inRiver(someRiver));
-    }
-
-    public static Atom inForest(Term someForest) {
-        return new Atom(false, PredicateFactory.inForest(someForest));
-    }
-
     public static Atom inZone(Term someZone){
         return new Atom(false, PredicateFactory.inZone(someZone));
     }

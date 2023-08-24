@@ -1,11 +1,10 @@
 package mock_logic.validation_model.norms;
 
-import mock_logic.validation_model.organizations.RoleFactory;
+import mock_logic.validation_model.institutions.RoleFactory;
 import aStar_planning.pop_with_norms.components.norms.ConstitutiveNorm;
 import settings.Keywords;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -26,7 +25,7 @@ public class ConstitutiveNormFactory {
 
     public static List<ConstitutiveNorm> agentCountAsExploiter() {
         return new ArrayList<>(List.of(
-            new ConstitutiveNorm(Keywords.AGENT_CONCEPT, RoleFactory.EXPLOITER)
+            new ConstitutiveNorm(Keywords.AGENT_CONCEPT, RoleFactory.FARMER)
         ));
     }
 }

@@ -1,16 +1,13 @@
 package aStar_planning.pop_with_norms.components.norms;
 
 import aStar_planning.pop_with_norms.utils.NormsPerRole;
-import com.sun.source.tree.ReturnTree;
 import logic.Action;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Getter
@@ -26,7 +23,7 @@ public class Institution {
                     .filter(normsPerRole -> role.getName().equals(normsPerRole.getRole().getName()))
                     .findFirst()
                     .get()
-                    .getRegulativeNorms();
+                    .getNorms();
         }catch (NoSuchElementException e){
             return new ArrayList<>();
         }

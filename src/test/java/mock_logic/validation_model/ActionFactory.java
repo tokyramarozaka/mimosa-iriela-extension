@@ -99,13 +99,12 @@ public class ActionFactory {
                 new ActionConsequence()
         );
     }
+
     public static List<Action> allActionsInExploitation() {
-        return List.of(dummyAction(), cut(), fish(), getLicense(), move());
+        return List.of(dummyAction(), cut(), fish(), getLicense());
     }
 
     public static List<Action> allActionsInHousehold() {
-        return List.of(
-           dummyAction(), fish(), move(), cut()
-        );
+        return List.of(move());
     }
 }

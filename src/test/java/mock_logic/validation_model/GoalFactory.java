@@ -3,9 +3,14 @@ package mock_logic.validation_model;
 import logic.Context;
 import logic.Goal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GoalFactory {
+    public static Goal empty(){
+        return new Goal(new Context(), new ArrayList<>());
+    }
+
     public static Goal haveFoodAndWood() {
         return new Goal(new Context(), List.of(
                 AtomFactory.haveWood(),

@@ -14,14 +14,6 @@ public class PredicateFactory {
         return new Predicate("haveWood", new ArrayList<>());
     }
 
-    public static Predicate inForest(Term someForest) {
-        return new Predicate("inForest", List.of(someForest));
-    }
-
-    public static Predicate inRiver(Term someRiver){
-        return new Predicate("inRiver", List.of(someRiver));
-    }
-
     public static Predicate inZone(Term someZone) {
         return new Predicate("inZone", List.of(someZone));
     }

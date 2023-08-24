@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ZonesConfiguration {
-    public static List<Predicate> configurationOne() {
+    public static List<Predicate> topologyOne() {
         return new ArrayList<>(List.of(
                 // Description of each zone
                 // Row A : first top row of the map

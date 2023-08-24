@@ -6,13 +6,14 @@ import logic.mappers.SituationMapper;
 import java.util.List;
 
 public class SituationFactory {
-    public static Situation startsAtA1_withZoneConfigurationOne(){
-        List<Predicate> predicateList = ZonesConfiguration.configurationOne();
-
+    public static planning.Situation getInitialSituation(){
+        List<Predicate> predicateList = ZonesConfiguration.topologyOne();
         predicateList.add(PredicateFactory.inZone(Zones.A1));
 
-        planning.Situation externalSituation = new planning.Situation(predicateList);
+        return new planning.Situation(predicateList);
+    }
 
-        return SituationMapper.convertToInternal(externalSituation);
+    public static Situation mapInitialSituationToContext(){
+        return SituationMapper.convertToInternal(getInitialSituation());
     }
 }

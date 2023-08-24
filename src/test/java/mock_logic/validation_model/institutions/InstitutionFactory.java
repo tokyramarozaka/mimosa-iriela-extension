@@ -25,8 +25,9 @@ public class InstitutionFactory {
     }
 
     public static Institution exploitationInstitution(){
-        List<NormsPerRole> normsPerRoles = new ArrayList<>();
+        List<NormsPerRole> normsPerRoles = NormsPerRoleFactory.forExploitation_Farmer();
         List<Action> exploitationActions = ActionFactory.allActionsInExploitation();
         return new Institution("EXPLOITATION", normsPerRoles, exploitationActions, 7);
     }
 }
+

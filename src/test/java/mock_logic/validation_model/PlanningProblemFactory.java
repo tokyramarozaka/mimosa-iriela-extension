@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class PlanningProblemFactory {
     public static NormativePopPlanningProblem haveFoodAndWood_asProvider(){
         return new NormativePopPlanningProblem(
-                SituationFactory.startsAtA1_withZoneConfigurationOne(),
+                SituationFactory.mapInitialSituationToContext(),
                 new ArrayList<>(),
                 GoalFactory.haveFoodAndWood() ,
                 OrganizationFactory.agentCountAsProvider_inHousehold()
@@ -17,7 +17,7 @@ public class PlanningProblemFactory {
 
     public static NormativePopPlanningProblem haveMoney_asExploiter(){
         return new NormativePopPlanningProblem(
-                SituationFactory.startsAtA1_withZoneConfigurationOne(),
+                SituationFactory.mapInitialSituationToContext(),
                 new ArrayList<>(),
                 GoalFactory.haveMoney(),
                 OrganizationFactory.agentCountAsExploiter_inExploitation()
@@ -26,7 +26,7 @@ public class PlanningProblemFactory {
 
     public static NormativePopPlanningProblem haveFoodCoalMoney_asProvider_asExploiter(){
         return new NormativePopPlanningProblem(
-                SituationFactory.startsAtA1_withZoneConfigurationOne(),
+                SituationFactory.mapInitialSituationToContext(),
                 new ArrayList<>(),
                 GoalFactory.haveFoodWoodMoney(),
                 OrganizationFactory.agentCountAs_providerAndExploiter()

@@ -1,11 +1,9 @@
 package aStar_planning.pop_with_norms.utils;
 
 import aStar_planning.pop_with_norms.components.norms.Norm;
-import aStar_planning.pop_with_norms.components.norms.RegulativeNorm;
 import aStar_planning.pop_with_norms.components.norms.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
 
 import java.util.List;
 
@@ -16,7 +14,7 @@ import java.util.List;
 @Getter
 public class NormsPerRole {
     private Role role;
-    private List<RegulativeNorm> regulativeNorms;
+    private List<Norm> norms;
 
     @Override
     public String toString() {
@@ -27,7 +25,7 @@ public class NormsPerRole {
                 .append(this.role)
                 .append("NORMS :");
 
-        this.regulativeNorms.forEach(regulativeNorm -> stringBuilder
+        this.norms.forEach(regulativeNorm -> stringBuilder
                 .append("\n\t\t- ")
                 .append(regulativeNorm));
 
