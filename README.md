@@ -1,4 +1,4 @@
-# 🖋 Theoric background
+# 🖋 Overview
 
 This extension aims to allow agent-based models to account for norms. During plan generation, agents must be able to represent and reason about norms. The end-goal is to be able to describe a planning problem with norms endowed by its organizations through the various roles that the agent must fulfill, and see how it affects its plans. 
 
