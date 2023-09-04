@@ -54,7 +54,7 @@ Using a simple, but verbose Kotlin-like syntax, all the institutions inside of t
 
 # 👁‍🗨 Syntax overview
 
-To showcase a better grasp of how a planning problem might look like through out upcoming Domain-Specific Language (DSL) which allow to craft such planning problems, here is a snippet of the whole planning problem, including all those who acuquire roles and the norms from the aformentionned institutions.
+To showcase a better grasp of how a planning problem might look like through our upcoming Domain-Specific Language (DSL) which allow to craft such planning problems, here is a snippet of the whole planning problem, including all those who acuquire roles and the norms from the aformentionned institutions.
 
 ![alt text](https://github.com/tokyramarozaka/mimosa-iriela-extension/blob/master/iriela-planning-problem.png)
 
