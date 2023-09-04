@@ -1,5 +1,6 @@
 package logic;
 
+import aStar_planning.pop_with_norms.components.norms.NormConsequences;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -21,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @EqualsAndHashCode
-public class Action extends LogicalEntity {
+public class Action extends LogicalEntity implements NormConsequences {
     private final Logger logger = LogManager.getLogger(Action.class);
     private String name;
     private ActionPrecondition preconditions;

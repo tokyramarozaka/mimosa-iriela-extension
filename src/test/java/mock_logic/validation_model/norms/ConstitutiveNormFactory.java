@@ -4,13 +4,26 @@ import aStar_planning.pop_with_norms.Concept;
 import aStar_planning.pop_with_norms.components.norms.Role;
 import mock_logic.validation_model.AgentFactory;
 import mock_logic.validation_model.Zones;
-import mock_logic.validation_model.institutions.RoleFactory;
+import mock_logic.validation_model.institutions.village.RoleFactory;
 import aStar_planning.pop_with_norms.components.norms.ConstitutiveNorm;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ConstitutiveNormFactory {
+    public static List<ConstitutiveNorm> exploitationOrganization(){
+        List<ConstitutiveNorm> allConstitutiveNorms = new ArrayList<>();
+        allConstitutiveNorms.addAll(zonesCountAsProtected());
+        allConstitutiveNorms.addAll(zonesCountAsSacred());
+        allConstitutiveNorms.add(agentCountAsFarmer());
+
+        return allConstitutiveNorms;
+    }
+
+    private static ConstitutiveNorm countAs(Concept source, Role target){
+        return new ConstitutiveNorm(source, target);
+    }
+
     public static ConstitutiveNorm agentCountAsProvider() {
         return new ConstitutiveNorm(AgentFactory.SELF, RoleFactory.PROVIDER);
     }
@@ -41,16 +54,4 @@ public class ConstitutiveNormFactory {
         return allConstitutiveNorms;
     }
 
-    public static List<ConstitutiveNorm> exploitationOrganization(){
-        List<ConstitutiveNorm> allConstitutiveNorms = new ArrayList<>();
-        allConstitutiveNorms.addAll(zonesCountAsProtected());
-        allConstitutiveNorms.addAll(zonesCountAsSacred());
-        allConstitutiveNorms.add(agentCountAsFarmer());
-
-        return allConstitutiveNorms;
-    }
-
-    private static ConstitutiveNorm countAs(Concept source, Role target){
-        return new ConstitutiveNorm(source, target);
-    }
 }

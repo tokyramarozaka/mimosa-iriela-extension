@@ -1,15 +1,15 @@
 package aStar_planning.pop_with_norms.components.norms;
 
+import logic.Constant;
+import logic.Term;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 @AllArgsConstructor
 @Getter
-public class Role {
-    private String name;
+@ToString
+public class Role{
+    private Constant name;
 
-    @Override
-    public String toString() {
-        return this.name;
-    }
 }

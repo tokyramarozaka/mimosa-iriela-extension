@@ -123,8 +123,7 @@ public class Predicate implements Unifiable {
     public Unifiable build(Context context) {
         return new Predicate(
                 this.name,
-                this.terms
-                        .stream()
+                this.terms.stream()
                         .map(term -> (Term) term.build(context))
                         .toList()
         );
@@ -143,7 +142,7 @@ public class Predicate implements Unifiable {
                 .append(this.name)
                 .append("(");
 
-        Integer termsCount = 0;
+        int termsCount = 0;
         for (Term term : distinctTerms) {
             stringBuilder.append(term);
             if (termsCount++ < distinctTerms.size() - 1) {

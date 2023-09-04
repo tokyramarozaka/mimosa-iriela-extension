@@ -1,5 +1,6 @@
 package logic;
 
+import aStar_planning.pop_with_norms.components.norms.NormConsequences;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,7 +18,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @EqualsAndHashCode
-public class Atom {
+public class Atom implements NormConsequences {
     private boolean negation;
     private Predicate predicate;
 

@@ -23,6 +23,7 @@ public class RegulativeNorm extends Norm {
     private DeonticOperator deonticOperator;
     private NormConditions normConditions;
     private NormConsequences normConsequences;
+
     private final static Logger logger = LogManager.getLogger(RegulativeNorm.class);
 
     /**

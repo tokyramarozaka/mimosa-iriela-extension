@@ -8,6 +8,7 @@ import aStar_planning.pop_with_norms.components.norms.RegulativeNorm;
 import aStar_planning.pop_with_norms.components.norms.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.sql.Array;
 import java.util.ArrayList;
@@ -15,22 +16,9 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter
+@ToString
 public class Organization {
-    private Institution institution;
     private List<ConstitutiveNorm> constitutiveNorms;
-
-    public List<RegulativeNorm> getRegulativeNormsByConcept(Concept concept) {
-        List<RegulativeNorm> regulativeNorms = new ArrayList<>();
-
-        this.constitutiveNorms.stream()
-                .filter(constitutiveNorm -> constitutiveNorm.getSource().equals(concept))
-                .forEach(constitutiveNorm -> {
-                    Role playedRole = constitutiveNorm.getTarget();
-                    regulativeNorms.addAll(this.getInstitution().getNormsForRole(playedRole));
-                });
-
-        return regulativeNorms;
-    }
 
     /**
      * Checks if some concept plays a role in this current organization
@@ -43,12 +31,4 @@ public class Organization {
                 .anyMatch(constitutiveNorm -> someConcept.equals(constitutiveNorm.getSource()));
     }
 
-    @Override
-    public String toString() {
-        return this.institution+
-                "\nORGANIZATION\n\t" +
-                this.getConstitutiveNorms() +
-                " IN " +
-                this.getInstitution().getName();
-    }
 }

@@ -12,12 +12,10 @@ public class NormativeProposition extends ContextualAtom implements NormConseque
         super(context, atom);
     }
 
-    @Override
     public boolean isApplied(NormativePlan plan, PopSituation situation, CodenotationConstraints cc) {
         return plan.isAsserted(new ContextualAtom(this.getContext(), this.getAtom()), situation,cc);
     }
 
-    @Override
     public NormConsequences build(Context context) {
         return new NormativeProposition(this.getContext(), this.getAtom().build(context));
     }
