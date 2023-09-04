@@ -1,25 +1,3 @@
-# 🔎 Overview
-This extension aims to allow agent-based models to account for norms. During plan generation, agents must be able to represent and reason about norms. The end-goal is to be able to describe a planning problem with norms endowed by its organizations through the various roles that the agent must fulfill, and see how it affects its plans. 
-
-A few good lectures on how automated planning works and its core concepts :
-`Weld, D. S. (2011). AAAI-10 classic paper award: systematic nonlinear planning a commentary. AI Magazine, 32(1), 101-101.`
-
-`Chapman, D. (1987). Planning for conjunctive goals. Artificial intelligence, 32(3), 333-377.`
-
-`McAllester, D., & Rosenblatt, D. (1991). Systematic nonlinear planning.`
-
-# ⚙ Tools
-
-This extension requires the following tools : 
-
-`Java 11 or higher`
-
-`Maven`
-
-`Lombok`
-
-`JUnit 5`
-
 # 🖋 Theoric background
 
 The tool is based upon the Partial-Order Planner (POP), which refines a plan until it becomes executable and fulfill all the agent's goals. We start off by having a plan with just the initial and final situation, which will be improved by resolving its "flaws". In addition to the standard types of flaws, we propose three other types of flaws relative to regulativeNorms, and their resolvers.
