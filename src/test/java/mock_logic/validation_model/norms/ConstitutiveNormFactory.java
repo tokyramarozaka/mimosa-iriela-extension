@@ -1,6 +1,6 @@
 package mock_logic.validation_model.norms;
 
-import aStar_planning.pop_with_norms.Concept;
+import aStar_planning.pop_with_norms.concepts.Concept;
 import aStar_planning.pop_with_norms.components.norms.Role;
 import mock_logic.validation_model.AgentFactory;
 import mock_logic.validation_model.Zones;

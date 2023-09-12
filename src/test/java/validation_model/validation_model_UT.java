@@ -5,7 +5,7 @@ import aStar_planning.pop.components.Flaw;
 import aStar_planning.pop_with_norms.NormativePopPlanningProblem;
 import aStar_planning.pop_with_norms.components.NormativeFlaw;
 import aStar_planning.pop_with_norms.components.NormativePlan;
-import aStar_planning.pop_with_norms.components.Organization;
+import aStar_planning.pop_with_norms.components.norms.Organization;
 import aStar_planning.pop_with_norms.components.norms.DeonticOperator;
 import mock_logic.validation_model.PlanningProblemFactory;
 import org.apache.logging.log4j.LogManager;

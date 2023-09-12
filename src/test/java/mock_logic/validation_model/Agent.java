@@ -1,7 +1,6 @@
 package mock_logic.validation_model;
 
-import aStar_planning.pop_with_norms.Concept;
-import logic.Constant;
+import aStar_planning.pop_with_norms.concepts.Concept;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

@@ -1,15 +1,12 @@
 package aStar_planning.pop_with_norms.components.norms;
 
 import aStar_planning.pop.components.PopSituation;
-import aStar_planning.pop_with_norms.Concept;
 import aStar_planning.pop_with_norms.components.NormativePlan;
 import logic.Constant;
 import logic.Context;
 import logic.LogicalEntity;
 import logic.Predicate;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
 
 import java.util.List;
 

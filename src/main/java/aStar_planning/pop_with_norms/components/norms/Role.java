@@ -6,10 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-@AllArgsConstructor
 @Getter
 @ToString
-public class Role{
-    private Constant name;
-
+public class Role extends Constant{
+    public Role(String name) {
+        super(name);
+    }
 }

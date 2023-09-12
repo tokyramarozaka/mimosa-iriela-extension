@@ -35,7 +35,7 @@ public class NormativeAction extends Action implements NormConsequences{
         super(action.getName(), action.getPreconditions(), action.getConsequences());
     }
 
-    @Override
+ 
     public boolean isApplied(
             NormativePlan plan,
             PopSituation situation,

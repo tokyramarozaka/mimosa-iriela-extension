@@ -10,6 +10,7 @@ import aStar_planning.pop.components.PlanModification;
 import aStar_planning.pop.components.Threat;
 import aStar_planning.pop_with_norms.components.norms.DeonticOperator;
 import aStar_planning.pop_with_norms.components.norms.NormativeAction;
+import aStar_planning.pop_with_norms.components.norms.Organization;
 import aStar_planning.pop_with_norms.components.norms.RegulativeNorm;
 import aStar_planning.pop_with_norms.resolvers.MissingObligationResolver;
 import aStar_planning.pop_with_norms.resolvers.MissingProhibitionResolver;
@@ -36,8 +37,6 @@ import java.util.stream.Collectors;
 @Getter
 public class NormativePlan extends Plan {
     private final static Logger logger = LogManager.getLogger(NormativePlan.class);
-    private final List<Organization> organizations;
-    private final List<NormsPerInterval> normsPerIntervals;
     private List<Organization> activeOrganizations;
 
     public NormativePlan(
@@ -49,9 +48,7 @@ public class NormativePlan extends Plan {
             List<NormsPerInterval> normsPerIntervals
     ) {
         super(situations, steps, cc, tc);
-        this.organizations = organizations;
         this.evaluateActiveOrganizations();
-        this.normsPerIntervals = normsPerIntervals;
         this.evaluateNormativeFlaws();
     }
 
@@ -61,9 +58,7 @@ public class NormativePlan extends Plan {
             List<NormsPerInterval> normsPerIntervals
     ) {
         super(plan.getSituations(), plan.getSteps(), plan.getCc(), plan.getTc());
-        this.organizations = organizations;
         this.evaluateActiveOrganizations();
-        this.normsPerIntervals = normsPerIntervals;
         this.evaluateNormativeFlaws();
     }
 

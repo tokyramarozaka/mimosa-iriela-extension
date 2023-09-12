@@ -10,7 +10,7 @@ import logic.Goal;
 import logic.Situation;
 import lombok.Getter;
 import lombok.ToString;
-import aStar_planning.pop_with_norms.components.Organization;
+import aStar_planning.pop_with_norms.components.norms.Organization;
 
 import java.util.ArrayList;
 import java.util.List;

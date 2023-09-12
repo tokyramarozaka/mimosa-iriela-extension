@@ -1,4 +1,4 @@
-package aStar_planning.pop_with_norms;
+package aStar_planning.pop_with_norms.concepts;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
