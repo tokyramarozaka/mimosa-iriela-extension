@@ -1,6 +1,5 @@
-package aStar_planning.pop_with_norms.components.norms;
+package aStar_planning.pop_with_norms.components;
 
-import aStar_planning.pop_with_norms.concepts.Concept;
 import logic.Predicate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

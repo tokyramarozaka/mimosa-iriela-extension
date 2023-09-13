@@ -1,37 +1,31 @@
-package aStar_planning.pop_with_norms.components.norms;
+package aStar_planning.pop_with_norms.components;
 
 import aStar_planning.pop.components.PopSituation;
-import aStar_planning.pop_with_norms.components.NormativePlan;
 import logic.Constant;
 import logic.Context;
 import logic.LogicalEntity;
-import logic.Predicate;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 public class ConstitutiveNorm extends Norm{
-    private final Predicate predicate;
-    private final Constant concept;
-    private final Constant role;
+    private final Constant source;
+    private final Constant target;
 
     public ConstitutiveNorm(Constant source, Constant target) {
-        this.concept = source;
-        this.role = target;
-        this.predicate = new Predicate("is", List.of(this.concept, this.role));
+        this.source = source;
+        this.target = target;
     }
 
 
     @Override
     public LogicalEntity copy() {
-        return new ConstitutiveNorm(this.concept, this.role);
+        return new ConstitutiveNorm(this.source, this.target);
     }
 
 
     @Override
     public String toString() {
-        return concept + " COUNT AS " + role;
+        return source + " COUNT AS " + target;
     }
 
     @Override

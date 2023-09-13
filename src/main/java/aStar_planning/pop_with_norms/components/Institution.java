@@ -1,6 +1,5 @@
-package aStar_planning.pop_with_norms.components.norms;
+package aStar_planning.pop_with_norms.components;
 
-import aStar_planning.pop_with_norms.utils.NormsPerRole;
 import logic.Action;
 import logic.Constant;
 import logic.Predicate;
@@ -8,9 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @AllArgsConstructor
 @Getter

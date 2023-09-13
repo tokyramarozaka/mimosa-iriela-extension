@@ -1,8 +1,8 @@
 package aStar_planning.pop_with_norms.utils;
 
-import aStar_planning.pop_with_norms.components.norms.ConstitutiveNorm;
-import aStar_planning.pop_with_norms.components.norms.Norm;
-import aStar_planning.pop_with_norms.components.norms.RegulativeNorm;
+import aStar_planning.pop_with_norms.components.ConstitutiveNorm;
+import aStar_planning.pop_with_norms.components.Norm;
+import aStar_planning.pop_with_norms.components.RegulativeNorm;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;

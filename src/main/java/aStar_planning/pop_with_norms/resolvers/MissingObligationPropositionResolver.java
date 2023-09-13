@@ -5,7 +5,7 @@ import aStar_planning.pop.components.OpenCondition;
 import aStar_planning.pop.resolvers.OpenConditionResolver;
 import aStar_planning.pop_with_norms.components.NormativeFlaw;
 import aStar_planning.pop_with_norms.components.NormativePlan;
-import aStar_planning.pop_with_norms.components.norms.NormativeProposition;
+import aStar_planning.pop_with_norms.components.NormativeProposition;
 import logic.Action;
 import logic.ContextualAtom;
 

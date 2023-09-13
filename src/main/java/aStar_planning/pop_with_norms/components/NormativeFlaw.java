@@ -1,10 +1,7 @@
 package aStar_planning.pop_with_norms.components;
 
 import aStar_planning.pop.components.PopSituation;
-import aStar_planning.pop_with_norms.components.norms.RegulativeNorm;
 import aStar_planning.pop.components.Flaw;
-import aStar_planning.pop_with_norms.resolvers.MissingProhibitionActionResolver;
-import constraints.CodenotationConstraints;
 import exception.UnapplicableNormException;
 import logic.Context;
 import lombok.AllArgsConstructor;
@@ -13,7 +10,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Getter

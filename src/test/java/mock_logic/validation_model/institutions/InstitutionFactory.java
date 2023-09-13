@@ -1,11 +1,10 @@
 package mock_logic.validation_model.institutions;
 
-import aStar_planning.pop_with_norms.components.norms.Institution;
+import aStar_planning.pop_with_norms.components.Institution;
 import aStar_planning.pop_with_norms.utils.NormsPerRole;
 import logic.Action;
 import mock_logic.validation_model.ActionFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

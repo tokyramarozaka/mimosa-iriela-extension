@@ -1,11 +1,9 @@
 package logic;
 
-import aStar_planning.pop_with_norms.components.norms.NormConsequences;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
  * An atom is a precondition which can be either an affirmation or a negation. It requires :
@@ -18,7 +16,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @EqualsAndHashCode
-public class Atom implements NormConsequences {
+public class Atom {
     private boolean negation;
     private Predicate predicate;
 

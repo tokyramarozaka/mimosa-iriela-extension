@@ -6,11 +6,8 @@ import lombok.Getter;
 
 @Getter
 public class ActionName extends Constant {
-    private Action action;
-
-    public ActionName(String name, Action action) {
+    public ActionName(String name) {
         super(name);
-        this.action = action;
     }
 
     @Override

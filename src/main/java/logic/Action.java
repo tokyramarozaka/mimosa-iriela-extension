@@ -1,6 +1,6 @@
 package logic;
 
-import aStar_planning.pop_with_norms.components.norms.NormConsequences;
+import aStar_planning.pop_with_norms.components.NormConsequences;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -8,7 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 /**

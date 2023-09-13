@@ -1,12 +1,11 @@
 package logic;
 
+import aStar_planning.pop_with_norms.components.NormConsequences;
 import constraints.CodenotationConstraints;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @EqualsAndHashCode
-public class Predicate implements Unifiable {
+public class Predicate implements Unifiable, NormConsequences {
     private String name;
     private List<Term> terms;
 
