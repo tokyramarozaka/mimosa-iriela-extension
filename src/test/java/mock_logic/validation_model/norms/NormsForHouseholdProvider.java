@@ -7,7 +7,6 @@ import aStar_planning.pop_with_norms.components.NormConsequences;
 import aStar_planning.pop_with_norms.components.NormativeProposition;
 import aStar_planning.pop_with_norms.components.RegulativeNorm;
 import logic.Context;
-import mock_logic.validation_model.AtomFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;

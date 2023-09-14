@@ -1,6 +1,7 @@
 package logic;
 
 import aStar_planning.pop_with_norms.components.NormConsequences;
+import aStar_planning.pop_with_norms.concepts.ActionName;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -23,7 +24,7 @@ import java.util.List;
 @EqualsAndHashCode
 public class Action extends LogicalEntity implements NormConsequences {
     private final Logger logger = LogManager.getLogger(Action.class);
-    private String name;
+    private ActionName name;
     private ActionPrecondition preconditions;
     private ActionConsequence consequences;
 
@@ -107,7 +108,7 @@ public class Action extends LogicalEntity implements NormConsequences {
 
     @Override
     public String getLabel() {
-        return this.getName();
+        return this.name.toString();
     }
 
     @Override
