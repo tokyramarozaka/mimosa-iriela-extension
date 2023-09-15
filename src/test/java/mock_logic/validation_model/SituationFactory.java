@@ -3,6 +3,8 @@ package mock_logic.validation_model;
 import logic.Predicate;
 import logic.Situation;
 import logic.mappers.SituationMapper;
+import mock_logic.validation_model.constants.Zones;
+
 import java.util.List;
 
 public class SituationFactory {

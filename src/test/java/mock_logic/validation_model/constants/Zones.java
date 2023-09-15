@@ -1,13 +1,9 @@
-package mock_logic.validation_model;
+package mock_logic.validation_model.constants;
 
 import logic.Constant;
 import logic.Variable;
 
 public class Zones {
-    public static Variable Z1 = new Variable("Z1");
-    public static Variable Z2 = new Variable("Z2");
-    public static Variable Z3 = new Variable("Z3");
-
     public static Constant A1 = new Constant("A1");
     public static Constant A2 = new Constant("A2");
     public static Constant A3 = new Constant("A3");

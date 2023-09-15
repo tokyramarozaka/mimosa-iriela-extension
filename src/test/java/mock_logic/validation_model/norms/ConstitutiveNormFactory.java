@@ -1,7 +1,7 @@
 package mock_logic.validation_model.norms;
 
 import mock_logic.validation_model.AgentFactory;
-import mock_logic.validation_model.Zones;
+import mock_logic.validation_model.constants.Zones;
 import mock_logic.validation_model.institutions.Village;
 import aStar_planning.pop_with_norms.components.ConstitutiveNorm;
 
