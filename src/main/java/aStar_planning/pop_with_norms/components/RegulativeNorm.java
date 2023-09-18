@@ -52,7 +52,7 @@ public class RegulativeNorm extends Norm {
      * PROHIBITION, PERMISSION.
      * @return true if the given step actually satisfies the normative action, false otherwise.
      */
-    public boolean isSatisfiedIn(NormativePlan plan, PopSituation situation){
+    public boolean isSatisfiedIn(OrganizationalPlan plan, PopSituation situation){
         plan.removeRedundantTemporalConstraints();
         try {
             CodenotationConstraints applicableCodenotations = this.getNormConditions()
@@ -75,11 +75,12 @@ public class RegulativeNorm extends Norm {
      * applicable.
      */
     public CodenotationConstraints getApplicableCodenotations (
-            NormativePlan plan,
+            OrganizationalPlan plan,
             PopSituation situation
     ) throws UnapplicableNormException{
         return this.getNormConditions().getApplicableCodenotations(plan, situation);
     }
+
 
     /**
      * Checks if the norm is being applied in a given situation of a given plan.
@@ -87,8 +88,7 @@ public class RegulativeNorm extends Norm {
      * @param situation : the situation we want to verify it in
      * @return true if the norm is applied, and false otherwise.
      */
-    @Override
-    public boolean isApplied(NormativePlan plan, PopSituation situation) {
+    public boolean isApplied(OrganizationalPlan plan, PopSituation situation) {
         List<PlanElement> allFollowingElements = plan.getSteps().stream()
                 .filter(step -> plan.getTc().isBefore(situation, step))
                 .collect(Collectors.toList());
@@ -117,15 +117,13 @@ public class RegulativeNorm extends Norm {
 
     @Override
     public String toString() {
-        return new StringBuilder()
-                .append("(")
-                .append(this.deonticOperator)
-                .append(")")
-                .append(" : ")
-                .append(this.normConditions)
-                .append(" -> ")
-                .append(this.normConsequences)
-                .toString();
+        return "(" +
+                this.deonticOperator +
+                ")" +
+                " : " +
+                this.normConditions +
+                " -> " +
+                this.normConsequences;
     }
 
     @Override
@@ -133,7 +131,7 @@ public class RegulativeNorm extends Norm {
         return new RegulativeNorm(
                 this.deonticOperator,
                 this.normConditions.build(context),
-                this.normConsequences.build(context)
+                this.normConsequences.buildConsequence(context)
         );
     }
 

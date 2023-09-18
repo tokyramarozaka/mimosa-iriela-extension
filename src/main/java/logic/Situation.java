@@ -71,7 +71,7 @@ public class Situation implements State {
             }
             if (!wasNegated) {
                 toAdd.add(new ContextualPredicate(
-                        new Context(), (Predicate) belief.getPredicate().build(belief.getContext())));
+                        new Context(), (Predicate) belief.getPredicate().buildConsequence(belief.getContext())));
             }
         }
 
@@ -92,7 +92,7 @@ public class Situation implements State {
             for (ContextualPredicate belief : this.getContextualPredicates()) {
                 if (belief.getPredicate().unify(
                         belief.getContext(), goalProposition.getPredicate()
-                                .build(goal.getGoalContext()), stateContext
+                                .buildConsequence(goal.getGoalContext()), stateContext
                 )) {
                     accomplished++;
                     break;
@@ -122,7 +122,7 @@ public class Situation implements State {
 
         this.contextualPredicates.forEach(contextualPredicate -> {
             stringBuilder.append(
-                    contextualPredicate.getPredicate().build(contextualPredicate.getContext())
+                    contextualPredicate.getPredicate().buildConsequence(contextualPredicate.getContext())
             );
             if (i.getAndIncrement() < this.contextualPredicates.size() - 1) {
                 stringBuilder.append(" , ");

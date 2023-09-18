@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class NormativeFlaw implements Flaw {
-    private NormativePlan plan;
+    private OrganizationalPlan plan;
     private RegulativeNorm flawedNorm;
     private PopSituation applicableSituation;
     private Context context;

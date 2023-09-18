@@ -5,7 +5,7 @@ import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop.components.Step;
 import aStar_planning.pop.mapper.PlanModificationMapper;
 import aStar_planning.pop_with_norms.components.NormativeFlaw;
-import aStar_planning.pop_with_norms.components.NormativePlan;
+import aStar_planning.pop_with_norms.components.OrganizationalPlan;
 import constraints.PartialOrder;
 import constraints.TemporalConstraints;
 import logic.Action;
@@ -22,7 +22,7 @@ public class MissingProhibitionActionResolver {
             MissingProhibitionActionResolver.class
     );
 
-    public static List<PlanModification> byPromotion(NormativePlan plan, NormativeFlaw flaw){
+    public static List<PlanModification> byPromotion(OrganizationalPlan plan, NormativeFlaw flaw){
         Step targetStep = getStep(flaw);
 
         Optional<Step> forbiddenStep = getForbiddenStepFromPlan(plan, flaw, targetStep);
@@ -41,7 +41,7 @@ public class MissingProhibitionActionResolver {
 
 
 
-    public static List<PlanModification> byDemotion(NormativePlan plan, NormativeFlaw flaw){
+    public static List<PlanModification> byDemotion(OrganizationalPlan plan, NormativeFlaw flaw){
         PopSituation inapplicableSituation = flaw.getInapplicableSituationAfter(
                 flaw.getApplicableSituation()
         );
@@ -65,7 +65,7 @@ public class MissingProhibitionActionResolver {
     }
 
     private static Optional<Step> getForbiddenStepFromPlan(
-            NormativePlan plan,
+            OrganizationalPlan plan,
             NormativeFlaw flaw,
             Step targetStep
     ){

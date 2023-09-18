@@ -119,7 +119,7 @@ public class Predicate implements Unifiable, NormConsequences {
     }
 
     @Override
-    public Unifiable build(Context context) {
+    public Unifiable buildConsequence(Context context) {
         return new Predicate(
                 this.name,
                 this.terms.stream()

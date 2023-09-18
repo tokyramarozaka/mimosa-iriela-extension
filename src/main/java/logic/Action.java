@@ -75,7 +75,7 @@ public class Action extends LogicalEntity implements NormConsequences {
 
                 for (ContextualPredicate belief : beliefs.getContextualPredicates()) {
                     if (condition.getPredicate().unify(
-                            context, belief.getPredicate().build(belief.getContext()), stateContext
+                            context, belief.getPredicate().buildConsequence(belief.getContext()), stateContext
                     )) {
                         if (unified_once) {
                             contextsToAdd.add(context);
@@ -99,6 +99,11 @@ public class Action extends LogicalEntity implements NormConsequences {
     public LogicalEntity build(Context context) {
         return new Action(this.name, this.preconditions.build(context),
                 this.consequences.build(context));
+    }
+
+    @Override
+    public NormConsequences buildConsequences(Context context){
+        return (Action) this.build(context);
     }
 
     @Override

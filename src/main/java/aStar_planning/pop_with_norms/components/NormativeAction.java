@@ -3,6 +3,7 @@ package aStar_planning.pop_with_norms.components;
 import aStar_planning.pop.components.PlanElement;
 import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop.components.Step;
+import aStar_planning.pop_with_norms.concepts.ActionName;
 import constraints.CodenotationConstraints;
 import logic.Action;
 import logic.ActionConsequence;
@@ -19,11 +20,11 @@ public class NormativeAction extends Action implements NormConsequences{
     private final static Logger logger = LogManager.getLogger(NormativeAction.class);
 
     public NormativeAction(
-            String name,
+            ActionName actionName,
             ActionPrecondition preconditions,
             ActionConsequence consequences
     ){
-        super(name, preconditions, consequences);
+        super(actionName, preconditions, consequences);
     }
 
     /**
@@ -36,7 +37,7 @@ public class NormativeAction extends Action implements NormConsequences{
 
  
     public boolean isApplied(
-            NormativePlan plan,
+            OrganizationalPlan plan,
             PopSituation situation,
             CodenotationConstraints cc
     ){

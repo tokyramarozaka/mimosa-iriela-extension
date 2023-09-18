@@ -4,7 +4,7 @@ import aStar.Operator;
 import aStar_planning.pop.components.OpenCondition;
 import aStar_planning.pop.resolvers.OpenConditionResolver;
 import aStar_planning.pop_with_norms.components.NormativeFlaw;
-import aStar_planning.pop_with_norms.components.NormativePlan;
+import aStar_planning.pop_with_norms.components.OrganizationalPlan;
 import constraints.CodenotationConstraints;
 import logic.Action;
 import logic.Atom;
@@ -15,14 +15,14 @@ import java.util.List;
 
 public class CircumventionOperator {
     public static List<Operator> circumvent(
-            NormativePlan plan,
+            OrganizationalPlan plan,
             NormativeFlaw flaw,
             List<Action> possibleActions
     ) {
         List<Operator> operators = new ArrayList<>();
 
         flaw.getFlawedNorm().getNormConditions().getConditions().forEach(condition -> {
-            NormativePlan applicablePlan = getApplicablePlan(plan, flaw);
+            OrganizationalPlan applicablePlan = getApplicablePlan(plan, flaw);
 
             OpenCondition toSolve = createReverseOpenCondition(
                     plan, flaw, possibleActions, condition
@@ -43,18 +43,17 @@ public class CircumventionOperator {
      * @param flaw : the normative flaw to solve
      * @return a temporary plan where the condition is being codenotated to some values
      */
-    private static NormativePlan getApplicablePlan(NormativePlan plan, NormativeFlaw flaw) {
+    private static OrganizationalPlan getApplicablePlan(OrganizationalPlan plan, NormativeFlaw flaw) {
         CodenotationConstraints applicableCodenotations = flaw.getFlawedNorm()
                 .getApplicableCodenotations(plan, flaw.getApplicableSituation())
                 .fuseWith(plan.getCc());
 
-        return new NormativePlan(
+        return new OrganizationalPlan(
                 plan.getSituations(),
                 plan.getSteps(),
                 applicableCodenotations,
                 plan.getTc(),
-                plan.getOrganizations(),
-                plan.getNormsPerIntervals()
+                plan.getOrganizations()
         );
     }
 
@@ -67,7 +66,7 @@ public class CircumventionOperator {
      * @return
      */
     private static OpenCondition createReverseOpenCondition(
-            NormativePlan plan,
+            OrganizationalPlan plan,
             NormativeFlaw flaw,
             List<Action> possibleActions,
             Atom condition

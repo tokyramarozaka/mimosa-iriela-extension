@@ -2,19 +2,15 @@ package iriela;
 
 import aStar.Operator;
 import aStar_planning.pop.components.Flaw;
-import aStar_planning.pop_with_norms.NormativePopPlanningProblem;
 import aStar_planning.pop_with_norms.OrganizationalPlanningProblem;
 import aStar_planning.pop_with_norms.components.NormativeFlaw;
-import aStar_planning.pop_with_norms.components.NormativePlan;
 import aStar_planning.pop_with_norms.components.Organization;
-import aStar_planning.pop_with_norms.components.DeonticOperator;
 import aStar_planning.pop_with_norms.components.OrganizationalPlan;
 import mock_logic.validation_model.PlanningProblemFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import settings.Keywords;
 
 import java.util.HashSet;
 import java.util.List;
