@@ -5,10 +5,14 @@ import constraints.CodenotationConstraints;
 import logic.Atom;
 import logic.Context;
 import logic.ContextualAtom;
+import logic.Predicate;
+import lombok.AllArgsConstructor;
 
-public class NormativeProposition extends ContextualAtom implements NormConsequences {
-    public NormativeProposition(Context context, Atom atom) {
-        super(context, atom);
+@AllArgsConstructor
+public class NormativeProposition extends Atom implements NormConsequences {
+
+    public NormativeProposition(boolean isNegation, Predicate predicate) {
+        super(isNegation, predicate);
     }
 
     @Override
@@ -16,11 +20,7 @@ public class NormativeProposition extends ContextualAtom implements NormConseque
             OrganizationalPlan plan,
             PopSituation situation,
             CodenotationConstraints cc
-    ) {
-        return plan.isAsserted(new ContextualAtom(this.getContext(), this.getAtom()), situation, cc);
-    }
-
-    public NormConsequences buildConsequence(Context context) {
-        return new NormativeProposition(this.getContext(), this.getAtom().build(context));
+    ){
+        return plan.isAsserted(new ContextualAtom(new Context(), this), situation, cc);
     }
 }

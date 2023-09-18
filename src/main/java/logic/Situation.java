@@ -9,12 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@NoArgsConstructor
 @Getter
 @EqualsAndHashCode
 public class Situation implements State {
     private List<ContextualPredicate> contextualPredicates;
     private Context stateContext = new Context();
+
+    public Situation(){
+        this.contextualPredicates = new ArrayList<>();
+    }
 
     public Situation(List<ContextualPredicate> contextualPredicates) {
         this.contextualPredicates = contextualPredicates;
@@ -71,7 +74,8 @@ public class Situation implements State {
             }
             if (!wasNegated) {
                 toAdd.add(new ContextualPredicate(
-                        new Context(), (Predicate) belief.getPredicate().buildConsequence(belief.getContext())));
+                   new Context(), (Predicate) belief.getPredicate().build(belief.getContext())
+                ));
             }
         }
 
@@ -92,7 +96,7 @@ public class Situation implements State {
             for (ContextualPredicate belief : this.getContextualPredicates()) {
                 if (belief.getPredicate().unify(
                         belief.getContext(), goalProposition.getPredicate()
-                                .buildConsequence(goal.getGoalContext()), stateContext
+                                .build(goal.getGoalContext()), stateContext
                 )) {
                     accomplished++;
                     break;
@@ -122,7 +126,7 @@ public class Situation implements State {
 
         this.contextualPredicates.forEach(contextualPredicate -> {
             stringBuilder.append(
-                    contextualPredicate.getPredicate().buildConsequence(contextualPredicate.getContext())
+                    contextualPredicate.getPredicate().build(contextualPredicate.getContext())
             );
             if (i.getAndIncrement() < this.contextualPredicates.size() - 1) {
                 stringBuilder.append(" , ");

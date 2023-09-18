@@ -26,6 +26,7 @@ import settings.Keywords;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A tool to start Partial-Order Planning with some initial plan, namely :
@@ -197,8 +198,7 @@ public class PlanInitializer {
                 new ActionConsequence(propositions
                         .stream()
                         .map(proposition -> new Atom(false, proposition.getPredicate()))
-                        .toList()
-                )
+                        .collect(Collectors.toList()))
         );
     }
 

@@ -7,6 +7,7 @@ import aStar_planning.pop_with_norms.components.NormativeFlaw;
 import aStar_planning.pop_with_norms.components.NormativeProposition;
 import aStar_planning.pop_with_norms.components.OrganizationalPlan;
 import logic.Action;
+import logic.Context;
 import logic.ContextualAtom;
 
 import java.util.List;
@@ -37,8 +38,7 @@ public class MissingObligationPropositionResolver {
     private static OpenCondition createOpenCondition(NormativeFlaw flaw) {
         NormativeProposition proposition = (NormativeProposition) flaw.getFlawedNorm()
                 .getNormConsequences();
-        ContextualAtom toAssert = new ContextualAtom(proposition.getContext(),
-                proposition.getAtom());
+        ContextualAtom toAssert = new ContextualAtom(new Context(), proposition);
 
         return new OpenCondition(flaw.getApplicableSituation(), toAssert);
     }

@@ -1,8 +1,8 @@
-package mock_logic.validation_model;
+package iriela.mock_components;
 
 import logic.Predicate;
 import logic.Term;
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class PredicateFactory {

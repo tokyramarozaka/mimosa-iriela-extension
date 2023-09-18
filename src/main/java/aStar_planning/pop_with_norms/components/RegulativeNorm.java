@@ -57,7 +57,6 @@ public class RegulativeNorm extends Norm {
         try {
             CodenotationConstraints applicableCodenotations = this.getNormConditions()
                          .getApplicableCodenotations(plan, situation);
-
             return this.normConsequences.isApplied(plan, situation, applicableCodenotations);
         }catch(UnapplicableNormException e){
             return false;
@@ -131,7 +130,7 @@ public class RegulativeNorm extends Norm {
         return new RegulativeNorm(
                 this.deonticOperator,
                 this.normConditions.build(context),
-                this.normConsequences.buildConsequence(context)
+                this.getNormConsequences()
         );
     }
 

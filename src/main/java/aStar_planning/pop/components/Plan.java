@@ -62,7 +62,9 @@ public class Plan implements State {
     }
 
     private boolean isNotFinalStep(Step step) {
-        return !step.getActionInstance().getName().equals(Keywords.POP_FINAL_STEP);
+        Action action = (Action) step.getActionInstance().getLogicalEntity();
+
+        return !action.getName().getName().equals(Keywords.POP_FINAL_STEP.getName());
     }
 
     /**
@@ -172,7 +174,11 @@ public class Plan implements State {
     private boolean isInitialStep(Step step) {
         Action stepAction = ((Action) step.getActionInstance().getLogicalEntity());
 
-        return Objects.equals(stepAction.getName(),Keywords.POP_INITIAL_STEP);
+        return getActionName(stepAction).equals(Keywords.POP_INITIAL_STEP.getName());
+    }
+
+    private String getActionName(Action stepAction) {
+        return stepAction.getName().getName();
     }
 
     /**
@@ -371,14 +377,16 @@ public class Plan implements State {
      */
     public Step getInitialStep() {
         return this.steps.stream()
-                .filter(step -> step.getActionInstance().getName().equals(Keywords.POP_INITIAL_STEP))
+                .filter(step -> ((Action) step.getActionInstance().getLogicalEntity()).getName()
+                        .getName().equals(Keywords.POP_INITIAL_STEP.getName()))
                 .findFirst()
                 .orElse(null);
     }
 
     public Step getFinalStep() {
         return this.steps.stream()
-                .filter(step -> step.getActionInstance().getName().equals(Keywords.POP_FINAL_STEP))
+                .filter(step -> ((Action) step.getActionInstance().getLogicalEntity()).getName()
+                        .getName().equals(Keywords.POP_FINAL_STEP.getName()))
                 .findFirst()
                 .orElse(null);
     }
@@ -404,17 +412,13 @@ public class Plan implements State {
     }
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        return stringBuilder
-                .append("PLAN\n")
-                .append("--SITUATIONS\n").append("\t").append(this.situations)
-                .append("\n--STEPS\n").append("\t").append(this.steps)
-                .append("\n--CODENOTATIONS :\n").append("\t").append(this.cc)
-                .append("\n--TEMPORAL CONSTRAINTS :\n").append("\t").append(this.tc)
-                .append("\n--FLAWS :")
-                .append(this.flaws.isEmpty() ? "NONE" : this.flaws)
-                .toString();
+        return "PLAN\n" +
+                "--SITUATIONS\n" + "\t" + this.situations +
+                "\n--STEPS\n" + "\t" + this.steps +
+                "\n--CODENOTATIONS :\n" + "\t" + this.cc +
+                "\n--TEMPORAL CONSTRAINTS :\n" + "\t" + this.tc +
+                "\n--FLAWS :" +
+                (this.flaws.isEmpty() ? "NONE" : this.flaws);
     }
 
 

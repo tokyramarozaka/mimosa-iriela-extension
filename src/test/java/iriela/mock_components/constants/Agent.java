@@ -1,4 +1,4 @@
-package mock_logic.validation_model.constants;
+package iriela.mock_components.constants;
 
 import logic.Constant;
 

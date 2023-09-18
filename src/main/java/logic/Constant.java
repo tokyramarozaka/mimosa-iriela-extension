@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
-@EqualsAndHashCode
 public class Constant extends Term{
     public Constant(String name){
         super(name);

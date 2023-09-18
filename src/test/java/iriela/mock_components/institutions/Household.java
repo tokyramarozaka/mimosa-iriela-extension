@@ -1,19 +1,20 @@
-package mock_logic.validation_model.institutions;
+package iriela.mock_components.institutions;
 
 import aStar_planning.pop_with_norms.components.DeonticOperator;
 import aStar_planning.pop_with_norms.components.Institution;
 import aStar_planning.pop_with_norms.components.Norm;
 import aStar_planning.pop_with_norms.components.NormConditions;
 import aStar_planning.pop_with_norms.components.NormConsequences;
+import aStar_planning.pop_with_norms.components.NormativeProposition;
 import aStar_planning.pop_with_norms.components.RegulativeNorm;
 import aStar_planning.pop_with_norms.components.Role;
+import iriela.mock_components.PredicateFactory;
+import iriela.mock_components.TermsFactory;
 import logic.Action;
 import logic.Atom;
 import logic.Constant;
 import logic.Predicate;
 import logic.Term;
-import mock_logic.validation_model.PredicateFactory;
-import mock_logic.validation_model.TermsFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class Household {
     }
 
     private static NormConsequences consequencesHaveFood(Term subject) {
-        return PredicateFactory.haveFood(subject);
+        return new NormativeProposition(false, PredicateFactory.haveFood(subject));
     }
     private static NormConditions conditionsHaveFood(Term subject) {
         return new NormConditions(List.of(
@@ -51,7 +52,7 @@ public class Household {
         ));
     }
     private static NormConsequences consequencesHaveWood(Term subject) {
-        return PredicateFactory.haveWood(subject);
+        return new NormativeProposition(false,PredicateFactory.haveWood(subject));
     }
     private static Norm obligationHaveWood() {
         return new RegulativeNorm(

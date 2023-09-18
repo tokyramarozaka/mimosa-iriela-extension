@@ -6,10 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 @ToString
 public class Goal implements State {
@@ -18,6 +18,11 @@ public class Goal implements State {
 
     public Goal(List<Atom> goalPropositions){
         this.goalPropositions = goalPropositions;
+        this.goalContext = new Context();
+    }
+
+    public Goal(){
+        this.goalPropositions = new ArrayList<>();
         this.goalContext = new Context();
     }
 }

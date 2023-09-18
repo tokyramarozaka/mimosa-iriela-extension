@@ -21,8 +21,7 @@ import java.util.List;
  */
 @AllArgsConstructor
 @Getter
-@EqualsAndHashCode
-public class Action extends LogicalEntity implements NormConsequences {
+public class Action extends LogicalEntity {
     private final Logger logger = LogManager.getLogger(Action.class);
     private ActionName name;
     private ActionPrecondition preconditions;
@@ -75,7 +74,7 @@ public class Action extends LogicalEntity implements NormConsequences {
 
                 for (ContextualPredicate belief : beliefs.getContextualPredicates()) {
                     if (condition.getPredicate().unify(
-                            context, belief.getPredicate().buildConsequence(belief.getContext()), stateContext
+                            context, belief.getPredicate().build(belief.getContext()), stateContext
                     )) {
                         if (unified_once) {
                             contextsToAdd.add(context);
@@ -102,18 +101,13 @@ public class Action extends LogicalEntity implements NormConsequences {
     }
 
     @Override
-    public NormConsequences buildConsequences(Context context){
-        return (Action) this.build(context);
-    }
-
-    @Override
     public LogicalEntity copy() {
         return new Action(this.name, this.preconditions.copy(), this.consequences.copy());
     }
 
     @Override
     public String getLabel() {
-        return this.name.toString();
+        return this.name.getName();
     }
 
     @Override

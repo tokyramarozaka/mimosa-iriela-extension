@@ -1,7 +1,6 @@
-package mock_logic.validation_model.constants;
+package iriela.mock_components.constants;
 
 import logic.Constant;
-import logic.Variable;
 
 public class Zones {
     public static Constant A1 = new Constant("A1");

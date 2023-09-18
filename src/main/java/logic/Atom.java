@@ -21,7 +21,7 @@ public class Atom {
     private Predicate predicate;
 
     public Atom build(Context context) {
-        return new Atom(this.negation,(Predicate) this.predicate.buildConsequence(context));
+        return new Atom(this.negation, (Predicate)this.predicate.build(context));
     }
 
     @Override

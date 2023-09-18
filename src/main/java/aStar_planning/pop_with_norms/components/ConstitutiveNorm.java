@@ -39,7 +39,7 @@ public class ConstitutiveNorm extends Norm{
     }
 
     @Override
-    public boolean isApplied(NormativePlan plan, PopSituation situation) {
+    public boolean isApplied(OrganizationalPlan plan, PopSituation situation) {
         return true;
     }
 }

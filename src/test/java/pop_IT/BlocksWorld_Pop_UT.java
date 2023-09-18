@@ -42,7 +42,7 @@ public class BlocksWorld_Pop_UT {
 
     @Test
     public void assertProposition_ok(){
-        Plan initialPlan = problem.getOrganizationalPlan();
+        Plan initialPlan = problem.getInitialPlan();
         ContextualAtom toAssert_onTableC = getOnTableProposition(initialPlan, "C");
         ContextualAtom toAssert_emptyArm = new ContextualAtom(
                 new Context(),
@@ -50,15 +50,17 @@ public class BlocksWorld_Pop_UT {
         );
         PopSituation finalSituation = getFinalSituation(initialPlan);
 
+        logger.info(initialPlan);
         assertTrue(initialPlan.isAsserted(toAssert_onTableC, finalSituation));
         assertTrue(initialPlan.isAsserted(toAssert_emptyArm, finalSituation));
     }
 
     @Test
     public void getOpenConditions_ok(){
-        Plan initialPlan = problem.getOrganizationalPlan();
+        Plan initialPlan = problem.getInitialPlan();
         Set<Flaw> initialFlaws = initialPlan.getFlaws();
 
+        logger.info(initialPlan);
         assertEquals(2, initialFlaws.size(), "detected the wrong amount of flaws");
     }
 
@@ -90,7 +92,7 @@ public class BlocksWorld_Pop_UT {
 
     @Test
     public void apply_ok(){
-        Plan someInitialPlan = problem.getOrganizationalPlan();
+        Plan someInitialPlan = problem.getInitialPlan();
         List<Operator> options = problem.getOptions(someInitialPlan);
         PlanModification someOption = (PlanModification) options.get(0);
         PlanModification otherOption = (PlanModification) options.get(1);

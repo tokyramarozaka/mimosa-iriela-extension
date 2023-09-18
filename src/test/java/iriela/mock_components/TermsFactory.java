@@ -1,4 +1,4 @@
-package mock_logic.validation_model;
+package iriela.mock_components;
 
 import logic.Variable;
 

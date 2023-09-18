@@ -1,13 +1,16 @@
-package mock_logic.validation_model.institutions;
+package iriela.mock_components.institutions;
 
 import aStar_planning.pop_with_norms.components.DeonticOperator;
 import aStar_planning.pop_with_norms.components.Institution;
 import aStar_planning.pop_with_norms.components.Norm;
 import aStar_planning.pop_with_norms.components.NormConditions;
 import aStar_planning.pop_with_norms.components.NormConsequences;
+import aStar_planning.pop_with_norms.components.NormativeAction;
 import aStar_planning.pop_with_norms.components.RegulativeNorm;
 import aStar_planning.pop_with_norms.components.Role;
 import aStar_planning.pop_with_norms.concepts.ActionName;
+import iriela.mock_components.PredicateFactory;
+import iriela.mock_components.TermsFactory;
 import logic.Action;
 import logic.ActionConsequence;
 import logic.ActionPrecondition;
@@ -15,9 +18,8 @@ import logic.Atom;
 import logic.Constant;
 import logic.Predicate;
 import logic.Term;
-import mock_logic.validation_model.PredicateFactory;
-import mock_logic.validation_model.TermsFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,10 +58,10 @@ public class Village {
         ));
     }
     public static ActionConsequence fishConsequences(Term subject, Term someZone) {
-        return new ActionConsequence(List.of(
+        return new ActionConsequence(new ArrayList<>(List.of(
                 new Atom(true, Village.hasFish(someZone)),
                 new Atom(false, PredicateFactory.haveFood(subject)))
-        );
+        ));
     }
     public static Action fish(Term subject, Term zone) {
         return new Action(
@@ -78,10 +80,10 @@ public class Village {
         ));
     }
     private static ActionConsequence cutConsequences(Term subject, Term someZone) {
-        return new ActionConsequence(List.of(
+        return new ActionConsequence(new ArrayList<>(List.of(
                 new Atom(true, Village.hasTrees(someZone)),
                 new Atom(false, PredicateFactory.haveWood(subject))
-        ));
+        )));
     }
     public static Action cut(Term subject, Term zone) {
         return new Action(
@@ -156,7 +158,7 @@ public class Village {
         );
     }
     private static NormConsequences consequencesSacredFish(Term subject, Term zone) {
-        return Village.fish(subject, zone);
+        return new NormativeAction(Village.fish(subject, zone));
     }
     private static NormConditions conditionsSacredFish(Term subject, Term zone) {
         return new NormConditions(List.of(
@@ -172,9 +174,11 @@ public class Village {
                 consequencesSacredCut(subject, zone)
         );
     }
+
     private static NormConsequences consequencesSacredCut(Term subject, Term zone) {
-        return Village.cut(subject, zone);
+        return new NormativeAction(Village.cut(subject, zone));
     }
+
     private static NormConditions conditionsSacredCut(Term subject, Term zone) {
         return new NormConditions(List.of(
                 new Atom(false, Village.member(subject)),

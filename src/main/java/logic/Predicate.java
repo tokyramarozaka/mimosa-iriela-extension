@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @EqualsAndHashCode
-public class Predicate implements Unifiable, NormConsequences {
+public class Predicate implements Unifiable {
     private String name;
     private List<Term> terms;
 
@@ -60,6 +60,7 @@ public class Predicate implements Unifiable, NormConsequences {
 
         return res;
     }
+
 
     private boolean attemptUnification(
             Context fromContext,
@@ -119,7 +120,7 @@ public class Predicate implements Unifiable, NormConsequences {
     }
 
     @Override
-    public Unifiable buildConsequence(Context context) {
+    public Unifiable build(Context context) {
         return new Predicate(
                 this.name,
                 this.terms.stream()

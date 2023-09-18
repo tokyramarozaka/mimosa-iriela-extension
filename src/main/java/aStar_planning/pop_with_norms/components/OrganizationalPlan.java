@@ -212,7 +212,10 @@ public class OrganizationalPlan extends Plan {
         List<RegulativeNorm> applicableRegulativeNorms = new ArrayList<>();
 
         for (Organization organization : this.organizations) {
-            List<RegulativeNorm> toAdd = allOrganizationNorms.stream()
+            List<RegulativeNorm> toAdd = organization.getNorms()
+                    .stream()
+                    .filter(norm -> norm instanceof RegulativeNorm)
+                    .map(norm -> (RegulativeNorm) norm)
                     .filter(norm -> isApplicable(situation, norm))
                     .toList();
 

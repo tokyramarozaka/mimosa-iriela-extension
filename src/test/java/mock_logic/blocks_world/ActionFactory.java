@@ -1,5 +1,6 @@
 package mock_logic.blocks_world;
 
+import aStar_planning.pop_with_norms.concepts.ActionName;
 import logic.Action;
 import logic.ActionConsequence;
 import logic.ActionPrecondition;
@@ -102,26 +103,31 @@ public class ActionFactory {
         Variable block_X = BlockFactory.createVariable("X");
         Variable block_Y = BlockFactory.createVariable("Y");
 
+        ActionName stack = new ActionName("stack");
+        ActionName unstack = new ActionName("unstack");
+        ActionName drop = new ActionName("drop");
+        ActionName take = new ActionName("take");
+
         possibleActions.add(new Action(
-                "stack",
+                stack,
                 stackPreconditions(block_X,block_Y),
                 stackConsequences(block_X,block_Y))
         );
 
         possibleActions.add(new Action(
-                "drop",
+                drop,
                 dropPreconditions(block_X),
                 dropConsequences(block_X))
         );
 
         possibleActions.add(new Action(
-                "unstack",
+                unstack,
                 unstackPreconditions(block_X, block_Y),
                 unstackConsequences(block_X, block_Y))
         );
 
         possibleActions.add(new Action(
-                "take",
+                take,
                 takePreconditions(block_X),
                 takeConsequences(block_X))
         );

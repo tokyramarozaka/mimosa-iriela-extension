@@ -1,9 +1,10 @@
-package mock_logic.validation_model.institutions;
+package iriela.mock_components.institutions;
 
 import aStar_planning.pop_with_norms.components.Institution;
 import aStar_planning.pop_with_norms.components.Norm;
 import aStar_planning.pop_with_norms.components.Role;
 import aStar_planning.pop_with_norms.concepts.ActionName;
+import iriela.mock_components.TermsFactory;
 import logic.Action;
 import logic.ActionConsequence;
 import logic.ActionPrecondition;
@@ -11,7 +12,6 @@ import logic.Atom;
 import logic.Constant;
 import logic.Predicate;
 import logic.Term;
-import mock_logic.validation_model.TermsFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,10 +47,10 @@ public class Global {
 
     private static ActionConsequence moveConsequences(Term subject, Term currentZone,
                                                       Term nextZone) {
-        return new ActionConsequence(List.of(
+        return new ActionConsequence(new ArrayList<>(List.of(
                 new Atom(true, Global.located(subject, currentZone)),
                 new Atom(false, Global.located(subject, nextZone))
-        ));
+        )));
     }
 
     public static Action move(Term subject, Term zone1, Term zone2) {
