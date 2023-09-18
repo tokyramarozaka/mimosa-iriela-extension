@@ -1,6 +1,8 @@
 package aStar_planning.pop.utils;
 
 import aStar_planning.pop.components.Step;
+import aStar_planning.pop_with_norms.components.Organization;
+import aStar_planning.pop_with_norms.components.OrganizationalPlan;
 import constraints.Codenotation;
 import constraints.PartialOrder;
 import aStar_planning.pop.components.Plan;
@@ -15,6 +17,7 @@ import logic.Context;
 import logic.ContextualPredicate;
 import logic.Goal;
 import logic.LogicalInstance;
+import logic.Predicate;
 import logic.Situation;
 import logic.mappers.GoalMapper;
 import org.apache.logging.log4j.LogManager;
@@ -23,7 +26,6 @@ import settings.Keywords;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * A tool to start Partial-Order Planning with some initial plan, namely :
@@ -58,6 +60,90 @@ public class PlanInitializer {
 
         return new Plan(initialAndFinalSituations, initialAndFinalSteps,
                 initialCodenotationConstraints, initialTemporalConstraints);
+    }
+
+    public static OrganizationalPlan constructInitialPlan(
+            Situation initialSituation,
+            Goal goal,
+            List<Organization> organizations
+    ){
+        List<PopSituation> initialAndFinalSituations = buildDummySituations();
+
+        Step initialStep = buildInitialStep(initialSituation, organizations);
+        Step finalStep = buildFinalStep(goal);
+        List<Step> initialAndFinalSteps = new ArrayList<>(List.of(initialStep, finalStep));
+
+        TemporalConstraints initialTemporalConstraints = buildInitialTemporalConstraints(
+                initialAndFinalSituations,
+                initialAndFinalSteps
+        );
+
+        return new OrganizationalPlan(
+                initialAndFinalSituations,
+                initialAndFinalSteps,
+                buildInitialCc(goal, goal.getGoalContext()),
+                initialTemporalConstraints,
+                organizations
+        );
+    }
+
+    private static Step buildFinalStep(Goal goal) {
+        return new Step(new LogicalInstance(
+                finalAction(goal.getGoalPropositions()),
+                goal.getGoalContext()
+        ));
+    }
+
+    /**
+     * Builds the initial step of the plan using a set of organizations to define norms
+     * @param initialSituation
+     * @param organizations
+     * @return
+     */
+    public static Step buildInitialStep(
+            Situation initialSituation,
+            List<Organization> organizations
+    ){
+        Action initialAction = initialAction(initialSituation.getContextualPredicates());
+
+        injectAllAssertions(organizations, initialAction);
+
+        LogicalInstance instance = new LogicalInstance(
+                initialAction,
+                new Context()
+        );
+
+        return new Step(instance);
+    }
+
+    /**
+     * Inject all assertions from a set of organizations into the consequence of some action.
+     * @param organizations
+     * @param action
+     */
+    private static void injectAllAssertions(List<Organization> organizations, Action action) {
+        getAllAssertions(organizations)
+                .stream()
+                .map(predicate -> new Atom(false, predicate))
+                .forEach(assertion -> {
+                    action.getConsequences().getAtoms().add(assertion);
+                });
+    }
+
+    /**
+     * Returns all assertions from all organizations and their respective institutions
+     * @param organizations
+     * @return
+     */
+    public static List<Predicate> getAllAssertions(List<Organization> organizations){
+        List<Predicate> assertions = new ArrayList<>();
+
+        for (Organization organization : organizations) {
+            assertions.addAll(organization.getAssertions());
+            assertions.addAll(organization.getInstitution().getAssertions());
+        }
+
+        return assertions;
     }
 
     private static List<PopSituation> buildDummySituations() {
@@ -125,8 +211,8 @@ public class PlanInitializer {
     private static Action finalAction(List<Atom> propositions) {
         return new Action(
                 Keywords.POP_FINAL_STEP,
-                new ActionPrecondition(propositions.stream()
-                        .filter(proposition -> !proposition.getPredicate().getName()
+                new ActionPrecondition(propositions.stream().filter(
+                        proposition -> !proposition.getPredicate().getName()
                                 .equals(Keywords.CODENOTATION_OPERATOR)).toList()
                 ),
                 new ActionConsequence()
@@ -174,14 +260,11 @@ public class PlanInitializer {
     private static CodenotationConstraints buildInitialCc(Goal goal, Context goalContext) {
         List<Codenotation> initialCodenotations = new ArrayList<>();
 
-        Predicate<Atom> isCodenotationProposition = proposition -> (proposition.getPredicate()
-                .getName()
-                .equals(Keywords.CODENOTATION_OPERATOR)
-        );
-
         goal.getGoalPropositions()
                 .stream()
-                .filter(isCodenotationProposition)
+                .filter(proposition -> proposition.getPredicate()
+                        .getName()
+                        .equals(Keywords.CODENOTATION_OPERATOR))
                 .forEach(proposition -> initialCodenotations.add(
                         GoalMapper.toCodenotation(proposition, goalContext))
                 );

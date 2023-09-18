@@ -20,8 +20,6 @@ public class PopSituation implements PlanElement {
         this.id = sequence.incrementAndGet();
     }
 
-
-
     @Override
     public Node toNode() {
         return new Node(this.toString(), new ArrayList<>(), this);
