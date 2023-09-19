@@ -25,7 +25,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @EqualsAndHashCode
-public class Codenotation {
+public class Codenotation{
     private boolean isCodenotation;
     private ContextualTerm left;
     private ContextualTerm right;
@@ -63,15 +63,6 @@ public class Codenotation {
                 .count() > 0;
     }
 
-    @Override
-    public String toString() {
-        return new StringBuilder()
-                .append(this.left)
-                .append(isCodenotation ? " == " : " != ")
-                .append(this.right)
-                .toString();
-    }
-
     public Codenotation reverse() {
         return new Codenotation(
                 !this.isCodenotation,
@@ -90,5 +81,14 @@ public class Codenotation {
                 new Node(this.getLeft().toString(), new ArrayList<>(), this.getLeft()),
                 new Node(this.getRight().toString(), new ArrayList<>(), this.getRight())
         );
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder()
+                .append(this.left)
+                .append(isCodenotation ? " == " : " != ")
+                .append(this.right)
+                .toString();
     }
 }

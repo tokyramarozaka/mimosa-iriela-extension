@@ -40,6 +40,18 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
         this.initialPlan = PlanInitializer.constructInitialPlan(initialSituation, goal);
     }
 
+    /**
+     * A constructor in case you don't want to compute the initial state (plan) right away.
+     * @param initialSituation
+     * @param possibleActions
+     * @param goal
+     * @param initialPlanIsNull
+     */
+    public PopPlanningProblem(Situation  initialSituation, List<Action> possibleActions,
+                              Goal goal, boolean initialPlanIsNull){
+        super(initialSituation, possibleActions,  goal);
+        this.initialPlan = initialPlanIsNull ? null  : new Plan();
+    }
     @Override
     public State getInitialState() {
         return this.initialPlan;
@@ -111,7 +123,7 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
         logger.info("CURRENT STATE : "+ plan);
         logger.info("\n______OPTIONS ARE______");
         plan.allPossibleModifications(possibleActions).forEach(operator -> {
-            logger.info("\n--> OPTION #"+(i.incrementAndGet())+" : " +operator);
+            logger.info("--> OPTION #"+(i.incrementAndGet())+" : " +operator);
         });
     }
 }

@@ -6,6 +6,7 @@ import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop.components.Step;
 import aStar_planning.pop.mapper.PlanModificationMapper;
 import aStar_planning.pop.utils.TemporalConstraintsBuilder;
+import aStar_planning.pop_with_norms.components.NormativeAction;
 import aStar_planning.pop_with_norms.components.NormativeFlaw;
 import aStar_planning.pop_with_norms.components.OrganizationalPlan;
 import constraints.CodenotationConstraints;
@@ -57,7 +58,7 @@ public class MissingObligationActionResolver {
             return new ArrayList<>();
         }
 
-        Action actionToAdd = (Action) flaw.getFlawedNorm().getNormConsequences();
+        NormativeAction actionToAdd = (NormativeAction) flaw.getFlawedNorm().getNormConsequences();
         LogicalInstance addedMandatoryAction = new LogicalInstance(actionToAdd, new Context());
 
         // Builds the step and its wrapping situations

@@ -26,7 +26,7 @@ public class OrganizationalPlanningProblem extends PopPlanningProblem {
             Goal goal,
             List<Organization> organizations
     ){
-        super(initialSituation, possibleActions, goal);
+        super(initialSituation, possibleActions, goal, true);
         this.organizations = organizations;
         this.initialOrganizationalPlan = PlanInitializer.constructInitialPlan(
                 initialSituation,

@@ -18,10 +18,9 @@ public class ContextualTerm {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append("Context_");
-        stringBuilder.append(this.getContext().getId());
-        stringBuilder.append(":");
         stringBuilder.append(this.getTerm());
+        stringBuilder.append("::");
+        stringBuilder.append(this.getContext().getId());
 
         return stringBuilder.toString();
     }

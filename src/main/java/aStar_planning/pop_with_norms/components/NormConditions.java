@@ -23,11 +23,6 @@ public class NormConditions {
     private List<Atom> conditions;
     private final static Logger logger = LogManager.getLogger(NormConditions.class);
 
-    public NormConditions build(Context context) {
-        return new NormConditions(this.conditions.stream()
-                .map(atom -> atom.build(context))
-                .collect(Collectors.toList()));
-    }
 
 
     /**
@@ -62,7 +57,7 @@ public class NormConditions {
             }
 
             if(!isUnifiedOnce){
-//                logger.info("\tNO APPLICABLE CODENOTATIONS\n");
+//                logger.info("\tNO APPLICABLE CODENOTATIONS FOR :" + condition + " FROM NORM CONDITIONS : " + this);
                 throw new UnapplicableNormException(this, situation);
             }
         }
@@ -88,5 +83,10 @@ public class NormConditions {
         stringBuilder.append("]");
 
         return stringBuilder.toString();
+    }
+    public NormConditions build(Context context) {
+        return new NormConditions(this.conditions.stream()
+                .map(atom -> atom.build(context))
+                .collect(Collectors.toList()));
     }
 }

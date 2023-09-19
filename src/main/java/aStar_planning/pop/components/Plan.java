@@ -14,6 +14,8 @@ import logic.LogicalInstance;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import settings.Keywords;
@@ -36,11 +38,13 @@ import java.util.stream.Collectors;
  *     <li>Temporal constraints : arrangement of all steps and situations inside of the plan </li>
  * </ul>
  */
+@NoArgsConstructor
 @Getter
 @EqualsAndHashCode
 public class Plan implements State {
     private List<PopSituation> situations;
     private List<Step> steps;
+    @Setter
     private CodenotationConstraints cc;
     private TemporalConstraints tc;
     private Set<Flaw> flaws;

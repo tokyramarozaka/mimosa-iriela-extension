@@ -22,12 +22,12 @@ public class MissingObligationResolver {
         if(normConsequences.getClass().equals(NormativeProposition.class)){
             operators.addAll(MissingObligationPropositionResolver.byCreation(plan, flaw,
                     possibleActions));
+        }else {
+            operators.addAll(MissingObligationActionResolver.byCreation(plan, flaw));
+            operators.addAll(MissingObligationActionResolver.byPromotion(plan, flaw));
+
+            operators.addAll(CircumventionOperator.circumvent(plan, flaw, possibleActions));
         }
-        operators.addAll(MissingObligationActionResolver.byCreation(plan, flaw));
-        operators.addAll(MissingObligationActionResolver.byPromotion(plan, flaw));
-
-        operators.addAll(CircumventionOperator.circumvent(plan, flaw, possibleActions));
-
         return operators;
     }
 }

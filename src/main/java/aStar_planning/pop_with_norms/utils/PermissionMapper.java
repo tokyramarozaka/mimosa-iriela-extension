@@ -11,18 +11,18 @@ public class PermissionMapper {
     public static List<RegulativeNorm> toProhibitions(
             OrganizationalPlan plan,
             RegulativeNorm permission
-    ) {
+    ){
         List<RegulativeNorm> generatedProhibitions = new ArrayList<>();
 
         plan.getSituations().stream()
-                .filter(situation -> !plan.getFinalSituation().equals(situation))
+                .filter(situation -> !plan.isApplicable(situation, permission))
                 .forEach(situation -> {
                     generatedProhibitions.add(
                         new RegulativeNorm(
                                 DeonticOperator.PROHIBITION,
                                 permission.getNormConditions(),
                                 permission.getNormConsequences())
-                            );
+                        );
                     }
                 );
 

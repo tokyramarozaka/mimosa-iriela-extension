@@ -95,11 +95,7 @@ public class RegulativeNorm extends Norm {
         for (PlanElement followingElement : allFollowingElements) {
             if(followingElement instanceof Step){
                 if(this.isSatisfiedIn(plan, situation)){
-                    if(this.isProhibition()){
-                        return false;
-                    }else{
-                        return true;
-                    }
+                    return !this.isProhibition();
                 }
             }
         }

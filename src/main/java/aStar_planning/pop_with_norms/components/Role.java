@@ -7,9 +7,13 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@ToString
 public class Role extends Constant{
     public Role(String name) {
         super(name);
+    }
+
+    @Override
+    public String toString() {
+        return this.getName();
     }
 }
