@@ -20,7 +20,6 @@ import logic.Action;
 import logic.Atom;
 import logic.Context;
 import logic.ContextualAtom;
-import logic.Situation;
 import logic.Term;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
@@ -62,12 +61,12 @@ public class OrganizationalPlan extends Plan {
      */
     public void evaluateNormativeFlaws() {
         List<RegulativeNorm> toEvaluate = new ArrayList<>();
-        //toEvaluate.addAll(this.convertPermissionsToProhibitions());
+        // TODO : toEvaluate.addAll(this.convertPermissionsToProhibitions());
         toEvaluate.addAll(getAllObligationsAndProhibitions());
 
         List<PopSituation> allSituationsExceptInitial = this.getSituations()
                 .stream()
-                .filter(situation -> situation.equals(this.getInitialSituation()))
+                .filter(situation -> !situation.equals(this.getInitialSituation()))
                 .toList();
 
         for (PopSituation situation : allSituationsExceptInitial) {
@@ -80,9 +79,8 @@ public class OrganizationalPlan extends Plan {
     }
 
     /**
-     * TODO : make sure to detect all constitutive norms through the special predicates of
-     * the regulative norm.
-     *
+     * Verifies if a norm is applicable by verifying all of its conditions, which demands
+     * some constitutive norm, or some proposition to be necessarily true
      * @param situation : the situation on which we want to check the norm's applicability
      *                  conditions
      * @param norm      : the norm whose applicability conditions will be tested.
@@ -155,13 +153,9 @@ public class OrganizationalPlan extends Plan {
      * @param applicableNorm : the norm which ought to be applied.
      */
     private void createFlawIfNormNotApplied(PopSituation situation, RegulativeNorm applicableNorm) {
-        Context applicableContext = new Context();
+        Context applicableContext = getApplicableContext(applicableNorm, situation);
 
-        if (!applicableNorm.isApplied(this, situation)) {
-            if (applicableNorm.getDeonticOperator().equals(DeonticOperator.PROHIBITION)) {
-                applicableContext = getContextOfProhibition(applicableNorm, situation);
-            }
-
+        if (!applicableNorm.isApplied(this, situation, this.getCc(), applicableContext)) {
             this.getFlaws().add(new NormativeFlaw(
                     this,
                     applicableNorm,
@@ -171,23 +165,6 @@ public class OrganizationalPlan extends Plan {
         }
     }
 
-    @Override
-    public State applyPlanModification(Operator toApply) {
-        return ((PlanModification) toApply).apply(this);
-    }
-
-    @Override
-    public List<Operator> resolve(Flaw toSolve, List<Action> possibleActions) {
-        if (toSolve instanceof OpenCondition) {
-            return resolve((OpenCondition) toSolve, possibleActions);
-        } else if (toSolve instanceof Threat) {
-            return resolve((Threat) toSolve);
-        } else if (toSolve instanceof NormativeFlaw) {
-            return resolve((NormativeFlaw) toSolve, possibleActions);
-        }
-
-        throw new UnsupportedOperationException("Flaw type not supported yet.");
-    }
 
     /**
      * Solve a normative flaw depending on its deontic operator and consequence type (either a
@@ -244,14 +221,17 @@ public class OrganizationalPlan extends Plan {
      * @param situation
      * @return
      */
-    private Context getContextOfProhibition(RegulativeNorm norm, PopSituation situation) {
+    private Context getApplicableContext(RegulativeNorm norm, PopSituation situation) {
         if (norm.enforceProposition()) {
-//          TODO: norm.getNormConditions().getApplicableCodenotations(this, situation);
+            Step followingStep = this.getTc().getFollowingStep(situation);
+            return followingStep.getActionInstance().getContext();
         } else if (norm.enforceAction()) {
             Action forbiddenAction = ((NormativeAction) norm.getNormConsequences());
+
             logger.error(this.getSteps().stream()
                     .filter(step -> this.getTc().isBefore(situation, step))
                     .collect(Collectors.toList()));
+
             Optional<Step> forbiddenStep = this.getSteps().stream()
                     .filter(step -> this.getTc().isBefore(situation, step))
                     .filter(step -> step.getActionInstance().getLogicalEntity()
@@ -358,7 +338,6 @@ public class OrganizationalPlan extends Plan {
     /**
      * Checks if some element in the plan is between two others. Namely, checks if the target
      * element is between the start and the finish element.
-     *
      * @param start   : the element at the left edge of the interval we want to check
      * @param target: the element we want to check if it is between start and finish
      * @param finish: the element at the right edge of the interval we want to check
@@ -389,5 +368,23 @@ public class OrganizationalPlan extends Plan {
         return super.toString() +
                 "\n-- ORGANIZATIONS : \n\t" +
                 this.organizations;
+    }
+
+    @Override
+    public State applyPlanModification(Operator toApply) {
+        return ((PlanModification) toApply).apply(this);
+    }
+
+    @Override
+    public List<Operator> resolve(Flaw toSolve, List<Action> possibleActions) {
+        if (toSolve instanceof OpenCondition) {
+            return resolve((OpenCondition) toSolve, possibleActions);
+        } else if (toSolve instanceof Threat) {
+            return resolve((Threat) toSolve);
+        } else if (toSolve instanceof NormativeFlaw) {
+            return resolve((NormativeFlaw) toSolve, possibleActions);
+        }
+
+        throw new UnsupportedOperationException("Flaw type not supported yet.");
     }
 }

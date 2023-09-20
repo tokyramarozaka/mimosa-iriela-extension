@@ -8,6 +8,8 @@ import logic.ContextualAtom;
 import logic.Predicate;
 import lombok.AllArgsConstructor;
 
+import java.util.stream.Collectors;
+
 @AllArgsConstructor
 public class NormativeProposition extends Atom implements NormConsequences {
 
@@ -19,8 +21,20 @@ public class NormativeProposition extends Atom implements NormConsequences {
     public boolean isApplied(
             OrganizationalPlan plan,
             PopSituation situation,
-            CodenotationConstraints cc
+            CodenotationConstraints cc,
+            Context applicableContext
     ){
-        return plan.isAsserted(new ContextualAtom(new Context(), this), situation, cc);
+        System.out.println("===> " + this.build(applicableContext) + " is asserted in  " +
+                situation + " : " + plan.isAsserted(
+                new ContextualAtom(applicableContext, this), situation, cc.copy()));
+
+        System.out.println("its preceding steps : " + plan.getSteps().stream()
+                .filter(plan::isNotFinalStep)
+                .filter(step -> plan.getTc().isBefore(
+                        plan.getTc().getFollowingSituation(step),  situation)
+                )
+                .collect(Collectors.toList()));
+        return plan.isAsserted(
+                new ContextualAtom(applicableContext, this), situation, cc.copy());
     }
 }

@@ -65,7 +65,7 @@ public class Plan implements State {
         this.evaluateFlaws();
     }
 
-    private boolean isNotFinalStep(Step step) {
+    public boolean isNotFinalStep(Step step) {
         Action action = (Action) step.getActionInstance().getLogicalEntity();
 
         return !action.getName().getName().equals(Keywords.POP_FINAL_STEP.getName());
@@ -373,10 +373,8 @@ public class Plan implements State {
 
     /**
      * Retrieves the initial step within the plan by using its reserved name.
-     *
      * @see PlanInitializer for more details on dummy steps naming
      * convention as "initial" and "final"
-     *
      * @return a step whose name is `initial`.
      */
     public Step getInitialStep() {

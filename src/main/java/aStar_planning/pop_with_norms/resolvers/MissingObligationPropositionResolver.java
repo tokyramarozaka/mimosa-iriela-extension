@@ -38,7 +38,7 @@ public class MissingObligationPropositionResolver {
     private static OpenCondition createOpenCondition(NormativeFlaw flaw) {
         NormativeProposition proposition = (NormativeProposition) flaw.getFlawedNorm()
                 .getNormConsequences();
-        ContextualAtom toAssert = new ContextualAtom(new Context(), proposition);
+        ContextualAtom toAssert = new ContextualAtom(flaw.getContext(), proposition);
 
         return new OpenCondition(flaw.getApplicableSituation(), toAssert);
     }

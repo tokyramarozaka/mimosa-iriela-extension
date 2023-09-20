@@ -40,7 +40,8 @@ public class NormativeAction extends Action implements NormConsequences {
     public boolean isApplied(
             OrganizationalPlan plan,
             PopSituation situation,
-            CodenotationConstraints cc
+            CodenotationConstraints cc,
+            Context applicableContext
     ) {
         PlanElement followingElement = plan.getTc().getFollowingElement(situation);
 
@@ -70,7 +71,7 @@ public class NormativeAction extends Action implements NormConsequences {
 
             return true;
         } else if (followingElement instanceof PopSituation) {
-            return isApplied(plan, (PopSituation) followingElement, cc);
+            return isApplied(plan, (PopSituation) followingElement, cc, applicableContext);
         }
 
         return false;

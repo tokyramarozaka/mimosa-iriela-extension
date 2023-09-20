@@ -6,6 +6,7 @@ import aStar_planning.pop.components.Step;
 import constraints.CodenotationConstraints;
 import exception.UnapplicableNormException;
 import logic.Context;
+import logic.ContextualAtom;
 import logic.LogicalEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -57,7 +58,8 @@ public class RegulativeNorm extends Norm {
         try {
             CodenotationConstraints applicableCodenotations = this.getNormConditions()
                          .getApplicableCodenotations(plan, situation);
-            return this.normConsequences.isApplied(plan, situation, applicableCodenotations);
+            return this.normConsequences.isApplied(plan, situation, applicableCodenotations,
+                    new Context());
         }catch(UnapplicableNormException e){
             return false;
         }
@@ -87,12 +89,24 @@ public class RegulativeNorm extends Norm {
      * @param situation : the situation we want to verify it in
      * @return true if the norm is applied, and false otherwise.
      */
-    public boolean isApplied(OrganizationalPlan plan, PopSituation situation) {
-        List<PlanElement> allFollowingElements = plan.getSteps().stream()
+    public boolean isApplied(OrganizationalPlan plan, PopSituation situation,
+                             CodenotationConstraints cc, Context applicableContext) {
+        if(this.enforceAction()){
+            return checkForActionAfterwards(plan, situation);
+        }else{
+            NormativeProposition proposition = (NormativeProposition) this.getNormConsequences();
+
+            return proposition.isApplied(plan, situation, cc, applicableContext);
+        }
+    }
+
+    private boolean checkForActionAfterwards(OrganizationalPlan plan, PopSituation situation) {
+        List<PlanElement> elementsAfterSituation = plan.getSteps()
+                .stream()
                 .filter(step -> plan.getTc().isBefore(situation, step))
                 .collect(Collectors.toList());
 
-        for (PlanElement followingElement : allFollowingElements) {
+        for (PlanElement followingElement : elementsAfterSituation) {
             if(followingElement instanceof Step){
                 if(this.isSatisfiedIn(plan, situation)){
                     return !this.isProhibition();

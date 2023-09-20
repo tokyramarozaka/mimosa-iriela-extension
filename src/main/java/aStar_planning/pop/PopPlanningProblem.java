@@ -74,7 +74,7 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
 
     @Override
     public State apply(Operator operator, State state) {
-        logger.info("\n___APPLYING___ "+operator);
+        logger.info("___APPLYING___ "+operator);
         logger.info("\n___GOT___ "+((Plan)state).applyPlanModification(operator));
         return ((Plan)state).applyPlanModification(operator);
     }

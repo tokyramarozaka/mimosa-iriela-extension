@@ -1,6 +1,7 @@
 package aStar_planning.pop_with_norms.components;
 
 import aStar_planning.pop.components.PopSituation;
+import constraints.CodenotationConstraints;
 import logic.Constant;
 import logic.Context;
 import logic.LogicalEntity;
@@ -39,7 +40,9 @@ public class ConstitutiveNorm extends Norm{
     }
 
     @Override
-    public boolean isApplied(OrganizationalPlan plan, PopSituation situation) {
+    public boolean isApplied(OrganizationalPlan plan, PopSituation situation,
+                             CodenotationConstraints cc, Context applicableContext)
+    {
         return true;
     }
 }

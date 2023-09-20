@@ -81,7 +81,21 @@ public class TemporalConstraints extends Graphic {
                 .getContent();
     }
 
+    public Step getFollowingStep(PopSituation situation){
+        Object content;
+        PlanElement element = situation;
+        do {
+            content = this.getGraph()
+                    .getFollowingNode(this.getGraph().getContainingNode(element))
+                    .getContent();
 
+            if(content.getClass() == PopSituation.class){
+                element = (PopSituation) content;
+            }
+        }while(content.getClass() != Step.class);
+
+        return (Step)  content;
+    }
     /**
      * Checks if an element (left) is after another element (right) according to the current
      * temporal constraints by using its graphical representation

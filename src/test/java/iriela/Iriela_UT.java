@@ -2,6 +2,7 @@ package iriela;
 
 import aStar.Operator;
 import aStar_planning.pop.components.Flaw;
+import aStar_planning.pop.components.PlanModification;
 import aStar_planning.pop_with_norms.OrganizationalPlanningProblem;
 import aStar_planning.pop_with_norms.components.NormativeFlaw;
 import aStar_planning.pop_with_norms.components.Organization;
@@ -9,9 +10,11 @@ import aStar_planning.pop_with_norms.components.OrganizationalPlan;
 import iriela.description.PlanningProblemFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import static  org.junit.jupiter.api.Assertions.assertEquals;
-import static  org.junit.jupiter.api.Assertions.assertTrue;
-import static  org.junit.jupiter.api.Assertions.assertFalse;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -32,7 +35,7 @@ public class Iriela_UT {
     }
 
     @Test
-    public void evaluateNormativeFlaws_ok(){
+    public void evaluateNormativeFlaws_ok() {
         OrganizationalPlanningProblem problem = PlanningProblemFactory.irielaProblem();
         OrganizationalPlan initialPlan = (OrganizationalPlan) problem.getInitialState();
 
@@ -56,20 +59,15 @@ public class Iriela_UT {
     public void applyOperatorSolvesFlaw_ok() {
         OrganizationalPlanningProblem problem = PlanningProblemFactory.irielaProblem();
         OrganizationalPlan initialPlan = (OrganizationalPlan) problem.getInitialState();
-
         Set<Flaw> initialFlaws = new HashSet<>(initialPlan.getFlaws());
+
         List<Operator> options = problem.getOptions(initialPlan);
-
-        for (Operator planModification : options) {
-            logger.info("applying : " + planModification);
-            initialPlan = (OrganizationalPlan) initialPlan.applyPlanModification(planModification);
-            logger.debug("got : " + initialPlan);
-        }
-
+        Operator toApply = options.get(0);
+        logger.info("applying : " + toApply);
+        initialPlan = (OrganizationalPlan) initialPlan.applyPlanModification(toApply);
+        logger.debug("got : " + initialPlan);
         Set<Flaw> nextFlaws = new HashSet<>(initialPlan.getFlaws());
 
-        initialFlaws.stream()
-                .filter(flaw -> flaw instanceof NormativeFlaw)
-                .forEach(initialFlaw -> assertFalse(nextFlaws.contains(initialFlaw)));
+        assertFalse(nextFlaws.contains(((PlanModification)toApply).getTargetFlaw()));
     }
 }

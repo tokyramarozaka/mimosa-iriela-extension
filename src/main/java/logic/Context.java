@@ -80,11 +80,17 @@ public class Context {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("Context_")
-                .append(this.id);
+                .append(this.id)
+                .append("{");
 
-        this.contextPairs.forEach(pair -> stringBuilder.append("\t"+pair));
+        for (int i = 0; i < contextPairs.size(); i++) {
+            stringBuilder.append(contextPairs.get(i));
+            if (i < contextPairs.size() - 1) {
+                stringBuilder.append(",");
+            }
+        }
 
-        stringBuilder.append(")");
+        stringBuilder.append("}");
 
         return stringBuilder.toString();
     }

@@ -5,6 +5,7 @@ import aStar_planning.pop.components.Flaw;
 import exception.UnapplicableNormException;
 import logic.Context;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
