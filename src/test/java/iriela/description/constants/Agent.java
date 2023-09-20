@@ -1,4 +1,4 @@
-package iriela.mock_components.constants;
+package iriela.description.constants;
 
 import logic.Constant;
 

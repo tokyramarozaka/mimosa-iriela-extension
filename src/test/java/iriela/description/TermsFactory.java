@@ -1,4 +1,4 @@
-package iriela.mock_components;
+package iriela.description;
 
 import logic.Variable;
 

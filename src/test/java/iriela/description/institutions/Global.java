@@ -1,10 +1,10 @@
-package iriela.mock_components.institutions;
+package iriela.description.institutions;
 
 import aStar_planning.pop_with_norms.components.Institution;
 import aStar_planning.pop_with_norms.components.Norm;
 import aStar_planning.pop_with_norms.components.Role;
 import aStar_planning.pop_with_norms.concepts.ActionName;
-import iriela.mock_components.TermsFactory;
+import iriela.description.TermsFactory;
 import logic.Action;
 import logic.ActionConsequence;
 import logic.ActionPrecondition;

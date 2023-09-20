@@ -1,14 +1,14 @@
-package iriela.mock_components;
+package iriela.description;
 
 import aStar_planning.pop_with_norms.OrganizationalPlanningProblem;
 import aStar_planning.pop_with_norms.components.Organization;
 import logic.Action;
 import logic.Goal;
 import logic.Situation;
-import iriela.mock_components.organizations.ExploitationOrg;
-import iriela.mock_components.organizations.GlobalOrg;
-import iriela.mock_components.organizations.HouseholdOrg;
-import iriela.mock_components.organizations.VillageOrg;
+import iriela.description.organizations.ExploitationOrg;
+import iriela.description.organizations.GlobalOrg;
+import iriela.description.organizations.HouseholdOrg;
+import iriela.description.organizations.VillageOrg;
 
 import java.util.ArrayList;
 import java.util.List;

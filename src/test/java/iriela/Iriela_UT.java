@@ -2,12 +2,11 @@ package iriela;
 
 import aStar.Operator;
 import aStar_planning.pop.components.Flaw;
-import aStar_planning.pop.components.PlanModification;
 import aStar_planning.pop_with_norms.OrganizationalPlanningProblem;
 import aStar_planning.pop_with_norms.components.NormativeFlaw;
 import aStar_planning.pop_with_norms.components.Organization;
 import aStar_planning.pop_with_norms.components.OrganizationalPlan;
-import iriela.mock_components.PlanningProblemFactory;
+import iriela.description.PlanningProblemFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import static  org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,7 +27,7 @@ public class Iriela_UT {
         OrganizationalPlan initialState = (OrganizationalPlan) problem.getInitialState();
 
         List<Organization> organizations = initialState.getOrganizations();
-
+        logger.info(initialState);
         assertEquals(organizations.size(), 4);
     }
 
@@ -49,6 +48,8 @@ public class Iriela_UT {
         List<Operator> options = problem.getOptions(initialPlan);
 
         logger.info(options);
+        logger.debug("=".repeat(10) + ". Now showing the initial plan.");
+        logger.info(initialPlan);
     }
 
     @Test
@@ -60,11 +61,12 @@ public class Iriela_UT {
         List<Operator> options = problem.getOptions(initialPlan);
 
         for (Operator planModification : options) {
+            logger.info("applying : " + planModification);
             initialPlan = (OrganizationalPlan) initialPlan.applyPlanModification(planModification);
+            logger.debug("got : " + initialPlan);
         }
 
         Set<Flaw> nextFlaws = new HashSet<>(initialPlan.getFlaws());
-
 
         initialFlaws.stream()
                 .filter(flaw -> flaw instanceof NormativeFlaw)

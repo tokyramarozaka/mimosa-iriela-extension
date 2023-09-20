@@ -1,6 +1,6 @@
 package graph;
 
-import aStar.AStarResolver;
+import aStar.AStarPlanner;
 import aStar_planning.graph_planning.GraphForwardPlanningProblem;
 import exception.NoPlanFoundException;
 import lombok.Getter;
@@ -9,7 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -43,7 +42,7 @@ public class Graph {
      */
     public boolean pathExists(Node start, Node goal){
         try{
-            AStarResolver search = new AStarResolver(new GraphForwardPlanningProblem(start,goal));
+            AStarPlanner search = new AStarPlanner(new GraphForwardPlanningProblem(start,goal));
             search.findSolution();
         }catch (NoPlanFoundException exception){
             return false;

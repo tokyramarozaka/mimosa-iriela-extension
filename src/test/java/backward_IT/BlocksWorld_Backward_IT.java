@@ -1,7 +1,7 @@
 package backward_IT;
 
 import aStar.AStarProblem;
-import aStar.AStarResolver;
+import aStar.AStarPlanner;
 import aStar.Operator;
 import aStar_planning.backward.BackwardPlanningProblem;
 import logic.Action;
@@ -32,7 +32,7 @@ public class BlocksWorld_Backward_IT {
                 rules
         );
 
-        AStarResolver resolver = new AStarResolver(problem);
+        AStarPlanner resolver = new AStarPlanner(problem);
         List<Operator> solutionPlan = resolver.findSolution();
 
         assertEquals(solutionPlan.size(),4,"Plan should have 4 actions");
@@ -55,7 +55,7 @@ public class BlocksWorld_Backward_IT {
                 rules
         );
 
-        AStarResolver resolver = new AStarResolver(problem);
+        AStarPlanner resolver = new AStarPlanner(problem);
         List<Operator> solutionPlan = resolver.findSolution();
 
         assertEquals(solutionPlan.size(),4,"Plan should have 4 actions");
@@ -78,7 +78,7 @@ public class BlocksWorld_Backward_IT {
                 rules
         );
 
-        AStarResolver resolver = new AStarResolver(problem);
+        AStarPlanner resolver = new AStarPlanner(problem);
         List<Operator> solutionPlan = resolver.findSolution();
 
         assertEquals(solutionPlan.size(),4,"Plan should have 4 actions");

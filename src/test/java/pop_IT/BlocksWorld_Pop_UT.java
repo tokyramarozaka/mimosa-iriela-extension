@@ -1,6 +1,6 @@
 package pop_IT;
 
-import aStar.AStarResolver;
+import aStar.AStarPlanner;
 import aStar.Operator;
 import aStar_planning.pop.PopPlanningProblem;
 import aStar_planning.pop.components.Flaw;
@@ -106,7 +106,7 @@ public class BlocksWorld_Pop_UT {
 
     @Test
     public void findSolution_ok(){
-        AStarResolver resolver = new AStarResolver(problem);
+        AStarPlanner resolver = new AStarPlanner(problem);
 
         List<Operator> solutionOperators = resolver.findSolution();
 

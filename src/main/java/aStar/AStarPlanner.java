@@ -10,17 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.stream.Collectors;
 
 @Getter
-public class AStarResolver {
+public class AStarPlanner {
     private AStarProblem problem;
     private final Queue<ProblemState> open = new PriorityQueue<>();
     private final List<State> closed = new ArrayList<>();
     private ProblemState finalProblemState;
-    private final static Logger logger = LogManager.getLogger(AStarResolver.class);
+    private final static Logger logger = LogManager.getLogger(AStarPlanner.class);
 
-    public AStarResolver(AStarProblem problem){
+    public AStarPlanner(AStarProblem problem){
         this.problem = problem;
     }
 

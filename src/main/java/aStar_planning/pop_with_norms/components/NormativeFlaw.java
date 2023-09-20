@@ -20,19 +20,6 @@ public class NormativeFlaw implements Flaw {
     private Context context;
     private final static Logger logger = LogManager.getLogger(NormativeFlaw.class);
 
-    @Override
-    public String toString() {
-        String flawName = switch(flawedNorm.getDeonticOperator()){
-            case OBLIGATION -> "\n\tMISSING OBLIGATION";
-            case PROHIBITION -> "\n\tMISSING PROHIBITION";
-            case PERMISSION -> "\n\tMISSING PERMISSION";
-        };
-
-        return flawName + " : " +
-                this.flawedNorm +
-                " IN " + this.applicableSituation
-                + "WITH CONTEXT " + this.context;
-    }
 
     /**
      * Get the non applicable situation in which the norm stops being applicable
@@ -55,5 +42,18 @@ public class NormativeFlaw implements Flaw {
 
         logger.info(" did not found unapplicable situation for norm : " + flawedNorm);
         return null;
+    }
+    @Override
+    public String toString() {
+        String flawName = switch(flawedNorm.getDeonticOperator()){
+            case OBLIGATION -> "\n\tMISSING OBLIGATION";
+            case PROHIBITION -> "\n\tMISSING PROHIBITION";
+            case PERMISSION -> "\n\tMISSING PERMISSION";
+        };
+
+        return flawName + " : " +
+                this.flawedNorm +
+                " IN " + this.applicableSituation
+                + "WITH CONTEXT " + this.context;
     }
 }

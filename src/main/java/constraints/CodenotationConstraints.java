@@ -1,12 +1,11 @@
 package constraints;
 
-import aStar.AStarResolver;
+import aStar.AStarPlanner;
 import aStar_planning.graph_planning.GraphForwardPlanningProblem;
 import exception.NoPlanFoundException;
 import graph.Graph;
 import graph.Node;
 import logic.Context;
-import logic.ContextPair;
 import logic.ContextualTerm;
 import logic.Graphic;
 import logic.Term;
@@ -108,7 +107,7 @@ public class CodenotationConstraints extends Graphic {
         List<Codenotation> codenotationsOnly = this.allCodenotations();
 
         for (Codenotation codenotation : codenotationsOnly) {
-            AStarResolver loopPlanningProblem = new AStarResolver(new GraphForwardPlanningProblem(
+            AStarPlanner loopPlanningProblem = new AStarPlanner(new GraphForwardPlanningProblem(
                     this.getGraph().getContainingNode(codenotation.getRight()),
                     this.getGraph().getContainingNode(codenotation.getLeft())
             ));

@@ -34,7 +34,9 @@ public class OpenCondition implements Flaw {
                 .append("\n\tOPEN CONDITION : ")
                 .append(this.proposition)
                 .append(" IN ")
-                .append(this.situation);
+                .append(this.situation)
+                .append(" WITH CONTEXT : ")
+                .append(this.proposition.getContext());
 
         return stringBuilder.toString();
     }

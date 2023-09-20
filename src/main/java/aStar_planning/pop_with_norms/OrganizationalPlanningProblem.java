@@ -7,7 +7,6 @@ import aStar_planning.pop_with_norms.components.Organization;
 import aStar_planning.pop_with_norms.components.OrganizationalPlan;
 import logic.Action;
 import logic.Goal;
-import logic.Predicate;
 import logic.Situation;
 import lombok.Getter;
 import lombok.ToString;
@@ -33,7 +32,7 @@ public class OrganizationalPlanningProblem extends PopPlanningProblem {
                 goal,
                 organizations
         );
-        this.getPossibleActions().addAll(getPossibleOrganizationalActions());
+        this.getPossibleActions().addAll(getPossibleInstitutionalActions());
     }
 
     @Override
@@ -41,7 +40,12 @@ public class OrganizationalPlanningProblem extends PopPlanningProblem {
         return this.initialOrganizationalPlan;
     }
 
-    public List<Action> getPossibleOrganizationalActions(){
+    /**
+     * Adds all the actions from the set of institutions organized in this planning problem.
+     * This searches through all active organizations and fetches all their actions.
+     * @return a list of all possible actions based upon all active organizations.
+     */
+    public List<Action> getPossibleInstitutionalActions(){
         List<Action> possibleActions = new ArrayList<>();
 
         for (Organization organization : this.organizations) {

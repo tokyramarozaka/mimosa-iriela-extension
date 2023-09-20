@@ -1,6 +1,6 @@
 package pop_IT;
 
-import aStar.AStarResolver;
+import aStar.AStarPlanner;
 import aStar_planning.pop.PopPlanningProblem;
 import mock_logic.blocks_world.ActionFactory;
 import mock_logic.blocks_world.GoalFactory;
@@ -19,7 +19,7 @@ public class BlocksWorld_Pop_IT {
                 ActionFactory.allActionsInBlocksWorld(),
                 GoalFactory.anyThreeBlocks_stacked__withNonCodenotationConstraints()
         );
-        AStarResolver resolver = new AStarResolver(abstractProblem);
+        AStarPlanner resolver = new AStarPlanner(abstractProblem);
 
         PlanningOutput output = resolver.outputSolutionPlan();
     }

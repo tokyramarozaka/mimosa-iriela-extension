@@ -1,10 +1,12 @@
 package aStar_planning.pop_with_norms.components;
 
 import aStar.Operator;
+import aStar.State;
 import aStar_planning.pop.components.Flaw;
 import aStar_planning.pop.components.OpenCondition;
 import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PlanElement;
+import aStar_planning.pop.components.PlanModification;
 import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop.components.Step;
 import aStar_planning.pop.components.Threat;
@@ -18,6 +20,7 @@ import logic.Action;
 import logic.Atom;
 import logic.Context;
 import logic.ContextualAtom;
+import logic.Situation;
 import logic.Term;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
@@ -59,10 +62,15 @@ public class OrganizationalPlan extends Plan {
      */
     public void evaluateNormativeFlaws() {
         List<RegulativeNorm> toEvaluate = new ArrayList<>();
-        toEvaluate.addAll(this.convertPermissionsToProhibitions());
+        //toEvaluate.addAll(this.convertPermissionsToProhibitions());
         toEvaluate.addAll(getAllObligationsAndProhibitions());
 
-        for (PopSituation situation : this.getSituations()) {
+        List<PopSituation> allSituationsExceptInitial = this.getSituations()
+                .stream()
+                .filter(situation -> situation.equals(this.getInitialSituation()))
+                .toList();
+
+        for (PopSituation situation : allSituationsExceptInitial) {
             for (RegulativeNorm norm : toEvaluate) {
                 if (isApplicable(situation, norm)) {
                     createFlawIfNormNotApplied(situation, norm);
@@ -83,6 +91,7 @@ public class OrganizationalPlan extends Plan {
     public boolean isApplicable(PopSituation situation, RegulativeNorm norm) {
         Context conditionContext = new Context();
         Context normContext = new Context();
+
         for (Atom condition : norm.getNormConditions().getConditions()) {
             boolean isRole = this.roleKeywords
                     .stream()
@@ -104,7 +113,6 @@ public class OrganizationalPlan extends Plan {
     /**
      * Checks if a condition matches with some constitutive norms of either the organization
      * or the institution
-     *
      * @param condition : the proposition we want to verify as a constitutive norm
      * @return true if the condition is confirmed by some constitutive norm, and false otherwise
      */
@@ -115,6 +123,7 @@ public class OrganizationalPlan extends Plan {
     ) {
         Term subject = condition.getPredicate().getTerms().get(0);
         String roleName = condition.getPredicate().getName();
+        CodenotationConstraints ccCopy = this.getCc().copy();
 
         for (ConstitutiveNorm constitutiveNorm : this.getAllConstitutiveNorms()) {
             if ((roleName.equals(constitutiveNorm.getTarget().getName()))
@@ -122,12 +131,11 @@ public class OrganizationalPlan extends Plan {
                     conditionContext,
                     constitutiveNorm.getSource(),
                     normContext,
-                    this.getCc()))
-            ){
+                    ccCopy))
+            ) {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -142,7 +150,8 @@ public class OrganizationalPlan extends Plan {
 
     /**
      * Creates and inserts a new flaw in this plan's flaw set if the norm is not applied correctly.
-     * @param situation : the situation in which the norm ought to be applied
+     *
+     * @param situation      : the situation in which the norm ought to be applied
      * @param applicableNorm : the norm which ought to be applied.
      */
     private void createFlawIfNormNotApplied(PopSituation situation, RegulativeNorm applicableNorm) {
@@ -150,7 +159,7 @@ public class OrganizationalPlan extends Plan {
 
         if (!applicableNorm.isApplied(this, situation)) {
             if (applicableNorm.getDeonticOperator().equals(DeonticOperator.PROHIBITION)) {
-                applicableContext = getApplicableContext(applicableNorm, situation);
+                applicableContext = getContextOfProhibition(applicableNorm, situation);
             }
 
             this.getFlaws().add(new NormativeFlaw(
@@ -160,6 +169,11 @@ public class OrganizationalPlan extends Plan {
                     applicableContext
             ));
         }
+    }
+
+    @Override
+    public State applyPlanModification(Operator toApply) {
+        return ((PlanModification) toApply).apply(this);
     }
 
     @Override
@@ -224,13 +238,13 @@ public class OrganizationalPlan extends Plan {
     }
 
     /**
-     * TODO: think if we really need a context, and where is it coming from ?
-     *
+     * TODO: we need a context for the flawed action / proposition, and where is it coming from,
+     * from the step who bears the missing condition
      * @param norm
      * @param situation
      * @return
      */
-    private Context getApplicableContext(RegulativeNorm norm, PopSituation situation) {
+    private Context getContextOfProhibition(RegulativeNorm norm, PopSituation situation) {
         if (norm.enforceProposition()) {
 //          TODO: norm.getNormConditions().getApplicableCodenotations(this, situation);
         } else if (norm.enforceAction()) {
@@ -244,9 +258,7 @@ public class OrganizationalPlan extends Plan {
                             .equals(forbiddenAction))
                     .findFirst();
 
-            logger.error("f step " + forbiddenStep);
             if (forbiddenStep.isPresent()) {
-                logger.debug("Found context of forbidden action in norm " + norm + " with " + forbiddenStep.get());
                 return forbiddenStep.get().getActionInstance().getContext();
             }
         }
@@ -290,30 +302,6 @@ public class OrganizationalPlan extends Plan {
 
         return constitutiveNorms;
     }
-
-    /**
-     * Returns a list of all regulative norms applicable to a given situation of the current pla
-     *
-     * @param situation : the situation in the plan we want to check out for applicable norms
-     * @return a list of regulative norms applicable to the given situation
-     */
-    private List<RegulativeNorm> getApplicableRegulativeNorms(PopSituation situation) {
-        List<RegulativeNorm> applicableRegulativeNorms = new ArrayList<>();
-
-        for (Organization organization : this.organizations) {
-            List<RegulativeNorm> toAdd = organization.getNorms()
-                    .stream()
-                    .filter(norm -> norm instanceof RegulativeNorm)
-                    .map(norm -> (RegulativeNorm) norm)
-                    .filter(norm -> isApplicable(situation, norm))
-                    .toList();
-
-            applicableRegulativeNorms.addAll(toAdd);
-        }
-
-        return applicableRegulativeNorms;
-    }
-
 
     /**
      * Returns all the asserted proposition in a given situation of the plan by retrieving all

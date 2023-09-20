@@ -1,7 +1,7 @@
 package graph;
 
 import aStar.AStarProblem;
-import aStar.AStarResolver;
+import aStar.AStarPlanner;
 import aStar.State;
 import aStar_planning.graph_planning.GraphForwardPlanningProblem;
 import exception.NoPlanFoundException;
@@ -37,11 +37,11 @@ public class Node implements State {
 
     public boolean hasRecursiveLink(){
         AStarProblem searchCycleProblem;
-        AStarResolver problemResolver;
+        AStarPlanner problemResolver;
 
         for (Link link : this.getLinks()) {
             searchCycleProblem = new GraphForwardPlanningProblem(link.getTo(), this);
-            problemResolver = new AStarResolver(searchCycleProblem);
+            problemResolver = new AStarPlanner(searchCycleProblem);
 
             try{
                 problemResolver.findSolution();

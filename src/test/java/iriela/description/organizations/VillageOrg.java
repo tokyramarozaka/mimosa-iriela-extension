@@ -1,12 +1,12 @@
-package iriela.mock_components.organizations;
+package iriela.description.organizations;
 
 import aStar_planning.pop_with_norms.components.ConstitutiveNorm;
 import aStar_planning.pop_with_norms.components.Norm;
 import aStar_planning.pop_with_norms.components.Organization;
-import iriela.mock_components.constants.Agent;
-import iriela.mock_components.constants.Zones;
+import iriela.description.constants.Agent;
+import iriela.description.constants.Zones;
 import logic.Predicate;
-import iriela.mock_components.institutions.Village;
+import iriela.description.institutions.Village;
 
 import java.util.List;
 
