@@ -141,7 +141,6 @@ public class PlanInitializer {
 
         for (Organization organization : organizations) {
             assertions.addAll(organization.getAssertions());
-            assertions.addAll(organization.getInstitution().getAssertions());
         }
 
         return assertions;

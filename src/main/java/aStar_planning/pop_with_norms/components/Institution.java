@@ -19,6 +19,6 @@ public class Institution {
     private float priority;
     private List<Constant> concepts;
     private List<Predicate> assertions;
-    private List<Action> possibleActions;
+    private List<RoleActions> roleActions;
     private List<Norm> norms;
 }

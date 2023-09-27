@@ -1,25 +1,16 @@
 package iriela.description.institutions;
 
-import aStar_planning.pop_with_norms.components.DeonticOperator;
 import aStar_planning.pop_with_norms.components.Institution;
 import aStar_planning.pop_with_norms.components.Norm;
-import aStar_planning.pop_with_norms.components.NormConditions;
-import aStar_planning.pop_with_norms.components.NormConsequences;
-import aStar_planning.pop_with_norms.components.NormativeAction;
-import aStar_planning.pop_with_norms.components.RegulativeNorm;
 import aStar_planning.pop_with_norms.components.Role;
+import aStar_planning.pop_with_norms.components.RoleActions;
 import aStar_planning.pop_with_norms.concepts.ActionName;
-import iriela.description.PredicateFactory;
 import iriela.description.TermsFactory;
 import logic.Action;
-import logic.ActionConsequence;
-import logic.ActionPrecondition;
-import logic.Atom;
 import logic.Constant;
 import logic.Predicate;
 import logic.Term;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,70 +18,16 @@ import java.util.List;
  */
 public class Village {
     // CONCEPTS
-    public static final Role member = new Role("member");
-    public static final Role land = new Role("land");
-    public static final Role forest = new Role("forest");
-    public static final Role river = new Role("river");
-    public static final Role office = new Role("office");
     public static final Role sacred = new Role("sacred");
     public static final Role _protected = new Role("_protected");
-    public static final ActionName fish = new ActionName("fish");
-    public static final ActionName cut = new ActionName("cut");
-
-
-    // ASSERTIONS
-    public static Predicate hasTrees(Term zone) {
-        return new Predicate("hasTrees", List.of(zone));
-    }
-    public static Predicate hasFish(Term zone) {
-        return new Predicate("hasFish", List.of(zone));
-    }
-
-
-    // ACTIONS
-    public static ActionPrecondition fishPreconditions(Term subject, Term someZone) {
-        return new ActionPrecondition(List.of(
-                new Atom(false, Global.located(subject, someZone)),
-                new Atom(false, Village.hasFish(someZone)),
-                new Atom(false, Village.hasTrees(someZone)),
-                new Atom(false, Village.river(someZone)),
-                new Atom(false, Global.zone(someZone))
-        ));
-    }
-    public static ActionConsequence fishConsequences(Term subject, Term someZone) {
-        return new ActionConsequence(new ArrayList<>(List.of(
-                new Atom(true, Village.hasFish(someZone)),
-                new Atom(false, PredicateFactory.haveFood(subject)))
-        ));
-    }
-    public static Action fish(Term subject, Term zone) {
-        return new Action(
-                fish,
-                fishPreconditions(subject, zone),
-                fishConsequences(subject, zone)
-        );
-    }
-
-    private static ActionPrecondition cutPreconditions(Term subject, Term someZone) {
-        return new ActionPrecondition(List.of(
-                new Atom(false, Village.member(subject)),
-                new Atom(false, Global.zone(someZone)),
-                new Atom(false, Village.forest(someZone)),
-                new Atom(false, Village.hasTrees(someZone))
-        ));
-    }
-    private static ActionConsequence cutConsequences(Term subject, Term someZone) {
-        return new ActionConsequence(new ArrayList<>(List.of(
-                new Atom(true, Village.hasTrees(someZone)),
-                new Atom(false, PredicateFactory.haveWood(subject))
-        )));
-    }
-    public static Action cut(Term subject, Term zone) {
-        return new Action(
-                cut,
-                cutPreconditions(subject, zone),
-                cutConsequences(subject, zone));
-    }
+    public static final Role member = new Role("member");
+    public static final Role office = new Role("office");
+    public static final ActionName reportCut = new ActionName("reportCut");
+    public static final ActionName getFishingLicense = new ActionName("getFishingLicense");
+    public static final ActionName getFishingNet = new ActionName("getFishingNet");
+    public static final ActionName getExploitationLicense = new ActionName(
+            "getExploitationLicense"
+    );
 
     // INSTITUTION
     public static Institution get() {
@@ -99,91 +36,91 @@ public class Village {
                 7,
                 Village.concepts(),
                 Village.assertions(),
-                Village.actions(),
+                Village.roleActions(),
                 Village.norms()
         );
     }
 
-    // ROLE CHECK PREDICATES
-    public static Predicate member(Term subject) {
-        return new Predicate("member", List.of(subject));
+    private static List<Norm> norms() {
+        return List.of(
+                VillageNorms.mandatoryCutReport(TermsFactory.X),
+                VillageNorms.locatedInSacred(TermsFactory.X, TermsFactory.Z),
+                VillageNorms.fishWithoutLicense(TermsFactory.X, TermsFactory.Z),
+                VillageNorms.cutWithLicense(TermsFactory.X, TermsFactory.Z),
+                VillageNorms.haveFishingNetWithLicense(TermsFactory.X)
+        );
     }
-    public static Predicate land(Term subject){
-        return new Predicate ("land", List.of(subject));
+
+
+    private static List<Constant> concepts() {
+        return List.of(
+                sacred,
+                _protected,
+                member,
+                office,
+                reportCut,
+                getFishingLicense,
+                getExploitationLicense,
+                getFishingNet
+        );
     }
-    public static Predicate forest(Term subject) {
-        return new Predicate("forest", List.of(subject));
+
+    private static List<Predicate> assertions() {
+        return List.of(
+                haveFishingLicense(TermsFactory.X),
+                haveExploitationLicense(TermsFactory.X),
+                filledCutReport(TermsFactory.X),
+                haveFishingNet(TermsFactory.X)
+        );
     }
-    public static Predicate river(Term subject) {
-        return new Predicate("river", List.of(subject));
+
+    private static List<Action> memberActions() {
+        return List.of(
+                VillageActions.reportCut(TermsFactory.X),
+                VillageActions.getExploitationLicense(TermsFactory.X, TermsFactory.Z),
+                VillageActions.getFishingLicense(TermsFactory.X, TermsFactory.Z),
+                VillageActions.getFishingNet(TermsFactory.X)
+        );
     }
-    public static Predicate office(Term subject) {
-        return new Predicate("office", List.of(subject));
-    }
+
+    // CHECK PREDICATES
     public static Predicate sacred(Term subject) {
         return new Predicate("sacred", List.of(subject));
     }
+
     public static Predicate _protected(Term subject) {
         return new Predicate("_protected", List.of(subject));
     }
 
-    // UTILITY LISTS
-    private static List<Norm> norms() {
-        return List.of(
-                sacredCut(TermsFactory.X, TermsFactory.Z),
-                sacredFish(TermsFactory.X, TermsFactory.Z)
-        );
-    }
-    private static List<Action> actions() {
-        return List.of(
-                fish(TermsFactory.X, TermsFactory.Z),
-                cut(TermsFactory.X, TermsFactory.Z)
-        );
+    public static Predicate office(Term subject) {
+        return new Predicate("office", List.of(subject));
     }
 
-    private static List<Constant> concepts() {
-        return List.of(member, land, forest, river, office, sacred, _protected, fish, cut);
+    public static Predicate member(Term subject) {
+        return new Predicate("member", List.of(subject));
     }
 
-    private static List<Predicate> assertions() {
-        return List.of(hasTrees(TermsFactory.X), hasFish(TermsFactory.X));
+    public static Predicate haveFishingLicense(Term subject) {
+        return new Predicate("haveFishingLicense", List.of(subject));
     }
 
-    // NORMS
-    private static Norm sacredFish(Term subject, Term zone) {
-        return new RegulativeNorm(
-                DeonticOperator.PROHIBITION,
-                conditionsSacredFish(subject, zone),
-                consequencesSacredFish(subject, zone)
-        );
-    }
-    private static NormConsequences consequencesSacredFish(Term subject, Term zone) {
-        return new NormativeAction(Village.fish(subject, zone));
-    }
-    private static NormConditions conditionsSacredFish(Term subject, Term zone) {
-        return new NormConditions(List.of(
-                new Atom(false, Village.member(subject)),
-                new Atom(false, Global.zone(zone)),
-                new Atom(false, Village.sacred(zone))
-        ));
-    }
-    private static Norm sacredCut(Term subject, Term zone) {
-        return new RegulativeNorm(
-                DeonticOperator.PROHIBITION,
-                conditionsSacredCut(subject, zone),
-                consequencesSacredCut(subject, zone)
-        );
+    public static Predicate haveExploitationLicense(Term subject) {
+        return new Predicate("haveExploitationLicense", List.of(subject));
     }
 
-    private static NormConsequences consequencesSacredCut(Term subject, Term zone) {
-        return new NormativeAction(Village.cut(subject, zone));
+    public static Predicate filledCutReport(Term subject) {
+        return new Predicate("filledCutReport", List.of(subject));
     }
 
-    private static NormConditions conditionsSacredCut(Term subject, Term zone) {
-        return new NormConditions(List.of(
-                new Atom(false, Village.member(subject)),
-                new Atom(false, Global.zone(zone)),
-                new Atom(false, Village.sacred(zone))
-        ));
+    public static Predicate haveFishingNet(Term subject) {
+        return new Predicate("haveFishingNet", List.of(subject));
+    }
+
+    private static List<RoleActions> roleActions() {
+        return List.of(forMember());
+    }
+
+    private static RoleActions forMember() {
+        return new RoleActions(member, memberActions());
     }
 }

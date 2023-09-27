@@ -24,16 +24,6 @@ public class NormativeProposition extends Atom implements NormConsequences {
             CodenotationConstraints cc,
             Context applicableContext
     ){
-        System.out.println("===> " + this.build(applicableContext) + " is asserted in  " +
-                situation + " : " + plan.isAsserted(
-                new ContextualAtom(applicableContext, this), situation, cc.copy()));
-
-        System.out.println("its preceding steps : " + plan.getSteps().stream()
-                .filter(plan::isNotFinalStep)
-                .filter(step -> plan.getTc().isBefore(
-                        plan.getTc().getFollowingSituation(step),  situation)
-                )
-                .collect(Collectors.toList()));
         return plan.isAsserted(
                 new ContextualAtom(applicableContext, this), situation, cc.copy());
     }

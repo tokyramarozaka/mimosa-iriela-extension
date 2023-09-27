@@ -4,7 +4,9 @@ import aStar_planning.pop_with_norms.components.ConstitutiveNorm;
 import aStar_planning.pop_with_norms.components.Norm;
 import aStar_planning.pop_with_norms.components.Organization;
 import iriela.description.constants.Agent;
+import iriela.description.constants.Zones;
 import iriela.description.institutions.Household;
+import iriela.description.institutions.Village;
 import logic.Predicate;
 
 import java.util.ArrayList;
@@ -21,11 +23,33 @@ public class HouseholdOrg {
 
     private static List<Norm> norms() {
         return List.of(
-                new ConstitutiveNorm(Agent.SELF, Household.provider)
+                new ConstitutiveNorm(Agent.SELF, Household.provider),
+                new ConstitutiveNorm(Zones.A1, Household.land),
+                new ConstitutiveNorm(Zones.A2, Household.land),
+                new ConstitutiveNorm(Zones.A3, Household.forest),
+                new ConstitutiveNorm(Zones.A4, Household.river),
+                new ConstitutiveNorm(Zones.B1, Household.land),
+                new ConstitutiveNorm(Zones.B2, Household.land),
+                new ConstitutiveNorm(Zones.B3, Household.land),
+                new ConstitutiveNorm(Zones.B4, Household.land),
+                new ConstitutiveNorm(Zones.C1, Household.land),
+                new ConstitutiveNorm(Zones.C2, Household.land),
+                new ConstitutiveNorm(Zones.C3, Household.land),
+                new ConstitutiveNorm(Zones.C4, Household.land),
+                new ConstitutiveNorm(Zones.D1, Household.forest),
+                new ConstitutiveNorm(Zones.D2, Household.river),
+                new ConstitutiveNorm(Zones.D3, Household.river),
+                new ConstitutiveNorm(Zones.D4, Household.forest)
         );
     }
 
     private static List<Predicate> assertions() {
-        return new ArrayList<>();
+        return List.of(
+                Household.hasTrees(Zones.A3),
+                Household.hasTrees(Zones.D1),
+                Household.hasTrees(Zones.D4),
+                Household.hasFish(Zones.A4),
+                Household.hasFish(Zones.D2)
+        );
     }
 }

@@ -65,6 +65,29 @@ public class Plan implements State {
         this.evaluateFlaws();
     }
 
+    /**
+     * Builds the plan without computing the set of flaws right away, this was designed to
+     * compute flaws at a later time.
+     * @param situations
+     * @param steps
+     * @param cc
+     * @param tc
+     * @param evaluateFlaws just a simple boolean to overload the default constructor
+     */
+    public Plan(
+            List<PopSituation> situations,
+            List<Step> steps,
+            CodenotationConstraints cc,
+            TemporalConstraints tc,
+            boolean evaluateFlaws
+    ){
+        this.situations = situations;
+        this.steps = steps;
+        this.cc = cc;
+        this.tc = tc;
+        this.tc.updateGraph();
+    }
+
     public boolean isNotFinalStep(Step step) {
         Action action = (Action) step.getActionInstance().getLogicalEntity();
 
@@ -190,7 +213,7 @@ public class Plan implements State {
      * @param step : the step to analyze
      * @return all open conditions regarding a specific step
      */
-    private List<Flaw> getOpenConditions(Step step) {
+    protected List<Flaw> getOpenConditions(Step step) {
         List<Flaw> openConditions = new ArrayList<>();
         List<Atom> stepPreconditions = step.getActionPreconditions().getAtoms();
         CodenotationConstraints temporaryCc = new CodenotationConstraints(new ArrayList<>(
@@ -262,7 +285,7 @@ public class Plan implements State {
     ){
         return this.steps.stream()
                 .filter(this::isNotFinalStep)
-                .anyMatch(step -> this.isBefore(this.tc.getFollowingSituation(step), situation)
+                .anyMatch(step -> this.isBefore(step, situation)
                     && step.assertsWithPermanentCodenotations(proposition, cc));
     }
 
@@ -300,7 +323,7 @@ public class Plan implements State {
      * @param step : the bearer of the open condition
      * @return an open condition stating the missing precondition for which step
      */
-    private OpenCondition buildOpenCondition(Atom missingPrecondition, Step step) {
+    protected OpenCondition buildOpenCondition(Atom missingPrecondition, Step step) {
         return new OpenCondition(
                 tc.getPrecedingSituation(step),
                 new ContextualAtom(step.getActionInstance().getContext(), missingPrecondition)

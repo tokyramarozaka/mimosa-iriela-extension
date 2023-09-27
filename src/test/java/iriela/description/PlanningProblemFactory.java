@@ -5,7 +5,6 @@ import aStar_planning.pop_with_norms.components.Organization;
 import logic.Action;
 import logic.Goal;
 import logic.Situation;
-import iriela.description.organizations.ExploitationOrg;
 import iriela.description.organizations.GlobalOrg;
 import iriela.description.organizations.HouseholdOrg;
 import iriela.description.organizations.VillageOrg;
@@ -22,8 +21,7 @@ public class PlanningProblemFactory {
                 new ArrayList<Organization>(List.of(
                         GlobalOrg.get(),
                         VillageOrg.get(),
-                        HouseholdOrg.get(),
-                        ExploitationOrg.get()
+                        HouseholdOrg.get()
                 ))
         );
     }

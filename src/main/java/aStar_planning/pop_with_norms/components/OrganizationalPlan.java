@@ -27,6 +27,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -44,9 +45,10 @@ public class OrganizationalPlan extends Plan {
             TemporalConstraints tc,
             List<Organization> organizations
     ) {
-        super(situations, steps, cc, tc);
+        super(situations, steps, cc, tc, true);
         this.organizations = organizations;
         this.roleKeywords = getAllRoles();
+        super.evaluateFlaws();
         evaluateNormativeFlaws();
     }
 
@@ -61,7 +63,7 @@ public class OrganizationalPlan extends Plan {
      */
     public void evaluateNormativeFlaws() {
         List<RegulativeNorm> toEvaluate = new ArrayList<>();
-        // TODO : toEvaluate.addAll(this.convertPermissionsToProhibitions());
+        toEvaluate.addAll(this.convertPermissionsToProhibitions());
         toEvaluate.addAll(getAllObligationsAndProhibitions());
 
         List<PopSituation> allSituationsExceptInitial = this.getSituations()
@@ -91,11 +93,7 @@ public class OrganizationalPlan extends Plan {
         Context normContext = new Context();
 
         for (Atom condition : norm.getNormConditions().getConditions()) {
-            boolean isRole = this.roleKeywords
-                    .stream()
-                    .anyMatch(role -> role.getName().equals(condition.getPredicate().getName()));
-
-            if (isRole) {
+            if (isRole(condition)) {
                 if (!existsInConstitutiveNorms(condition, conditionContext, normContext)) {
                     return false;
                 }
@@ -106,6 +104,21 @@ public class OrganizationalPlan extends Plan {
             }
         }
         return true;
+    }
+
+    /**
+     * Determines if an atom is a constitutive norm verification. Meaning that the atom requires
+     * some constitutive norms, or else it is false.
+     * @param condition : the condition to check if it designates a role
+     * @return true if the atom is referring to a constitutive norm, and false otherwise.
+     */
+    private boolean isRole(Atom condition) {
+        return this.roleKeywords
+                .stream()
+                .anyMatch(role -> Objects.equals(
+                        role.getName(),
+                        condition.getPredicate().getName())
+                );
     }
 
     /**
@@ -215,8 +228,8 @@ public class OrganizationalPlan extends Plan {
     }
 
     /**
-     * TODO: we need a context for the flawed action / proposition, and where is it coming from,
-     * from the step who bears the missing condition
+     * Retrieves the context of application of a norm.
+     * TODO : write the docs here for both obligations and prohibitions.
      * @param norm
      * @param situation
      * @return
@@ -227,10 +240,6 @@ public class OrganizationalPlan extends Plan {
             return followingStep.getActionInstance().getContext();
         } else if (norm.enforceAction()) {
             Action forbiddenAction = ((NormativeAction) norm.getNormConsequences());
-
-            logger.error(this.getSteps().stream()
-                    .filter(step -> this.getTc().isBefore(situation, step))
-                    .collect(Collectors.toList()));
 
             Optional<Step> forbiddenStep = this.getSteps().stream()
                     .filter(step -> this.getTc().isBefore(situation, step))
@@ -363,12 +372,6 @@ public class OrganizationalPlan extends Plan {
         return roles;
     }
 
-    @Override
-    public String toString() {
-        return super.toString() +
-                "\n-- ORGANIZATIONS : \n\t" +
-                this.organizations;
-    }
 
     @Override
     public State applyPlanModification(Operator toApply) {
@@ -386,5 +389,42 @@ public class OrganizationalPlan extends Plan {
         }
 
         throw new UnsupportedOperationException("Flaw type not supported yet.");
+    }
+
+    @Override
+    protected List<Flaw> getOpenConditions(Step step) {
+        List<Flaw> openConditions = new ArrayList<>();
+        List<Atom> stepPreconditions = step.getActionPreconditions().getAtoms();
+        CodenotationConstraints temporaryCc = new CodenotationConstraints(new ArrayList<>(
+                this.getCc().getCodenotations())
+        );
+
+        for (Atom precondition : stepPreconditions) {
+            if(isRole(precondition)){
+                if(existsInConstitutiveNorms(precondition, step.getActionInstance().getContext(),
+                        new Context())
+                ){
+                    continue;
+                }else{
+                    openConditions.add(buildOpenCondition(precondition, step));
+                }
+            }
+            ContextualAtom preconditionInstance = new ContextualAtom(
+                    step.getActionInstance().getContext(), precondition
+            );
+
+            if(!isAsserted(preconditionInstance, this.getTc().getPrecedingSituation(step), temporaryCc)){
+                openConditions.add(buildOpenCondition(precondition, step));
+            }
+        }
+
+        return openConditions;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                "\n-- ORGANIZATIONS : \n\t" +
+                this.organizations;
     }
 }
