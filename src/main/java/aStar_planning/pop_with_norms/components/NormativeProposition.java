@@ -8,8 +8,6 @@ import logic.ContextualAtom;
 import logic.Predicate;
 import lombok.AllArgsConstructor;
 
-import java.util.stream.Collectors;
-
 @AllArgsConstructor
 public class NormativeProposition extends Atom implements NormConsequences {
 
@@ -19,7 +17,7 @@ public class NormativeProposition extends Atom implements NormConsequences {
 
     @Override
     public boolean isApplied(
-            OrganizationalPlan plan,
+            NormativePlan plan,
             PopSituation situation,
             CodenotationConstraints cc,
             Context applicableContext

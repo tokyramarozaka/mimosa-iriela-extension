@@ -5,6 +5,6 @@ import constraints.CodenotationConstraints;
 import logic.Context;
 
 public interface NormConsequences {
-    boolean isApplied(OrganizationalPlan plan, PopSituation situation, CodenotationConstraints cc,
-    Context applicableContext);
+    boolean isApplied(NormativePlan plan, PopSituation situation, CodenotationConstraints cc,
+                      Context applicableContext);
 }

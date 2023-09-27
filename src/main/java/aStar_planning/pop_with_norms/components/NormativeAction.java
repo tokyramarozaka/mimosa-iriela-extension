@@ -38,7 +38,7 @@ public class NormativeAction extends Action implements NormConsequences {
 
     @Override
     public boolean isApplied(
-            OrganizationalPlan plan,
+            NormativePlan plan,
             PopSituation situation,
             CodenotationConstraints cc,
             Context applicableContext

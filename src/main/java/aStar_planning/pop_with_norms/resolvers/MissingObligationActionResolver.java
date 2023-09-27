@@ -8,7 +8,7 @@ import aStar_planning.pop.mapper.PlanModificationMapper;
 import aStar_planning.pop.utils.TemporalConstraintsBuilder;
 import aStar_planning.pop_with_norms.components.NormativeAction;
 import aStar_planning.pop_with_norms.components.NormativeFlaw;
-import aStar_planning.pop_with_norms.components.OrganizationalPlan;
+import aStar_planning.pop_with_norms.components.NormativePlan;
 import constraints.CodenotationConstraints;
 import constraints.PartialOrder;
 import constraints.TemporalConstraints;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MissingObligationActionResolver {
-    public static List<PlanModification> byPromotion(OrganizationalPlan plan, NormativeFlaw flaw) {
+    public static List<PlanModification> byPromotion(NormativePlan plan, NormativeFlaw flaw) {
         List<PlanModification> operators = new ArrayList<>();
         Action mandatoryAction = (Action) flaw.getFlawedNorm().getNormConsequences();
         PopSituation currentSituation = flaw.getApplicableSituation();
@@ -52,7 +52,7 @@ public class MissingObligationActionResolver {
         return operators;
     }
 
-    public static List<Operator> byCreation(OrganizationalPlan plan, NormativeFlaw flaw) {
+    public static List<Operator> byCreation(NormativePlan plan, NormativeFlaw flaw) {
         // if the flaw happens in the final situation no steps can be added after it
         if (flaw.getApplicableSituation().equals(plan.getFinalSituation())) {
             return new ArrayList<>();

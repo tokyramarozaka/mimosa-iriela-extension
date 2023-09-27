@@ -4,7 +4,7 @@ import aStar.State;
 import aStar_planning.pop.PopPlanningProblem;
 import aStar_planning.pop.utils.PlanInitializer;
 import aStar_planning.pop_with_norms.components.Organization;
-import aStar_planning.pop_with_norms.components.OrganizationalPlan;
+import aStar_planning.pop_with_norms.components.NormativePlan;
 import logic.Action;
 import logic.Goal;
 import logic.Situation;
@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.ToString;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import settings.Keywords;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,7 @@ import java.util.List;
 @Getter
 @ToString
 public class OrganizationalPlanningProblem extends PopPlanningProblem {
-    private final OrganizationalPlan initialOrganizationalPlan;
+    private final NormativePlan initialNormativePlan;
     private final List<Organization> organizations;
 
     private final Logger logger = LogManager.getLogger(OrganizationalPlanningProblem.class);
@@ -33,7 +32,7 @@ public class OrganizationalPlanningProblem extends PopPlanningProblem {
     ){
         super(initialSituation, possibleActions, goal, true);
         this.organizations = organizations;
-        this.initialOrganizationalPlan = PlanInitializer.constructInitialPlan(
+        this.initialNormativePlan = PlanInitializer.constructInitialPlan(
                 initialSituation,
                 goal,
                 organizations
@@ -43,7 +42,7 @@ public class OrganizationalPlanningProblem extends PopPlanningProblem {
 
     @Override
     public State getInitialState() {
-        return this.initialOrganizationalPlan;
+        return this.initialNormativePlan;
     }
 
     /**

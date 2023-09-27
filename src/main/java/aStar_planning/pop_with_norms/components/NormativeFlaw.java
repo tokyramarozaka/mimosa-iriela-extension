@@ -5,7 +5,6 @@ import aStar_planning.pop.components.Flaw;
 import exception.UnapplicableNormException;
 import logic.Context;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class NormativeFlaw implements Flaw {
-    private OrganizationalPlan plan;
+    private NormativePlan plan;
     private RegulativeNorm flawedNorm;
     private PopSituation applicableSituation;
     private Context context;

@@ -6,7 +6,6 @@ import aStar_planning.pop.components.Step;
 import constraints.CodenotationConstraints;
 import exception.UnapplicableNormException;
 import logic.Context;
-import logic.ContextualAtom;
 import logic.LogicalEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -53,7 +52,7 @@ public class RegulativeNorm extends Norm {
      * PROHIBITION, PERMISSION.
      * @return true if the given step actually satisfies the normative action, false otherwise.
      */
-    public boolean isSatisfiedIn(OrganizationalPlan plan, PopSituation situation){
+    public boolean isSatisfiedIn(NormativePlan plan, PopSituation situation){
         plan.removeRedundantTemporalConstraints();
         try {
             CodenotationConstraints applicableCodenotations = this.getNormConditions()
@@ -76,7 +75,7 @@ public class RegulativeNorm extends Norm {
      * applicable.
      */
     public CodenotationConstraints getApplicableCodenotations (
-            OrganizationalPlan plan,
+            NormativePlan plan,
             PopSituation situation
     ) throws UnapplicableNormException{
         return this.getNormConditions().getApplicableCodenotations(plan, situation);
@@ -89,7 +88,7 @@ public class RegulativeNorm extends Norm {
      * @param situation : the situation we want to verify it in
      * @return true if the norm is applied, and false otherwise.
      */
-    public boolean isApplied(OrganizationalPlan plan, PopSituation situation,
+    public boolean isApplied(NormativePlan plan, PopSituation situation,
                              CodenotationConstraints cc, Context applicableContext) {
         if(this.enforceAction()){
             return checkForActionAfterwards(plan, situation);
@@ -100,7 +99,7 @@ public class RegulativeNorm extends Norm {
         }
     }
 
-    private boolean checkForActionAfterwards(OrganizationalPlan plan, PopSituation situation) {
+    private boolean checkForActionAfterwards(NormativePlan plan, PopSituation situation) {
         List<PlanElement> elementsAfterSituation = plan.getSteps()
                 .stream()
                 .filter(step -> plan.getTc().isBefore(situation, step))

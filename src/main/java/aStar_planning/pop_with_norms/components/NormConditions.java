@@ -33,7 +33,7 @@ public class NormConditions {
      * @return a set of codenotation constraints that makes the norm applicable.
      */
     public CodenotationConstraints getApplicableCodenotations(
-            OrganizationalPlan plan,
+            NormativePlan plan,
             PopSituation situation
     )throws UnapplicableNormException{
         CodenotationConstraints cc = new CodenotationConstraints();

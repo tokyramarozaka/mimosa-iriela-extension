@@ -2,7 +2,7 @@ package aStar_planning.pop.utils;
 
 import aStar_planning.pop.components.Step;
 import aStar_planning.pop_with_norms.components.Organization;
-import aStar_planning.pop_with_norms.components.OrganizationalPlan;
+import aStar_planning.pop_with_norms.components.NormativePlan;
 import constraints.Codenotation;
 import constraints.PartialOrder;
 import aStar_planning.pop.components.Plan;
@@ -63,7 +63,7 @@ public class PlanInitializer {
                 initialCodenotationConstraints, initialTemporalConstraints);
     }
 
-    public static OrganizationalPlan constructInitialPlan(
+    public static NormativePlan constructInitialPlan(
             Situation initialSituation,
             Goal goal,
             List<Organization> organizations
@@ -79,7 +79,7 @@ public class PlanInitializer {
                 initialAndFinalSteps
         );
 
-        return new OrganizationalPlan(
+        return new NormativePlan(
                 initialAndFinalSituations,
                 initialAndFinalSteps,
                 buildInitialCc(goal, goal.getGoalContext()),

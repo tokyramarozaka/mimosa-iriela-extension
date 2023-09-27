@@ -4,7 +4,7 @@ import aStar.Operator;
 import aStar_planning.pop_with_norms.components.NormativeFlaw;
 import aStar_planning.pop_with_norms.components.NormConsequences;
 import aStar_planning.pop_with_norms.components.NormativeProposition;
-import aStar_planning.pop_with_norms.components.OrganizationalPlan;
+import aStar_planning.pop_with_norms.components.NormativePlan;
 import logic.Action;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class MissingObligationResolver {
     public static List<Operator> resolve(
-            OrganizationalPlan plan,
+            NormativePlan plan,
             NormativeFlaw flaw,
             List<Action> possibleActions
     ){

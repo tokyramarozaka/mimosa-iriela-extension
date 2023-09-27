@@ -4,7 +4,7 @@ import aStar.Operator;
 import aStar_planning.pop.components.OpenCondition;
 import aStar_planning.pop.resolvers.OpenConditionResolver;
 import aStar_planning.pop_with_norms.components.NormativeFlaw;
-import aStar_planning.pop_with_norms.components.OrganizationalPlan;
+import aStar_planning.pop_with_norms.components.NormativePlan;
 import constraints.CodenotationConstraints;
 import logic.Action;
 import logic.Atom;
@@ -15,14 +15,14 @@ import java.util.List;
 
 public class CircumventionOperator {
     public static List<Operator> circumvent(
-            OrganizationalPlan plan,
+            NormativePlan plan,
             NormativeFlaw flaw,
             List<Action> possibleActions
     ) {
         List<Operator> operators = new ArrayList<>();
 
         flaw.getFlawedNorm().getNormConditions().getConditions().forEach(condition -> {
-            OrganizationalPlan applicablePlan = getApplicablePlan(plan, flaw);
+            NormativePlan applicablePlan = getApplicablePlan(plan, flaw);
 
             OpenCondition toSolve = createReverseOpenCondition(
                     plan, flaw, possibleActions, condition
@@ -43,12 +43,12 @@ public class CircumventionOperator {
      * @param flaw : the normative flaw to solve
      * @return a temporary plan where the condition is being codenotated to some values
      */
-    private static OrganizationalPlan getApplicablePlan(OrganizationalPlan plan, NormativeFlaw flaw) {
+    private static NormativePlan getApplicablePlan(NormativePlan plan, NormativeFlaw flaw) {
         CodenotationConstraints applicableCodenotations = flaw.getFlawedNorm()
                 .getApplicableCodenotations(plan, flaw.getApplicableSituation())
                 .fuseWith(plan.getCc());
 
-        return new OrganizationalPlan(
+        return new NormativePlan(
                 plan.getSituations(),
                 plan.getSteps(),
                 applicableCodenotations,
@@ -66,7 +66,7 @@ public class CircumventionOperator {
      * @return
      */
     private static OpenCondition createReverseOpenCondition(
-            OrganizationalPlan plan,
+            NormativePlan plan,
             NormativeFlaw flaw,
             List<Action> possibleActions,
             Atom condition

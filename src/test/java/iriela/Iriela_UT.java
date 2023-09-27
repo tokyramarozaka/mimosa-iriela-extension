@@ -4,9 +4,8 @@ import aStar.Operator;
 import aStar_planning.pop.components.Flaw;
 import aStar_planning.pop.components.PlanModification;
 import aStar_planning.pop_with_norms.OrganizationalPlanningProblem;
-import aStar_planning.pop_with_norms.components.NormativeFlaw;
 import aStar_planning.pop_with_norms.components.Organization;
-import aStar_planning.pop_with_norms.components.OrganizationalPlan;
+import aStar_planning.pop_with_norms.components.NormativePlan;
 import iriela.description.PlanningProblemFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,7 +26,7 @@ public class Iriela_UT {
     @Test
     public void getActiveOrganizations_ok() {
         OrganizationalPlanningProblem problem = PlanningProblemFactory.irielaProblem();
-        OrganizationalPlan initialState = (OrganizationalPlan) problem.getInitialState();
+        NormativePlan initialState = (NormativePlan) problem.getInitialState();
 
         List<Organization> organizations = initialState.getOrganizations();
         logger.info(initialState);
@@ -37,7 +36,7 @@ public class Iriela_UT {
     @Test
     public void evaluateNormativeFlaws_ok() {
         OrganizationalPlanningProblem problem = PlanningProblemFactory.irielaProblem();
-        OrganizationalPlan initialPlan = (OrganizationalPlan) problem.getInitialState();
+        NormativePlan initialPlan = (NormativePlan) problem.getInitialState();
 
         Set<Flaw> initialFlaws = initialPlan.getFlaws();
 
@@ -47,7 +46,7 @@ public class Iriela_UT {
     @Test
     public void getNormativeOptions_ok() {
         OrganizationalPlanningProblem problem = PlanningProblemFactory.irielaProblem();
-        OrganizationalPlan initialPlan = (OrganizationalPlan) problem.getInitialState();
+        NormativePlan initialPlan = (NormativePlan) problem.getInitialState();
         List<Operator> options = problem.getOptions(initialPlan);
 
         logger.info(options);
@@ -58,13 +57,13 @@ public class Iriela_UT {
     @Test
     public void applyOperatorSolvesFlaw_ok() {
         OrganizationalPlanningProblem problem = PlanningProblemFactory.irielaProblem();
-        OrganizationalPlan initialPlan = (OrganizationalPlan) problem.getInitialState();
+        NormativePlan initialPlan = (NormativePlan) problem.getInitialState();
         Set<Flaw> initialFlaws = new HashSet<>(initialPlan.getFlaws());
 
         List<Operator> options = problem.getOptions(initialPlan);
         Operator toApply = options.get(0);
         logger.info("applying : " + toApply);
-        initialPlan = (OrganizationalPlan) initialPlan.applyPlanModification(toApply);
+        initialPlan = (NormativePlan) initialPlan.applyPlanModification(toApply);
         logger.debug("got : " + initialPlan);
         Set<Flaw> nextFlaws = new HashSet<>(initialPlan.getFlaws());
 

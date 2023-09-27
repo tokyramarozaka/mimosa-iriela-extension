@@ -30,15 +30,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @Getter
-public class OrganizationalPlan extends Plan {
-    private final static Logger logger = LogManager.getLogger(OrganizationalPlan.class);
+public class NormativePlan extends Plan {
+    private final static Logger logger = LogManager.getLogger(NormativePlan.class);
     private final List<Organization> organizations;
     private final List<Role> roleKeywords;
 
-    public OrganizationalPlan(
+    public NormativePlan(
             List<PopSituation> situations,
             List<Step> steps,
             CodenotationConstraints cc,
@@ -53,6 +52,7 @@ public class OrganizationalPlan extends Plan {
     }
 
     /**
+     * TODO : update all of this
      * Adds to the flaw list all flaws related to regulative norms and the situation in which they
      * are not applied, namely :
      * <ul>

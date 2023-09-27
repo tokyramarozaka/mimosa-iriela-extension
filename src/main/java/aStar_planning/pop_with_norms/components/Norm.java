@@ -6,6 +6,6 @@ import logic.Context;
 import logic.LogicalEntity;
 
 public abstract class Norm extends LogicalEntity {
-    public abstract boolean isApplied(OrganizationalPlan plan, PopSituation situation,
+    public abstract boolean isApplied(NormativePlan plan, PopSituation situation,
                                       CodenotationConstraints cc, Context applicableContext);
 }

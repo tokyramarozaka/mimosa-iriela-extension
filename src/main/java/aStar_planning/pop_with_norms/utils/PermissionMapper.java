@@ -1,7 +1,7 @@
 package aStar_planning.pop_with_norms.utils;
 
 import aStar_planning.pop_with_norms.components.DeonticOperator;
-import aStar_planning.pop_with_norms.components.OrganizationalPlan;
+import aStar_planning.pop_with_norms.components.NormativePlan;
 import aStar_planning.pop_with_norms.components.RegulativeNorm;
 
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PermissionMapper {
     public static List<RegulativeNorm> toProhibitions(
-            OrganizationalPlan plan,
+            NormativePlan plan,
             RegulativeNorm permission
     ){
         List<RegulativeNorm> generatedProhibitions = new ArrayList<>();
