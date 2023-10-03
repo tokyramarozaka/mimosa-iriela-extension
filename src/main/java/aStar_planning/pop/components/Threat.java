@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 
 @AllArgsConstructor
 @Getter
@@ -14,7 +13,7 @@ import lombok.ToString;
 public class Threat implements Flaw {
     private Step destroyer;
     private Step threatened;
-    private PopSituation situation;
+    private PopSituation applicableSituation;
     private ContextualAtom proposition;
 
     @Override

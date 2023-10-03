@@ -210,9 +210,11 @@ public class PlanInitializer {
     private static Action finalAction(List<Atom> propositions) {
         return new Action(
                 Keywords.POP_FINAL_STEP,
-                new ActionPrecondition(propositions.stream().filter(
-                        proposition -> !proposition.getPredicate().getName()
-                                .equals(Keywords.CODENOTATION_OPERATOR)).toList()
+                new ActionPrecondition(propositions
+                        .stream()
+                        .filter(proposition -> !proposition.getPredicate().getName()
+                                .equals(Keywords.CODENOTATION_OPERATOR))
+                        .collect(Collectors.toList())
                 ),
                 new ActionConsequence()
         );

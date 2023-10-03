@@ -30,7 +30,6 @@ public class OpenConditionResolver {
 
     /**
      * Resolve an open condition by adding a codenotation constraint to an existing step
-     *
      * @param plan          : the plan in which we want to resolve the open condition
      * @param openCondition : the open condition we want to resolve describing which proposition is
      *                      not necessarily true in which situation
@@ -40,14 +39,19 @@ public class OpenConditionResolver {
         List<Operator> operators = new ArrayList<>();
 
         plan.getSteps().stream()
-                .filter(step -> plan.getTc().isBefore(step, openCondition.getSituation()))
+                .filter(step -> plan.getTc().isBefore(step, openCondition.getApplicableSituation()))
                 .filter(precedingStep -> precedingStep.asserts(openCondition.getProposition(),
                         plan.getCc()))
                 .map(assertingStep -> assertingStep.getAllAssertingCodenotations(
-                        openCondition.getProposition()))
-                .forEach(codenotationConstraintsList -> codenotationConstraintsList.forEach(
-                        codenotationConstraints -> operators.add(PlanModificationMapper
-                                .from(openCondition, codenotationConstraints))));
+                        openCondition.getProposition(), plan.getCc()))
+                .forEach(codenotationConstraintsList -> {
+                    codenotationConstraintsList.forEach(codenotationConstraints -> {
+                        Operator toAdd = PlanModificationMapper
+                                .from(openCondition, codenotationConstraints);
+
+                        operators.add(toAdd);
+                    });
+                });
 
         return operators;
     }
@@ -70,10 +74,14 @@ public class OpenConditionResolver {
                             .getFollowingSituation(potentialEstablisher);
 
                     TemporalConstraints temporalChange = new TemporalConstraints(Arrays.asList(
-                            new PartialOrder(situationPostEstablisher, openCondition.getSituation())
+                            new PartialOrder(
+                                    situationPostEstablisher,
+                                    openCondition.getApplicableSituation()
+                            )
                     ));
 
-                    planModifications.add(PlanModificationMapper.from(openCondition, temporalChange));
+                    planModifications.add(PlanModificationMapper
+                            .from(openCondition, temporalChange));
                 });
 
         return planModifications;
@@ -99,7 +107,7 @@ public class OpenConditionResolver {
             PopSituation newStepEntry = new PopSituation();
             PopSituation newStepExit = new PopSituation();
             TemporalConstraints tcChanges = TemporalConstraintsBuilder.insertNewStepBeforeSituation(
-                    plan, solvingStep, newStepEntry, newStepExit, openCondition.getSituation());
+                    plan, solvingStep, newStepEntry, newStepExit, openCondition.getApplicableSituation());
 
             possibleModifications.add(PlanModificationMapper.from(
                     openCondition,
@@ -146,7 +154,7 @@ public class OpenConditionResolver {
     private static List<Step> potentialEstablishers(Plan plan, OpenCondition openCondition) {
         return plan.getSteps()
                 .stream()
-                .filter(step -> plan.getTc().isAfter(step, openCondition.getSituation()))
+                .filter(step -> plan.getTc().isAfter(step, openCondition.getApplicableSituation()))
                 .filter(step -> step.asserts(openCondition.getProposition(), plan.getCc()))
                 .collect(Collectors.toList());
     }

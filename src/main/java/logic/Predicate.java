@@ -79,11 +79,11 @@ public class Predicate implements Unifiable {
             return false;
         }
 
-        int index = 0;
-        for (Term term : this.getTerms()) {
-            if (!term.attemptUnification(
+        for (int index = 0; index < this.getTerms().size(); index++) {
+            Term toUnify = this.getTerms().get(index);
+            if (!toUnify.attemptUnification(
                     fromContext,
-                    toPredicate.getTerms().get(index++),
+                    toPredicate.getTerms().get(index),
                     toContext,
                     changes,
                     codenotationConstraint

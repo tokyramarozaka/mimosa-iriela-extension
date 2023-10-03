@@ -28,7 +28,7 @@ public class ContextualAtom {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append(this.atom.build(this.context));
+        stringBuilder.append(this.atom);
 
         return stringBuilder.toString();
     }

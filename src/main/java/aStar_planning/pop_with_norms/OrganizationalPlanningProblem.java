@@ -1,5 +1,6 @@
 package aStar_planning.pop_with_norms;
 
+import aStar.Operator;
 import aStar.State;
 import aStar_planning.pop.PopPlanningProblem;
 import aStar_planning.pop.utils.PlanInitializer;
@@ -37,27 +38,11 @@ public class OrganizationalPlanningProblem extends PopPlanningProblem {
                 goal,
                 organizations
         );
-        this.getPossibleActions().addAll(getPossibleInstitutionalActions());
+        this.getPossibleActions().addAll(this.initialNormativePlan.getActionsFromAllInstitutions());
     }
 
     @Override
     public State getInitialState() {
         return this.initialNormativePlan;
-    }
-
-    /**
-     * Adds all the actions from the set of institutions organized in this planning problem.
-     * This searches through all active organizations and fetches actions attached to the role the
-     * agent plays.
-     * @return a list of all possible actions based upon all active organizations.
-     */
-    public List<Action> getPossibleInstitutionalActions(){
-        List<Action> possibleActions = new ArrayList<>();
-
-        for (Organization organization : this.organizations) {
-            possibleActions.addAll(organization.allActionsForAgent());
-        }
-
-        return possibleActions;
     }
 }

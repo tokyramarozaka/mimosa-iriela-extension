@@ -36,8 +36,8 @@ public class Household {
 
     private static List<Predicate> assertions() {
         return List.of(
-                hasTrees(TermsFactory.X),
-                hasFish(TermsFactory.X),
+                containsTrees(TermsFactory.X),
+                containsFishes(TermsFactory.X),
                 haveFood(TermsFactory.X),
                 haveWood(TermsFactory.X)
         );
@@ -56,11 +56,11 @@ public class Household {
     public static final ActionName cut = new ActionName("cut");
 
     //  ASSERTIONS
-    public static Predicate hasTrees(Term zone) {
-        return new Predicate("hasTrees", List.of(zone));
+    public static Predicate containsTrees(Term zone) {
+        return new Predicate("containsTrees", List.of(zone));
     }
-    public static Predicate hasFish(Term zone) {
-        return new Predicate("hasFish", List.of(zone));
+    public static Predicate containsFishes(Term zone) {
+        return new Predicate("containsFishes", List.of(zone));
     }
     public static Predicate haveFood(Term subject){
         return PredicateFactory.haveFood(subject);

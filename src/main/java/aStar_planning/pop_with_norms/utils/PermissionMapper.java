@@ -8,24 +8,5 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PermissionMapper {
-    public static List<RegulativeNorm> toProhibitions(
-            NormativePlan plan,
-            RegulativeNorm permission
-    ){
-        List<RegulativeNorm> generatedProhibitions = new ArrayList<>();
 
-        plan.getSituations().stream()
-                .filter(situation -> !plan.isApplicable(situation, permission))
-                .forEach(situation -> {
-                    generatedProhibitions.add(
-                        new RegulativeNorm(
-                                DeonticOperator.PROHIBITION,
-                                permission.getNormConditions(),
-                                permission.getNormConsequences())
-                        );
-                    }
-                );
-
-        return generatedProhibitions;
-    }
 }

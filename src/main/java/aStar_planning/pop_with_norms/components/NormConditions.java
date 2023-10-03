@@ -35,7 +35,7 @@ public class NormConditions {
     public CodenotationConstraints getApplicableCodenotations(
             NormativePlan plan,
             PopSituation situation
-    )throws UnapplicableNormException{
+    ) throws UnapplicableNormException{
         CodenotationConstraints cc = new CodenotationConstraints();
         Context conditionContext = new Context();
 
@@ -51,8 +51,10 @@ public class NormConditions {
                         cc
                 )){
 //                    logger.info("\tOK for : "+condition+" for " + situation+"\n");
-                    isUnifiedOnce = true;
-                    break;
+                    if(condition.isNegation() == assertedProposition.getAtom().isNegation()) {
+                        isUnifiedOnce = true;
+                        break;
+                    }
                 }
             }
 

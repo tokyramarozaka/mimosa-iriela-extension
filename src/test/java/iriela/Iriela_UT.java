@@ -3,10 +3,15 @@ package iriela;
 import aStar.Operator;
 import aStar_planning.pop.components.Flaw;
 import aStar_planning.pop.components.PlanModification;
+import aStar_planning.pop.components.Step;
 import aStar_planning.pop_with_norms.OrganizationalPlanningProblem;
 import aStar_planning.pop_with_norms.components.Organization;
 import aStar_planning.pop_with_norms.components.NormativePlan;
 import iriela.description.PlanningProblemFactory;
+import logic.Action;
+import logic.ActionPrecondition;
+import logic.Atom;
+import logic.Predicate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,10 +27,10 @@ import java.util.Set;
 
 public class Iriela_UT {
     private static final Logger logger = LogManager.getLogger(Iriela_UT.class);
+    OrganizationalPlanningProblem problem = PlanningProblemFactory.irielaProblem();
 
     @Test
     public void getActiveOrganizations_ok() {
-        OrganizationalPlanningProblem problem = PlanningProblemFactory.irielaProblem();
         NormativePlan initialState = (NormativePlan) problem.getInitialState();
 
         List<Organization> organizations = initialState.getOrganizations();
@@ -35,17 +40,15 @@ public class Iriela_UT {
 
     @Test
     public void evaluateNormativeFlaws_ok() {
-        OrganizationalPlanningProblem problem = PlanningProblemFactory.irielaProblem();
         NormativePlan initialPlan = (NormativePlan) problem.getInitialState();
 
         Set<Flaw> initialFlaws = initialPlan.getFlaws();
 
-        assertTrue(initialFlaws.size() > 0);
+        assertTrue(initialFlaws.size() == 2);
     }
 
     @Test
     public void getNormativeOptions_ok() {
-        OrganizationalPlanningProblem problem = PlanningProblemFactory.irielaProblem();
         NormativePlan initialPlan = (NormativePlan) problem.getInitialState();
         List<Operator> options = problem.getOptions(initialPlan);
 
@@ -56,17 +59,47 @@ public class Iriela_UT {
 
     @Test
     public void applyOperatorSolvesFlaw_ok() {
-        OrganizationalPlanningProblem problem = PlanningProblemFactory.irielaProblem();
         NormativePlan initialPlan = (NormativePlan) problem.getInitialState();
-        Set<Flaw> initialFlaws = new HashSet<>(initialPlan.getFlaws());
 
         List<Operator> options = problem.getOptions(initialPlan);
-        Operator toApply = options.get(0);
-        logger.info("applying : " + toApply);
+        PlanModification toApply = (PlanModification) options.get(0);
         initialPlan = (NormativePlan) initialPlan.applyPlanModification(toApply);
-        logger.debug("got : " + initialPlan);
         Set<Flaw> nextFlaws = new HashSet<>(initialPlan.getFlaws());
 
-        assertFalse(nextFlaws.contains(((PlanModification)toApply).getTargetFlaw()));
+        assertFalse(nextFlaws.contains(toApply.getTargetFlaw()));
+    }
+
+    @Test
+    public void convertObligatoryPropositionsToGoals_ok() {
+        NormativePlan initialPlan = (NormativePlan) problem.getInitialState();
+        Step finalStep = initialPlan.getFinalStep();
+        ActionPrecondition goals = finalStep.getActionPreconditions();
+
+        List<Predicate> goalPredicates = goals.getAtoms()
+                .stream()
+                .map(Atom::getPredicate)
+                .toList();
+
+        assertTrue(goalPredicates
+                .stream()
+                .anyMatch(predicate -> predicate.getName().equals("haveFood"))
+        );
+        assertTrue(goalPredicates
+                .stream()
+                .anyMatch(predicate -> predicate.getName().equals("haveWood"))
+        );
+    }
+
+    @Test
+    public void permissionsAffectPossibleActions_ok(){
+        NormativePlan initialPlan = (NormativePlan) problem.getInitialState();
+
+        List<Action> permittedActions = initialPlan.getPermittedActions(
+                initialPlan.getInitialSituation(),
+                initialPlan.getActionsFromAllInstitutions()
+        );
+
+        assertFalse(permittedActions.stream().anyMatch(action -> action.getActionName()
+                .getName().equals("cut")));
     }
 }

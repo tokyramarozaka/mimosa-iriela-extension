@@ -23,6 +23,9 @@ public class NormativeProposition extends Atom implements NormConsequences {
             Context applicableContext
     ){
         return plan.isAsserted(
-                new ContextualAtom(applicableContext, this), situation, cc.copy());
+                new ContextualAtom(applicableContext, this),
+                situation,
+                cc.copy()
+        );
     }
 }

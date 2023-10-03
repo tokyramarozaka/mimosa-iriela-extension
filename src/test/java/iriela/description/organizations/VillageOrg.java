@@ -26,6 +26,7 @@ public class VillageOrg {
                 new ConstitutiveNorm(Zones.C1, Village.sacred),
                 new ConstitutiveNorm(Zones.D1, Village.sacred),
                 new ConstitutiveNorm(Zones.D2, Village.sacred),
+                new ConstitutiveNorm(Zones.C4, Village.sacred),
                 new ConstitutiveNorm(Zones.A3, Village._protected),
                 new ConstitutiveNorm(Zones.A4, Village._protected),
                 new ConstitutiveNorm(Zones.C4, Village.office)

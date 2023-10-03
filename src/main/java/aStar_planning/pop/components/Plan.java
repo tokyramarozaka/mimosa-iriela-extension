@@ -23,9 +23,7 @@ import settings.Keywords;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -91,7 +89,7 @@ public class Plan implements State {
     public boolean isNotFinalStep(Step step) {
         Action action = (Action) step.getActionInstance().getLogicalEntity();
 
-        return !action.getName().getName().equals(Keywords.POP_FINAL_STEP.getName());
+        return !action.getActionName().getName().equals(Keywords.POP_FINAL_STEP.getName());
     }
 
     /**
@@ -205,7 +203,7 @@ public class Plan implements State {
     }
 
     private String getActionName(Action stepAction) {
-        return stepAction.getName().getName();
+        return stepAction.getActionName().getName();
     }
 
     /**
@@ -223,6 +221,7 @@ public class Plan implements State {
             ContextualAtom preconditionInstance = new ContextualAtom(
                     step.getActionInstance().getContext(), precondition
             );
+
 
             if(!isAsserted(preconditionInstance, tc.getPrecedingSituation(step), temporaryCc)){
                 openConditions.add(buildOpenCondition(precondition, step));
@@ -285,7 +284,7 @@ public class Plan implements State {
     ){
         return this.steps.stream()
                 .filter(this::isNotFinalStep)
-                .anyMatch(step -> this.isBefore(step, situation)
+                .anyMatch(step -> !this.tc.isAfter(step, situation)
                     && step.assertsWithPermanentCodenotations(proposition, cc));
     }
 
@@ -324,10 +323,14 @@ public class Plan implements State {
      * @return an open condition stating the missing precondition for which step
      */
     protected OpenCondition buildOpenCondition(Atom missingPrecondition, Step step) {
-        return new OpenCondition(
+        OpenCondition openCondition = new OpenCondition(
                 tc.getPrecedingSituation(step),
                 new ContextualAtom(step.getActionInstance().getContext(), missingPrecondition)
         );
+        if(openCondition.toString().equals("OPEN CONDITION : areAdjacents(Y) IN PopSituation(id=53) WITH CONTEXT : Context_43162{X ==> X::7576,Z ==> Y::7576}]")){
+            System.out.println("test");
+        }
+        return openCondition;
     }
 
 
@@ -402,7 +405,7 @@ public class Plan implements State {
      */
     public Step getInitialStep() {
         return this.steps.stream()
-                .filter(step -> ((Action) step.getActionInstance().getLogicalEntity()).getName()
+                .filter(step -> ((Action) step.getActionInstance().getLogicalEntity()).getActionName()
                         .getName().equals(Keywords.POP_INITIAL_STEP.getName()))
                 .findFirst()
                 .orElse(null);
@@ -410,7 +413,7 @@ public class Plan implements State {
 
     public Step getFinalStep() {
         return this.steps.stream()
-                .filter(step -> ((Action) step.getActionInstance().getLogicalEntity()).getName()
+                .filter(step -> ((Action) step.getActionInstance().getLogicalEntity()).getActionName()
                         .getName().equals(Keywords.POP_FINAL_STEP.getName()))
                 .findFirst()
                 .orElse(null);

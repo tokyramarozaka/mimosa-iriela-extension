@@ -9,7 +9,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 public class OpenCondition implements Flaw {
-    private PopSituation situation;
+    private PopSituation applicableSituation;
     private ContextualAtom proposition;
 
     @Override
@@ -17,13 +17,13 @@ public class OpenCondition implements Flaw {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OpenCondition that = (OpenCondition) o;
-        return Objects.equals(situation, that.situation)
+        return Objects.equals(applicableSituation, that.applicableSituation)
                 && Objects.equals(proposition, that.proposition);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(situation, proposition);
+        return Objects.hash(applicableSituation, proposition);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class OpenCondition implements Flaw {
                 .append("\n\tOPEN CONDITION : ")
                 .append(this.proposition)
                 .append(" IN ")
-                .append(this.situation)
+                .append(this.applicableSituation)
                 .append(" WITH CONTEXT : ")
                 .append(this.proposition.getContext());
 

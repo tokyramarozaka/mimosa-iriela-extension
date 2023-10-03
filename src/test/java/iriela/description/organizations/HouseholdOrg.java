@@ -6,10 +6,8 @@ import aStar_planning.pop_with_norms.components.Organization;
 import iriela.description.constants.Agent;
 import iriela.description.constants.Zones;
 import iriela.description.institutions.Household;
-import iriela.description.institutions.Village;
 import logic.Predicate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class HouseholdOrg {
@@ -45,11 +43,11 @@ public class HouseholdOrg {
 
     private static List<Predicate> assertions() {
         return List.of(
-                Household.hasTrees(Zones.A3),
-                Household.hasTrees(Zones.D1),
-                Household.hasTrees(Zones.D4),
-                Household.hasFish(Zones.A4),
-                Household.hasFish(Zones.D2)
+                Household.containsTrees(Zones.A3),
+                Household.containsTrees(Zones.D1),
+                Household.containsTrees(Zones.D4),
+                Household.containsFishes(Zones.A4),
+                Household.containsFishes(Zones.D2)
         );
     }
 }

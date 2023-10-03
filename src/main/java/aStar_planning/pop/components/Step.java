@@ -53,6 +53,7 @@ public class Step implements PlanElement {
      * Checks if the current step makes the given proposition necessarily true in its preceding
      * situation. If true, we say that the current step ASSERTS the proposition.
      * This version does not change the given Codenotation Constraints.
+     *
      * @param proposition : the proposition to check if it is asserted by the current step or not
      * @param cc          : codenotations constraints describing variable bindings which will NOT
      *                    be changed during the function as we use a copy of it.
@@ -78,14 +79,15 @@ public class Step implements PlanElement {
     /**
      * Checks if the current step can assert the given proposition, and save the changes made to
      * codenotation constraints that would make the assertion possible.
+     *
      * @param proposition : the proposition to check if it is asserted
-     * @param cc : the current codenotations set in the plan(which will change if need be)
+     * @param cc          : the current codenotations set in the plan(which will change if need be)
      * @return
      */
     public boolean assertsWithPermanentCodenotations(
             ContextualAtom proposition,
             CodenotationConstraints cc
-    ){
+    ) {
         for (Atom consequence : this.getActionConsequences().getAtoms()) {
             ContextualAtom consequenceInstance = new ContextualAtom(
                     actionInstance.getContext(), consequence
@@ -100,6 +102,7 @@ public class Step implements PlanElement {
 
         return false;
     }
+
     /**
      * Determines if the current step destroys a given proposition without adding any other bindings
      *
@@ -109,6 +112,11 @@ public class Step implements PlanElement {
      */
     public boolean destroys(ContextualAtom proposition, CodenotationConstraints cc) {
         for (Atom consequence : this.getActionConsequences().getAtoms()) {
+            if(!consequence.getPredicate().getName().equals(
+                    proposition.getAtom().getPredicate().getName())
+            ){
+                continue;
+            }
             CodenotationConstraints tempCc = cc.copy();
             ContextualAtom consequenceInstance = new ContextualAtom(
                     this.actionInstance.getContext(), consequence
@@ -139,18 +147,27 @@ public class Step implements PlanElement {
             ContextualAtom proposition,
             CodenotationConstraints tempCc
     ) {
-        return consequenceInstance.getAtom().getPredicate().unify(
-                this.getActionInstance().getContext(),
+        boolean res = consequenceInstance.getAtom().getPredicate().unify(
+                consequenceInstance.getContext(),
                 proposition.getAtom().getPredicate(),
                 proposition.getContext(),
                 tempCc
         );
+        if (proposition.getAtom().getPredicate().getName().equals("areAdjacents")
+                && consequenceInstance.getAtom().getPredicate().getName().equals("areAdjacents")
+                && ((consequenceInstance.getContext().getId() == 43162) ||
+                (proposition.getContext().getId() == 43162))
+        && !res){
+            System.out.println("test");
+        }
+        return res;
     }
 
 
     /**
      * Returns the set of codenotation constraints which would make it so that this step asserts
      * the given proposition
+     *
      * @param toAssert : the proposition to assert
      * @return a set of variable bindings (codenotation constraints) which would allow this step
      * to assert the given proposition, if any.
@@ -175,24 +192,29 @@ public class Step implements PlanElement {
         return assertingCodenotations;
     }
 
-    public List<CodenotationConstraints> getAllAssertingCodenotations(ContextualAtom toAssert) {
+    public List<CodenotationConstraints> getAllAssertingCodenotations(
+            ContextualAtom toAssert,
+            CodenotationConstraints existingCc
+    ) {
         List<CodenotationConstraints> allAssertingCodenotations = new ArrayList<>();
 
         for (Atom consequence : this.getActionConsequences().getAtoms()) {
-            CodenotationConstraints assertingCodenotations = new CodenotationConstraints();
+            CodenotationConstraints assertingCc = existingCc.copy();
             if (toAssert.getAtom().isNegation() == consequence.isNegation() &&
                     consequence.getPredicate().unify(
                             this.getActionInstance().getContext(),
                             toAssert.getAtom().getPredicate(),
                             toAssert.getContext(),
-                            assertingCodenotations)
-            ){
-                allAssertingCodenotations.add(assertingCodenotations);
+                            assertingCc)
+            ) {
+                CodenotationConstraints changes = assertingCc.differencesWith(existingCc);
+                allAssertingCodenotations.add(changes);
             }
         }
 
         return allAssertingCodenotations;
     }
+
     /**
      * Checks if a step is the initial dummy step
      *
@@ -219,6 +241,7 @@ public class Step implements PlanElement {
 
     /**
      * Converts an action instance into codenotations based upon its context
+     *
      * @return a set of codenotation constraints which copies the variable bindings in the context
      */
     public CodenotationConstraints toCodenotation() {

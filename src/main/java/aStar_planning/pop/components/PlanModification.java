@@ -6,6 +6,7 @@ import constraints.CodenotationConstraints;
 import constraints.TemporalConstraints;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Builder
+@EqualsAndHashCode
 public class PlanModification implements Operator {
     private Flaw targetFlaw;
     private List<PopSituation> addedSituations;

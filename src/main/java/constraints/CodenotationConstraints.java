@@ -181,7 +181,8 @@ public class CodenotationConstraints extends Graphic {
 
         return this.codenotations
                 .stream()
-                .filter(codenotation -> codenotation.getLeft().equals(source))
+                .filter(codenotation -> codenotation.isCodenotation() &&
+                        codenotation.getLeft().equals(source))
                 .findFirst()
                 .get()
                 .getRight();
@@ -335,5 +336,20 @@ public class CodenotationConstraints extends Graphic {
     public CodenotationConstraints copy(){
         return new CodenotationConstraints(this.getCodenotations().stream()
                 .collect(Collectors.toList()));
+    }
+
+    /**
+     * Retrieves every element that is in this set of codenotation constraints but not in the
+     * other codenotation constraints
+     * @param other the other set of codenotation constraints that we want to compare it with.
+     * @return
+     */
+    public CodenotationConstraints differencesWith(CodenotationConstraints other) {
+        return new CodenotationConstraints(
+                this.getCodenotations()
+                        .stream()
+                        .filter(codenotation -> !other.getCodenotations().contains(codenotation))
+                        .collect(Collectors.toList())
+        );
     }
 }

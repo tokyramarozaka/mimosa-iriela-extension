@@ -2,6 +2,7 @@ package iriela;
 
 import aStar.AStarPlanner;
 import aStar_planning.pop_with_norms.OrganizationalPlanningProblem;
+import aStar_planning.pop_with_norms.components.NormativePlan;
 import iriela.description.PlanningProblemFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,6 +14,8 @@ public class Iriela_IT {
     public void findsSolution_ok(){
         OrganizationalPlanningProblem problem = PlanningProblemFactory.irielaProblem();
         AStarPlanner planner = new AStarPlanner(problem);
+
+        NormativePlan initialPlan = (NormativePlan) problem.getInitialState();
 
         planner.outputSolutionPlan();
     }

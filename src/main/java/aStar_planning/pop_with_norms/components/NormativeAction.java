@@ -33,7 +33,7 @@ public class NormativeAction extends Action implements NormConsequences {
      * @param action : the action we want to build a normative action upon
      */
     public NormativeAction(Action action) {
-        super(action.getName(), action.getPreconditions(), action.getConsequences());
+        super(action.getActionName(), action.getPreconditions(), action.getConsequences());
     }
 
     @Override
@@ -49,7 +49,7 @@ public class NormativeAction extends Action implements NormConsequences {
             logger.info("following element is null");
             return false;
         } else if (followingElement instanceof Step followingStep) {
-            if (!this.getName().equals(followingStep.getActionInstance().getName())) {
+            if (!this.getActionName().equals(followingStep.getActionInstance().getName())) {
                 return false;
             }
 
@@ -62,7 +62,7 @@ public class NormativeAction extends Action implements NormConsequences {
                             followingStep.getActionInstance().getContext(),
                             cc
                     )) {
-                        logger.info(this.getName() + " is applied is FALSE because : " +
+                        logger.info(this.getActionName() + " is applied is FALSE because : " +
                                 normConsequence + " and " + consequence + " does not match.");
                         return false;
                     }

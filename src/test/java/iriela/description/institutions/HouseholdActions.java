@@ -15,13 +15,13 @@ public class HouseholdActions {
     public static ActionPrecondition fishPreconditions(Term subject, Term someZone) {
         return new ActionPrecondition(List.of(
                 new Atom(false, Global.located(subject, someZone)),
-                new Atom(false, Household.hasFish(someZone))
+                new Atom(false, Household.containsFishes(someZone))
         ));
     }
 
     public static ActionConsequence fishConsequences(Term subject, Term someZone) {
         return new ActionConsequence(new ArrayList<>(List.of(
-                new Atom(true, Household.hasFish(someZone)),
+                new Atom(true, Household.containsFishes(someZone)),
                 new Atom(false, PredicateFactory.haveFood(subject)))
         ));
     }
@@ -37,13 +37,13 @@ public class HouseholdActions {
     public static ActionPrecondition cutPreconditions(Term subject, Term someZone) {
         return new ActionPrecondition(List.of(
                 new Atom(false, Global.located(subject, someZone)),
-                new Atom(false, Household.hasTrees(someZone))
+                new Atom(false, Household.containsTrees(someZone))
         ));
     }
 
     public static ActionConsequence cutConsequences(Term subject, Term someZone) {
         return new ActionConsequence(new ArrayList<>(List.of(
-                new Atom(true, Household.hasTrees(someZone)),
+                new Atom(true, Household.containsTrees(someZone)),
                 new Atom(false, PredicateFactory.haveWood(subject))
         )));
     }

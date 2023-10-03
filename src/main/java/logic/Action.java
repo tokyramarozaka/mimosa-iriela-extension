@@ -1,6 +1,5 @@
 package logic;
 
-import aStar_planning.pop_with_norms.components.NormConsequences;
 import aStar_planning.pop_with_norms.concepts.ActionName;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -20,10 +19,11 @@ import java.util.List;
  * </ul>
  */
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @Getter
 public class Action extends LogicalEntity {
     private final Logger logger = LogManager.getLogger(Action.class);
-    private ActionName name;
+    private ActionName actionName;
     private ActionPrecondition preconditions;
     private ActionConsequence consequences;
 
@@ -96,18 +96,18 @@ public class Action extends LogicalEntity {
 
     @Override
     public LogicalEntity build(Context context) {
-        return new Action(this.name, this.preconditions.build(context),
+        return new Action(this.actionName, this.preconditions.build(context),
                 this.consequences.build(context));
     }
 
     @Override
     public LogicalEntity copy() {
-        return new Action(this.name, this.preconditions.copy(), this.consequences.copy());
+        return new Action(this.actionName, this.preconditions.copy(), this.consequences.copy());
     }
 
     @Override
     public String getLabel() {
-        return this.name.getName();
+        return this.actionName.getName();
     }
 
     @Override
@@ -116,7 +116,7 @@ public class Action extends LogicalEntity {
         List<Term> terms = new ArrayList<>();
 
         StringBuilder sb = new StringBuilder();
-        sb.append(this.getName());
+        sb.append(this.getActionName());
         sb.append("(");
 
         for (Atom p : (this.getPreconditions().getAtoms())) {
