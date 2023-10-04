@@ -64,7 +64,6 @@ public class RegulativeNorm extends Norm {
         return this.getNormConditions().getApplicableCodenotations(plan, situation);
     }
 
-
     /**
      * Checks if the norm is being applied in a given situation of a given plan.
      *

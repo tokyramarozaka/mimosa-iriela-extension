@@ -50,7 +50,6 @@ public class NormConditions {
                         assertedProposition.getContext(),
                         cc
                 )){
-//                    logger.info("\tOK for : "+condition+" for " + situation+"\n");
                     if(condition.isNegation() == assertedProposition.getAtom().isNegation()) {
                         isUnifiedOnce = true;
                         break;

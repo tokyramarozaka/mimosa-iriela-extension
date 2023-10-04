@@ -19,6 +19,7 @@ import logic.Action;
 import logic.Atom;
 import logic.Context;
 import logic.ContextualAtom;
+import logic.Predicate;
 import logic.Term;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
@@ -258,7 +259,31 @@ public class NormativePlan extends Plan {
                     return false;
                 }
             } else {
-                if (!hasApplicableCodenotations(situation, norm)) {
+                CodenotationConstraints cc = new CodenotationConstraints();
+                Predicate conditionPredicate = condition.getPredicate();
+                boolean isUnifiedOnce = false;
+
+                for(ContextualAtom assertedProposition : getAllAssertedPropositions(situation)){
+                    if(conditionPredicate.unify(
+                            conditionContext,
+                            assertedProposition.getAtom().getPredicate(),
+                            assertedProposition.getContext(),
+                            cc
+                    )){
+//                    logger.info("\tOK for : "+condition+" for " + situation+"\n");
+                        if(condition.isNegation() == assertedProposition.getAtom().isNegation()) {
+                            isUnifiedOnce = true;
+                            break;
+                        }
+                    }
+                }
+
+                if(!isUnifiedOnce){
+                    if(condition.getPredicate().getName().equals("member") || condition
+                            .getPredicate().getName().equals("haveFood")){
+                        logger.info(condition + " is not satisfied for applicability in " +
+                                "situation " + situation);
+                    }
                     return false;
                 }
             }
@@ -309,33 +334,6 @@ public class NormativePlan extends Plan {
             }
         }
         return condition.isNegation();
-    }
-
-    private boolean hasApplicableCodenotations(PopSituation situation, RegulativeNorm norm) {
-        try {
-            norm.getNormConditions().getApplicableCodenotations(this, situation);
-            return true;
-        } catch (UnapplicableNormException e) {
-            return false;
-        }
-    }
-
-    /**
-     * Creates and inserts a new flaw in this plan's flaw set if the norm is not applied correctly
-     * @param situation      : the situation in which the norm ought to be applied
-     * @param applicableNorm : the norm which ought to be applied.
-     */
-    private void createFlawIfNormNotApplied(PopSituation situation, RegulativeNorm applicableNorm) {
-        Context applicableContext = getApplicableContext(applicableNorm, situation);
-
-        if (!applicableNorm.isApplied(this, situation, this.getCc(), applicableContext)) {
-            this.getFlaws().add(new NormativeFlaw(
-                    this,
-                    applicableNorm,
-                    situation,
-                    applicableContext
-            ));
-        }
     }
 
     /**
