@@ -19,6 +19,13 @@ public class HouseholdOrg {
         );
     }
 
+    public static Organization get_haveFoodOnly(){
+        return new Organization(
+                Household.get_haveFoodOnly(),
+                HouseholdOrg.norms(),
+                HouseholdOrg.assertions()
+        );
+    }
     private static List<Norm> norms() {
         return List.of(
                 new ConstitutiveNorm(Agent.SELF, Household.provider),

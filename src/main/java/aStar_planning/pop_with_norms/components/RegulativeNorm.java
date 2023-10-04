@@ -47,28 +47,6 @@ public class RegulativeNorm extends Norm {
     }
 
     /**
-     * Checks if a given normative action is satisfied by a given step. To do this, we must
-     * first check the variable bindings that make the norm applicable using its applicability
-     * conditions, then we must see if the norm's consequences are carried out by the given step
-     * or not.
-     * Keep in mind that the algorithm may vary depending on its deontic operator : OBLIGATION,
-     * PROHIBITION, PERMISSION.
-     *
-     * @return true if the given step actually satisfies the normative action, false otherwise.
-     */
-    public boolean isSatisfiedIn(NormativePlan plan, PopSituation situation) {
-        plan.removeRedundantTemporalConstraints();
-        try {
-            CodenotationConstraints applicableCodenotations = this.getNormConditions()
-                    .getApplicableCodenotations(plan, situation);
-            return this.normConsequences.isApplied(plan, situation, applicableCodenotations,
-                    new Context());
-        } catch (UnapplicableNormException e) {
-            return false;
-        }
-    }
-
-    /**
      * Return the codenotation constraints that would make this norm applicable in a given situation
      * (if any, if there is none, then an exception is thrown).
      *
@@ -145,22 +123,6 @@ public class RegulativeNorm extends Norm {
             }
         }
         return false;
-    }
-
-    private boolean checkForActionAfterwards(NormativePlan plan, PopSituation situation) {
-        List<PlanElement> elementsAfterSituation = plan.getSteps()
-                .stream()
-                .filter(step -> plan.getTc().isBefore(situation, step))
-                .collect(Collectors.toList());
-
-        for (PlanElement followingElement : elementsAfterSituation) {
-            if (followingElement instanceof Step) {
-                if (this.isSatisfiedIn(plan, situation)) {
-                    return !this.isProhibition();
-                }
-            }
-        }
-        return isProhibition();
     }
 
     public boolean isProhibition() {

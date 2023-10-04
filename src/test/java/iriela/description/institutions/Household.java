@@ -27,6 +27,16 @@ public class Household {
         );
     }
 
+    public static Institution get_haveFoodOnly(){
+        return new Institution(
+                "household",
+                9.5f,
+                Household.concepts(),
+                Household.assertions(),
+                Household.roleActions(),
+                Household.norms_haveFoodOnly()
+        );
+    }
     private static List<Action> providerActions() {
         return List.of(
                 HouseholdActions.cut(TermsFactory.X, TermsFactory.Z),
@@ -90,6 +100,11 @@ public class Household {
         );
     }
 
+    private static List<Norm> norms_haveFoodOnly() {
+        return List.of(
+                HouseholdNorms.obligationHaveFood()
+        );
+    }
     private static List<RoleActions> roleActions(){
         return List.of(forProvider());
     }

@@ -79,7 +79,6 @@ public class VillageNorms {
     private static NormConditions fishWithoutLicense_conditions(Term subject, Term zone) {
         return new NormConditions(List.of(
                 new Atom(true, Village.haveFishingLicense(subject)),
-                new Atom(false, Global.located(subject, zone)),
                 new Atom(false, Village.member(subject)),
                 new Atom(false, Village._protected(zone))
         ));

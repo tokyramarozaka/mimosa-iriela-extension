@@ -94,9 +94,11 @@ public class NormativePlan extends Plan {
         List<RegulativeNorm> prohibitions = getProhibitions(allRegulativeNorms);
 
         // TODO: convert permissions to prohibitions and remove them
-        // TODO : convert APPLICABLE obligations on propositions to goals and remove them;
         for (PopSituation situation : this.getSituations()) {
-            List<RegulativeNorm> toEvaluate = getPotentialNormativeFlaws(obligationsOnActions, prohibitions);
+            List<RegulativeNorm> toEvaluate = getPotentialNormativeFlaws(
+                    obligationsOnActions,
+                    prohibitions
+            );
 
             for (RegulativeNorm norm : toEvaluate) {
                 if (isApplicable(situation, norm)) {
@@ -267,11 +269,10 @@ public class NormativePlan extends Plan {
     /**
      * Determines if an atom is a constitutive norm verification. Meaning that the atom requires
      * some constitutive norms, or else it is false.
-     *
      * @param condition : the condition to check if it designates a role
      * @return true if the atom is referring to a constitutive norm, and false otherwise.
      */
-    private boolean isRole(Atom condition) {
+    public boolean isRole(Atom condition) {
         return this.roleKeywords
                 .stream()
                 .anyMatch(role -> Objects.equals(
@@ -287,7 +288,7 @@ public class NormativePlan extends Plan {
      * @param condition : the proposition we want to verify as a constitutive norm
      * @return true if the condition is confirmed by some constitutive norm, and false otherwise
      */
-    private boolean validatedByConstitutiveNorms(
+    public boolean validatedByConstitutiveNorms(
             Atom condition,
             Context conditionContext,
             Context normContext
@@ -321,7 +322,6 @@ public class NormativePlan extends Plan {
 
     /**
      * Creates and inserts a new flaw in this plan's flaw set if the norm is not applied correctly
-     *
      * @param situation      : the situation in which the norm ought to be applied
      * @param applicableNorm : the norm which ought to be applied.
      */
@@ -341,7 +341,6 @@ public class NormativePlan extends Plan {
     /**
      * Solve a normative flaw depending on its deontic operator and consequence type (either a
      * proposition or an action that ought to be or not to be done).
-     *
      * @param normativeFlaw   : the normative flaw to be solved
      * @param possibleActions : the set of all possible actions, necessary for solutions that
      *                        require adding in some new action, such as adding a mandatory
@@ -456,7 +455,7 @@ public class NormativePlan extends Plan {
     ) {
         List<ContextualAtom> assertedPropositions = new ArrayList<>();
 
-        this.getSteps().stream().filter(step -> this.getTc().isBefore(step, situation))
+        this.getSteps().stream().filter(step -> !this.getTc().isAfter(step, situation))
                 .forEach(precedingStep -> {
                     assertedPropositions.addAll(getRemainingPropositions(precedingStep, situation));
                 });

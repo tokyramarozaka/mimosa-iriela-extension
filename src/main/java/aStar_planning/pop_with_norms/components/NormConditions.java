@@ -59,6 +59,11 @@ public class NormConditions {
             }
 
             if(!isUnifiedOnce){
+                        if(condition.getPredicate().getName().equals("member") || condition
+                                .getPredicate().getName().equals("haveFood")){
+                            logger.info(condition + " is not satisfied for applicability in " +
+                                    "situation " + situation);
+                        }
 //                logger.info("\tNO APPLICABLE CODENOTATIONS FOR :" + condition + " FROM NORM CONDITIONS : " + this);
                 throw new UnapplicableNormException(this, situation);
             }

@@ -3,6 +3,7 @@ package iriela;
 import aStar.AStarPlanner;
 import aStar_planning.pop_with_norms.OrganizationalPlanningProblem;
 import aStar_planning.pop_with_norms.components.NormativePlan;
+import aStar_planning.pop_with_norms.components.Organization;
 import iriela.description.PlanningProblemFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,4 +20,13 @@ public class Iriela_IT {
 
         planner.outputSolutionPlan();
     }
+
+    @Test
+    public void findSolution_forFood_ok(){
+        OrganizationalPlanningProblem problem = PlanningProblemFactory.irielaProblem_haveFoodOnly();
+        AStarPlanner planner = new AStarPlanner(problem);
+
+        planner.outputSolutionPlan();
+    }
+
 }
