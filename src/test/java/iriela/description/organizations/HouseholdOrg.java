@@ -21,7 +21,7 @@ public class HouseholdOrg {
 
     public static Organization get_haveFoodOnly(){
         return new Organization(
-                Household.get_haveFoodOnly(),
+                Household.get_haveFishOnly(),
                 HouseholdOrg.norms(),
                 HouseholdOrg.assertions()
         );

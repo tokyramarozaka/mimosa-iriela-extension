@@ -14,11 +14,11 @@ import logic.Term;
 import java.util.List;
 
 public class HouseholdNorms {
-    public static Norm obligationHaveFood() {
+    public static Norm obligationHaveFish() {
         return new RegulativeNorm(
                 DeonticOperator.OBLIGATION,
-                conditionsHaveFood(TermsFactory.X),
-                consequencesHaveFood(TermsFactory.X)
+                obligatoryHaveFish_conditions(TermsFactory.X),
+                obligatoryHaveFish_consequences(TermsFactory.X)
         );
     }
 
@@ -30,11 +30,11 @@ public class HouseholdNorms {
         );
     }
 
-    public static NormConsequences consequencesHaveFood(Term subject) {
-        return new NormativeProposition(false, PredicateFactory.haveFood(subject));
+    public static NormConsequences obligatoryHaveFish_consequences(Term subject) {
+        return new NormativeProposition(false, PredicateFactory.haveFish(subject));
     }
 
-    public static NormConditions conditionsHaveFood(Term subject) {
+    public static NormConditions obligatoryHaveFish_conditions(Term subject) {
         return new NormConditions(List.of(
                 new Atom(false, Household.provider(subject))
         ));

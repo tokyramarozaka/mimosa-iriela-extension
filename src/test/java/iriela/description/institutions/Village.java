@@ -22,7 +22,7 @@ public class Village {
     public static final Role _protected = new Role("_protected");
     public static final Role member = new Role("member");
     public static final Role office = new Role("office");
-    public static final ActionName reportCut = new ActionName("reportCut");
+    public static final ActionName reportFish = new ActionName("reportFish");
     public static final ActionName getFishingLicense = new ActionName("getFishingLicense");
     public static final ActionName getFishingNet = new ActionName("getFishingNet");
     public static final ActionName getExploitationLicense = new ActionName(
@@ -43,7 +43,7 @@ public class Village {
 
     private static List<Norm> norms() {
         return List.of(
-                VillageNorms.mandatoryCutReport(TermsFactory.X),
+                VillageNorms.obligatoryReportFish(TermsFactory.X),
                 VillageNorms.locatedInSacred(TermsFactory.X, TermsFactory.Z),
                 VillageNorms.fishWithoutLicense(TermsFactory.X, TermsFactory.Z),
                 VillageNorms.cutWithLicense(TermsFactory.X, TermsFactory.Z),
@@ -58,7 +58,7 @@ public class Village {
                 _protected,
                 member,
                 office,
-                reportCut,
+                reportFish,
                 getFishingLicense,
                 getExploitationLicense,
                 getFishingNet
@@ -69,14 +69,14 @@ public class Village {
         return List.of(
                 haveFishingLicense(TermsFactory.X),
                 haveExploitationLicense(TermsFactory.X),
-                filledCutReport(TermsFactory.X),
+                filledFishReport(TermsFactory.X),
                 haveFishingNet(TermsFactory.X)
         );
     }
 
     private static List<Action> memberActions() {
         return List.of(
-                VillageActions.reportCut(TermsFactory.X),
+                VillageActions.reportFish(TermsFactory.X),
                 VillageActions.getExploitationLicense(TermsFactory.X, TermsFactory.Z),
                 VillageActions.getFishingLicense(TermsFactory.X, TermsFactory.Z),
                 VillageActions.getFishingNet(TermsFactory.X)
@@ -108,8 +108,8 @@ public class Village {
         return new Predicate("haveExploitationLicense", List.of(subject));
     }
 
-    public static Predicate filledCutReport(Term subject) {
-        return new Predicate("filledCutReport", List.of(subject));
+    public static Predicate filledFishReport(Term subject) {
+        return new Predicate("filledFishReport", List.of(subject));
     }
 
     public static Predicate haveFishingNet(Term subject) {

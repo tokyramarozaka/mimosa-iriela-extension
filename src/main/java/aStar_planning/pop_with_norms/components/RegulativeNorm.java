@@ -66,7 +66,6 @@ public class RegulativeNorm extends Norm {
 
     /**
      * Checks if the norm is being applied in a given situation of a given plan.
-     *
      * @param plan      : the plan to check
      * @param situation : the situation we want to verify it in
      * @return true if the norm is applied, and false otherwise.
@@ -77,7 +76,6 @@ public class RegulativeNorm extends Norm {
             CodenotationConstraints cc,
             Context applicableContext
     ) {
-
 //        if (this.enforceAction()) {
 //            // TODO : ask JP about it...
 //            return checkForActionAfterwards(plan, situation);

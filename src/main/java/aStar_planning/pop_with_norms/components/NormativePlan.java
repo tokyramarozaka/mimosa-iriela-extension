@@ -14,7 +14,6 @@ import aStar_planning.pop_with_norms.resolvers.MissingObligationResolver;
 import aStar_planning.pop_with_norms.resolvers.MissingProhibitionResolver;
 import constraints.CodenotationConstraints;
 import constraints.TemporalConstraints;
-import exception.UnapplicableNormException;
 import logic.Action;
 import logic.Atom;
 import logic.Context;
@@ -24,9 +23,6 @@ import logic.Term;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +72,6 @@ public class NormativePlan extends Plan {
         List<Atom> existingPreconditions = this.getFinalStep().getActionPreconditions().getAtoms();
 
         if (!existingPreconditions.contains(consequence)) {
-            logger.debug("Adding : " + obligation);
             existingPreconditions.add(consequence);
         }
     }
@@ -102,7 +97,9 @@ public class NormativePlan extends Plan {
             );
 
             for (RegulativeNorm norm : toEvaluate) {
+                logger.debug("Evaluating : " + norm + " in situation " + situation);
                 if (isApplicable(situation, norm)) {
+                    logger.debug(norm + " is applicable in " + situation);
                     Context applicableContext = getApplicableContext(norm, situation);
                     this.addNormativeFlawsIfAny(situation, norm, applicableContext);
                 }
@@ -241,9 +238,8 @@ public class NormativePlan extends Plan {
     }
 
     /**
-     * Verifies if a norm is applicable by verifying all of its conditions, which demands
+     * Verifies if a norm is applicable by verifying all of its conditions, which either demands
      * some constitutive norm, or some proposition to be necessarily true
-     *
      * @param situation : the situation on which we want to check the norm's applicability
      *                  conditions
      * @param norm      : the norm whose applicability conditions will be tested.
@@ -259,36 +255,47 @@ public class NormativePlan extends Plan {
                     return false;
                 }
             } else {
-                CodenotationConstraints cc = new CodenotationConstraints();
-                Predicate conditionPredicate = condition.getPredicate();
-                boolean isUnifiedOnce = false;
-
-                for(ContextualAtom assertedProposition : getAllAssertedPropositions(situation)){
-                    if(conditionPredicate.unify(
-                            conditionContext,
-                            assertedProposition.getAtom().getPredicate(),
-                            assertedProposition.getContext(),
-                            cc
-                    )){
-//                    logger.info("\tOK for : "+condition+" for " + situation+"\n");
-                        if(condition.isNegation() == assertedProposition.getAtom().isNegation()) {
-                            isUnifiedOnce = true;
-                            break;
-                        }
-                    }
-                }
-
-                if(!isUnifiedOnce){
-                    if(condition.getPredicate().getName().equals("member") || condition
-                            .getPredicate().getName().equals("haveFood")){
-                        logger.info(condition + " is not satisfied for applicability in " +
-                                "situation " + situation);
-                    }
+                if (!isSatisfiedInSituation(situation, conditionContext, condition)) {
                     return false;
                 }
             }
         }
         return true;
+    }
+
+    /**
+     * Checks if a condition is satisfied in a given situation of the plan.
+     * @param situation : the situation in which we want to check if the condition is necessarily
+     *                  true.
+     * @param conditionContext : the context of the condition
+     * @param condition : the condition we want to check if it is necessarily true, mainly some
+     *                  applicability condition
+     * @return true if the condition is necessarily true in the given situation, and false otherwise
+     */
+    private boolean isSatisfiedInSituation(
+            PopSituation situation,
+            Context conditionContext,
+            Atom condition
+    ) {
+        CodenotationConstraints cc = new CodenotationConstraints();
+        Predicate conditionPredicate = condition.getPredicate();
+        boolean isUnifiedOnce = false;
+
+        for(ContextualAtom assertedProposition : getAllAssertedPropositions(situation)){
+            if(conditionPredicate.unify(
+                    conditionContext,
+                    assertedProposition.getAtom().getPredicate(),
+                    assertedProposition.getContext(),
+                    cc
+            )){
+                if(condition.isNegation() == assertedProposition.getAtom().isNegation()) {
+                    isUnifiedOnce = true;
+                    break;
+                }
+            }
+        }
+
+        return isUnifiedOnce;
     }
 
     /**
@@ -299,17 +306,13 @@ public class NormativePlan extends Plan {
      */
     public boolean isRole(Atom condition) {
         return this.roleKeywords
-                .stream()
-                .anyMatch(role -> Objects.equals(
-                        role.getName(),
-                        condition.getPredicate().getName())
-                );
+            .stream()
+            .anyMatch(role -> Objects.equals(role.getName(),condition.getPredicate().getName()));
     }
 
     /**
      * Checks if a condition matches with some constitutive norms of either the organization
      * or the institution
-     *
      * @param condition : the proposition we want to verify as a constitutive norm
      * @return true if the condition is confirmed by some constitutive norm, and false otherwise
      */
@@ -392,16 +395,22 @@ public class NormativePlan extends Plan {
             Step followingStep = this.getTc().getFollowingStep(situation);
             return followingStep.getActionInstance().getContext();
         } else if (norm.enforceAction()) {
-            Action forbiddenAction = ((NormativeAction) norm.getNormConsequences());
+            if(norm.getDeonticOperator().equals(DeonticOperator.OBLIGATION)){
+                return new Context();
+            }else if(norm.getDeonticOperator().equals(DeonticOperator.PROHIBITION)){
+                Action forbiddenAction = ((NormativeAction) norm.getNormConsequences());
 
-            Optional<Step> forbiddenStep = this.getSteps().stream()
-                    .filter(step -> this.getTc().isBefore(situation, step))
-                    .filter(step -> step.getActionInstance().getLogicalEntity()
-                            .equals(forbiddenAction))
-                    .findFirst();
+                Optional<Step> forbiddenStep = this.getSteps().stream()
+                        .filter(step -> this.getTc().isBefore(situation, step))
+                        .filter(step -> step.getActionInstance().getLogicalEntity()
+                                .equals(forbiddenAction))
+                        .findFirst();
 
-            if (forbiddenStep.isPresent()) {
-                return forbiddenStep.get().getActionInstance().getContext();
+                if (forbiddenStep.isPresent()) {
+                    return forbiddenStep.get().getActionInstance().getContext();
+                }
+            }else{
+
             }
         }
         throw new RuntimeException("Applicable context could not be found for : " + norm);

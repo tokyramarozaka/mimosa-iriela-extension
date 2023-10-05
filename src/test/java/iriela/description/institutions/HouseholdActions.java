@@ -22,7 +22,7 @@ public class HouseholdActions {
     public static ActionConsequence fishConsequences(Term subject, Term someZone) {
         return new ActionConsequence(new ArrayList<>(List.of(
                 new Atom(true, Household.containsFishes(someZone)),
-                new Atom(false, PredicateFactory.haveFood(subject)))
+                new Atom(false, PredicateFactory.haveFish(subject)))
         ));
     }
 

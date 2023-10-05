@@ -13,11 +13,11 @@ import logic.Term;
 import java.util.List;
 
 public class VillageNorms {
-    static Norm mandatoryCutReport(Term subject) {
+    static Norm obligatoryReportFish(Term subject) {
         return new RegulativeNorm(
                 DeonticOperator.OBLIGATION,
-                mandatoryCutReport_conditions(subject),
-                mandatoryCutReport_consequences(subject)
+                obligatoryFishReport_conditions(subject),
+                obligatoryFishReport_consequences(subject)
         );
     }
 
@@ -55,15 +55,15 @@ public class VillageNorms {
     /*
     ======================== NORM CONDITIONS AND CONSEQUENCES =================================
      */
-    private static NormConditions mandatoryCutReport_conditions(Term subject){
+    private static NormConditions obligatoryFishReport_conditions(Term subject){
         return new NormConditions(List.of(
                 new Atom(false, Village.member(subject)),
-                new Atom(false, Household.haveWood(subject))
+                new Atom(false, Household.haveFish(subject))
         ));
     }
 
-    private static NormConsequences mandatoryCutReport_consequences(Term subject){
-        return new NormativeAction(VillageActions.reportCut(subject));
+    private static NormConsequences obligatoryFishReport_consequences(Term subject){
+        return new NormativeAction(VillageActions.reportFish(subject));
     }
     private static NormConditions locatedInSacred_conditions(Term subject, Term zone) {
         return new NormConditions(List.of(

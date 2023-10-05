@@ -40,11 +40,11 @@ public class VillageActions {
     }
 
 
-    public static Action reportCut(Term subject) {
+    public static Action reportFish(Term subject) {
         return new Action(
-                Village.reportCut,
-                reportCut_preconditions(subject),
-                reportCut_consequences(subject)
+                Village.reportFish,
+                reportFish_preconditions(subject),
+                reportFish_consequences(subject)
         );
     }
 
@@ -61,15 +61,15 @@ public class VillageActions {
                 new Atom(false, Village.haveFishingLicense(subject))
         ));
     }
-    public static ActionPrecondition reportCut_preconditions(Term subject) {
+    public static ActionPrecondition reportFish_preconditions(Term subject) {
         return new ActionPrecondition(List.of(
-                new Atom(false, Household.haveWood(subject))
+                new Atom(false, Household.haveFish(subject))
         ));
     }
 
-    public static ActionConsequence reportCut_consequences(Term subject) {
+    public static ActionConsequence reportFish_consequences(Term subject) {
         return new ActionConsequence(List.of(
-                new Atom(false, Village.filledCutReport(subject))
+                new Atom(false, Village.filledFishReport(subject))
         ));
     }
 
