@@ -59,9 +59,10 @@ public class RegulativeNorm extends Norm {
      */
     public CodenotationConstraints getApplicableCodenotations(
             NormativePlan plan,
-            PopSituation situation
+            PopSituation situation,
+            Context context
     ) throws UnapplicableNormException {
-        return this.getNormConditions().getApplicableCodenotations(plan, situation);
+        return this.getNormConditions().getApplicableCodenotations(plan, situation, context);
     }
 
     /**

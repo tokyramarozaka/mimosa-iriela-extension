@@ -20,45 +20,48 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Getter
 public class NormConditions {
-    private List<Atom> conditions;
     private final static Logger logger = LogManager.getLogger(NormConditions.class);
-
-
+    private List<Atom> conditions;
 
     /**
      * Returns all the codenotation constraints that would make the current norm conditions to be
      * applicable, if any.
-     * @param plan : the current plan containing the norm
+     *
+     * @param plan      : the current plan containing the norm
      * @param situation : the situation where we want to check out the applicability conditions
      * @return a set of codenotation constraints that makes the norm applicable.
      */
     public CodenotationConstraints getApplicableCodenotations(
             NormativePlan plan,
-            PopSituation situation
-    ) throws UnapplicableNormException{
+            PopSituation situation,
+            Context conditionContext
+    ) throws UnapplicableNormException {
         CodenotationConstraints cc = new CodenotationConstraints();
-        Context conditionContext = new Context();
 
         for (Atom condition : this.conditions) {
-            Predicate conditionPredicate = condition.getPredicate();
-            boolean isUnifiedOnce = false;
+            if (plan.isRole(condition)) {
+                continue;
+            } else {
+                Predicate conditionPredicate = condition.getPredicate();
+                boolean isUnifiedOnce = false;
 
-            for(ContextualAtom assertedProposition : plan.getAllAssertedPropositions(situation)){
-                if(conditionPredicate.unify(
-                        conditionContext,
-                        assertedProposition.getAtom().getPredicate(),
-                        assertedProposition.getContext(),
-                        cc
-                )){
-                    if(condition.isNegation() == assertedProposition.getAtom().isNegation()) {
-                        isUnifiedOnce = true;
-                        break;
+                for(ContextualAtom assertedProposition : plan.getAllAssertedPropositions(situation)){
+                    if (conditionPredicate.unify(
+                            conditionContext,
+                            assertedProposition.getAtom().getPredicate(),
+                            assertedProposition.getContext(),
+                            cc
+                    )) {
+                        if (condition.isNegation() == assertedProposition.getAtom().isNegation()) {
+                            isUnifiedOnce = true;
+                            break;
+                        }
                     }
                 }
-            }
 
-            if(!isUnifiedOnce){
-                throw new UnapplicableNormException(this, situation);
+                if (!isUnifiedOnce) {
+                    throw new UnapplicableNormException(this, situation);
+                }
             }
         }
 
@@ -84,6 +87,7 @@ public class NormConditions {
 
         return stringBuilder.toString();
     }
+
     public NormConditions build(Context context) {
         return new NormConditions(this.conditions.stream()
                 .map(atom -> atom.build(context))

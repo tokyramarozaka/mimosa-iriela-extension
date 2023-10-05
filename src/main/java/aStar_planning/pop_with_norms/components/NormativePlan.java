@@ -49,7 +49,7 @@ public class NormativePlan extends Plan {
         this.roleKeywords = getAllRoles();
         evaluateNormativeFlaws();
         addObligatoryPropositionsToGoals();
-        super.evaluateFlaws();
+        super.evaluateFlaws(false);
     }
 
     private void addObligatoryPropositionsToGoals() {
@@ -97,9 +97,9 @@ public class NormativePlan extends Plan {
             );
 
             for (RegulativeNorm norm : toEvaluate) {
-                logger.debug("Evaluating : " + norm + " in situation " + situation);
+//                logger.debug("Evaluating : " + norm + " in situation " + situation);
                 if (isApplicable(situation, norm)) {
-                    logger.debug(norm + " is applicable in " + situation);
+//                    logger.debug(norm + " is applicable in " + situation);
                     Context applicableContext = getApplicableContext(norm, situation);
                     this.addNormativeFlawsIfAny(situation, norm, applicableContext);
                 }
@@ -178,7 +178,9 @@ public class NormativePlan extends Plan {
             Context applicableContext
     ) {
         if (norm.isObligation() && norm.enforceAction()) {
-            if (!actionIsPresentAsItShould(norm)) {
+            Context obligationContext = new Context();
+
+            if (!actionIsPresentAsItShould(norm, obligationContext)) {
                 addNormativeFlaw(situation, norm, applicableContext);
             }
         }
@@ -195,8 +197,21 @@ public class NormativePlan extends Plan {
         return null;
     }
 
-    private boolean actionIsPresentAsItShould(RegulativeNorm norm) {
-        // TODO : check if inside the plan the mandatory action is there.
+    private boolean actionIsPresentAsItShould(RegulativeNorm norm, Context obligationContext) {
+        NormativeAction obligatoryAction = (NormativeAction)  norm.getNormConsequences();
+
+        for (Step step : this.getSteps()) {
+            if(!step.getActionInstance().getName().equals(obligatoryAction.getLabel())){
+                continue;
+            }
+
+            Action stepAction = (Action) step.getActionInstance().getLogicalEntity();
+            Context stepContext = step.getActionInstance().getContext();
+
+            if(obligatoryAction.unify(obligationContext, stepAction, stepContext)){
+                return true;
+            }
+        }
         return false;
     }
 

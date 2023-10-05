@@ -60,7 +60,7 @@ public class Plan implements State {
         this.cc = cc;
         this.tc = tc;
         this.tc.updateGraph();
-        this.evaluateFlaws();
+        this.evaluateFlaws(true);
     }
 
     /**
@@ -84,6 +84,7 @@ public class Plan implements State {
         this.cc = cc;
         this.tc = tc;
         this.tc.updateGraph();
+        this.flaws = new HashSet<>();
     }
 
     public boolean isNotFinalStep(Step step) {
@@ -96,8 +97,10 @@ public class Plan implements State {
      * (Re)computes all the flaws of the plan's steps : its open conditions and its threats
      * Note that the initial step cannot have any threats since it is the first step.
      */
-    public void evaluateFlaws(){
-        this.flaws = new HashSet<>();
+    public void evaluateFlaws(boolean resetFlaws){
+        if(resetFlaws) {
+            this.flaws = new HashSet<>();
+        }
 
         for(Step step : this.steps) {
             if(!isInitialStep(step)) {

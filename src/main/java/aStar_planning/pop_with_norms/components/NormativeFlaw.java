@@ -27,21 +27,22 @@ public class NormativeFlaw implements Flaw {
      * @return
      */
     public PopSituation getInapplicableSituationAfter(PopSituation applicableSituation) {
-        List<PopSituation> situationsAfterApplication = plan.getSituations().stream()
-                .filter(situation -> plan.getTc().isBefore(applicableSituation, situation))
-                .toList();
-
-        for (PopSituation situation : situationsAfterApplication) {
-            try {
-                this.flawedNorm.getApplicableCodenotations(plan, situation);
-            } catch(UnapplicableNormException e){
-                logger.info("Unapplicable exception found for : " + flawedNorm + " : " + situation);
-                return situation;
-            }
-        }
-
-        logger.info(" did not found unapplicable situation for norm : " + flawedNorm);
         return null;
+//        TODO : List<PopSituation> situationsAfterApplication = plan.getSituations().stream()
+//                .filter(situation -> plan.getTc().isBefore(applicableSituation, situation))
+//                .toList();
+//
+//        for (PopSituation situation : situationsAfterApplication) {
+//            try {
+//                this.flawedNorm.getApplicableCodenotations(plan, situation);
+//            } catch(UnapplicableNormException e){
+//                logger.info("Unapplicable exception found for : " + flawedNorm + " : " + situation);
+//                return situation;
+//            }
+//        }
+//
+//        logger.info(" did not found unapplicable situation for norm : " + flawedNorm);
+//        return null;
     }
     @Override
     public String toString() {
