@@ -21,6 +21,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import outputs.PlanningOutput;
 import pop_IT.mock.MockPlan;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -105,7 +107,7 @@ public class BlocksWorld_Pop_UT {
     }
 
     @Test
-    public void findSolution_ok(){
+    public void findSolution_ok() throws IOException {
         AStarPlanner resolver = new AStarPlanner(problem);
 
         List<Operator> solutionOperators = resolver.findSolution();

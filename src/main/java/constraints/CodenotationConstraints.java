@@ -5,6 +5,7 @@ import aStar_planning.graph_planning.GraphForwardPlanningProblem;
 import exception.NoPlanFoundException;
 import graph.Graph;
 import graph.Node;
+import logic.Constant;
 import logic.Context;
 import logic.ContextualTerm;
 import logic.Graphic;
@@ -351,5 +352,24 @@ public class CodenotationConstraints extends Graphic {
                         .filter(codenotation -> !other.getCodenotations().contains(codenotation))
                         .collect(Collectors.toList())
         );
+    }
+
+    public Term build(Term term, Context context){
+        if(term instanceof Constant){
+            return term;
+        }
+
+        Variable variable = (Variable) term;
+        if(!this.isLinked(variable, context)){
+            return variable;
+        }
+
+        ContextualTerm link = this.getLink(variable, context);
+
+        if(link.getTerm() instanceof Variable){
+            return this.build(link.getTerm(), link.getContext());
+        }
+
+        return link.getTerm();
     }
 }

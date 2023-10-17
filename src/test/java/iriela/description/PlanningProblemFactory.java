@@ -38,4 +38,17 @@ public class PlanningProblemFactory {
                 ))
         );
     }
+
+    public static OrganizationalPlanningProblem irielaProblem_haveWoodOnly() {
+        return new OrganizationalPlanningProblem(
+                new Situation(),
+                new ArrayList<Action>(),
+                new Goal(),
+                new ArrayList<Organization>(List.of(
+                        GlobalOrg.get(),
+                        VillageOrg.get(),
+                        HouseholdOrg.get_haveWoodOnly()
+                ))
+        );
+    }
 }

@@ -15,6 +15,7 @@ import mock_logic.blocks_world.GoalFactory;
 import mock_logic.blocks_world.SituationFactory;
 import outputs.TotalOrderPlan;
 
+import java.io.IOException;
 import java.util.List;
 
 public class BlocksWorld_Forward_IT {
@@ -49,7 +50,7 @@ public class BlocksWorld_Forward_IT {
     }
 
     @Test
-    public void shouldStackThreeAbstractBlocks(){
+    public void shouldStackThreeAbstractBlocks() throws IOException {
         Situation initialSituation = SituationFactory.threeBlocksOnTable();
         Goal goal = GoalFactory.anyThreeBlocks_stacked();
         List<Action> possibleActions = ActionFactory.allActionsInBlocksWorld();

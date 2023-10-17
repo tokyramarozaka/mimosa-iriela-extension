@@ -1,5 +1,6 @@
 package logic;
 
+import constraints.CodenotationConstraints;
 import logic.automated_theorem_proving.ClauseSet;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,6 +34,13 @@ public class Rule extends LogicalEntity{
     @Override
     public LogicalEntity build(Context context) {
         return new Rule(this.name, this.conditions.build(context), this.conclusions.build(context));
+    }
+
+    @Override
+    public LogicalEntity build(Context context, CodenotationConstraints cc) {
+        // TODO : fill this if you want to represent backward using codenotation constraints
+        // instead of contexts for variable bindings.
+        return null;
     }
 
     @Override

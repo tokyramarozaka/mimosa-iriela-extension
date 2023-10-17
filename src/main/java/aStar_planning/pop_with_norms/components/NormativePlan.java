@@ -10,14 +10,18 @@ import aStar_planning.pop.components.PlanModification;
 import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop.components.Step;
 import aStar_planning.pop.components.Threat;
+import aStar_planning.pop.mapper.PlanModificationMapper;
 import aStar_planning.pop_with_norms.resolvers.MissingObligationResolver;
 import aStar_planning.pop_with_norms.resolvers.MissingProhibitionResolver;
+import constraints.Codenotation;
 import constraints.CodenotationConstraints;
 import constraints.TemporalConstraints;
 import logic.Action;
+import logic.ActionPrecondition;
 import logic.Atom;
 import logic.Context;
 import logic.ContextualAtom;
+import logic.ContextualTerm;
 import logic.Predicate;
 import logic.Term;
 import lombok.Getter;
@@ -47,9 +51,38 @@ public class NormativePlan extends Plan {
         super(situations, steps, cc, tc, true);
         this.organizations = organizations;
         this.roleKeywords = getAllRoles();
-        evaluateNormativeFlaws();
         addObligatoryPropositionsToGoals();
         super.evaluateFlaws(false);
+        evaluateNormativeFlaws();
+    }
+
+    private List<Action> buildPermittedNormativeActions() {
+        List<Action> permittedActions = new ArrayList<>();
+        List<RegulativeNorm> permissionOnActions = this.getPermissions()
+                .stream()
+                .filter(RegulativeNorm::enforceAction)
+                .toList();
+
+        for (RegulativeNorm permission : permissionOnActions) {
+            Action targetedAction = (Action) permission.getNormConsequences();
+            ActionPrecondition normativePreconditions = new ActionPrecondition(new ArrayList<>(
+                    targetedAction.getPreconditions().getAtoms()
+            ));
+            for (Atom normativeCondition : permission.getNormConditions().getConditions()) {
+                // TODO : if you want to create constitutive normative flaws, create an else here.
+                if (!isRole(normativeCondition)) {
+                    normativePreconditions.getAtoms().add(normativeCondition);
+                }
+            }
+
+            permittedActions.add(new Action(
+                    targetedAction.getActionName(),
+                    normativePreconditions,
+                    targetedAction.getConsequences()
+            ));
+        }
+
+        return permittedActions;
     }
 
     private void addObligatoryPropositionsToGoals() {
@@ -142,6 +175,13 @@ public class NormativePlan extends Plan {
                 .collect(Collectors.toList());
     }
 
+    private List<RegulativeNorm> getPermissions() {
+        return getAllRegulativeNorms()
+                .stream()
+                .filter(RegulativeNorm::isPermission)
+                .collect(Collectors.toList());
+    }
+
     public List<RegulativeNorm> generatedProhibitionsFromPermissions(
             List<RegulativeNorm> allRegulativeNorms
     ) {
@@ -172,6 +212,17 @@ public class NormativePlan extends Plan {
         ));
     }
 
+    /**
+     * Adds normative flaw if any is generated  by either :
+     * a) an obligatory action
+     * b) a prohibited action
+     * c) a prohibited proposition
+     * d) a permitted proposition
+     *
+     * @param situation
+     * @param norm
+     * @param applicableContext
+     */
     private void addNormativeFlawsIfAny(
             PopSituation situation,
             RegulativeNorm norm,
@@ -179,10 +230,10 @@ public class NormativePlan extends Plan {
     ) {
         if (norm.isObligation() && norm.enforceAction()) {
             Context obligationContext = new Context();
-
-            if (!actionIsPresentAsItShould(norm, obligationContext)) {
-                addNormativeFlaw(situation, norm, applicableContext);
-            }
+//          TODO : obligatory action should be done.
+//            if (!actionIsPresentAsItShould(norm, situation, obligationContext)) {
+//                addNormativeFlaw(situation, norm, applicableContext);
+//            }
         }
         if (norm.isProhibition()) {
 //            TODO : add normative flaws to deal with prohibitions
@@ -197,21 +248,26 @@ public class NormativePlan extends Plan {
         return null;
     }
 
-    private boolean actionIsPresentAsItShould(RegulativeNorm norm, Context obligationContext) {
-        NormativeAction obligatoryAction = (NormativeAction)  norm.getNormConsequences();
+    private boolean actionIsPresentAsItShould(
+            RegulativeNorm norm,
+            PopSituation situation,
+            Context obligationContext
+    ) {
+        NormativeAction obligatoryAction = (NormativeAction) norm.getNormConsequences();
 
         for (Step step : this.getSteps()) {
-            if(!step.getActionInstance().getName().equals(obligatoryAction.getLabel())){
+            if (!step.getActionInstance().getName().equals(obligatoryAction.getLabel())) {
                 continue;
             }
 
             Action stepAction = (Action) step.getActionInstance().getLogicalEntity();
             Context stepContext = step.getActionInstance().getContext();
 
-            if(obligatoryAction.unify(obligationContext, stepAction, stepContext)){
+            if (obligatoryAction.unify(obligationContext, stepAction, stepContext, this.getCc())) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -255,6 +311,7 @@ public class NormativePlan extends Plan {
     /**
      * Verifies if a norm is applicable by verifying all of its conditions, which either demands
      * some constitutive norm, or some proposition to be necessarily true
+     *
      * @param situation : the situation on which we want to check the norm's applicability
      *                  conditions
      * @param norm      : the norm whose applicability conditions will be tested.
@@ -266,7 +323,12 @@ public class NormativePlan extends Plan {
 
         for (Atom condition : norm.getNormConditions().getConditions()) {
             if (isRole(condition)) {
-                if (!validatedByConstitutiveNorms(condition, conditionContext, normContext)) {
+                if (!validatedByConstitutiveNorms(
+                        condition,
+                        conditionContext,
+                        normContext,
+                        this.getCc().copy()
+                )) {
                     return false;
                 }
             } else {
@@ -280,11 +342,12 @@ public class NormativePlan extends Plan {
 
     /**
      * Checks if a condition is satisfied in a given situation of the plan.
-     * @param situation : the situation in which we want to check if the condition is necessarily
-     *                  true.
+     *
+     * @param situation        : the situation in which we want to check if the condition is necessarily
+     *                         true.
      * @param conditionContext : the context of the condition
-     * @param condition : the condition we want to check if it is necessarily true, mainly some
-     *                  applicability condition
+     * @param condition        : the condition we want to check if it is necessarily true, mainly some
+     *                         applicability condition
      * @return true if the condition is necessarily true in the given situation, and false otherwise
      */
     private boolean isSatisfiedInSituation(
@@ -296,14 +359,14 @@ public class NormativePlan extends Plan {
         Predicate conditionPredicate = condition.getPredicate();
         boolean isUnifiedOnce = false;
 
-        for(ContextualAtom assertedProposition : getAllAssertedPropositions(situation)){
-            if(conditionPredicate.unify(
+        for (ContextualAtom assertedProposition : getAllAssertedPropositions(situation)) {
+            if (conditionPredicate.unify(
                     conditionContext,
                     assertedProposition.getAtom().getPredicate(),
                     assertedProposition.getContext(),
                     cc
-            )){
-                if(condition.isNegation() == assertedProposition.getAtom().isNegation()) {
+            )) {
+                if (condition.isNegation() == assertedProposition.getAtom().isNegation()) {
                     isUnifiedOnce = true;
                     break;
                 }
@@ -316,29 +379,31 @@ public class NormativePlan extends Plan {
     /**
      * Determines if an atom is a constitutive norm verification. Meaning that the atom requires
      * some constitutive norms, or else it is false.
+     *
      * @param condition : the condition to check if it designates a role
      * @return true if the atom is referring to a constitutive norm, and false otherwise.
      */
     public boolean isRole(Atom condition) {
         return this.roleKeywords
-            .stream()
-            .anyMatch(role -> Objects.equals(role.getName(),condition.getPredicate().getName()));
+                .stream()
+                .anyMatch(role -> Objects.equals(role.getName(), condition.getPredicate().getName()));
     }
 
     /**
      * Checks if a condition matches with some constitutive norms of either the organization
      * or the institution
+     *
      * @param condition : the proposition we want to verify as a constitutive norm
      * @return true if the condition is confirmed by some constitutive norm, and false otherwise
      */
     public boolean validatedByConstitutiveNorms(
             Atom condition,
             Context conditionContext,
-            Context normContext
+            Context normContext,
+            CodenotationConstraints ccCopy
     ) {
         Term subject = condition.getPredicate().getTerms().get(0);
         String roleName = condition.getPredicate().getName();
-        CodenotationConstraints ccCopy = this.getCc().copy();
 
         for (ConstitutiveNorm constitutiveNorm : this.getAllConstitutiveNorms()) {
             if ((roleName.equals(constitutiveNorm.getTarget().getName()))
@@ -357,6 +422,7 @@ public class NormativePlan extends Plan {
     /**
      * Solve a normative flaw depending on its deontic operator and consequence type (either a
      * proposition or an action that ought to be or not to be done).
+     *
      * @param normativeFlaw   : the normative flaw to be solved
      * @param possibleActions : the set of all possible actions, necessary for solutions that
      *                        require adding in some new action, such as adding a mandatory
@@ -376,19 +442,17 @@ public class NormativePlan extends Plan {
         };
     }
 
-    public List<Action> getPermittedActions(
-            PopSituation applicableSituation,
-            List<Action> possibleActions
-    ) {
+    public List<Action> getPermittedActions(List<Action> possibleActions) {
         List<Action> permittedActions = new ArrayList<>(possibleActions);
 
         this.getAllRegulativeNorms()
                 .stream()
                 .filter(norm -> norm.isPermission() && norm.enforceAction())
-                .filter(permission -> !isApplicable(applicableSituation, permission))
                 .forEach(permission -> permittedActions.removeIf(
                         action -> action.equals(permission.getNormConsequences())
                 ));
+
+        permittedActions.addAll(buildPermittedNormativeActions());
 
         return permittedActions;
     }
@@ -410,9 +474,9 @@ public class NormativePlan extends Plan {
             Step followingStep = this.getTc().getFollowingStep(situation);
             return followingStep.getActionInstance().getContext();
         } else if (norm.enforceAction()) {
-            if(norm.getDeonticOperator().equals(DeonticOperator.OBLIGATION)){
+            if (norm.getDeonticOperator().equals(DeonticOperator.OBLIGATION)) {
                 return new Context();
-            }else if(norm.getDeonticOperator().equals(DeonticOperator.PROHIBITION)){
+            } else if (norm.getDeonticOperator().equals(DeonticOperator.PROHIBITION)) {
                 Action forbiddenAction = ((NormativeAction) norm.getNormConsequences());
 
                 Optional<Step> forbiddenStep = this.getSteps().stream()
@@ -424,7 +488,7 @@ public class NormativePlan extends Plan {
                 if (forbiddenStep.isPresent()) {
                     return forbiddenStep.get().getActionInstance().getContext();
                 }
-            }else{
+            } else {
 
             }
         }
@@ -553,10 +617,7 @@ public class NormativePlan extends Plan {
 
     @Override
     public List<Operator> resolve(Flaw toSolve, List<Action> possibleActions) {
-        List<Action> permittedActions = getPermittedActions(
-                toSolve.getApplicableSituation(),
-                possibleActions
-        );
+        List<Action> permittedActions = getPermittedActions(possibleActions);
 
         if (toSolve instanceof OpenCondition) {
             return resolve((OpenCondition) toSolve, permittedActions);
@@ -569,21 +630,28 @@ public class NormativePlan extends Plan {
         throw new UnsupportedOperationException("Flaw type not supported yet.");
     }
 
+    /**
+     * Detects all the open conditions within the plan, all the preconditions of actions which
+     * are not necessarily true in their preceding situation.
+     *
+     * @param step : the step to analyze
+     * @return
+     */
     @Override
     protected List<Flaw> getOpenConditions(Step step) {
         List<Flaw> openConditions = new ArrayList<>();
         List<Atom> stepPreconditions = step.getActionPreconditions().getAtoms();
-        CodenotationConstraints temporaryCc = new CodenotationConstraints(new ArrayList<>(
-                this.getCc().getCodenotations())
-        );
+        CodenotationConstraints temporaryCc = this.getCc().copy();
 
         for (Atom precondition : stepPreconditions) {
             if (isRole(precondition)) {
-                if (validatedByConstitutiveNorms(precondition, step.getActionInstance().getContext(),
-                        new Context())
-                ) {
-                    // you might consider completing this code to account for constitutive norms
-                    continue;
+                if (!validatedByConstitutiveNorms(
+                        precondition,
+                        step.getActionInstance().getContext(),
+                        new Context(),
+                        temporaryCc
+                )) {
+                    openConditions.add(buildOpenCondition(precondition, step));
                 }
             } else {
                 ContextualAtom preconditionInstance = new ContextualAtom(
@@ -601,9 +669,83 @@ public class NormativePlan extends Plan {
     }
 
     @Override
+    public boolean isAsserted(
+            ContextualAtom proposition,
+            PopSituation situation,
+            CodenotationConstraints cc
+    ) {
+        return this.getSteps().stream()
+                .filter(this::isNotFinalStep)
+                .anyMatch(step -> !this.getTc().isAfter(step, situation)
+                        && step.assertsWithPermanentCodenotations(proposition, cc)
+                );
+    }
+
+    @Override
+    public List<Operator> resolve(OpenCondition openCondition, List<Action> possibleActions) {
+        if (this.isRole(openCondition.getProposition().getAtom())) {
+            return resolveRole(openCondition);
+        }
+        return super.resolve(openCondition, possibleActions);
+    }
+
+    /**
+     * Specify how you want to resolve a missing constitutive norm
+     *
+     * @param openCondition : the open condition you want to resolve
+     * @return a list of operators based upon the set of constitutive norm
+     */
+    private List<Operator> resolveRole(OpenCondition openCondition) {
+        List<CodenotationConstraints> additions = new ArrayList<>();
+        ContextualAtom missingCondition = openCondition.getProposition();
+        Context initialContext = this.getInitialStep().getActionInstance().getContext();
+        Term onlyTermToCodenotate = missingCondition.getAtom().getPredicate().getTerms().get(0);
+
+        this.getAllConstitutiveNorms()
+                .stream()
+                .filter(constitutiveNorm -> constitutiveNorm.getTarget().getName()
+                        .equals(missingCondition.getAtom().getPredicate().getName()))
+                .forEach(constitutiveNorm -> {
+                    if (onlyTermToCodenotate.unify(
+                            missingCondition.getContext(),
+                            constitutiveNorm.getSource(),
+                            initialContext,
+                            this.getCc().copy())
+                    ) {
+                        additions.add(new CodenotationConstraints(List.of(
+                                new Codenotation(true,
+                                        new ContextualTerm(
+                                                openCondition.getProposition().getContext(),
+                                                onlyTermToCodenotate),
+                                        new ContextualTerm(
+                                                initialContext,
+                                                constitutiveNorm.getSource()
+                                        )
+                                )
+                        )));
+                    }
+                });
+
+        return additions.stream()
+                .map(foundCc -> (Operator) PlanModificationMapper.from(openCondition, foundCc))
+                .toList();
+    }
+
+    @Override
     public String toString() {
         return super.toString() +
                 "\n-- ORGANIZATIONS : \n\t" +
                 this.organizations;
+    }
+
+    public boolean haveMissingRole() {
+        for (Flaw flaw : this.getFlaws()) {
+            if (flaw instanceof OpenCondition openCondition) {
+                if (this.isRole(openCondition.getProposition().getAtom())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

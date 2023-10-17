@@ -156,6 +156,12 @@ public class RegulativeNorm extends Norm {
     }
 
     @Override
+    public LogicalEntity build(Context context, CodenotationConstraints cc) {
+        // TODO : represent a norm with all their bindings for visual purposes
+        return null;
+    }
+
+    @Override
     public LogicalEntity copy() {
         return new RegulativeNorm(
                 this.deonticOperator,

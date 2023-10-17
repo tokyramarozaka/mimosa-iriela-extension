@@ -40,4 +40,8 @@ public class OpenCondition implements Flaw {
 
         return stringBuilder.toString();
     }
+
+    public boolean involvesRole() {
+        return false;
+    }
 }

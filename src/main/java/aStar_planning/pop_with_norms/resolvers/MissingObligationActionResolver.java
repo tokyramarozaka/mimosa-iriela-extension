@@ -67,17 +67,20 @@ public class MissingObligationActionResolver {
         PopSituation newStepExit = new PopSituation();
 
         // Adds the step and its wrapping situations in the plan's temporal constraints
-        PopSituation situationAfterNewStep = (PopSituation) plan.getTc()
-                .getFollowingElement(flaw.getApplicableSituation());
+        PopSituation finalSituation = plan.getFinalSituation();
         TemporalConstraints addedTemporalConstraints = TemporalConstraintsBuilder
                 .insertNewStepBetweenTwoSituations(
                         plan, newStep, newStepEntry, newStepExit,
-                        flaw.getApplicableSituation(), situationAfterNewStep
+                        flaw.getApplicableSituation(), finalSituation
                 );
 
         // Adds the necessary codenotation constraints to the plan for the new step
         CodenotationConstraints applicableCodenotations = flaw.getFlawedNorm()
-                .getApplicableCodenotations(plan, flaw.getApplicableSituation());
+                .getApplicableCodenotations(
+                        plan,
+                        flaw.getApplicableSituation(),
+                        addedMandatoryAction.getContext()
+                );
 
         return List.of(PlanModificationMapper.from(
                         flaw,
@@ -88,4 +91,5 @@ public class MissingObligationActionResolver {
                 )
         );
     }
+
 }

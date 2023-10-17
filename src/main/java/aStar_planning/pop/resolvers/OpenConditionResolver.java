@@ -38,7 +38,8 @@ public class OpenConditionResolver {
     public static List<Operator> byCodenotation(Plan plan, OpenCondition openCondition) {
         List<Operator> operators = new ArrayList<>();
 
-        plan.getSteps().stream()
+        plan.getSteps()
+                .stream()
                 .filter(step -> plan.getTc().isBefore(step, openCondition.getApplicableSituation()))
                 .filter(precedingStep -> precedingStep.asserts(openCondition.getProposition(),
                         plan.getCc()))
@@ -59,7 +60,6 @@ public class OpenConditionResolver {
     /**
      * Determines all the operators which requires some step, called "establisher" to be put before
      * the open condition in order to solve it.
-     *
      * @param plan          : the plan in which we resolve the open condition
      * @param openCondition : the open condition to resolve
      * @return the list of all possible plan modifications which will resolve the open condition.

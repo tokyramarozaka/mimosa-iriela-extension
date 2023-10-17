@@ -8,6 +8,13 @@ import logic.Term;
 
 import java.util.List;
 
+/**
+ * All actions for the village institutions, notably for the member role, which includes :
+ * <ul>
+ *     <li>getExploitationLicense</li>
+ *     <li>getFishingLicense</li>
+ * </ul>
+ */
 public class VillageActions {
     public static Action getExploitationLicense(Term subject, Term zone) {
         return new Action(
@@ -19,9 +26,8 @@ public class VillageActions {
 
     public static ActionPrecondition getExploitationLicense_preconditions(Term subject, Term zone) {
         return new ActionPrecondition(List.of(
-                new Atom(false, Village.member(subject)),
-                new Atom(false, Global.located(subject, zone)),
-                new Atom(false, Village.office(zone))
+                new Atom(false, Village.office(zone)),
+                new Atom(false, Global.located(subject, zone))
         ));
     }
 
@@ -76,7 +82,7 @@ public class VillageActions {
     public static Action getFishingNet(Term subject){
         return new Action(
                 Village.getFishingNet,
-                getFishinNet_preconditions(subject),
+                getFishingNet_preconditions(subject),
                 getFishingNet_consequences(subject)
         );
     }
@@ -87,7 +93,7 @@ public class VillageActions {
         ));
     }
 
-    public static ActionPrecondition getFishinNet_preconditions(Term subject) {
+    public static ActionPrecondition getFishingNet_preconditions(Term subject) {
         return new ActionPrecondition();
     }
 }

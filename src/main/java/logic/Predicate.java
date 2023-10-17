@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @AllArgsConstructor
@@ -62,7 +63,7 @@ public class Predicate implements Unifiable {
     }
 
 
-    private boolean attemptUnification(
+    public boolean attemptUnification(
             Context fromContext,
             Unifiable to,
             Context toContext,
@@ -118,6 +119,17 @@ public class Predicate implements Unifiable {
 
         return true;
     }
+
+    public Predicate build(Context context, CodenotationConstraints cc){
+        return new Predicate(
+                this.name,
+                this.terms.stream()
+                        .sorted(Comparator.comparing(Term::getName))
+                        .map(term -> term.build(context, cc))
+                        .toList()
+        );
+    }
+
 
     @Override
     public Unifiable build(Context context) {

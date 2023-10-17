@@ -95,7 +95,6 @@ public class Iriela_UT {
         NormativePlan initialPlan = (NormativePlan) problem.getInitialState();
 
         List<Action> permittedActions = initialPlan.getPermittedActions(
-                initialPlan.getInitialSituation(),
                 initialPlan.getActionsFromAllInstitutions()
         );
 

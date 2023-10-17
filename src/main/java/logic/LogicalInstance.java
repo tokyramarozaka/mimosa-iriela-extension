@@ -25,6 +25,10 @@ public class LogicalInstance implements Operator {
         return this.getLogicalEntity().build(this.context).toString();
     }
 
+    public String toStringWithCodenotations(CodenotationConstraints cc){
+        return this.getLogicalEntity().build(this.getContext(), cc).toString();
+    }
+
     @Override
     public String getName() {
         return this.getLogicalEntity().getLabel();

@@ -1,5 +1,6 @@
 package iriela.description.institutions;
 
+import aStar_planning.pop_with_norms.components.ConstitutiveNorm;
 import aStar_planning.pop_with_norms.components.Institution;
 import aStar_planning.pop_with_norms.components.Norm;
 import aStar_planning.pop_with_norms.components.Role;

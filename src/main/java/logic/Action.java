@@ -1,6 +1,7 @@
 package logic;
 
 import aStar_planning.pop_with_norms.concepts.ActionName;
+import constraints.CodenotationConstraints;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -30,6 +31,7 @@ public class Action extends LogicalEntity {
     /**
      * Returns all the possible instances of a given action in a target situation based on its
      * preconditions
+     *
      * @param targetSituation : the situation to check if any instance of the action is possible.
      * @return a list of action instances, executable in the target situation
      */
@@ -53,6 +55,7 @@ public class Action extends LogicalEntity {
     /**
      * Recursive algorithms to get all contexts from each branch, the recursion stops when we have
      * treated all the precondition's predicates
+     *
      * @param precondition
      * @param beliefs
      * @param contexts
@@ -100,6 +103,11 @@ public class Action extends LogicalEntity {
                 this.consequences.build(context));
     }
 
+    public LogicalEntity build(Context context, CodenotationConstraints cc){
+        return new Action(this.actionName, this.preconditions.build(context, cc),
+                this.consequences.build(context, cc));
+    }
+
     @Override
     public LogicalEntity copy() {
         return new Action(this.actionName, this.preconditions.copy(), this.consequences.copy());
@@ -134,5 +142,70 @@ public class Action extends LogicalEntity {
 
         sb.append(")");
         return sb.toString();
+    }
+
+    public boolean unify(Context context, Action to, Context toContext, CodenotationConstraints cc) {
+        List<ContextualTerm> changes = new ArrayList<>();
+
+        boolean res = attemptUnification(context, to, toContext, changes, cc);
+        if (!res) {
+            for (ContextualTerm linkedVariable : changes) {
+                cc.unlink(linkedVariable);
+            }
+        }
+
+        return res;
+    }
+
+    private boolean attemptUnification(
+            Context context,
+            Action to,
+            Context toContext,
+            List<ContextualTerm> changes,
+            CodenotationConstraints cc
+    ) {
+        if (!this.getActionName().getName().equals(to.getActionName().getName())) {
+            return false;
+        }
+
+        ActionPrecondition fromPrecondition = this.getPreconditions();
+        ActionPrecondition toPrecondition = to.getPreconditions();
+        for (int index = 0; index < fromPrecondition.getAtoms().size(); index++) {
+            Predicate fromPredicate = fromPrecondition.getAtoms().get(index).getPredicate();
+            Predicate toPredicate = toPrecondition.getAtoms().get(index).getPredicate();
+            if (!fromPredicate.attemptUnification(
+                    context,
+                    toPredicate,
+                    toContext,
+                    changes,
+                    cc
+            )) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public List<Term> getTerms() {
+        List<Term> terms = new ArrayList<>();
+
+        this.getPreconditions().getAtoms().forEach(atom -> {
+            for (Term term : atom.getPredicate().getTerms()) {
+                if(!terms.contains(term)){
+                    terms.add(term);
+                }
+            }
+        });
+
+        this.getConsequences().getAtoms().forEach(atom -> {
+            for (Term term : atom.getPredicate().getTerms()) {
+                if(!terms.contains(term)){
+                    terms.add(term);
+                }
+            }
+        });
+
+        return terms;
     }
 }

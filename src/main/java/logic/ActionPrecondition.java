@@ -1,5 +1,7 @@
 package logic;
 
+import constraints.Codenotation;
+import constraints.CodenotationConstraints;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -33,6 +35,28 @@ public class ActionPrecondition {
         );
     }
 
+    public ActionPrecondition build(Context context, CodenotationConstraints cc) {
+        return new ActionPrecondition(
+                this.atoms
+                        .stream()
+                        .map(atom -> atom.build(context, cc))
+                        .toList()
+        );
+    }
+
+    public List<Term> getTerms(){
+        List<Term> terms = new ArrayList<>();
+
+        for (Atom atom : this.getAtoms()) {
+            for (Term term : atom.getPredicate().getTerms()) {
+                if(!terms.contains(term)){
+                    terms.add(term);
+                }
+            }
+        }
+
+        return terms;
+    }
     public ActionPrecondition copy() {
         return new ActionPrecondition(this.atoms.stream().toList());
     }

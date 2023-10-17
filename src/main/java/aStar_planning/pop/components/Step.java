@@ -79,7 +79,6 @@ public class Step implements PlanElement {
     /**
      * Checks if the current step can assert the given proposition, and save the changes made to
      * codenotation constraints that would make the assertion possible.
-     *
      * @param proposition : the proposition to check if it is asserted
      * @param cc          : the current codenotations set in the plan(which will change if need be)
      * @return
@@ -133,9 +132,8 @@ public class Step implements PlanElement {
     }
 
     /**
-     * Check if two propositions (contextual atom) can be unified without committing to permanent
+     * Check if two propositions (contextual atom) can be unified and commits to permanent
      * variable bindings (codenotation constraints)
-     *
      * @param consequenceInstance : the first proposition to be unified
      * @param proposition         : the second proposition to be unified
      * @param tempCc              : current codenotation constraints representing the current bindings
@@ -147,20 +145,12 @@ public class Step implements PlanElement {
             ContextualAtom proposition,
             CodenotationConstraints tempCc
     ) {
-        boolean res = consequenceInstance.getAtom().getPredicate().unify(
+        return consequenceInstance.getAtom().getPredicate().unify(
                 consequenceInstance.getContext(),
                 proposition.getAtom().getPredicate(),
                 proposition.getContext(),
                 tempCc
         );
-        if (proposition.getAtom().getPredicate().getName().equals("areAdjacents")
-                && consequenceInstance.getAtom().getPredicate().getName().equals("areAdjacents")
-                && ((consequenceInstance.getContext().getId() == 43162) ||
-                (proposition.getContext().getId() == 43162))
-        && !res){
-            System.out.println("test");
-        }
-        return res;
     }
 
 
@@ -260,6 +250,11 @@ public class Step implements PlanElement {
     @Override
     public String toString() {
         return this.getActionInstance().toString() + "::" +
+                this.getActionInstance().getContext().getId();
+    }
+
+    public String toStringWithCodenotations(CodenotationConstraints cc){
+        return this.getActionInstance().toStringWithCodenotations(cc) + "::" +
                 this.getActionInstance().getContext().getId();
     }
 }

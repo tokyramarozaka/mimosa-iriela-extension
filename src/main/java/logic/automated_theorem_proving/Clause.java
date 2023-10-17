@@ -1,5 +1,6 @@
 package logic.automated_theorem_proving;
 
+import constraints.CodenotationConstraints;
 import logic.Atom;
 import logic.Context;
 import logic.LogicalEntity;
@@ -37,6 +38,12 @@ public class Clause extends LogicalEntity {
         });
 
         return new Clause(builtAtoms);
+    }
+
+    @Override
+    public LogicalEntity build(Context context, CodenotationConstraints cc) {
+        // TODO : implement build method for validation on a backward planning algorithm
+        return null;
     }
 
     @Override

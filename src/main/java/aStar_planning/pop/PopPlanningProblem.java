@@ -87,7 +87,7 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
 
     @Override
     public double evaluateOperator(Operator transition) {
-        return 1;
+        return 0.1;
     }
 
     @Override
@@ -119,7 +119,7 @@ public class PopPlanningProblem extends Problem implements AStarProblem{
         Plan plan = (Plan) state;
 
         AtomicInteger i = new AtomicInteger(0);
-        logger.info("\n_________GET OPTIONS_________");
+        logger.debug("_________GET OPTIONS_________");
         logger.info("CURRENT STATE : "+ plan);
         logger.info("\n______OPTIONS ARE______");
         plan.allPossibleModifications(possibleActions).forEach(operator -> {

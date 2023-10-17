@@ -33,12 +33,12 @@
             <artifactId>log4j-core</artifactId>
             <version>2.19.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.jgrapht/jgrapht-jdk1.5 -->
         <dependency>
-            <groupId>org.jgrapht</groupId>
-            <artifactId>jgrapht-jdk1.5</artifactId>
-            <version>0.7.3</version>
+            <groupId>guru.nidi</groupId>
+            <artifactId>graphviz-java</artifactId>
+            <version>0.18.1</version>
         </dependency>
+
 
     </dependencies>
 

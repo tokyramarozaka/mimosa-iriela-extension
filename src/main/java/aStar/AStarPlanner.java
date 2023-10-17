@@ -1,11 +1,13 @@
 package aStar;
 
+import aStar_planning.pop.components.Plan;
 import exception.NoPlanFoundException;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import outputs.PlanningOutput;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -13,18 +15,19 @@ import java.util.Queue;
 
 @Getter
 public class AStarPlanner {
-    private AStarProblem problem;
+    private final static Logger logger = LogManager.getLogger(AStarPlanner.class);
     private final Queue<ProblemState> open = new PriorityQueue<>();
     private final List<State> closed = new ArrayList<>();
+    private AStarProblem problem;
     private ProblemState finalProblemState;
-    private final static Logger logger = LogManager.getLogger(AStarPlanner.class);
 
-    public AStarPlanner(AStarProblem problem){
+    public AStarPlanner(AStarProblem problem) {
         this.problem = problem;
     }
 
     /**
      * Returns the list of operators which would allow to go from the initial state to a final state
+     *
      * @return the list of Operators in a given order to reach a final state (if any).
      * @throws NoPlanFoundException : no final state was found
      */
@@ -43,26 +46,26 @@ public class AStarPlanner {
         while (!open.isEmpty() && !found) {
             ProblemState candidate = open.poll();
 
-             if(closed.contains(candidate.getState())) {
+            if (closed.contains(candidate.getState())) {
                 continue;
             }
 
-            if (problem.isFinal(candidate.getState())){
+            if (problem.isFinal(candidate.getState())) {
                 solutionState = candidate;
                 break;
             }
-            
+
             for (Operator option : problem.getOptions(candidate.getState())) {
                 State nextState = problem.apply(option, candidate.getState());
 
                 ProblemState successor = new ProblemState(
-                        candidate,nextState,
+                        candidate, nextState,
                         option,
                         candidate.g + problem.evaluateOperator(option),
                         problem.evaluateState(nextState)
                 );
 
-                if(problem.isValid(nextState)) {
+                if (problem.isValid(nextState)) {
                     if (problem.isFinal(nextState)) {
                         found = true;
                         solutionState = successor;
@@ -90,13 +93,14 @@ public class AStarPlanner {
      * Returns the set of all operators that have been applied given a final State. By using its
      * encapsulating ProblemState. We can trace back all the Operators that have been applied,
      * starting from the last to the first Operator.
-     *
+     * <p>
      * Depending on the type of technique used to solve the problem (Forward, Backward) this order
      * might need to be reversed to obtain the set of operators in the right order.
+     *
      * @param finalState : the final ProblemState which will allow to get back to its parent
      * @return the set of applied operator in the right order : from the first to the last.
      */
-    public List<Operator> extractSolution(ProblemState finalState){
+    public List<Operator> extractSolution(ProblemState finalState) {
         List<Operator> solution = new ArrayList<>();
 
         ProblemState iteratorFromFinalState = finalState;
@@ -115,10 +119,17 @@ public class AStarPlanner {
      * object that can be considered as a Plan.
      * @return
      */
-    public PlanningOutput outputSolutionPlan() throws NoPlanFoundException{
+    public PlanningOutput outputSolutionPlan() throws NoPlanFoundException, IOException {
         List<Operator> operators = findSolution();
         State finalState = this.getFinalProblemState().getState();
 
-        return problem.outputPlan(finalState, operators);
+        Plan plan = (Plan) finalState;
+
+        plan.render("overview.png");
+        PlanningOutput output = problem.outputPlan(finalState, operators);
+
+        plan.render("simplified.png");
+
+        return output;
     }
 }

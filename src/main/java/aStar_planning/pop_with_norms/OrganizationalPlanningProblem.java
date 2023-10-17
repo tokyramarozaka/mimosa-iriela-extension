@@ -4,6 +4,7 @@ import aStar.Operator;
 import aStar.State;
 import aStar_planning.pop.PopPlanningProblem;
 import aStar_planning.pop.components.PopSituation;
+import aStar_planning.pop.components.Step;
 import aStar_planning.pop.utils.PlanInitializer;
 import aStar_planning.pop_with_norms.components.Organization;
 import aStar_planning.pop_with_norms.components.NormativePlan;
@@ -32,7 +33,7 @@ public class OrganizationalPlanningProblem extends PopPlanningProblem {
             List<Action> possibleActions,
             Goal goal,
             List<Organization> organizations
-    ){
+    ) {
         super(initialSituation, possibleActions, goal, true);
         this.organizations = organizations;
         this.initialNormativePlan = PlanInitializer.constructInitialPlan(
@@ -46,22 +47,5 @@ public class OrganizationalPlanningProblem extends PopPlanningProblem {
     @Override
     public State getInitialState() {
         return this.initialNormativePlan;
-    }
-
-    @Override
-    public boolean isFinal(State state) {
-        boolean isFinal = super.isFinal(state);
-        NormativePlan plan = (NormativePlan) state;
-
-        for (PopSituation situation : plan.getSituations()) {
-            logger.debug("All asserted propositions in : " + situation + " are : " +
-                    plan.getAllAssertedPropositions(situation)
-                            .stream()
-                            .filter(proposition -> !proposition.getAtom().getPredicate().getName()
-                                    .equals("areAdjacents"))
-                            .collect(Collectors.toList()));
-        }
-
-        return isFinal;
     }
 }

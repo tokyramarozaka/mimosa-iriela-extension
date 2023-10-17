@@ -1,5 +1,6 @@
 package logic;
 
+import constraints.CodenotationConstraints;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -24,6 +25,9 @@ public class Atom {
         return new Atom(this.negation, (Predicate)this.predicate.build(context));
     }
 
+    public Atom build(Context context, CodenotationConstraints cc) {
+        return new Atom(this.negation, this.predicate.build(context,cc));
+    }
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();

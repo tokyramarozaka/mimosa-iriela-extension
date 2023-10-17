@@ -26,6 +26,16 @@ public class Household {
                 Household.norms()
         );
     }
+    public static Institution get_haveWoodOnly() {
+        return new Institution(
+                "household",
+                9.5f,
+                Household.concepts(),
+                Household.assertions(),
+                Household.roleActions(),
+                Household.norms_haveWoodOnly()
+        );
+    }
 
     public static Institution get_haveFishOnly(){
         return new Institution(
@@ -103,6 +113,12 @@ public class Household {
     private static List<Norm> norms_haveFishOnly() {
         return List.of(
                 HouseholdNorms.obligationHaveFish()
+        );
+    }
+
+    private static List<Norm> norms_haveWoodOnly() {
+        return List.of(
+                HouseholdNorms.obligationHaveWood()
         );
     }
     private static List<RoleActions> roleActions(){

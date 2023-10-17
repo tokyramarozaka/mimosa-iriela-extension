@@ -53,6 +53,11 @@ public abstract class Term implements Unifiable {
             List<ContextualTerm> currentChanges
     );
 
+    public Term build(Context context, CodenotationConstraints cc){
+        return cc.build(this, context);
+    }
+
+
     /**
      * Attempts a unification between the current term and another one using the codenotation
      * constraints provided.

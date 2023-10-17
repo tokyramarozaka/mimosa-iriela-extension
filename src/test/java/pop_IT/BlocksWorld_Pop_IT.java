@@ -8,12 +8,14 @@ import mock_logic.blocks_world.SituationFactory;
 import org.junit.jupiter.api.Test;
 import outputs.PlanningOutput;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BlocksWorld_Pop_IT {
     @Test
-    public void outputPlan_ifGoalHasUngroundedVariables_ok(){
+    public void outputPlan_ifGoalHasUngroundedVariables_ok() throws IOException {
         PopPlanningProblem abstractProblem = new PopPlanningProblem(
                 SituationFactory.threeBlocksOnTable(),
                 ActionFactory.allActionsInBlocksWorld(),

@@ -40,6 +40,12 @@ public class ConstitutiveNorm extends Norm{
     }
 
     @Override
+    public LogicalEntity build(Context context, CodenotationConstraints cc) {
+        //TODO : represent all the constitutive norms using the CC as variable binding.
+        return null;
+    }
+
+    @Override
     public boolean isApplied(NormativePlan plan, PopSituation situation,
                              CodenotationConstraints cc, Context applicableContext)
     {

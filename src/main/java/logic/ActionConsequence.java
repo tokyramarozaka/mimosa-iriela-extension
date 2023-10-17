@@ -1,5 +1,6 @@
 package logic;
 
+import constraints.CodenotationConstraints;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -35,6 +36,14 @@ public class ActionConsequence {
         );
     }
 
+    public ActionConsequence build(Context context, CodenotationConstraints cc){
+        return new ActionConsequence(
+                this.atoms
+                        .stream()
+                        .map(atom -> atom.build(context, cc))
+                        .toList()
+        );
+    }
     public ActionConsequence copy() {
         return new ActionConsequence(this.atoms.stream().toList());
     }

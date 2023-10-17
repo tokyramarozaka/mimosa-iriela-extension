@@ -23,13 +23,15 @@ public class VillageOrg {
     private static List<Norm> norms() {
         return List.of(
                 new ConstitutiveNorm(Agent.SELF, Village.member),
+
+                new ConstitutiveNorm(Zones.A2, Village.sacred),
+                new ConstitutiveNorm(Zones.B3, Village.sacred),
                 new ConstitutiveNorm(Zones.C1, Village.sacred),
-                new ConstitutiveNorm(Zones.D1, Village.sacred),
-                new ConstitutiveNorm(Zones.D2, Village.sacred),
-                new ConstitutiveNorm(Zones.C4, Village.sacred),
+
                 new ConstitutiveNorm(Zones.A3, Village._protected),
-                new ConstitutiveNorm(Zones.A4, Village._protected),
-                new ConstitutiveNorm(Zones.C4, Village.office)
+                new ConstitutiveNorm(Zones.B1, Village._protected),
+
+                new ConstitutiveNorm(Zones.B2, Village.office)
         );
     }
 
