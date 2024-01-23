@@ -1,10 +1,7 @@
 package aStar_planning.pop_with_norms;
 
-import aStar.Operator;
 import aStar.State;
 import aStar_planning.pop.PopPlanningProblem;
-import aStar_planning.pop.components.PopSituation;
-import aStar_planning.pop.components.Step;
 import aStar_planning.pop.utils.PlanInitializer;
 import aStar_planning.pop_with_norms.components.Organization;
 import aStar_planning.pop_with_norms.components.NormativePlan;
@@ -16,19 +13,17 @@ import lombok.ToString;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @ToString
-public class OrganizationalPlanningProblem extends PopPlanningProblem {
+public class NormativePlanningProblem extends PopPlanningProblem {
     private final NormativePlan initialNormativePlan;
     private final List<Organization> organizations;
 
-    private final Logger logger = LogManager.getLogger(OrganizationalPlanningProblem.class);
+    private final Logger logger = LogManager.getLogger(NormativePlanningProblem.class);
 
-    public OrganizationalPlanningProblem(
+    public NormativePlanningProblem(
             Situation initialSituation,
             List<Action> possibleActions,
             Goal goal,

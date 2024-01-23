@@ -4,7 +4,7 @@ import aStar.Operator;
 import aStar_planning.pop.components.Flaw;
 import aStar_planning.pop.components.PlanModification;
 import aStar_planning.pop.components.Step;
-import aStar_planning.pop_with_norms.OrganizationalPlanningProblem;
+import aStar_planning.pop_with_norms.NormativePlanningProblem;
 import aStar_planning.pop_with_norms.components.Organization;
 import aStar_planning.pop_with_norms.components.NormativePlan;
 import iriela.description.PlanningProblemFactory;
@@ -27,7 +27,7 @@ import java.util.Set;
 
 public class Iriela_UT {
     private static final Logger logger = LogManager.getLogger(Iriela_UT.class);
-    OrganizationalPlanningProblem problem = PlanningProblemFactory.irielaProblem();
+    NormativePlanningProblem problem = PlanningProblemFactory.irielaProblem();
 
     @Test
     public void getActiveOrganizations_ok() {

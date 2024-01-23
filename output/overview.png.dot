@@ -1,25 +1,13 @@
-digraph G {
-  "initial()::3" -> "PopSituation(id=1)";
-  "PopSituation(id=1)" -> "PopSituation(id=2)";
-  "PopSituation(id=1)" -> "PopSituation(id=5)";
-  "PopSituation(id=1)" -> "PopSituation(id=19)";
-  "PopSituation(id=1)" -> "PopSituation(id=167)";
-  "PopSituation(id=1)" -> "PopSituation(id=195)";
-  "PopSituation(id=1)" -> "PopSituation(id=245)";
-  "PopSituation(id=2)" -> "final(X)::2";
-  "PopSituation(id=5)" -> "cut(X,Z)::49";
-  "cut(X,Z)::49" -> "PopSituation(id=6)";
-  "PopSituation(id=6)" -> "PopSituation(id=2)";
-  "PopSituation(id=19)" -> "move(X,Y,Z)::3466";
-  "move(X,Y,Z)::3466" -> "PopSituation(id=20)";
-  "PopSituation(id=20)" -> "PopSituation(id=5)";
-  "PopSituation(id=167)" -> "getExploitationLicense(Z,X)::48524";
-  "getExploitationLicense(Z,X)::48524" -> "PopSituation(id=168)";
-  "PopSituation(id=168)" -> "PopSituation(id=5)";
-  "PopSituation(id=195)" -> "move(X,Y)::54352";
-  "move(X,Y)::54352" -> "PopSituation(id=196)";
-  "PopSituation(id=196)" -> "PopSituation(id=19)";
-  "PopSituation(id=245)" -> "move(X,Y)::75653";
-  "move(X,Y)::75653" -> "PopSituation(id=246)";
-  "PopSituation(id=246)" -> "PopSituation(id=195)";
+digraph G { 
+  "initial()" -> "final(X)";
+  "initial()" -> "cut(X,B1)";
+  "initial()" -> "getExploitationLicense(B2,X)";
+  "initial()" -> "move(X,A2,B2)";
+  "initial()" -> "move(X,Y,B1)";
+  "initial()" -> "move(X,Y,A2)";
+  "cut(X,B1)" -> "final(X)";
+  "getExploitationLicense(B2,X)" -> "cut(X,B1)";
+  "move(X,A2,B2)" -> "getExploitationLicense(B2,X)";
+  "move(X,Y,B1)" -> "cut(X,B1)";
+  "move(X,Y,A2)" -> "move(X,A2,B2)";
 }

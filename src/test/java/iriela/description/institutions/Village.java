@@ -1,6 +1,5 @@
 package iriela.description.institutions;
 
-import aStar_planning.pop_with_norms.components.ConstitutiveNorm;
 import aStar_planning.pop_with_norms.components.Institution;
 import aStar_planning.pop_with_norms.components.Norm;
 import aStar_planning.pop_with_norms.components.Role;
@@ -45,10 +44,10 @@ public class Village {
     private static List<Norm> norms() {
         return List.of(
                 VillageNorms.obligatoryReportFish(TermsFactory.X),
-                VillageNorms.locatedInSacred(TermsFactory.X, TermsFactory.Z),
-                VillageNorms.fishWithoutLicense(TermsFactory.X, TermsFactory.Z),
-                VillageNorms.cutWithLicense(TermsFactory.X, TermsFactory.Z),
-                VillageNorms.haveFishingNetWithLicense(TermsFactory.X)
+                VillageNorms.prohibitedSacredTerritory(TermsFactory.X, TermsFactory.Z),
+                VillageNorms.prohibitedFishingWithoutLicense(TermsFactory.X, TermsFactory.Z),
+                VillageNorms.permittedCutWithLicense(TermsFactory.X, TermsFactory.Z),
+                VillageNorms.permittedToHaveFishingNet_ifHasLicense(TermsFactory.X)
         );
     }
 

@@ -124,8 +124,7 @@ public class Predicate implements Unifiable {
         return new Predicate(
                 this.name,
                 this.terms.stream()
-                        .sorted(Comparator.comparing(Term::getName))
-                        .map(term -> term.build(context, cc))
+                        .map(term -> (Term) term.build(context, cc))
                         .toList()
         );
     }

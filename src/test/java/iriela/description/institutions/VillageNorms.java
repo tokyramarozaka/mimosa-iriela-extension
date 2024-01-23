@@ -21,14 +21,14 @@ public class VillageNorms {
         );
     }
 
-    static Norm locatedInSacred(Term subject, Term zone) {
+    static Norm prohibitedSacredTerritory(Term subject, Term zone) {
         return new RegulativeNorm(
                 DeonticOperator.PROHIBITION,
                 locatedInSacred_conditions(subject, zone),
                 locatedInSacred_consequences(subject, zone)
         );
     }
-    static Norm fishWithoutLicense(Term subject, Term zone) {
+    static Norm prohibitedFishingWithoutLicense(Term subject, Term zone) {
         return new RegulativeNorm(
                 DeonticOperator.PROHIBITION,
                 fishWithoutLicense_conditions(subject, zone),
@@ -36,7 +36,7 @@ public class VillageNorms {
         );
     }
 
-    static Norm cutWithLicense(Term subject, Term zone){
+    static Norm permittedCutWithLicense(Term subject, Term zone){
         return new RegulativeNorm(
                 DeonticOperator.PERMISSION,
                 cutWithLicense_conditions(subject, zone),
@@ -44,7 +44,7 @@ public class VillageNorms {
         );
     }
 
-    static Norm haveFishingNetWithLicense(Term subject){
+    static Norm permittedToHaveFishingNet_ifHasLicense(Term subject){
         return new RegulativeNorm(
                 DeonticOperator.PERMISSION,
                 haveFishingNetWithLicense_conditions(subject),

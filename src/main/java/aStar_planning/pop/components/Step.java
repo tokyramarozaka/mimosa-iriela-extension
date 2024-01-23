@@ -104,7 +104,6 @@ public class Step implements PlanElement {
 
     /**
      * Determines if the current step destroys a given proposition without adding any other bindings
-     *
      * @param proposition : the proposition to check
      * @param cc          : the current codenotation constraint of the plan.
      * @return true if this step destroys the given proposition and false otherwise.
@@ -116,6 +115,7 @@ public class Step implements PlanElement {
             ){
                 continue;
             }
+
             CodenotationConstraints tempCc = cc.copy();
             ContextualAtom consequenceInstance = new ContextualAtom(
                     this.actionInstance.getContext(), consequence
@@ -254,7 +254,6 @@ public class Step implements PlanElement {
     }
 
     public String toStringWithCodenotations(CodenotationConstraints cc){
-        return this.getActionInstance().toStringWithCodenotations(cc) + "::" +
-                this.getActionInstance().getContext().getId();
+        return this.getActionInstance().toStringWithCodenotations(cc);
     }
 }

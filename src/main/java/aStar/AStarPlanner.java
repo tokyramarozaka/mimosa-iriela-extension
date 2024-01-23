@@ -49,12 +49,7 @@ public class AStarPlanner {
             if (closed.contains(candidate.getState())) {
                 continue;
             }
-
-            if (problem.isFinal(candidate.getState())) {
-                solutionState = candidate;
-                break;
-            }
-
+            
             for (Operator option : problem.getOptions(candidate.getState())) {
                 State nextState = problem.apply(option, candidate.getState());
 
@@ -93,7 +88,6 @@ public class AStarPlanner {
      * Returns the set of all operators that have been applied given a final State. By using its
      * encapsulating ProblemState. We can trace back all the Operators that have been applied,
      * starting from the last to the first Operator.
-     * <p>
      * Depending on the type of technique used to solve the problem (Forward, Backward) this order
      * might need to be reversed to obtain the set of operators in the right order.
      *
@@ -132,4 +126,5 @@ public class AStarPlanner {
 
         return output;
     }
+
 }

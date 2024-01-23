@@ -312,14 +312,13 @@ public class Plan implements State {
 
     /**
      * Return all the steps which destroys (or threaten) a given proposition in a given situation
-     *
      * @param proposition : the proposition we want to check
      * @param situation   : the situation in which we want to check if it has been destroyed
      * @return the list of all steps which can destroy a given proposition in a given situation
      */
     public List<Step> getDestroyers(ContextualAtom proposition, PopSituation situation) {
         return this.steps.stream()
-                .filter(step -> !this.tc.isBefore(situation, step))
+                .filter(step -> !this.tc.isAfter(step, situation))
                 .filter(step -> step.destroys(proposition, this.getCc()))
                 .collect(Collectors.toList());
     }
@@ -471,7 +470,7 @@ public class Plan implements State {
      * @throws IOException
      */
     public void render(String outputName) throws IOException {
-        String input = GraphvizGenerator.generateGraphviz(this.getTc().getGraph());
+        String input = GraphvizGenerator.generateGraphviz(this);
         logger.info(input);
 
         String folderPath = "output";

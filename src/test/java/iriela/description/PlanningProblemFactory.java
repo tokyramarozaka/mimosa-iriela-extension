@@ -1,6 +1,6 @@
 package iriela.description;
 
-import aStar_planning.pop_with_norms.OrganizationalPlanningProblem;
+import aStar_planning.pop_with_norms.NormativePlanningProblem;
 import aStar_planning.pop_with_norms.components.Organization;
 import logic.Action;
 import logic.Goal;
@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlanningProblemFactory {
-    public static OrganizationalPlanningProblem irielaProblem(){
-        return new OrganizationalPlanningProblem(
+    public static NormativePlanningProblem irielaProblem(){
+        return new NormativePlanningProblem(
                 new Situation(),
                 new ArrayList<Action>(),
                 new Goal(),
@@ -26,27 +26,40 @@ public class PlanningProblemFactory {
         );
     }
 
-    public static OrganizationalPlanningProblem irielaProblem_haveFoodOnly(){
-        return new OrganizationalPlanningProblem(
+    public static NormativePlanningProblem irielaProblem_haveFishOnly(){
+        return new NormativePlanningProblem(
                 new Situation(),
-                new ArrayList<Action>(),
+                new ArrayList<>(),
                 new Goal(),
-                new ArrayList<Organization>(List.of(
+                new ArrayList<>(List.of(
                         GlobalOrg.get(),
                         VillageOrg.get(),
-                        HouseholdOrg.get_haveFoodOnly()
+                        HouseholdOrg.get_haveFishOnly()
                 ))
         );
     }
 
-    public static OrganizationalPlanningProblem irielaProblem_haveWoodOnly() {
-        return new OrganizationalPlanningProblem(
+    public static NormativePlanningProblem irielaProblem_haveWoodOnly() {
+        return new NormativePlanningProblem(
                 new Situation(),
-                new ArrayList<Action>(),
+                new ArrayList<>(),
                 new Goal(),
-                new ArrayList<Organization>(List.of(
+                new ArrayList<>(List.of(
                         GlobalOrg.get(),
                         VillageOrg.get(),
+                        HouseholdOrg.get_haveWoodOnly()
+                ))
+        );
+    }
+
+    public static NormativePlanningProblem irielaProblem_haveWoodOnly_noVillageNorms() {
+        return new NormativePlanningProblem(
+                new Situation(),
+                new ArrayList<>(),
+                new Goal(),
+                new ArrayList<>(List.of(
+                        GlobalOrg.get(),
+                        //VillageOrg.get(),
                         HouseholdOrg.get_haveWoodOnly()
                 ))
         );

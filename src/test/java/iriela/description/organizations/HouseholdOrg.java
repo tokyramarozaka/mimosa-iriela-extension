@@ -19,7 +19,7 @@ public class HouseholdOrg {
         );
     }
 
-    public static Organization get_haveFoodOnly(){
+    public static Organization get_haveFishOnly(){
         return new Organization(
                 Household.get_haveFishOnly(),
                 HouseholdOrg.norms(),

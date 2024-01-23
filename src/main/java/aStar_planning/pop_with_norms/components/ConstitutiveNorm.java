@@ -4,8 +4,13 @@ import aStar_planning.pop.components.PopSituation;
 import constraints.CodenotationConstraints;
 import logic.Constant;
 import logic.Context;
+import logic.ContextualTerm;
 import logic.LogicalEntity;
+import logic.Predicate;
+import logic.Variable;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 public class ConstitutiveNorm extends Norm{

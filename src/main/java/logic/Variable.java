@@ -1,5 +1,7 @@
 package logic;
 
+import aStar_planning.pop_with_norms.components.ConstitutiveNorm;
+import aStar_planning.pop_with_norms.components.Role;
 import constraints.Codenotation;
 import constraints.CodenotationConstraints;
 import org.apache.logging.log4j.LogManager;
@@ -58,16 +60,68 @@ public class Variable extends Term {
                     .unify(variableLink.getContext(), to, toContext, cc);
         }
 
-        if(!cc.isAllowed(new Codenotation(
+        if (!cc.isAllowed(new Codenotation(
                 true,
                 new ContextualTerm(fromContext, this),
-                new ContextualTerm(toContext, (Term)to))
-        )){
+                new ContextualTerm(toContext, (Term) to))
+        )) {
             return false;
         }
 
         cc.link(this, fromContext, (Term) to, toContext);
-        currentChanges.add(new ContextualTerm(fromContext,this));
+        currentChanges.add(new ContextualTerm(fromContext, this));
+        return cc.isCoherent();
+    }
+
+    public boolean attemptUnificationWithConstitutiveNorms(
+            Context fromContext,
+            Unifiable to,
+            Context toContext,
+            List<ContextualTerm> currentChanges,
+            CodenotationConstraints cc,
+            List<Role> variableRoles,
+            List<ConstitutiveNorm> constitutiveNorms
+    ) {
+        if (!cc.isCoherent()) {
+            return false;
+        }
+
+        if (fromContext.equals(toContext) && this.equals(to)) {
+            return true;
+        }
+
+        if (cc.isLinked(this, fromContext)) {
+            ContextualTerm variableLink = cc.getLink(this, fromContext);
+
+            return variableLink
+                    .getTerm()
+                    .unify(variableLink.getContext(), to, toContext, cc);
+        }
+
+        Codenotation toAdd = new Codenotation(
+                true,
+                new ContextualTerm(fromContext, this),
+                new ContextualTerm(toContext, (Term) to));
+
+        if (!cc.isAllowed(toAdd)) {
+            return false;
+        }
+
+        /**
+         * Codenotation : L and R terms.
+         * check which roles L must play inside the step's role
+         * and then see if R actually plays that role
+         * (BASIC TYPE checking)
+         * Given a list of roles that this variable must have, we can go like ...
+         * for each role that the variable must play,
+         * does the constitutive norms says that R is playing that role ?
+         * return constitutiveNorms
+         *      .stream()
+         *      .anyMatch(constitutiveNorm -> constitutiveNorm.getSource().sameName(R.getTerm())
+         *              && constitutiveNorm.getTarget().equals(role))
+         */
+        cc.link(this, fromContext, (Term) to, toContext);
+        currentChanges.add(new ContextualTerm(fromContext, this));
         return cc.isCoherent();
     }
 

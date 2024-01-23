@@ -392,7 +392,6 @@ public class NormativePlan extends Plan {
     /**
      * Checks if a condition matches with some constitutive norms of either the organization
      * or the institution
-     *
      * @param condition : the proposition we want to verify as a constitutive norm
      * @return true if the condition is confirmed by some constitutive norm, and false otherwise
      */
@@ -674,9 +673,9 @@ public class NormativePlan extends Plan {
             PopSituation situation,
             CodenotationConstraints cc
     ) {
-        return this.getSteps().stream()
+       return this.getSteps().stream()
                 .filter(this::isNotFinalStep)
-                .anyMatch(step -> !this.getTc().isAfter(step, situation)
+                .anyMatch(step -> this.getTc().isBefore(step, situation)
                         && step.assertsWithPermanentCodenotations(proposition, cc)
                 );
     }
