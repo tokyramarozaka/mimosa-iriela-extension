@@ -12,6 +12,7 @@ import java.util.PriorityQueue;
  * high is it in the priority queue of all pending states.
  */
 @EqualsAndHashCode
+@ToString
 public class ProblemState implements Comparable<ProblemState> {
     private ProblemState parent;
     private State state;

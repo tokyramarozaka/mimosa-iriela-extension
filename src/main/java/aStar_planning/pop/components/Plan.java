@@ -3,6 +3,7 @@ package aStar_planning.pop.components;
 import aStar.AStarPlanner;
 import aStar.AStarProblem;
 import aStar.Operator;
+import aStar.ProblemState;
 import aStar.State;
 import aStar_planning.pop.resolvers.OpenConditionResolver;
 import aStar_planning.pop.resolvers.ThreatResolver;
@@ -488,16 +489,17 @@ public class Plan implements State {
 
     public void renderAsGraphic_verbose(
             String outputFileName,
-            List<Operator> operators,
-            AStarPlanner planner
+            List<ProblemState> allProblemStates,
+            List<ProblemState> solutionProblemStates
     ) throws IOException {
+        for (ProblemState solutionProblemState : solutionProblemStates) {
+            logger.debug(solutionProblemState);
+        }
         // Creates the input string for the dot file
         String input = StateSpaceSearchGraph.stateSpaceSearchDetails(
-                planner.getProblem().getInitialState(),
-                operators,
-                planner
+                allProblemStates,
+                solutionProblemStates
         );
-
 
         // Configures in which folder the output is going to be created as a file
         String folderPath = "output";

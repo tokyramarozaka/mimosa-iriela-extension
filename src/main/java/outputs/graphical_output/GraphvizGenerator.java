@@ -23,17 +23,18 @@ public class GraphvizGenerator {
      */
     public static List<String> getFollowingSteps(
             String source,
-            List<String> input
+            List<String> input,
+            String separator
     ) {
         List<String> followingSteps = new ArrayList<>();
         String finalSource = source.substring(0, source.length() - 1);
 
         input.stream()
-                .filter(line -> line.split(" -> ")[0].contains(finalSource))
+                .filter(line -> line.split(separator)[0].contains(finalSource))
                 .forEach(line -> {
-                    String right = line.split(" -> ")[1];
+                    String right = line.split(separator)[1];
                     if (isPopSituation(right)) {
-                        followingSteps.addAll(getFollowingSteps(right, input));
+                        followingSteps.addAll(getFollowingSteps(right, input, separator));
                     } else {
                         followingSteps.add(right);
                     }
@@ -47,12 +48,12 @@ public class GraphvizGenerator {
      * @param input : the initial string used to generate the graph with situations
      * @return a situation-less plan with only the action instances(steps) left.
      */
-    public static String removeSituations(String input) {
+    public static String removeSituations(String input, String separator) {
         StringBuilder result = new StringBuilder();
         List<String> lines = Arrays.asList(input.split("\n"));
 
         result.append("digraph G { \n");
-        appendSituationlessLines(result, lines.subList(1, lines.size()-1), " -> ");
+        appendSituationlessLines(result, lines.subList(1, lines.size()-1), separator);
         result.append("}");
 
         return result.toString();
@@ -77,7 +78,7 @@ public class GraphvizGenerator {
             String right = order[1];
 
             if (!isPopSituation(left)) {
-                for (String followingStep : getFollowingSteps(right, lines)) {
+                for (String followingStep : getFollowingSteps(right, lines, separator)) {
                     result
                             .append(left)
                             .append(separator)
@@ -107,7 +108,7 @@ public class GraphvizGenerator {
 
         dot.append("}\n");
 
-        return removeSituations(dot.toString());
+        return removeSituations(dot.toString(), " -> ");
     }
 
     public static String buildPlanElement(Object planElement, Plan plan) {

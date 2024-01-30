@@ -7,6 +7,7 @@ import graph.Graph;
 import graph.Link;
 import graph.Node;
 import logic.Graphic;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@EqualsAndHashCode
 @ToString
 public class TemporalConstraints extends Graphic {
     private final List<PartialOrder> partialOrders;

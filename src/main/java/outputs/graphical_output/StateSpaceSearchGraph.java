@@ -1,59 +1,75 @@
 package outputs.graphical_output;
 
-import aStar.AStarPlanner;
-import aStar.AStarProblem;
-import aStar.Operator;
-import aStar.State;
+import aStar.ProblemState;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @AllArgsConstructor
 @Getter
 public class StateSpaceSearchGraph {
 
-    public static String stateSpaceSearchDetails(State initialState, List<Operator> operators,
-                                                 AStarPlanner planner) {
+    public static String stateSpaceSearchDetails(
+            List<ProblemState> allProblemStates,
+            List<ProblemState> solutionProblemStates
+    ) {
         StringBuilder dotFileContent = new StringBuilder("digraph G {\n");
 
         // Initialize the state space search starting from the initial state
-        stateSpaceSearchHelper(initialState, operators, dotFileContent, planner);
+        dotFileContent.append(getDotFileContent(allProblemStates, solutionProblemStates));
 
         dotFileContent.append("}\n");
 
         return dotFileContent.toString();
     }
 
-    private static void stateSpaceSearchHelper(
-            State currentState,
-            List<Operator> operators,
-            StringBuilder dotFileContent,
-            AStarPlanner planner
+    private static String getDotFileContent(
+            List<ProblemState> allProblemStates,
+            List<ProblemState> solutionProblemStates
     ) {
-        Map<State, List<Operator>> statesAndTheirOptions = planner.getOptionsHistory();
+        StringBuilder dotFileContent = new StringBuilder();
+        Set<ProblemState> problemStateSet = new HashSet<>();
 
-        statesAndTheirOptions.entrySet()
-                .stream()
-                .filter(stateListEntry -> {
-                    state
-                });
-
-        for (Operator option : options) {
-            if (operators.contains(option)) {
-
+        for (ProblemState problemState : allProblemStates) {
+            if (problemStateSet.contains(problemState)) {
+                continue;
             }
-            // Apply the operator to get the next state
-            State nextState = planner.getProblem().apply(option, currentState);
 
-            // Generate the link between the current state and its next state with a label
-            dotFileContent.append(String.format("\"%s\" -> \"%s\" [label=\"%s\"];\n",
-                    currentState.toGraphNode(),
-                    nextState.toGraphNode(),
-                    option.toGraphArc())
+            if (solutionProblemStates.contains(problemState)) {
+                dotFileContent.append(String.format("\"%s\" -> \"%s\" [label=\"%s\"];\n",
+                        problemState.getParent().getState().toGraphNode(),
+                        problemState.getState().toGraphNode(),
+                        problemState.getAppliedOperator().toGraphArc())
+                );
+                insertFillColorIfFinalState(dotFileContent, problemState);
+                insertFillColorIfInitialState(dotFileContent, problemState);
+            }
+
+            problemStateSet.add(problemState);
+        }
+
+        return dotFileContent.toString();
+    }
+
+    private static void insertFillColorIfInitialState(StringBuilder dotFileContent, ProblemState problemState) {
+        if (problemState.getParent().getParent() == null) {
+            dotFileContent.insert(0,
+                    String.format("\"%s\" [style=filled,fillcolor=\"lightgreen\"];\n",
+                            problemState.getParent().getState().toGraphNode()
+                    )
+            );
+        }
+    }
+
+    private static void insertFillColorIfFinalState(StringBuilder dotFileContent, ProblemState problemState) {
+        if(problemState.getState().toGraphNode().isBlank()){
+            dotFileContent.insert(0,
+                    String.format("\"%s\" [style=filled,fillcolor=\"red\"];\n",
+                            problemState.getState().toGraphNode()
+                    )
             );
         }
     }

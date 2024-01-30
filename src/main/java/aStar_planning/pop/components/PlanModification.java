@@ -129,7 +129,6 @@ public class PlanModification implements Operator {
     public String toGraphArc() {
         return new StringBuilder()
                 .append(addedStep == null ? "" : "+" + this.addedStep + "\n")
-                .append(addedSituations == null ? "" : "+" + this.addedSituations + "\n\n")
                 .append(addedCc == null ? "" : "+" + this.addedCc.toSimpleString() + "\n\n")
                 .append(addedTc == null ? "" : "+" + this.addedTc.toSimpleString() + "\n")
                 .toString();

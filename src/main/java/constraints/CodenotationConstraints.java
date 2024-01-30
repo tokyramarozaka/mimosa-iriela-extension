@@ -11,6 +11,7 @@ import logic.ContextualTerm;
 import logic.Graphic;
 import logic.Term;
 import logic.Variable;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import org.apache.logging.log4j.LogManager;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
  * @see Codenotation
  */
 @Getter
+@EqualsAndHashCode
 @ToString
 public class CodenotationConstraints extends Graphic {
     private List<Codenotation> codenotations;

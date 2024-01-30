@@ -19,7 +19,8 @@ import java.util.Queue;
 public class AStarPlanner {
     private final static Logger logger = LogManager.getLogger(AStarPlanner.class);
     private final Queue<ProblemState> open = new PriorityQueue<>();
-    private final List<ProblemState> closed = new ArrayList<>();
+    private final List<State> closed = new ArrayList<>();
+    private final List<ProblemState> closedProblemStates = new ArrayList<>();
     private final AStarProblem problem;
     private ProblemState finalProblemState;
 
@@ -34,13 +35,15 @@ public class AStarPlanner {
      * @throws NoPlanFoundException : no final state was found
      */
     public List<Operator> findSolution() throws NoPlanFoundException {
-        open.add(new ProblemState(
+        ProblemState initialProblemState = new ProblemState(
                 null,
                 problem.getInitialState(),
                 null,
                 0,
                 problem.evaluateState(problem.getInitialState())
-        ));
+        );
+
+        open.add(initialProblemState);
 
         boolean found = false;
         ProblemState solutionState = null;
@@ -48,7 +51,7 @@ public class AStarPlanner {
         while (!open.isEmpty() && !found) {
             ProblemState candidate = open.poll();
 
-            if (closed.contains(candidate)) {
+            if (closed.contains(candidate.getState())) {
                 continue;
             }
 
@@ -64,9 +67,11 @@ public class AStarPlanner {
                 );
 
                 if (problem.isValid(nextState)) {
+                    closedProblemStates.add(candidate);
                     if (problem.isFinal(nextState)) {
                         found = true;
                         solutionState = successor;
+                        closedProblemStates.add(successor);
                         break;
                     } else {
                         open.add(successor);
@@ -74,7 +79,7 @@ public class AStarPlanner {
                 }
             }
 
-            closed.add(candidate);
+            closed.add(candidate.getState());
         }
 
         if (solutionState == null) {
@@ -82,9 +87,7 @@ public class AStarPlanner {
         }
 
         this.finalProblemState = solutionState;
-        List<Operator> solution = extractSolution(solutionState);
-
-        return solution;
+        return extractSolution(solutionState);
     }
 
     /**
@@ -97,7 +100,7 @@ public class AStarPlanner {
      * @param finalState : the final ProblemState which will allow to get back to its parent
      * @return the set of applied operator in the right order : from the first to the last.
      */
-    public List<Operator> extractSolution(ProblemState finalState) {
+    private List<Operator> extractSolution(ProblemState finalState) {
         List<Operator> solution = new ArrayList<>();
 
         ProblemState iteratorFromFinalState = finalState;
@@ -111,6 +114,23 @@ public class AStarPlanner {
     }
 
     /**
+     * Return the list of Problem states that have chained to find the final state. This is used
+     * to create the graph that displays all the details of the state space search.
+     * @return List of ProblemStates that makes the final state come about, in no particular order
+     */
+    private List<ProblemState> getSolutionStateList(){
+        List<ProblemState> solutionStates = new ArrayList<>();
+
+        ProblemState iteratorFromFinalState = this.getFinalProblemState();
+
+        while (iteratorFromFinalState.getParent() != null) {
+            solutionStates.add(iteratorFromFinalState);
+            iteratorFromFinalState = iteratorFromFinalState.getParent();
+        }
+
+        return solutionStates;
+    }
+    /**
      * Outputs the final plan to be agent. Since it can be a partial-order plan, or simply a set of
      * totally ordered actions, or any sort of eventual other representation it simply returns an
      * object that can be considered as a Plan.
@@ -119,6 +139,7 @@ public class AStarPlanner {
      */
     public PlanningOutput outputSolutionPlan() throws NoPlanFoundException, IOException {
         List<Operator> operators = findSolution();
+        logger.error("ENTERED THE FUNCTION");
         State finalState = this.getFinalProblemState().getState();
         Plan plan = (Plan) finalState;
 
@@ -126,7 +147,9 @@ public class AStarPlanner {
         PlanningOutput output = problem.outputPlan(finalState, operators);
         plan.renderAsGraphic("simplified.png");
 
-        plan.renderAsGraphic_verbose("detailed.png", operators, this);
+        plan.renderAsGraphic_verbose("detailed.png", this.closedProblemStates,
+                this.getSolutionStateList());
+
         return output;
     }
 

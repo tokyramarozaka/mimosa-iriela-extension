@@ -10,7 +10,6 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
-@EqualsAndHashCode
 @ToString
 public class PopSituation implements PlanElement {
     private int id;
