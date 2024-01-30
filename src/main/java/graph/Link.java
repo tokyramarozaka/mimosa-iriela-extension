@@ -46,4 +46,9 @@ public class Link implements Operator {
                 ", content=" + (this.content == null ? "" : content.toString()) +
                 '}';
     }
+
+    @Override
+    public String toGraphArc() {
+        return this.toString();
+    }
 }

@@ -64,4 +64,9 @@ public class Node implements State {
     public int hashCode() {
         return Objects.hash(name);
     }
+
+    @Override
+    public String toGraphNode() {
+        return this.toString();
+    }
 }

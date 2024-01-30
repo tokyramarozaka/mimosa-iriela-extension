@@ -372,4 +372,14 @@ public class CodenotationConstraints extends Graphic {
 
         return link.getTerm();
     }
+
+    public String toSimpleString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (Codenotation codenotation : this.codenotations) {
+            stringBuilder.append(codenotation);
+        }
+
+        return stringBuilder.toString();
+    }
 }

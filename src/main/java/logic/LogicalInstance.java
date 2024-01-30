@@ -33,4 +33,9 @@ public class LogicalInstance implements Operator {
     public String getName() {
         return this.getLogicalEntity().getLabel();
     }
+
+    @Override
+    public String toGraphArc() {
+        return this.toString();
+    }
 }

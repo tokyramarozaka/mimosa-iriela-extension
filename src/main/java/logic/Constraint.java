@@ -111,4 +111,9 @@ public class Constraint extends Graphic implements State {
 
         return uncompletedGoals;
     }
+
+    @Override
+    public String toGraphNode() {
+        return this.toString();
+    }
 }

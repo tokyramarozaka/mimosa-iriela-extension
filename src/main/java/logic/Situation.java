@@ -137,4 +137,9 @@ public class Situation implements State {
 
         return stringBuilder.toString();
     }
+
+    @Override
+    public String toGraphNode() {
+        return this.toString();
+    }
 }

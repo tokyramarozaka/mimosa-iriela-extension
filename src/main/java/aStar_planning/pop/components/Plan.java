@@ -1,12 +1,15 @@
 package aStar_planning.pop.components;
 
+import aStar.AStarPlanner;
+import aStar.AStarProblem;
 import aStar.Operator;
 import aStar.State;
 import aStar_planning.pop.resolvers.OpenConditionResolver;
 import aStar_planning.pop.resolvers.ThreatResolver;
 import aStar_planning.pop.utils.PlanInitializer;
 import constraints.TemporalConstraints;
-import graph.GraphvizGenerator;
+import outputs.graphical_output.GraphvizGenerator;
+import outputs.graphical_output.StateSpaceSearchGraph;
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import logic.Action;
@@ -466,23 +469,45 @@ public class Plan implements State {
 
     /**
      * Renders the graph of the plan into a png file. Name is based on the id to differentiate them
-     *
      * @throws IOException
      */
-    public void render(String outputName) throws IOException {
+    public void renderAsGraphic(String outputName) throws IOException {
         String input = GraphvizGenerator.generateGraphviz(this);
         logger.info(input);
-
         String folderPath = "output";
-        String fileName = outputName;
+
         // Create the output folder if it doesn't exist
         Path outputPath = Paths.get(folderPath);
         Files.createDirectories(outputPath);
 
         // Save the DOT file
-        Path dotFilePath = Paths.get(folderPath, fileName + ".dot");
+        Path dotFilePath = Paths.get(folderPath, outputName + ".dot");
         Files.write(dotFilePath, input.getBytes());
-        Graphviz.fromString(input).render(Format.PNG).toFile(new File(folderPath, fileName));
+        Graphviz.fromString(input).render(Format.PNG).toFile(new File(folderPath, outputName));
+    }
+
+    public void renderAsGraphic_verbose(
+            String outputFileName,
+            List<Operator> operators,
+            AStarPlanner planner
+    ) throws IOException {
+        // Creates the input string for the dot file
+        String input = StateSpaceSearchGraph.stateSpaceSearchDetails(
+                planner.getProblem().getInitialState(),
+                operators,
+                planner
+        );
+
+
+        // Configures in which folder the output is going to be created as a file
+        String folderPath = "output";
+        Path outputPath = Paths.get(folderPath);
+        Files.createDirectories(outputPath);
+
+        // Save the dot file
+        Path dotFilePath = Paths.get(folderPath, outputFileName + ".dot");
+        Files.write(dotFilePath, input.getBytes());
+        Graphviz.fromString(input).render(Format.PNG).toFile(new File(folderPath,outputFileName));
     }
 
     @Override
@@ -495,9 +520,18 @@ public class Plan implements State {
                 .toList() +
                 "\n--CODENOTATIONS :\n" + "\t" + this.cc +
                 "\n--TEMPORAL CONSTRAINTS :\n" + "\t" + this.tc +
-                "\n--FLAWS :" +
+                "\n--FLAWS :\n\t" +
                 (this.flaws.isEmpty() ? "NONE" : this.flaws);
     }
 
 
+    @Override
+    public String toGraphNode() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (Flaw flaw : this.flaws) {
+            stringBuilder.append(flaw);
+        }
+        return stringBuilder.toString();
+    }
 }

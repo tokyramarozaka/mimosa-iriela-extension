@@ -9,7 +9,9 @@ import outputs.PlanningOutput;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -17,8 +19,8 @@ import java.util.Queue;
 public class AStarPlanner {
     private final static Logger logger = LogManager.getLogger(AStarPlanner.class);
     private final Queue<ProblemState> open = new PriorityQueue<>();
-    private final List<State> closed = new ArrayList<>();
-    private AStarProblem problem;
+    private final List<ProblemState> closed = new ArrayList<>();
+    private final AStarProblem problem;
     private ProblemState finalProblemState;
 
     public AStarPlanner(AStarProblem problem) {
@@ -27,7 +29,7 @@ public class AStarPlanner {
 
     /**
      * Returns the list of operators which would allow to go from the initial state to a final state
-     *
+     * (if any)
      * @return the list of Operators in a given order to reach a final state (if any).
      * @throws NoPlanFoundException : no final state was found
      */
@@ -46,11 +48,12 @@ public class AStarPlanner {
         while (!open.isEmpty() && !found) {
             ProblemState candidate = open.poll();
 
-            if (closed.contains(candidate.getState())) {
+            if (closed.contains(candidate)) {
                 continue;
             }
-            
-            for (Operator option : problem.getOptions(candidate.getState())) {
+
+            List<Operator> options = problem.getOptions(candidate.getState());
+            for (Operator option : options) {
                 State nextState = problem.apply(option, candidate.getState());
 
                 ProblemState successor = new ProblemState(
@@ -71,7 +74,7 @@ public class AStarPlanner {
                 }
             }
 
-            closed.add(candidate.getState());
+            closed.add(candidate);
         }
 
         if (solutionState == null) {
@@ -111,19 +114,19 @@ public class AStarPlanner {
      * Outputs the final plan to be agent. Since it can be a partial-order plan, or simply a set of
      * totally ordered actions, or any sort of eventual other representation it simply returns an
      * object that can be considered as a Plan.
+     *
      * @return
      */
     public PlanningOutput outputSolutionPlan() throws NoPlanFoundException, IOException {
         List<Operator> operators = findSolution();
         State finalState = this.getFinalProblemState().getState();
-
         Plan plan = (Plan) finalState;
 
-        plan.render("overview.png");
+        plan.renderAsGraphic("overview.png");
         PlanningOutput output = problem.outputPlan(finalState, operators);
+        plan.renderAsGraphic("simplified.png");
 
-        plan.render("simplified.png");
-
+        plan.renderAsGraphic_verbose("detailed.png", operators, this);
         return output;
     }
 

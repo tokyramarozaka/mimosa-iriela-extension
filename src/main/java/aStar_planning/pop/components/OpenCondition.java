@@ -31,12 +31,10 @@ public class OpenCondition implements Flaw {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder
-                .append("\n\tOPEN CONDITION : ")
+                .append("OPEN CONDITION : ")
                 .append(this.proposition)
                 .append(" IN ")
-                .append(this.applicableSituation)
-                .append(" WITH CONTEXT : ")
-                .append(this.proposition.getContext());
+                .append(this.applicableSituation);
 
         return stringBuilder.toString();
     }

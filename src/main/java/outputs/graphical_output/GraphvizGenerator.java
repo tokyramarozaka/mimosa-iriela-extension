@@ -1,8 +1,11 @@
-package graph;
+package outputs.graphical_output;
 
 import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PopSituation;
 import aStar_planning.pop.components.Step;
+import graph.Graph;
+import graph.Link;
+import graph.Node;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,9 +52,27 @@ public class GraphvizGenerator {
         List<String> lines = Arrays.asList(input.split("\n"));
 
         result.append("digraph G { \n");
+        appendSituationlessLines(result, lines.subList(1, lines.size()-1), " -> ");
+        result.append("}");
 
-        for (int i = 1; i < lines.size() - 1; i++) {
-            String[] order = lines.get(i).split(" -> ");
+        return result.toString();
+    }
+
+    /**
+     * Appends to a StringBuilder all the lines by removing all the elements marked as
+     * "PopSituations", and deducts transitive links between steps only.
+     * @param result : the String builder we want to append the resulting String
+     * @param lines : the lines to process
+     * @param separator : the string that denotes that an element has a relationship with another
+     *                  element. Could either be -> for graphs, and < for temporal constraints
+     */
+    public static void appendSituationlessLines(
+            StringBuilder result,
+            List<String> lines,
+            String separator
+    ) {
+        for (int i = 0; i < lines.size(); i++) {
+            String[] order = lines.get(i).split(separator);
             String left = order[0];
             String right = order[1];
 
@@ -59,16 +80,12 @@ public class GraphvizGenerator {
                 for (String followingStep : getFollowingSteps(right, lines)) {
                     result
                             .append(left)
-                            .append(" -> ")
+                            .append(separator)
                             .append(followingStep)
                             .append("\n");
                 }
             }
         }
-
-        result.append("}");
-
-        return result.toString();
     }
 
     private static boolean isPopSituation(String left) {

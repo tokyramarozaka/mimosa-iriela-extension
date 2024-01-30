@@ -1,0 +1,13 @@
+digraph G {
+"OPEN CONDITION : haveWood(X) IN PopSituation(id=2)" -> "OPEN CONDITION : containsTrees(Z) IN PopSituation(id=21)" [label="+cut(X,Z)::256
++[PopSituation(id=21), PopSituation(id=22)]
+
++X::256 == X::2
+
++PopSituation(id=21) < cut(X,Z)::256
+cut(X,Z)::256 < PopSituation(id=22)
+PopSituation(id=22) < PopSituation(id=2)
+PopSituation(id=1) < PopSituation(id=21)
+
+"];
+}

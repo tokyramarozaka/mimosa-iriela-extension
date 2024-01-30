@@ -25,4 +25,9 @@ public class Goal implements State {
         this.goalPropositions = new ArrayList<>();
         this.goalContext = new Context();
     }
+
+    @Override
+    public String toGraphNode() {
+        return this.toString();
+    }
 }

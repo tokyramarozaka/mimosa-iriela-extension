@@ -1,6 +1,7 @@
 package aStar;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.PriorityQueue;
@@ -10,6 +11,7 @@ import java.util.PriorityQueue;
  * It is considered a problem since it needs to be explored, therefore, we need to tell how
  * high is it in the priority queue of all pending states.
  */
+@EqualsAndHashCode
 public class ProblemState implements Comparable<ProblemState> {
     private ProblemState parent;
     private State state;

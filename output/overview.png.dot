@@ -1,13 +1,7 @@
 digraph G { 
   "initial()" -> "final(X)";
   "initial()" -> "cut(X,B1)";
-  "initial()" -> "getExploitationLicense(B2,X)";
-  "initial()" -> "move(X,A2,B2)";
   "initial()" -> "move(X,Y,B1)";
-  "initial()" -> "move(X,Y,A2)";
   "cut(X,B1)" -> "final(X)";
-  "getExploitationLicense(B2,X)" -> "cut(X,B1)";
-  "move(X,A2,B2)" -> "getExploitationLicense(B2,X)";
   "move(X,Y,B1)" -> "cut(X,B1)";
-  "move(X,Y,A2)" -> "move(X,A2,B2)";
 }

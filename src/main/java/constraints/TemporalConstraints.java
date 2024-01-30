@@ -250,5 +250,15 @@ public class TemporalConstraints extends Graphic {
         }
         return (Step) followingElement;
     }
+
+    public String toSimpleString(){
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (PartialOrder partialOrder : this.getPartialOrders()) {
+            stringBuilder.append(partialOrder.toString()).append("\n");
+        }
+
+        return stringBuilder.toString();
+    }
 }
 
