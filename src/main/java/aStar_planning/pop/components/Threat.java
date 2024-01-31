@@ -21,9 +21,9 @@ public class Threat implements Flaw {
         StringBuilder stringBuilder = new StringBuilder();
 
         return stringBuilder
-                .append("THREAT : ")
+                .append("THREAT: ")
                 .append(this.destroyer)
-                .append(" THREATENS ")
+                .append(" TO ")
                 .append(this.proposition)
                 .append(" IN ")
                 .append(this.threatened)

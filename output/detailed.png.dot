@@ -1,28 +1,47 @@
 digraph G {
-"" [style=filled,fillcolor="red"];
-"OPEN CONDITION : haveWood(X) IN PopSituation(id=2)" [style=filled,fillcolor="lightgreen"];
-"OPEN CONDITION : haveWood(X) IN PopSituation(id=2)" -> "OPEN CONDITION : containsTrees(Z) IN PopSituation(id=5)" [label="+cut(X,Z)::12
-+X::12 == X::2
+"(19) " [style=filled,fillcolor="red"];
+"(17) " [style=filled,fillcolor="yellow"];
+"(1) " [style=filled,fillcolor="lightgreen"];
+"(1) " -> "(3) " [label="OPEN CONDITION: haveWood(X) IN Situation2
++cut(X,Z)
 
-+PopSituation(id=5) < cut(X,Z)::12
-cut(X,Z)::12 < PopSituation(id=6)
-PopSituation(id=6) < PopSituation(id=2)
-PopSituation(id=1) < PopSituation(id=5)
++C12::X == C2::X. 
 
-"];
-"OPEN CONDITION : containsTrees(Z) IN PopSituation(id=5)" -> "OPEN CONDITION : located(X,Z) IN PopSituation(id=5)" [label="+Z::12 == B1::3
-
-"];
-"OPEN CONDITION : located(X,Z) IN PopSituation(id=5)" -> "THREAT : move(X,Y,Z)::87 THREATENS located(X,Z) IN cut(X,Z)::12" [label="+move(X,Y,Z)::87
-+X::87 == X::12Z::87 == Z::12
-
-+PopSituation(id=9) < move(X,Y,Z)::87
-move(X,Y,Z)::87 < PopSituation(id=10)
-PopSituation(id=10) < PopSituation(id=5)
-PopSituation(id=1) < PopSituation(id=9)
++Situation5 < cut(X,Z)
+cut(X,Z) < Situation6
+Situation6 < Situation2
+Situation1 < Situation5
 
 "];
-"THREAT : move(X,Y,Z)::87 THREATENS located(X,Z) IN cut(X,Z)::12" -> "" [label="+Y::87 != Z::12
+"(3) " -> "(5) " [label="OPEN CONDITION: containsTrees(Z) IN Situation5
++C12::Z == C3::B1. 
+
+"];
+"(3) " -> "(7) " [label="OPEN CONDITION: containsTrees(Z) IN Situation5
++C12::Z == C3::C1. 
+
+"];
+"(3) " -> "(9) " [label="OPEN CONDITION: containsTrees(Z) IN Situation5
++C12::Z == C3::C2. 
+
+"];
+"(5) " -> "(11) " [label="OPEN CONDITION: located(X,Z) IN Situation5
++move(X,Y,Z)
+
++C87::X == C12::X. C87::Z == C12::Z. 
+
++Situation9 < move(X,Y,Z)
+move(X,Y,Z) < Situation10
+Situation10 < Situation5
+Situation1 < Situation9
+
+"];
+"(11) " -> "(19) " [label="THREAT: move(X,Y,Z) TO located(X,Z) IN cut(X,Z)
++C87::Y != C12::Z. 
+
+"];
+"(11) " -> "(17) " [label="THREAT: move(X,Y,Z) TO located(X,Z) IN cut(X,Z)
++Situation6 < Situation9
 
 "];
 }

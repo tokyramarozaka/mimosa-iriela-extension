@@ -116,7 +116,7 @@ public class PlanModification implements Operator {
     @Override
     public String toString() {
         return new StringBuilder()
-                .append("Plan Modification to resolve : ")
+                .append("RESOLVING ")
                 .append(this.getTargetFlaw())
                 .append(addedStep == null ? "" : "\nAdded : \n\t" + this.addedStep)
                 .append(addedSituations == null ? "" : "\nAdded : \n\t" + this.addedSituations)
@@ -128,7 +128,9 @@ public class PlanModification implements Operator {
     @Override
     public String toGraphArc() {
         return new StringBuilder()
-                .append(addedStep == null ? "" : "+" + this.addedStep + "\n")
+                .append(this.getTargetFlaw())
+                .append("\n")
+                .append(addedStep == null ? "" : "+" + this.addedStep.toStringWithCodenotations(addedCc) + "\n\n")
                 .append(addedCc == null ? "" : "+" + this.addedCc.toSimpleString() + "\n\n")
                 .append(addedTc == null ? "" : "+" + this.addedTc.toSimpleString() + "\n")
                 .toString();

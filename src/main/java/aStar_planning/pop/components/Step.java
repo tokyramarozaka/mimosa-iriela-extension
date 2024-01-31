@@ -249,8 +249,7 @@ public class Step implements PlanElement {
 
     @Override
     public String toString() {
-        return this.getActionInstance().toString() + "::" +
-                this.getActionInstance().getContext().getId();
+        return this.getActionInstance().toString();
     }
 
     public String toStringWithCodenotations(CodenotationConstraints cc){

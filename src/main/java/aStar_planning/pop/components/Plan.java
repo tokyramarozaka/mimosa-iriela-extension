@@ -37,6 +37,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -48,18 +49,21 @@ import java.util.stream.Collectors;
  *     <li>Temporal constraints : arrangement of all steps and situations inside of the plan </li>
  * </ul>
  */
-@NoArgsConstructor
 @Getter
 @EqualsAndHashCode
 public class Plan implements State {
     private final static Logger logger = LogManager.getLogger(Plan.class);
+    private int id;
     private List<PopSituation> situations;
     private List<Step> steps;
-    @Setter
     private CodenotationConstraints cc;
     private TemporalConstraints tc;
     private Set<Flaw> flaws;
+    private static final AtomicInteger sequence = new AtomicInteger(0);
 
+    public Plan(){
+        this.id = sequence.incrementAndGet();
+    }
     @Builder
     public Plan(
             List<PopSituation> situations,
@@ -67,6 +71,7 @@ public class Plan implements State {
             CodenotationConstraints cc,
             TemporalConstraints tc
     ) {
+        this.id = sequence.incrementAndGet();
         this.situations = situations;
         this.steps = steps;
         this.cc = cc;
@@ -92,6 +97,7 @@ public class Plan implements State {
             TemporalConstraints tc,
             boolean evaluateFlaws
     ) {
+        this.id = sequence.incrementAndGet();
         this.situations = situations;
         this.steps = steps;
         this.cc = cc;
@@ -487,30 +493,7 @@ public class Plan implements State {
         Graphviz.fromString(input).render(Format.PNG).toFile(new File(folderPath, outputName));
     }
 
-    public void renderAsGraphic_verbose(
-            String outputFileName,
-            List<ProblemState> allProblemStates,
-            List<ProblemState> solutionProblemStates
-    ) throws IOException {
-        for (ProblemState solutionProblemState : solutionProblemStates) {
-            logger.debug(solutionProblemState);
-        }
-        // Creates the input string for the dot file
-        String input = StateSpaceSearchGraph.stateSpaceSearchDetails(
-                allProblemStates,
-                solutionProblemStates
-        );
 
-        // Configures in which folder the output is going to be created as a file
-        String folderPath = "output";
-        Path outputPath = Paths.get(folderPath);
-        Files.createDirectories(outputPath);
-
-        // Save the dot file
-        Path dotFilePath = Paths.get(folderPath, outputFileName + ".dot");
-        Files.write(dotFilePath, input.getBytes());
-        Graphviz.fromString(input).render(Format.PNG).toFile(new File(folderPath,outputFileName));
-    }
 
     @Override
     public String toString() {
@@ -534,6 +517,6 @@ public class Plan implements State {
         for (Flaw flaw : this.flaws) {
             stringBuilder.append(flaw);
         }
-        return stringBuilder.toString();
+        return "(" + this.id + ") ";
     }
 }

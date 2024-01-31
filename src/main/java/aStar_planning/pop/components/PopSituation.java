@@ -10,7 +10,6 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
-@ToString
 public class PopSituation implements PlanElement {
     private int id;
     private static final AtomicInteger sequence = new AtomicInteger(0);
@@ -35,5 +34,10 @@ public class PopSituation implements PlanElement {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Situation" + this.id;
     }
 }

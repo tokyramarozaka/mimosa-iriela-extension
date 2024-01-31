@@ -379,7 +379,7 @@ public class CodenotationConstraints extends Graphic {
         StringBuilder stringBuilder = new StringBuilder();
 
         for (Codenotation codenotation : this.codenotations) {
-            stringBuilder.append(codenotation);
+            stringBuilder.append(codenotation).append(". ");
         }
 
         return stringBuilder.toString();

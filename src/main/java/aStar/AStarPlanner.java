@@ -6,6 +6,7 @@ import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import outputs.PlanningOutput;
+import outputs.graphical_output.StateSpaceSearchGraph;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,8 +67,9 @@ public class AStarPlanner {
                         problem.evaluateState(nextState)
                 );
 
+                closedProblemStates.add(successor);
+
                 if (problem.isValid(nextState)) {
-                    closedProblemStates.add(candidate);
                     if (problem.isFinal(nextState)) {
                         found = true;
                         solutionState = successor;
@@ -139,7 +141,6 @@ public class AStarPlanner {
      */
     public PlanningOutput outputSolutionPlan() throws NoPlanFoundException, IOException {
         List<Operator> operators = findSolution();
-        logger.error("ENTERED THE FUNCTION");
         State finalState = this.getFinalProblemState().getState();
         Plan plan = (Plan) finalState;
 
@@ -147,7 +148,9 @@ public class AStarPlanner {
         PlanningOutput output = problem.outputPlan(finalState, operators);
         plan.renderAsGraphic("simplified.png");
 
-        plan.renderAsGraphic_verbose("detailed.png", this.closedProblemStates,
+        StateSpaceSearchGraph.renderAsGraphic_verbose(
+                "detailed.png",
+                this.closedProblemStates,
                 this.getSolutionStateList());
 
         return output;
