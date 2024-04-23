@@ -63,7 +63,7 @@ public class CircumventionOperator {
      * @param flaw : the normative flaw
      * @param possibleActions : the set of all possible actions to choose from
      * @param condition : the condition to circumvent
-     * @return
+     * @return an OpenCondition based on the negation of the condition.
      */
     private static OpenCondition createReverseOpenCondition(
             NormativePlan plan,
@@ -81,10 +81,8 @@ public class CircumventionOperator {
                 new Atom(!condition.isNegation(), condition.getPredicate())
         );
 
-        OpenCondition toSolve = new OpenCondition(
+        return new OpenCondition(
                 flaw.getApplicableSituation(), toAssert
         );
-
-        return toSolve;
     }
 }

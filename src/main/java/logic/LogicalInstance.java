@@ -22,11 +22,12 @@ public class LogicalInstance implements Operator {
 
     @Override
     public String toString() {
-        return this.getLogicalEntity().build(this.context).toString();
+        return this.getLogicalEntity().build(this.context).toString() + ":" + context.getId();
     }
 
     public String toStringWithCodenotations(CodenotationConstraints cc){
-        return this.getLogicalEntity().build(this.getContext(), cc).toString();
+        return this.getLogicalEntity().build(this.getContext(), cc).toString() + ":"
+                + this.getContext().getId();
     }
 
     @Override

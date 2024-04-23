@@ -40,6 +40,16 @@ public class Village {
                 Village.norms()
         );
     }
+    public static Institution get_fishingNetPermission() {
+        return new Institution(
+                "village",
+                7,
+                Village.concepts(),
+                Village.assertions(),
+                Village.roleActions(),
+                norms_permittedToHaveFishingNet_ifHasLicense()
+        );
+    }
 
     private static List<Norm> norms() {
         return List.of(
@@ -51,6 +61,19 @@ public class Village {
         );
     }
 
+    private static List<Norm> norms_permittedToHaveFishingNet_ifHasLicense(){
+        return List.of(VillageNorms.permittedToHaveFishingNet_ifHasLicense(TermsFactory.X));
+    }
+    public static Institution get_fishingReportObligation() {
+        return new Institution(
+                "village",
+                7,
+                Village.concepts(),
+                Village.assertions(),
+                Village.roleActions(),
+                List.of(VillageNorms.obligatoryReportFish(TermsFactory.X))
+        );
+    }
 
     private static List<Constant> concepts() {
         return List.of(
@@ -123,4 +146,5 @@ public class Village {
     private static RoleActions forMember() {
         return new RoleActions(member, memberActions());
     }
+
 }

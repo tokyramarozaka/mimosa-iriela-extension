@@ -31,7 +31,7 @@ public class OpenCondition implements Flaw {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder
-                .append("OPEN CONDITION: ")
+                .append("(OC): ")
                 .append(this.proposition)
                 .append(" IN ")
                 .append(this.applicableSituation);

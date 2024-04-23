@@ -23,22 +23,6 @@ public class Iriela_IT {
     }
 
     @Test
-    public void findSolution_forFish_ok() throws IOException {
-        NormativePlanningProblem problem = PlanningProblemFactory.irielaProblem_haveFishOnly();
-        AStarPlanner planner = new AStarPlanner(problem);
-
-        planner.outputSolutionPlan();
-    }
-
-    @Test
-    public void findSolution_forWood__permittedCut_withLicense_ok() throws IOException {
-        NormativePlanningProblem problem = PlanningProblemFactory.irielaProblem_haveWoodOnly();
-        AStarPlanner planner = new AStarPlanner(problem);
-
-        planner.outputSolutionPlan();
-    }
-
-    @Test
     public void findSolution_forWood__noNorms_ok() throws IOException {
         NormativePlanningProblem problem = PlanningProblemFactory
                 .irielaProblem_haveWoodOnly_noVillageNorms();
@@ -48,4 +32,49 @@ public class Iriela_IT {
         planner.outputSolutionPlan();
     }
 
+    /* === OBLIGATIONS === */
+    @Test
+    public void findSolution_forFish_ok() throws IOException {
+        NormativePlanningProblem problem = PlanningProblemFactory.irielaProblem_haveFishOnly();
+        AStarPlanner planner = new AStarPlanner(problem);
+
+        planner.outputSolutionPlan();
+    }
+
+    @Test
+    public void findSolution_forFish_withMandatoryFishReport_ok() throws IOException {
+        NormativePlanningProblem problem = PlanningProblemFactory
+                .irielaProblem_haveFish_withMandatoryFishReport();
+        AStarPlanner planner = new AStarPlanner(problem);
+
+        planner.outputSolutionPlan();
+    }
+
+    /* === PROHIBITIONS === */
+    public void findSolution_forFish__noTrespassing_inSacredZone_ok() throws IOException {
+
+    }
+
+    public void findSolution_forFish__noFishingWithoutLicense_ok() throws IOException {
+
+    }
+
+    /* === PERMISSIONS === */
+    @Test
+    public void findSolution_forWood__permittedCut_withLicense_ok() throws IOException {
+        NormativePlanningProblem problem = PlanningProblemFactory.irielaProblem_haveWoodOnly();
+        AStarPlanner planner = new AStarPlanner(problem);
+
+        planner.outputSolutionPlan();
+    }
+
+    @Test
+    public void findSolution__forFishingNet_permitted_withFishingLicense_ok() throws IOException{
+        NormativePlanningProblem problem = PlanningProblemFactory
+                .irielaProblem_haveFish_withRequiredLicenseForFishingNet();
+        AStarPlanner planner = new AStarPlanner(problem);
+
+        planner.outputSolutionPlan();
+    }
 }
+

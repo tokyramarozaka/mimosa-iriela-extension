@@ -1,6 +1,7 @@
 package iriela.description;
 
 import aStar_planning.pop_with_norms.NormativePlanningProblem;
+import aStar_planning.pop_with_norms.components.NormativePlan;
 import aStar_planning.pop_with_norms.components.Organization;
 import logic.Action;
 import logic.Goal;
@@ -61,6 +62,32 @@ public class PlanningProblemFactory {
                         GlobalOrg.get(),
                         //VillageOrg.get(),
                         HouseholdOrg.get_haveWoodOnly()
+                ))
+        );
+    }
+
+    public static NormativePlanningProblem irielaProblem_haveFish_withRequiredLicenseForFishingNet() {
+        return new NormativePlanningProblem(
+                new Situation(),
+                new ArrayList<>(),
+                new Goal(),
+                new ArrayList<>(List.of(
+                        GlobalOrg.get(),
+                        VillageOrg.get_withOnly_fishingNetPermission(),
+                        HouseholdOrg.get_haveFishOnly()
+                ))
+        );
+    }
+
+    public static NormativePlanningProblem irielaProblem_haveFish_withMandatoryFishReport() {
+        return new NormativePlanningProblem(
+                new Situation(),
+                new ArrayList<>(),
+                new Goal(),
+                new ArrayList<>(List.of(
+                        GlobalOrg.get(),
+                        VillageOrg.get_withOnly_fishingReportObligation(),
+                        HouseholdOrg.get_haveFishOnly()
                 ))
         );
     }

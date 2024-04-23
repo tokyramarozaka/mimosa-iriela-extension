@@ -17,76 +17,69 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * A class to resolve mandatory actions within the plan.
+ */
 public class MissingProhibitionActionResolver {
-    private final static Logger logger = LogManager.getLogger(
-            MissingProhibitionActionResolver.class
-    );
+  private final static Logger logger = LogManager.getLogger(
+      MissingProhibitionActionResolver.class);
 
-    public static List<PlanModification> byPromotion(NormativePlan plan, NormativeFlaw flaw){
-        Step targetStep = getStep(flaw);
+  public static List<PlanModification> byPromotion(NormativePlan plan, NormativeFlaw flaw) {
+    Step targetStep = getStep(flaw);
 
-        Optional<Step> forbiddenStep = getForbiddenStepFromPlan(plan, flaw, targetStep);
+    Optional<Step> forbiddenStep = getForbiddenStepFromPlan(plan, flaw, targetStep);
 
-        PartialOrder stepBeforeSituation = new PartialOrder(
-                forbiddenStep.get(),
-                flaw.getApplicableSituation()
-        );
+    PartialOrder stepBeforeSituation = new PartialOrder(
+        forbiddenStep.get(),
+        flaw.getApplicableSituation());
 
-        TemporalConstraints temporalChanges = new TemporalConstraints(new ArrayList<>(
-                List.of(stepBeforeSituation))
-        );
+    TemporalConstraints temporalChanges = new TemporalConstraints(new ArrayList<>(
+        List.of(stepBeforeSituation)));
 
-        return new ArrayList<>(List.of(PlanModificationMapper.from(flaw, temporalChanges)));
+    return new ArrayList<>(List.of(PlanModificationMapper.from(flaw, temporalChanges)));
+  }
+
+  public static List<PlanModification> byDemotion(NormativePlan plan, NormativeFlaw flaw) {
+    PopSituation inapplicableSituation = flaw.getInapplicableSituationAfter(
+        flaw.getApplicableSituation());
+    if (inapplicableSituation == null) {
+      return new ArrayList<>();
     }
 
+    Step targetStep = getStep(flaw);
 
+    Optional<Step> forbiddenStep = getForbiddenStepFromPlan(plan, flaw, targetStep);
 
-    public static List<PlanModification> byDemotion(NormativePlan plan, NormativeFlaw flaw){
-        PopSituation inapplicableSituation = flaw.getInapplicableSituationAfter(
-                flaw.getApplicableSituation()
-        );
-        if(inapplicableSituation == null){
-            return new ArrayList<>();
-        }
+    PartialOrder stepAfterInapplicableSituation = new PartialOrder(
+        forbiddenStep.get(),
+        inapplicableSituation);
+    TemporalConstraints temporalChanges = new TemporalConstraints(new ArrayList<>(
+        List.of(stepAfterInapplicableSituation)));
 
-        Step targetStep = getStep(flaw);
+    return new ArrayList<>(List.of(PlanModificationMapper.from(flaw, temporalChanges)));
+  }
 
-        Optional<Step> forbiddenStep = getForbiddenStepFromPlan(plan, flaw, targetStep);
+  private static Optional<Step> getForbiddenStepFromPlan(
+      NormativePlan plan,
+      NormativeFlaw flaw,
+      Step targetStep) {
+    logger.info("Fetching step " + targetStep + " in " + plan);
 
-        PartialOrder stepAfterInapplicableSituation = new PartialOrder(
-                forbiddenStep.get(),
-                inapplicableSituation
-        );
-        TemporalConstraints temporalChanges = new TemporalConstraints(new ArrayList<>(
-                List.of(stepAfterInapplicableSituation)
-        ));
+    Optional<Step> forbiddenStep = plan.getSteps().stream()
+        .filter(step -> step.equals(targetStep))
+        .findFirst();
 
-        return new ArrayList<>(List.of(PlanModificationMapper.from(flaw, temporalChanges)));
+    if (forbiddenStep.isEmpty()) {
+      throw new RuntimeException("Flaw's prohibited step was not detected during resolution");
     }
 
-    private static Optional<Step> getForbiddenStepFromPlan(
-            NormativePlan plan,
-            NormativeFlaw flaw,
-            Step targetStep
-    ){
-        logger.info("Fetching step " + targetStep + " in " + plan);
+    return forbiddenStep;
+  }
 
-        Optional<Step> forbiddenStep = plan.getSteps().stream()
-                .filter(step -> step.equals(targetStep))
-                .findFirst();
-
-        if(forbiddenStep.isEmpty()){
-            throw new RuntimeException("Flaw's prohibited step was not detected during resolution");
-        }
-
-        return forbiddenStep;
-    }
-
-    private static Step getStep(NormativeFlaw flaw) {
-        Action forbiddenAction = (Action) flaw.getFlawedNorm().getNormConsequences();
-        return new Step(new LogicalInstance(
-                forbiddenAction,
-                flaw.getContext()
-        ));
-    }
+  private static Step getStep(NormativeFlaw flaw) {
+    Action forbiddenAction = (Action) flaw.getFlawedNorm().getNormConsequences();
+    return new Step(new LogicalInstance(
+        forbiddenAction,
+        flaw.getContext()));
+  }
 }

@@ -15,12 +15,19 @@ public class VillageOrg {
     public static Organization get(){
         return new Organization(
                 Village.get(),
-                VillageOrg.norms(),
+                VillageOrg.constitutiveNorms(),
                 VillageOrg.assertions()
         );
     }
 
-    private static List<Norm> norms() {
+    public static Organization get_withOnly_fishingNetPermission(){
+        return new Organization(
+          Village.get_fishingNetPermission(),
+          VillageOrg.constitutiveNorms(),
+          VillageOrg.assertions()
+        );
+    }
+    private static List<Norm> constitutiveNorms() {
         return List.of(
                 new ConstitutiveNorm(Agent.SELF, Village.member),
 
@@ -37,5 +44,13 @@ public class VillageOrg {
 
     private static List<Predicate> assertions() {
         return new ArrayList<>();
+    }
+
+    public static Organization get_withOnly_fishingReportObligation() {
+        return new Organization(
+                Village.get_fishingReportObligation(),
+                VillageOrg.constitutiveNorms(),
+                VillageOrg.assertions()
+        );
     }
 }

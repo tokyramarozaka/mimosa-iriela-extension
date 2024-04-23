@@ -6,17 +6,20 @@ import aStar_planning.pop.components.Step;
 import graph.Graph;
 import graph.Link;
 import graph.Node;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class GraphvizGenerator {
+    private final static Logger logger = LogManager.getLogger(GraphvizGenerator.class);
+
     /**
      * Get all the first following steps for a given situation, i.e. it searches for steps within
      * a given String representation of the temporal constraints, starting from a given
      * PopSituation.
-     *
      * @param source : the PopSituation from which we are starting our research for a step
      * @param input  : the set of all temporal constraints
      * @return all steps directly following the source
@@ -94,7 +97,9 @@ public class GraphvizGenerator {
 
     public static String generateGraphviz(Plan plan) {
         StringBuilder dot = new StringBuilder();
+        plan.getTc().updateGraph();
         Graph graph = plan.getTc().getGraph();
+
         dot.append("digraph G {\n");
 
         for (Node node : graph.getNodes()) {

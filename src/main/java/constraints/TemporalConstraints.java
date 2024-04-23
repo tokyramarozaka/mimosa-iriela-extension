@@ -10,6 +10,9 @@ import logic.Graphic;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 @ToString
 public class TemporalConstraints extends Graphic {
+    private static Logger logger = LogManager.getLogger(TemporalConstraints.class);
     private final List<PartialOrder> partialOrders;
 
     public TemporalConstraints() {
@@ -33,8 +37,7 @@ public class TemporalConstraints extends Graphic {
     }
 
     /**
-     * Checks if the graph has no cycles which would cause an infinite loop
-     *
+     * Checks if the graph has no cycles which would cause an infinite loop.
      * @return true if the graph has no cycles, and false otherwise.
      */
     public boolean isCoherent() {
@@ -208,7 +211,7 @@ public class TemporalConstraints extends Graphic {
                 .toList();
 
         for (Link otherLink : otherLinks) {
-            if (this.getGraph().pathExists(otherLink.getTo(), target)) {
+            if (this.getGraph().longerPathExists(otherLink.getTo(), target)) {
                 return true;
             }
         }

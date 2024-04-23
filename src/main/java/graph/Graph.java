@@ -51,6 +51,17 @@ public class Graph {
         return true;
     }
 
+    public boolean longerPathExists(Node start, Node goal) {
+        int solutionLength = 0;
+        try{
+            AStarPlanner search = new AStarPlanner(new GraphForwardPlanningProblem(start,goal));
+            solutionLength = search.findSolution().size();
+        }catch (NoPlanFoundException exception){
+            return false;
+        }
+
+        return solutionLength > 1;
+    }
     /**
      * Verifies if the graph has cycles meaning that you can go from one node and find your way
      * back. This is not desirable as it will lead to infinite loops in searches if the heuristic
@@ -60,7 +71,6 @@ public class Graph {
     public boolean hasCycles(){
         for (Node node : this.nodes) {
             if(node.hasRecursiveLink()){
-                logger.info("Cycle found for "+node);
                 return true;
             }
         }
@@ -68,6 +78,11 @@ public class Graph {
         return false;
     }
 
+    /**
+     * Returns the node preceding the actual node in the parameter
+     * @param node
+     * @return
+     */
     public Node getPrecedingNode(Node node) {
         return this.nodes.stream()
                 .filter(precedingNode -> precedingNode.getLinks().stream()
@@ -87,7 +102,7 @@ public class Graph {
         List<Link> links = new ArrayList<>();
 
         this.nodes.forEach(node -> {
-            node.getLinks().forEach(link -> links.add(link));
+            links.addAll(node.getLinks());
         });
 
         return links;

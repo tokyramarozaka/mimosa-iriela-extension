@@ -41,6 +41,13 @@ public class NormativePlanningProblem extends PopPlanningProblem {
 
     @Override
     public State getInitialState() {
+        logger.info("INITIAL STATE : " + this.initialNormativePlan);
         return this.initialNormativePlan;
+    }
+
+    @Override
+    public boolean isFinal(State state) {
+        boolean isFinal = ((NormativePlan)state).getFlaws().size() == 0;
+        return isFinal;
     }
 }

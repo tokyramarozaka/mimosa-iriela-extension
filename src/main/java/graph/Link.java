@@ -25,7 +25,7 @@ public class Link implements Operator {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Link link = (Link) o;
-        return from.equals(link.from) && to.equals(link.to) && Objects.equals(content, link.content);
+        return from.equals(link.from) && to.equals(link.to) && Objects.equals(content,link.content);
     }
 
     @Override

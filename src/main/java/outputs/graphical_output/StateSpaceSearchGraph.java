@@ -15,6 +15,8 @@ import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @AllArgsConstructor
 @Getter
@@ -55,6 +57,12 @@ public class StateSpaceSearchGraph {
         return dotFileContent.toString();
     }
 
+    /**
+     * Builds the dotfile content to append all states to the dotfile of the state space search
+     * @param allProblemStates : all the problem states explored
+     * @param solutionProblemStates : the set of problem states which brings about the final state.
+     * @return a String representing the input to build the graph.
+     */
     private static String getDotFileContent(
             List<ProblemState> allProblemStates,
             List<ProblemState> solutionProblemStates
@@ -97,20 +105,50 @@ public class StateSpaceSearchGraph {
             ProblemState solutionState,
             List<ProblemState> allProblemStates
     ) {
-        allProblemStates.stream()
+        List<ProblemState> otherOptionsList = allProblemStates.stream()
                 .filter(problemState -> problemState.getParent().equals(solutionState.getParent()))
                 .filter(problemState -> !problemState.equals(solutionState))
-                .forEach(otherOption -> {
-                    dotFileContent.append(String.format("\"%s\" -> \"%s\" [label=\"%s\"];\n",
-                            solutionState.getParent().getState().toGraphNode(),
-                            otherOption.getState().toGraphNode(),
-                            otherOption.getAppliedOperator().toGraphArc())
-                    );
+                .toList();
 
-                    fillColorForInvalidState(dotFileContent, otherOption);
-                });
+        for (int i = 0; i < otherOptionsList.size(); i++) {
+            if (i >= GraphvizDisplaySettings.MAX_ALTERNATIVE_ARCS_PER_NODE){
+                appendLeftoverOptionsAsOneNode(
+                        dotFileContent,
+                        solutionState,
+                        GraphvizDisplaySettings.generateId(),
+                        otherOptionsList.size() - i
+                );
+                break;
+            }
+
+            ProblemState otherOption = otherOptionsList.get(i);
+
+            dotFileContent.append(String.format("\"%s\" -> \"%s\" [label=\"%s\"];\n",
+                    solutionState.getParent().getState().toGraphNode(),
+                    otherOption.getState().toGraphNode(),
+                    otherOption.getAppliedOperator().toGraphArc())
+            );
+
+            fillColorForInvalidState(dotFileContent, otherOption);
+        }
     }
 
+    private static void appendLeftoverOptionsAsOneNode(
+            StringBuilder dotFileContent,
+            ProblemState solutionState,
+            int id,
+            int otherOptionsSize
+    ) {
+        dotFileContent.append(String.format("\"%s\" -> \"%s\";\n",
+                solutionState.getParent().getState().toGraphNode(),
+                "(" + id + ") And " + otherOptionsSize + " other option(s)."));
+    }
+
+    /**
+     * Appends the color of the initial state inside the dot file at the top of the file
+     * @param dotFileContent : the dot file we want to append the initial state color to
+     * @param problemState : the problem state which contains the initial state.
+     */
     private static void fillColorForInitialState(
             StringBuilder dotFileContent,
             ProblemState problemState
@@ -125,6 +163,12 @@ public class StateSpaceSearchGraph {
         }
     }
 
+    /**
+     * Appends the color of the final state into the dot file.
+     * @see ColorTheme for final state color
+     * @param dotFileContent : the dotfile to which the color will be appended
+     * @param problemState : the problem state which contains the final state.
+     */
     private static void fillColorForFinalState(
             StringBuilder dotFileContent,
             ProblemState problemState
@@ -145,6 +189,7 @@ public class StateSpaceSearchGraph {
     ) {
         // TODO : make sure to call isValid instead of this.
         Plan plan = (Plan) problemState.getState();
+
         if (!plan.isCoherent()) {
             dotFileContent.insert(0,
                     String.format("\"%s\" [style=filled,fillcolor=\"%s\"];\n",

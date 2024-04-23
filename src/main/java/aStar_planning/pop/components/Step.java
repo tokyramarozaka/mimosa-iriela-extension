@@ -29,7 +29,6 @@ public class Step implements PlanElement {
 
     /**
      * A shortcut to access the step's preconditions
-     *
      * @return the set of preconditions of the step
      */
     public ActionPrecondition getActionPreconditions() {
@@ -40,7 +39,6 @@ public class Step implements PlanElement {
 
     /**
      * A shortcut to access the step's consequences.
-     *
      * @return the set of consequences of the step
      */
     public ActionConsequence getActionConsequences() {
@@ -53,7 +51,6 @@ public class Step implements PlanElement {
      * Checks if the current step makes the given proposition necessarily true in its preceding
      * situation. If true, we say that the current step ASSERTS the proposition.
      * This version does not change the given Codenotation Constraints.
-     *
      * @param proposition : the proposition to check if it is asserted by the current step or not
      * @param cc          : codenotations constraints describing variable bindings which will NOT
      *                    be changed during the function as we use a copy of it.
@@ -231,7 +228,6 @@ public class Step implements PlanElement {
 
     /**
      * Converts an action instance into codenotations based upon its context
-     *
      * @return a set of codenotation constraints which copies the variable bindings in the context
      */
     public CodenotationConstraints toCodenotation() {

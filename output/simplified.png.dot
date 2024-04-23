@@ -1,5 +1,9 @@
 digraph G { 
-  "initial()" -> "move(X,Y,B1)";
-  "cut(X,B1)" -> "final(X)";
-  "move(X,Y,B1)" -> "cut(X,B1)";
+  "initial():3" -> "move(X,Y,A2):14043";
+  "fish(X,A3):25" -> "move(X,A3,B3):161887";
+  "reportFish(X):1440" -> "final(X):2";
+  "move(X,A2,A3):1635" -> "fish(X,A3):25";
+  "move(X,Y,A2):14043" -> "move(X,A2,A3):1635";
+  "fish(X,B3):14899" -> "reportFish(X):1440";
+  "move(X,A3,B3):161887" -> "fish(X,B3):14899";
 }
