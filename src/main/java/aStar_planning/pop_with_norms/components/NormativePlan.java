@@ -17,6 +17,7 @@ import aStar_planning.pop_with_norms.resolvers.MissingProhibitionResolver;
 import constraints.Codenotation;
 import constraints.CodenotationConstraints;
 import constraints.TemporalConstraints;
+import exception.UnapplicableNormException;
 import logic.Action;
 import logic.ActionPrecondition;
 import logic.Atom;
@@ -231,10 +232,14 @@ public class NormativePlan extends Plan {
 
     /**
      * Adds normative flaw if any is generated  by either :
-     * a) an obligatory action
-     * b) a prohibited action
-     * c) a prohibited proposition
-     * d) a permitted proposition
+     * a) an obligatory action: which will create a flaw that signals that a certain action needs to
+     * be in the plan
+     * b) a prohibited action: which will create a flaw that signals that a certain action should
+     * not be within a certain interval of the plan
+     * c) a prohibited proposition: which will create a flaw that signals that a certain atom
+     * should not be within a certain interval of the plan
+     * d) a permitted proposition: which will not generate normative flaws directly, but will
+     * generate prohibitions instead.
      *
      * @param situation
      * @param norm
@@ -258,20 +263,64 @@ public class NormativePlan extends Plan {
             if (!actionExists){
                 this.addNormativeFlaw(situation, norm, applicableContext);
             }
-        }
-        if (norm.isProhibition()) {
-//            TODO : add normative flaws to deal with prohibitions
-//            if (norm.applicableWithin(getForbiddenInterval(situation, norm))) {
-//                addNormativeFlaw(situation, norm, applicableContext);
-//            }
+        }else if (norm.isProhibition()) {
+            Interval forbiddenInterval = getForbiddenInterval(situation, norm);
+
+            if(norm.enforceProposition()){
+                // TODO: take care of the forbidden proposition scenario.
+                addNormativeFlaw(situation, norm, applicableContext);
+            }else{
+                NormativeAction forbiddenAction = (NormativeAction) norm.getNormConsequences();
+                boolean actionExists = this.getSteps()
+                        .stream()
+                        .filter(step -> step.getAction().sameName(forbiddenAction))
+                        .anyMatch(step -> isBetween(
+                                forbiddenInterval.getBeginningSituation(),
+                                step,
+                                forbiddenInterval.getEndingSituation())
+                        );
+
+                if(actionExists){
+                    addNormativeFlaw(situation, norm, applicableContext);
+                }
+            }
         }
     }
 
     private Interval getForbiddenInterval(PopSituation startingSituation, RegulativeNorm norm) {
-        // TODO : start from the situation, and then stop when you find an unapplicable situation
-        return null;
+        return new Interval(
+                startingSituation,
+                getInapplicableSituationAfter(startingSituation, norm)
+        );
     }
 
+    /**
+     * Get the non applicable situation in which the norm stops being applicable
+     * @param applicableSituation
+     * @return
+     */
+    public PopSituation getInapplicableSituationAfter(
+            PopSituation applicableSituation,
+            RegulativeNorm flawedNorm
+    ) {
+        List<PopSituation> situationsAfterApplication = this.getSituations()
+                .stream()
+                .filter(situation -> this.getTc().isBefore(applicableSituation, situation))
+                .toList();
+
+        for (PopSituation situation : situationsAfterApplication) {
+            Context conditionContext = new Context();
+            try {
+                flawedNorm.getApplicableCodenotations(this, situation, conditionContext);
+            } catch(UnapplicableNormException e){
+                logger.info("Inapplicable exception found for : " + flawedNorm + " : " + situation);
+                return situation;
+            }
+        }
+
+        logger.info(" did not found inapplicable situation for norm : " + flawedNorm);
+        return null;
+    }
     private boolean actionIsPresentAsItShould(
             RegulativeNorm norm,
             PopSituation situation,
@@ -298,7 +347,6 @@ public class NormativePlan extends Plan {
     /**
      * Adds a normative flaw to the set of flaws inside the plan. This happens when a regulative
      * norm is applicable but not applied as it should.
-     *
      * @param situation is where the norm is applicable but not applied
      * @param norm      : the regulative norm concerned by the normative flaw
      */
@@ -764,14 +812,27 @@ public class NormativePlan extends Plan {
                 this.organizations;
     }
 
-    public boolean haveMissingRole() {
-        for (Flaw flaw : this.getFlaws()) {
-            if (flaw instanceof OpenCondition openCondition) {
-                if (this.isRole(openCondition.getProposition().getAtom())) {
-                    return true;
-                }
+    /**
+     * Fetches the step which established a proposition in the plan in a given situation
+     * @param proposition : the proposition to be established
+     * @param situation : the situation in which it is made necessarily true
+     * @return : the step which establishes (or asserts) the `proposition` in `situation`
+     */
+    public Step getEstablisher(NormativeProposition proposition, PopSituation situation) {
+        List<Step> precedingOrParallelSteps = this.getSteps()
+                .stream()
+                .filter(step -> !this.getTc().isAfter(step, situation))
+                .toList();
+
+        for(Step step : precedingOrParallelSteps){
+            Context contextPerStep = new Context();
+            ContextualAtom propositionWithContext = new ContextualAtom(contextPerStep, proposition);
+
+            if(step.asserts(propositionWithContext, this.getCc())){
+                return step;
             }
         }
-        return false;
+
+        return null;
     }
 }

@@ -2,8 +2,12 @@ package aStar_planning.pop_with_norms.resolvers;
 
 import aStar.Operator;
 import aStar_planning.pop.components.PopSituation;
+import aStar_planning.pop.components.Step;
+import aStar_planning.pop.mapper.PlanModificationMapper;
 import aStar_planning.pop_with_norms.components.NormativeFlaw;
 import aStar_planning.pop_with_norms.components.NormativePlan;
+import aStar_planning.pop_with_norms.components.NormativeProposition;
+import constraints.PartialOrder;
 import constraints.TemporalConstraints;
 
 import java.util.ArrayList;
@@ -18,16 +22,61 @@ public class MissingProhibitionPropositionResolver {
     /**
      * Resolves a forbidden proposition by promoting it so that it happens before the situation
      * where the prohibition is applicable
-     * @param flaw
-     * @param plan
-     * @return
+     * @param flaw: the normative flaw to be resolved
+     * @param plan: the normative plan containing the flaw
+     * @return a list of Operators (=plan modification) which resolves the `flaw` in the `plan`
      */
     public List<Operator> byPromotion(NormativeFlaw flaw, NormativePlan plan) {
         List<Operator> operators = new ArrayList<>();
         PopSituation applicableSituation = flaw.getApplicableSituation();
+        NormativeProposition forbiddenProposition = (NormativeProposition) flaw
+                .getFlawedNorm()
+                .getNormConsequences();
 
-        // TODO : complete these operators
+        Step establisher = plan.getEstablisher(forbiddenProposition, flaw.getApplicableSituation());
+
+        if (establisher == null){
+            throw new NullPointerException("Establisher not found");
+        }
+        PopSituation establisherPostSituation = plan.getTc().getFollowingSituation(establisher);
+
+        TemporalConstraints toAdd = new TemporalConstraints(List.of(
+            new PartialOrder(establisherPostSituation, applicableSituation)
+        ));
+
+        operators.add(PlanModificationMapper.from(flaw, toAdd));
 
         return operators;
     }
+
+    public List<Operator> byDemotion(NormativeFlaw flaw, NormativePlan plan){
+        List<Operator> operators = new ArrayList<>();
+        PopSituation applicableSituation = flaw.getApplicableSituation();
+        PopSituation inapplicableSituation = plan
+                .getInapplicableSituationAfter(applicableSituation, flaw.getFlawedNorm());
+
+        // If the prohibition is always applicable a demotion is not possible...
+        if(inapplicableSituation == null){
+            return new ArrayList<>();
+        }
+
+        NormativeProposition forbiddenProposition = (NormativeProposition) flaw.getFlawedNorm()
+                .getNormConsequences();
+
+        Step establisher = plan.getEstablisher(forbiddenProposition, flaw.getApplicableSituation());
+
+        if (establisher == null){
+            throw new NullPointerException("Establisher not found");
+        }
+        PopSituation establisherPreviousSituation = plan.getTc().getPrecedingSituation(establisher);
+
+        TemporalConstraints toAdd = new TemporalConstraints(List.of(
+                new PartialOrder(inapplicableSituation, establisherPreviousSituation)
+        ));
+
+        operators.add(PlanModificationMapper.from(flaw, toAdd));
+
+        return operators;
+    }
+
 }

@@ -51,12 +51,24 @@ public class Iriela_IT {
     }
 
     /* === PROHIBITIONS === */
+    @Test
     public void findSolution_forFish__noTrespassing_inSacredZone_ok() throws IOException {
+        NormativePlanningProblem problem = PlanningProblemFactory
+                    .irielaProblem_noTrespassing();
 
+        AStarPlanner planner = new AStarPlanner(problem);
+
+        planner.outputSolutionPlan();
     }
 
+    @Test
     public void findSolution_forFish__noFishingWithoutLicense_ok() throws IOException {
+        NormativePlanningProblem problem = PlanningProblemFactory
+                .irielaProblem_noFishingWithoutLicense();
 
+        AStarPlanner planner = new AStarPlanner(problem);
+
+        planner.outputSolutionPlan();
     }
 
     /* === PERMISSIONS === */

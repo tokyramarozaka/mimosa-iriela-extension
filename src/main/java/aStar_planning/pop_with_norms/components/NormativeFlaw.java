@@ -21,29 +21,6 @@ public class NormativeFlaw implements Flaw {
     private final static Logger logger = LogManager.getLogger(NormativeFlaw.class);
 
 
-    /**
-     * Get the non applicable situation in which the norm stops being applicable
-     * @param applicableSituation
-     * @return
-     */
-    public PopSituation getInapplicableSituationAfter(PopSituation applicableSituation) {
-        return null;
-//        TODO : List<PopSituation> situationsAfterApplication = plan.getSituations().stream()
-//                .filter(situation -> plan.getTc().isBefore(applicableSituation, situation))
-//                .toList();
-//
-//        for (PopSituation situation : situationsAfterApplication) {
-//            try {
-//                this.flawedNorm.getApplicableCodenotations(plan, situation);
-//            } catch(UnapplicableNormException e){
-//                logger.info("Unapplicable exception found for : " + flawedNorm + " : " + situation);
-//                return situation;
-//            }
-//        }
-//
-//        logger.info(" did not found unapplicable situation for norm : " + flawedNorm);
-//        return null;
-    }
     @Override
     public String toString() {
         String flawName = switch(flawedNorm.getDeonticOperator()){

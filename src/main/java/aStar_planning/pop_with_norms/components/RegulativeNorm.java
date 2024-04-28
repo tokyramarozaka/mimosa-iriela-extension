@@ -28,7 +28,6 @@ public class RegulativeNorm extends Norm {
 
     /**
      * Determines whether the regulative norm enforces some action that ought (not) to be done.
-     *
      * @return true if the norm enforces some action, and false if it enforces some proposition
      * instead
      */
@@ -38,7 +37,6 @@ public class RegulativeNorm extends Norm {
 
     /**
      * Determines whether the regulative norm enforces some proposition that ought (not) to be done.
-     *
      * @return true if the norm enforces some proposition, and false if it enforces some action
      * instead
      */
@@ -49,7 +47,6 @@ public class RegulativeNorm extends Norm {
     /**
      * Return the codenotation constraints that would make this norm applicable in a given situation
      * (if any, if there is none, then an exception is thrown).
-     *
      * @param plan      : the plan within which we want to check for applicable codenotations
      * @param situation : the situation in the plan where we want to check for applicability
      *                  conditions
@@ -63,35 +60,6 @@ public class RegulativeNorm extends Norm {
             Context context
     ) throws UnapplicableNormException {
         return this.getNormConditions().getApplicableCodenotations(plan, situation, context);
-    }
-
-    /**
-     * Checks if the norm is being applied in a given situation of a given plan.
-     * @param plan      : the plan to check
-     * @param situation : the situation we want to verify it in
-     * @return true if the norm is applied, and false otherwise.
-     */
-    public boolean isApplied(
-            NormativePlan plan,
-            PopSituation situation,
-            CodenotationConstraints cc,
-            Context applicableContext
-    ) {
-//        if (this.enforceAction()) {
-//            // TODO : ask JP about it...
-//            return checkForActionAfterwards(plan, situation);
-//        }
-        return false;
-    }
-
-    public boolean applicableWithin(PopSituation situation, Interval situationInterval) {
-//        TODO : check if the situation where this norm is applicable is within a certain interval
-//        try{
-//            return situationInterval.isWithin(plan, situation);
-//        }catch(NoPlanFoundException e){
-//
-//        }
-        return false;
     }
 
     /**

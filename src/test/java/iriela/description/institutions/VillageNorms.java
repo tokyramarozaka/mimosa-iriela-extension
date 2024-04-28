@@ -21,7 +21,7 @@ public class VillageNorms {
         );
     }
 
-    static Norm prohibitedSacredTerritory(Term subject, Term zone) {
+    static Norm prohibitiedTrespassingIfSacred(Term subject, Term zone) {
         return new RegulativeNorm(
                 DeonticOperator.PROHIBITION,
                 locatedInSacred_conditions(subject, zone),

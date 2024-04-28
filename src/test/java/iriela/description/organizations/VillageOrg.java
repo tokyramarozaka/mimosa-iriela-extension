@@ -53,4 +53,20 @@ public class VillageOrg {
                 VillageOrg.assertions()
         );
     }
+
+    public static Organization get_withOnly_trespassingProhibition() {
+        return new Organization(
+          Village.get_trespassingProhibition(),
+          VillageOrg.constitutiveNorms(),
+          VillageOrg.assertions()
+        );
+    }
+
+    public static Organization get_withOnly_fishingWithoutLicenseProhibition() {
+        return new Organization(
+                Village.get_fishingWithoutLicenseProhibition(),
+                VillageOrg.constitutiveNorms(),
+                VillageOrg.assertions()
+        );
+    }
 }

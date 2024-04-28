@@ -1,8 +1,14 @@
 package aStar_planning.pop_with_norms.components;
 
 import aStar_planning.pop.components.PopSituation;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
 
-public interface Interval {
-    PopSituation getBeginningSituation();
-    PopSituation getEndingSituation();
+@Getter
+@AllArgsConstructor
+@ToString
+public class Interval {
+    private PopSituation beginningSituation;
+    private PopSituation endingSituation;
 }

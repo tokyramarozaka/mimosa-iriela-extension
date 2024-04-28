@@ -22,7 +22,7 @@ public class MissingProhibitionResolver {
 
         if(operators.isEmpty()){
             System.out.println(" OPERATORS ARE EMPTY ");
-            throw new RuntimeException("Operators are emtpy, cannot resolve prohibition flaw");
+            throw new RuntimeException("Operators are empty, cannot resolve prohibition flaw");
         }
         return operators;
     }

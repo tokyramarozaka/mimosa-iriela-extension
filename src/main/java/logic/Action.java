@@ -208,4 +208,8 @@ public class Action extends LogicalEntity {
 
         return terms;
     }
+
+    public boolean sameName(Action other){
+        return this.getActionName().equals(other.getActionName());
+    }
 }

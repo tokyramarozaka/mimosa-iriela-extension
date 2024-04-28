@@ -48,6 +48,14 @@ public class Step implements PlanElement {
     }
 
     /**
+     * A shortcut to access the abstract action of this step
+     * @return Action that is instantiated by this step.
+     */
+    public Action getAction(){
+        return (Action) this.actionInstance.getLogicalEntity();
+    }
+
+    /**
      * Checks if the current step makes the given proposition necessarily true in its preceding
      * situation. If true, we say that the current step ASSERTS the proposition.
      * This version does not change the given Codenotation Constraints.

@@ -40,8 +40,11 @@ public class MissingProhibitionActionResolver {
   }
 
   public static List<PlanModification> byDemotion(NormativePlan plan, NormativeFlaw flaw) {
-    PopSituation inapplicableSituation = flaw.getInapplicableSituationAfter(
-        flaw.getApplicableSituation());
+    PopSituation inapplicableSituation = plan.getInapplicableSituationAfter(
+        flaw.getApplicableSituation(),
+        flaw.getFlawedNorm()
+    );
+
     if (inapplicableSituation == null) {
       return new ArrayList<>();
     }

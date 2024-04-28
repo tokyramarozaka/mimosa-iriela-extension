@@ -51,10 +51,36 @@ public class Village {
         );
     }
 
+    public static Institution get_trespassingProhibition() {
+        return new Institution(
+                "village",
+                7,
+                Village.concepts(),
+                Village.assertions(),
+                Village.roleActions(),
+                List.of(
+                    VillageNorms.prohibitiedTrespassingIfSacred(TermsFactory.X, TermsFactory.Z)
+                )
+        );
+    }
+
+    public static Institution get_fishingWithoutLicenseProhibition() {
+        return new Institution(
+                "village",
+                7,
+                Village.concepts(),
+                Village.assertions(),
+                Village.roleActions(),
+                List.of(
+                        VillageNorms.prohibitedFishingWithoutLicense(TermsFactory.X, TermsFactory.Z)
+                )
+        );
+    }
+
     private static List<Norm> norms() {
         return List.of(
                 VillageNorms.obligatoryReportFish(TermsFactory.X),
-                VillageNorms.prohibitedSacredTerritory(TermsFactory.X, TermsFactory.Z),
+                VillageNorms.prohibitiedTrespassingIfSacred(TermsFactory.X, TermsFactory.Z),
                 VillageNorms.prohibitedFishingWithoutLicense(TermsFactory.X, TermsFactory.Z),
                 VillageNorms.permittedCutWithLicense(TermsFactory.X, TermsFactory.Z),
                 VillageNorms.permittedToHaveFishingNet_ifHasLicense(TermsFactory.X)
