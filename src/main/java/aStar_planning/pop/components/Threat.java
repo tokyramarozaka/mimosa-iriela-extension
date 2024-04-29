@@ -23,7 +23,7 @@ public class Threat implements Flaw {
         return stringBuilder
                 .append("(T): ")
                 .append(this.destroyer)
-                .append(" TO ")
+                .append(" THREATENS ")
                 .append(this.proposition)
                 .append(" IN ")
                 .append(this.threatened)

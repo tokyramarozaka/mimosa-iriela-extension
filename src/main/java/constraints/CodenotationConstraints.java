@@ -384,4 +384,25 @@ public class CodenotationConstraints extends Graphic {
 
         return stringBuilder.toString();
     }
+
+    /**
+     * Changes all codenotations to non-codenotations and vice-versa. Mostly this is needed to
+     * avoid making certain conditions necessarily true. You just take how it is made true, and
+     * reverse it, and ... voilà !
+     * @return a copy of the current codenotation constraint with each non-codenotation turning
+     * into codenotations, and vice versa.
+     */
+    public CodenotationConstraints reverse() {
+        logger.info("Reversing " + this);
+        List<Codenotation> reversedCodenotations =  this.codenotations
+                .stream()
+                .map(codenotation -> new Codenotation(
+                        !codenotation.isCodenotation(),
+                        codenotation.getLeft(),
+                        codenotation.getRight())
+                )
+                .collect(Collectors.toList());
+
+        return new CodenotationConstraints(reversedCodenotations);
+    }
 }

@@ -22,15 +22,13 @@ public class CircumventionOperator {
         List<Operator> operators = new ArrayList<>();
 
         flaw.getFlawedNorm().getNormConditions().getConditions().forEach(condition -> {
-            NormativePlan applicablePlan = getApplicablePlan(plan, flaw);
+            // NormativePlan applicablePlan = getApplicablePlan(plan, flaw);
 
             OpenCondition toSolve = createReverseOpenCondition(
                     plan, flaw, possibleActions, condition
             );
 
-            operators.addAll(OpenConditionResolver.byCreation(
-                    applicablePlan, toSolve, possibleActions
-            ));
+            operators.addAll(plan.resolve(toSolve, possibleActions));
         });
 
         return operators;
@@ -71,11 +69,13 @@ public class CircumventionOperator {
             List<Action> possibleActions,
             Atom condition
     ){
+        /*
         CodenotationConstraints applicableCodenotations= flaw.getFlawedNorm()
                 .getApplicableCodenotations(plan, flaw.getApplicableSituation(),
                         flaw.getContext())
                 .fuseWith(plan.getCc());
 
+        */
         ContextualAtom toAssert = new ContextualAtom(
                 new Context(),
                 new Atom(!condition.isNegation(), condition.getPredicate())

@@ -30,7 +30,7 @@ public class MissingProhibitionActionResolver {
     Optional<Step> forbiddenStep = getForbiddenStepFromPlan(plan, flaw, targetStep);
 
     PartialOrder stepBeforeSituation = new PartialOrder(
-        forbiddenStep.get(),
+        plan.getTc().getFollowingSituation(forbiddenStep.get()),
         flaw.getApplicableSituation());
 
     TemporalConstraints temporalChanges = new TemporalConstraints(new ArrayList<>(
@@ -45,7 +45,7 @@ public class MissingProhibitionActionResolver {
         flaw.getFlawedNorm()
     );
 
-    if (inapplicableSituation == null) {
+    if (inapplicableSituation == null || plan.getFinalSituation().equals(inapplicableSituation)) {
       return new ArrayList<>();
     }
 
@@ -54,8 +54,7 @@ public class MissingProhibitionActionResolver {
     Optional<Step> forbiddenStep = getForbiddenStepFromPlan(plan, flaw, targetStep);
 
     PartialOrder stepAfterInapplicableSituation = new PartialOrder(
-        forbiddenStep.get(),
-        inapplicableSituation);
+        inapplicableSituation, plan.getTc().getPrecedingSituation(forbiddenStep.get()));
     TemporalConstraints temporalChanges = new TemporalConstraints(new ArrayList<>(
         List.of(stepAfterInapplicableSituation)));
 
@@ -66,7 +65,6 @@ public class MissingProhibitionActionResolver {
       NormativePlan plan,
       NormativeFlaw flaw,
       Step targetStep) {
-    logger.info("Fetching step " + targetStep + " in " + plan);
 
     Optional<Step> forbiddenStep = plan.getSteps().stream()
         .filter(step -> step.equals(targetStep))

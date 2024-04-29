@@ -21,7 +21,6 @@ public class MissingProhibitionResolver {
         operators.addAll(CircumventionOperator.circumvent(plan, flaw, possibleActions));
 
         if(operators.isEmpty()){
-            System.out.println(" OPERATORS ARE EMPTY ");
             throw new RuntimeException("Operators are empty, cannot resolve prohibition flaw");
         }
         return operators;

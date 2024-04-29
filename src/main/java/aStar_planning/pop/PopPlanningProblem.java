@@ -80,7 +80,7 @@ public class PopPlanningProblem extends Problem implements AStarProblem {
 
   @Override
   public State apply(Operator operator, State state) {
-     logger.info("___APPLYING___ "+operator);
+     logger.debug("___APPLYING___ "+operator);
      logger.info("\n___GOT___ "+((Plan)state).applyPlanModification(operator));
     return ((Plan) state).applyPlanModification(operator);
   }
@@ -93,7 +93,7 @@ public class PopPlanningProblem extends Problem implements AStarProblem {
 
   @Override
   public double evaluateOperator(Operator transition) {
-    return 0.1;
+    return 1;
   }
 
   @Override

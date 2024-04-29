@@ -52,7 +52,7 @@ public class Iriela_IT {
 
     /* === PROHIBITIONS === */
     @Test
-    public void findSolution_forFish__noTrespassing_inSacredZone_ok() throws IOException {
+    public void findSolution_forFish__prohibitedTrespassing_inSacredZone_ok() throws IOException {
         NormativePlanningProblem problem = PlanningProblemFactory
                     .irielaProblem_noTrespassing();
 
@@ -62,7 +62,7 @@ public class Iriela_IT {
     }
 
     @Test
-    public void findSolution_forFish__noFishingWithoutLicense_ok() throws IOException {
+    public void findSolution_forFish__prohibitedFishingWithoutLicense_ok() throws IOException {
         NormativePlanningProblem problem = PlanningProblemFactory
                 .irielaProblem_noFishingWithoutLicense();
 

@@ -38,7 +38,7 @@ Situation1 < Situation9
 +C175::Y == C3::A2. 
 
 "];
-"(11) " -> "(37) " [label="(T): move(X,Y,Z):175 TO located(X,Z) IN fish(X,Z):25
+"(11) " -> "(37) " [label="(T): move(X,Y,Z):175 THREATENS located(X,Z) IN fish(X,Z):25
 +Situation6 < Situation9
 
 "];
@@ -54,11 +54,11 @@ Situation38 < Situation9
 Situation1 < Situation37
 
 "];
-"(49) " -> "(55) " [label="(T): move(X,Y):1443 TO located(X,Y) IN move(X,Y,Z):175
+"(49) " -> "(55) " [label="(T): move(X,Y):1443 THREATENS located(X,Y) IN move(X,Y,Z):175
 +C1443::Y != C175::Y. 
 
 "];
-"(49) " -> "(53) " [label="(T): move(X,Y):1443 TO located(X,Y) IN move(X,Y,Z):175
+"(49) " -> "(53) " [label="(T): move(X,Y):1443 THREATENS located(X,Y) IN move(X,Y,Z):175
 +Situation10 < Situation37
 
 "];

@@ -4,6 +4,7 @@ import aStar.Operator;
 import aStar_planning.pop.mapper.PlanModificationMapper;
 import aStar_planning.pop.components.OpenCondition;
 import aStar_planning.pop.utils.TemporalConstraintsBuilder;
+import constraints.CodenotationConstraints;
 import constraints.PartialOrder;
 import aStar_planning.pop.components.Plan;
 import aStar_planning.pop.components.PopSituation;
@@ -47,9 +48,14 @@ public class OpenConditionResolver {
                         openCondition.getProposition(), plan.getCc()))
                 .forEach(codenotationConstraintsList -> {
                     codenotationConstraintsList.forEach(codenotationConstraints -> {
-                        Operator toAdd = PlanModificationMapper
-                                .from(openCondition, codenotationConstraints);
-
+                        Operator toAdd;
+                        if(openCondition.getProposition().getAtom().isNegation()){
+                            toAdd = PlanModificationMapper
+                                    .from(openCondition, codenotationConstraints.reverse());
+                        } else {
+                            toAdd = PlanModificationMapper
+                                    .from(openCondition, codenotationConstraints);
+                        }
                         operators.add(toAdd);
                     });
                 });

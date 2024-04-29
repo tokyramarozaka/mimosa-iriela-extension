@@ -137,7 +137,14 @@ public class NormativePlan extends Plan {
 
             for (RegulativeNorm norm : toEvaluate) {
                 if (isApplicable(situation, norm)) {
-                    Context applicableContext = getApplicableContext(norm, situation);
+                    Context applicableContext;
+
+                    try{
+                        applicableContext = getApplicableContext(norm, situation);
+                    }catch(UnapplicableNormException e){
+                        continue;
+                    }
+
                     this.addNormativeFlawsIfAny(situation, norm, applicableContext);
                 }
             }
@@ -271,6 +278,7 @@ public class NormativePlan extends Plan {
                 addNormativeFlaw(situation, norm, applicableContext);
             }else{
                 NormativeAction forbiddenAction = (NormativeAction) norm.getNormConsequences();
+
                 boolean actionExists = this.getSteps()
                         .stream()
                         .filter(step -> step.getAction().sameName(forbiddenAction))
@@ -313,35 +321,11 @@ public class NormativePlan extends Plan {
             try {
                 flawedNorm.getApplicableCodenotations(this, situation, conditionContext);
             } catch(UnapplicableNormException e){
-                logger.info("Inapplicable exception found for : " + flawedNorm + " : " + situation);
                 return situation;
             }
         }
 
-        logger.info(" did not found inapplicable situation for norm : " + flawedNorm);
         return null;
-    }
-    private boolean actionIsPresentAsItShould(
-            RegulativeNorm norm,
-            PopSituation situation,
-            Context obligationContext
-    ) {
-        NormativeAction obligatoryAction = (NormativeAction) norm.getNormConsequences();
-
-        for (Step step : this.getSteps()) {
-            if (!step.getActionInstance().getName().equals(obligatoryAction.getLabel())) {
-                continue;
-            }
-
-            Action stepAction = (Action) step.getActionInstance().getLogicalEntity();
-            Context stepContext = step.getActionInstance().getContext();
-
-            if (obligatoryAction.unify(obligationContext, stepAction, stepContext, this.getCc())) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -383,7 +367,6 @@ public class NormativePlan extends Plan {
     /**
      * Verifies if a norm is applicable by verifying all of its conditions, which either demands
      * some constitutive norm, or some proposition to be necessarily true
-     *
      * @param situation : the situation on which we want to check the norm's applicability
      *                  conditions
      * @param norm      : the norm whose applicability conditions will be tested.
@@ -401,10 +384,12 @@ public class NormativePlan extends Plan {
                         normContext,
                         this.getCc().copy()
                 )) {
+                    // logger.error("Not applicable because ROLE : " + condition + " is not ok");
                     return false;
                 }
             } else {
                 if (!isSatisfiedInSituation(situation, conditionContext, condition)) {
+                    //logger.error("Not applicable because CONDITION : " + condition + " is not ok");
                     return false;
                 }
             }
@@ -438,14 +423,15 @@ public class NormativePlan extends Plan {
                     assertedProposition.getContext(),
                     cc
             )) {
-                if (condition.isNegation() == assertedProposition.getAtom().isNegation()) {
+                // TODO: Double check this.
+                if (!condition.isNegation()) {
                     isUnifiedOnce = true;
-                    break;
                 }
+                break;
             }
         }
 
-        return isUnifiedOnce;
+        return condition.isNegation() ? !isUnifiedOnce : isUnifiedOnce;
     }
 
     /**
@@ -563,7 +549,7 @@ public class NormativePlan extends Plan {
 
             }
         }
-        throw new RuntimeException("Applicable context could not be found for : " + norm);
+        throw new UnapplicableNormException(norm.getNormConditions(), situation);
     }
 
     /**
@@ -787,7 +773,7 @@ public class NormativePlan extends Plan {
                             this.getCc().copy())
                     ) {
                         additions.add(new CodenotationConstraints(List.of(
-                                new Codenotation(true,
+                                new Codenotation(!missingCondition.getAtom().isNegation(),
                                         new ContextualTerm(
                                                 openCondition.getProposition().getContext(),
                                                 onlyTermToCodenotate),
