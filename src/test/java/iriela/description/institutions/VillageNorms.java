@@ -101,7 +101,7 @@ public class VillageNorms {
 
     private static NormConditions haveFishingNetWithLicense_conditions(Term subject){
         return new NormConditions(List.of(
-            new Atom(false, Village.haveFishingLicense(subject))
+                new Atom(false, Village.haveFishingLicense(subject))
         ));
     }
 

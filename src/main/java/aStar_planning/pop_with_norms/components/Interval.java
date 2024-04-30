@@ -11,4 +11,12 @@ import lombok.ToString;
 public class Interval {
     private PopSituation beginningSituation;
     private PopSituation endingSituation;
+
+    public boolean hasNoEnd(){
+        return this.endingSituation == null;
+    }
+
+    public boolean isInstant(){
+        return this.beginningSituation == this.endingSituation;
+    }
 }

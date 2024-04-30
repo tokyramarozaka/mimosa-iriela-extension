@@ -93,7 +93,7 @@ public class PopPlanningProblem extends Problem implements AStarProblem {
 
   @Override
   public double evaluateOperator(Operator transition) {
-    return 1;
+    return 0;
   }
 
   @Override

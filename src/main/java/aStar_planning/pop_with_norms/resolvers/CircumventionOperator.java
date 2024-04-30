@@ -2,7 +2,6 @@ package aStar_planning.pop_with_norms.resolvers;
 
 import aStar.Operator;
 import aStar_planning.pop.components.OpenCondition;
-import aStar_planning.pop.resolvers.OpenConditionResolver;
 import aStar_planning.pop_with_norms.components.NormativeFlaw;
 import aStar_planning.pop_with_norms.components.NormativePlan;
 import constraints.CodenotationConstraints;
@@ -21,15 +20,16 @@ public class CircumventionOperator {
     ) {
         List<Operator> operators = new ArrayList<>();
 
-        flaw.getFlawedNorm().getNormConditions().getConditions().forEach(condition -> {
-            // NormativePlan applicablePlan = getApplicablePlan(plan, flaw);
+        flaw.getFlawedNorm().getNormConditions().getConditions()
+                .stream()
+                .filter(condition -> !plan.isRole(condition))
+                .forEach(condition -> {
+                    OpenCondition toSolve = createReverseOpenCondition(
+                            plan, flaw, possibleActions, condition, flaw.getContext()
+                    );
 
-            OpenCondition toSolve = createReverseOpenCondition(
-                    plan, flaw, possibleActions, condition
-            );
-
-            operators.addAll(plan.resolve(toSolve, possibleActions));
-        });
+                    operators.addAll(plan.resolve(toSolve, possibleActions));
+                });
 
         return operators;
     }
@@ -67,7 +67,8 @@ public class CircumventionOperator {
             NormativePlan plan,
             NormativeFlaw flaw,
             List<Action> possibleActions,
-            Atom condition
+            Atom condition,
+            Context conditionContext
     ){
         /*
         CodenotationConstraints applicableCodenotations= flaw.getFlawedNorm()
@@ -77,7 +78,7 @@ public class CircumventionOperator {
 
         */
         ContextualAtom toAssert = new ContextualAtom(
-                new Context(),
+                conditionContext,
                 new Atom(!condition.isNegation(), condition.getPredicate())
         );
 

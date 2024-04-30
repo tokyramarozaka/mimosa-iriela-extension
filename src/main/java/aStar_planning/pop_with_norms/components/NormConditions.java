@@ -59,7 +59,8 @@ public class NormConditions {
                     }
                 }
 
-                if (!isUnifiedOnce) {
+                if (!isUnifiedOnce && !condition.isNegation()) {
+                    logger.error("Condition is not satisfied : " + condition);
                     throw new UnapplicableNormException(this, situation);
                 }
             }
