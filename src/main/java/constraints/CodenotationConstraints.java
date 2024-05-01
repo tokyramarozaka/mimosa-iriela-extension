@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
  */
 @Getter
 @EqualsAndHashCode
-@ToString
 public class CodenotationConstraints extends Graphic {
     private List<Codenotation> codenotations;
     private final static Logger logger = LogManager.getLogger(CodenotationConstraints.class);
@@ -140,7 +139,7 @@ public class CodenotationConstraints extends Graphic {
      */
     private boolean hasNoContradictions() {
         List<Codenotation> allCodenotations = this.allCodenotations();
-        List<Codenotation> allNonCodenotations = this.allNonCodenotations();
+        List<Codenotation> allNonCodenotations = this.getAllNonCodenotations();
 
         return allNonCodenotations
                 .stream()
@@ -162,7 +161,7 @@ public class CodenotationConstraints extends Graphic {
      * Returns the sublist of all non-codenotations only from the current codenotation constraint
      * @return all non-codenotations from the current codenotations constraint
      */
-    private List<Codenotation> allNonCodenotations(){
+    private List<Codenotation> getAllNonCodenotations(){
         return this.codenotations
                 .stream()
                 .filter(codenotation -> !codenotation.isCodenotation())
@@ -393,7 +392,6 @@ public class CodenotationConstraints extends Graphic {
      * into codenotations, and vice versa.
      */
     public CodenotationConstraints reverse() {
-        logger.info("Reversing " + this);
         List<Codenotation> reversedCodenotations =  this.codenotations
                 .stream()
                 .map(codenotation -> new Codenotation(
@@ -404,5 +402,27 @@ public class CodenotationConstraints extends Graphic {
                 .collect(Collectors.toList());
 
         return new CodenotationConstraints(reversedCodenotations);
+    }
+
+    public boolean isTransitivelyCoherent() {
+        for (Codenotation nonCodenotation : this.getAllNonCodenotations()) {
+            ContextualTerm left = nonCodenotation.getLeft();
+            ContextualTerm right = nonCodenotation.getRight();
+
+            if(left.getTerm().unify(
+                    left.getContext(),
+                    right.getTerm(),
+                    right.getContext(),
+                    this)
+            ){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return this.codenotations.toString();
     }
 }

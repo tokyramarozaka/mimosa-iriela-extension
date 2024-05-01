@@ -34,8 +34,9 @@ public class Iriela_IT {
 
     /* === OBLIGATIONS === */
     @Test
-    public void findSolution_forFish_ok() throws IOException {
-        NormativePlanningProblem problem = PlanningProblemFactory.irielaProblem_haveFishOnly();
+    public void findSolution_forFish_noNorms_ok() throws IOException {
+        NormativePlanningProblem problem = PlanningProblemFactory
+                .irielaProblem_haveFishOnly_noVillageNorms();
         AStarPlanner planner = new AStarPlanner(problem);
 
         planner.outputSolutionPlan();

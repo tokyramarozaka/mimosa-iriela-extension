@@ -116,12 +116,12 @@ public class PlanModification implements Operator {
     @Override
     public String toString() {
         return new StringBuilder()
-                .append("RESOLVING ")
+                .append("TO RESOLVE ")
                 .append(this.getTargetFlaw())
-                .append(addedStep == null ? "" : "\nAdded : \n\t" + this.addedStep)
-                .append(addedSituations == null ? "" : "\nAdded : \n\t" + this.addedSituations)
-                .append(addedCc == null ? "" : "\nAdded : \n\t" + this.addedCc)
-                .append(addedTc == null ? "" : "\nAdded : \n\t" + this.addedTc)
+                .append(addedStep == null ? "" : "\nAdd : \n\t" + this.addedStep)
+                .append(addedSituations == null ? "" : "\nAdd : \n\t" + this.addedSituations)
+                .append(addedCc == null ? "" : "\nAdd : \n\t" + this.addedCc)
+                .append(addedTc == null ? "" : "\nAdd : \n\t" + this.addedTc)
                 .toString();
     }
 

@@ -26,6 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -512,19 +513,48 @@ public class Plan implements State {
     Graphviz.fromString(input).render(Format.PNG).toFile(new File(folderPath, outputName));
   }
 
+  /**
+   * Formats the set of flaws so that each flaw in the flaw set occupies exactly one line. The next
+   * flaw will be on a separate line and start with a tab.
+   * @param flaws
+   * @return
+   */
+  private String formatFlaws(Set<Flaw> flaws) {
+    String pattern = "\\)\\s*(?=\\w+:|\\[)"; // Lookahead for flaw start
+    StringBuilder sb = new StringBuilder(); // Use StringBuilder for string modification
+
+    for (Flaw flaw : flaws) {
+      sb.append(flaw.toString()).append("\n\t"); // Append each flaw's String and a newline with tab
+    }
+
+    return sb.toString().trim(); // Remove any leading/trailing whitespace
+  }
+
+
+  private String formatList(String listToString){
+    if(listToString.equals("[]")){
+      return "NONE";
+    }
+    listToString = listToString
+            .substring(1, listToString.length()-1);
+
+    return Arrays.stream(listToString.split(", "))
+            .collect(Collectors.joining(",\n\t"));
+  }
+
   @Override
   public String toString() {
-    return "PLAN\n" +
-        "--SITUATIONS\n" + "\t" + this.situations +
-        "\n--STEPS\n" + "\t" + this.steps
+    return "PLAN #"+ this.id+"\n" +
+        " - SITUATIONS : " + this.situations +
+        "\n - STEPS : " + this.steps
             .stream()
             .map(step -> step.toStringWithCodenotations(this.cc))
             .toList()
         +
-        "\n--CODENOTATIONS :\n" + "\t" + this.cc +
-        "\n--TEMPORAL CONSTRAINTS :\n" + "\t" + this.tc +
-        "\n--FLAWS :\n\t" +
-        (this.flaws.isEmpty() ? "NONE" : this.flaws);
+        "\n - CODENOTATIONS :\n" + "\t" + formatList(this.cc.toString()) +
+        "\n - TEMPORAL CONSTRAINTS :\n\t" + this.tc +
+        "\n - FLAWS :\n\t" +
+        (this.flaws.isEmpty() ? "NONE" : formatFlaws(this.flaws));
   }
 
   @Override

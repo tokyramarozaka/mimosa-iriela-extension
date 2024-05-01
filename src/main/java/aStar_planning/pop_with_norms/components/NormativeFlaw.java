@@ -18,7 +18,6 @@ public class NormativeFlaw implements Flaw {
     private PopSituation applicableSituation;
     private Interval applicableInterval;
     private Context context;
-    private Context intervalStartContext;
 
     private final static Logger logger = LogManager.getLogger(NormativeFlaw.class);
 
@@ -38,25 +37,20 @@ public class NormativeFlaw implements Flaw {
             NormativePlan plan,
             RegulativeNorm flawedNorm,
             Interval applicableInterval,
-            Context intervalStartContext
+            Context startContext
     ){
         this.plan = plan;
         this.flawedNorm = flawedNorm;
+        this.applicableSituation = applicableInterval.getBeginningSituation();
         this.applicableInterval = applicableInterval;
-        this.intervalStartContext = intervalStartContext;
+        this.context = startContext;
     }
 
     @Override
     public String toString() {
-        if(this.context == null){
-            return "(NORM): " +
-                    this.flawedNorm +
-                    " IN " + this.applicableInterval;
-        }else{
-            return "(NORM): " +
-                    this.flawedNorm +
-                    " IN " + this.applicableSituation
-                    + "WITH CONTEXT " + this.context;
-        }
+        return this.flawedNorm +
+                " IN " + (this.applicableInterval == null ? this.getApplicableSituation()
+                : this.getApplicableInterval());
+//                + " WITH CONTEXT " + this.context;
     }
 }

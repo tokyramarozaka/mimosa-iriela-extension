@@ -14,12 +14,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
 @EqualsAndHashCode
-@ToString
 public class TemporalConstraints extends Graphic {
     private static Logger logger = LogManager.getLogger(TemporalConstraints.class);
     private final List<PartialOrder> partialOrders;
@@ -264,6 +264,17 @@ public class TemporalConstraints extends Graphic {
         }
 
         return stringBuilder.toString();
+    }
+
+    @Override
+    public String toString() {
+        String partialOrdersAsString =  this.getPartialOrders().toString();
+
+        partialOrdersAsString = partialOrdersAsString
+                .substring(1, partialOrdersAsString.length()-1);
+
+        return Arrays.stream(partialOrdersAsString.split(", "))
+                .collect(Collectors.joining(",\n\t"));
     }
 }
 

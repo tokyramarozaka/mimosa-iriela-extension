@@ -2,6 +2,7 @@ package aStar_planning.pop_with_norms.resolvers;
 
 import aStar.Operator;
 import aStar_planning.pop.components.OpenCondition;
+import aStar_planning.pop.resolvers.OpenConditionResolver;
 import aStar_planning.pop_with_norms.components.NormativeFlaw;
 import aStar_planning.pop_with_norms.components.NormativePlan;
 import constraints.CodenotationConstraints;
@@ -9,10 +10,14 @@ import logic.Action;
 import logic.Atom;
 import logic.Context;
 import logic.ContextualAtom;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class CircumventionOperator {
+    private static final Logger logger = LogManager.getLogger(CircumventionOperator.class);
     public static List<Operator> circumvent(
             NormativePlan plan,
             NormativeFlaw flaw,
@@ -20,16 +25,12 @@ public class CircumventionOperator {
     ) {
         List<Operator> operators = new ArrayList<>();
 
-        flaw.getFlawedNorm().getNormConditions().getConditions()
-                .stream()
-                .filter(condition -> !plan.isRole(condition))
-                .forEach(condition -> {
-                    OpenCondition toSolve = createReverseOpenCondition(
-                            plan, flaw, possibleActions, condition, flaw.getContext()
-                    );
-
-                    operators.addAll(plan.resolve(toSolve, possibleActions));
-                });
+        flaw.getFlawedNorm().getNormConditions().getConditions().forEach(condition -> {
+            OpenCondition toSolve = createReverseOpenCondition(
+                    plan, flaw, possibleActions, condition, flaw.getContext()
+            );
+            operators.addAll(plan.resolve(toSolve, possibleActions));
+        });
 
         return operators;
     }

@@ -36,11 +36,14 @@ public class NormConditions {
             PopSituation situation,
             Context conditionContext
     ) throws UnapplicableNormException {
-        CodenotationConstraints cc = new CodenotationConstraints();
+        CodenotationConstraints cc = plan.getCc().copy();
 
         for (Atom condition : this.conditions) {
             if (plan.isRole(condition)) {
-                continue;
+                if(!plan.validatedByConstitutiveNorms(condition, conditionContext, cc)){
+//                    logger.error(condition + " failed in situation : " + situation + " | " + cc);
+                    throw new UnapplicableNormException(this, situation);
+                }
             } else {
                 Predicate conditionPredicate = condition.getPredicate();
                 boolean isUnifiedOnce = false;
@@ -52,18 +55,20 @@ public class NormConditions {
                             assertedProposition.getContext(),
                             cc
                     )) {
-                        if (condition.isNegation() == assertedProposition.getAtom().isNegation()) {
-                            isUnifiedOnce = true;
-                            break;
-                        }
+                        isUnifiedOnce = true;
+                        break;
                     }
                 }
 
                 if (!isUnifiedOnce && !condition.isNegation()) {
-                    logger.error("Condition is not satisfied : " + condition);
+//                    logger.error(condition + " failed in situation : " + situation + " | " + cc);
+                    throw new UnapplicableNormException(this, situation);
+                } else if (isUnifiedOnce && condition.isNegation()){
+//                    logger.error(condition + " failed in situation : " + situation + " | " + cc);
                     throw new UnapplicableNormException(this, situation);
                 }
             }
+//            logger.trace(condition + " is OK : " + cc);
         }
 
         return cc;

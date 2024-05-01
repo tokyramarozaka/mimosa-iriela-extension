@@ -81,6 +81,7 @@ public class VillageNorms {
                 new Atom(true, Village.haveFishingLicense(subject)),
                 new Atom(false, Village.member(subject)),
                 new Atom(false, Village._protected(zone))
+//              ,new Atom(false, Global.located(subject, zone))
         ));
     }
 

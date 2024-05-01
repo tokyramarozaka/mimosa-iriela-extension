@@ -60,6 +60,7 @@ public class NormativePlan extends Plan {
     /**
      * Add the norm applicability conditions to the action preconditions as a result of some
      * conditional permission on the action
+     *
      * @return List of all actions with their permissive conditions added if any.
      */
     private List<Action> buildPermittedNormativeActions() {
@@ -107,6 +108,7 @@ public class NormativePlan extends Plan {
 
     /**
      * Adds the current obligatory condition as goal to the planning problem.
+     *
      * @param obligation : the obligation which is applicable and will be turned to a goal.
      */
     private void addNormativeGoal(RegulativeNorm obligation) {
@@ -132,6 +134,7 @@ public class NormativePlan extends Plan {
         List<RegulativeNorm> prohibitions = getProhibitions(allRegulativeNorms);
         prohibitions.addAll(generatedProhibitionsFromPermissions(getAllRegulativeNorms()));
 
+        logger.info("prohbitions : " + prohibitions);
         evaluateObligationsPerSituation(obligationsOnActions);
         evaluateProhibitionsPerInterval(prohibitions);
     }
@@ -139,27 +142,29 @@ public class NormativePlan extends Plan {
     /**
      * Checks if there is any normative flaw to be generated about applicable prohibitions.
      * This will check every applicable interval and generate normative flaw if it is not applied.
+     *
      * @param prohibitions : all prohibitions to be tested and verified.
      */
     private void evaluateProhibitionsPerInterval(List<RegulativeNorm> prohibitions) {
         for (RegulativeNorm prohibition : prohibitions) {
-            Interval applicableInterval;
-            try {
-                applicableInterval= getApplicableInterval(prohibition);
-            }catch(NullPointerException e){
+            Interval applicableInterval = getApplicableInterval(prohibition);
+
+//            logger.debug("---> Applicable interval is : " + applicableInterval);
+
+            if (applicableInterval.isEmpty()) {
                 continue;
             }
-            logger.debug("Applicable interval is : " + applicableInterval);
+
             Context startContext;
 
-            try{
+            try {
                 startContext = getApplicableContext(prohibition, applicableInterval
                         .getBeginningSituation());
-            }catch(UnapplicableNormException e){
+            } catch (UnapplicableNormException e) {
                 continue;
             }
 
-            this.addMissingProhibitionIfAny(applicableInterval,prohibition,startContext);
+            this.addMissingProhibitionIfAny(applicableInterval, prohibition, startContext);
         }
     }
 
@@ -167,6 +172,7 @@ public class NormativePlan extends Plan {
      * Checks if there is any normative flaw to be generated about applicable obligations.
      * Note that only obligations on actions needs to be treated as obligations on propositions
      * are already handled as goals.
+     *
      * @param obligationsOnActions
      */
     private void evaluateObligationsPerSituation(List<RegulativeNorm> obligationsOnActions) {
@@ -175,9 +181,9 @@ public class NormativePlan extends Plan {
                 if (isApplicable(situation, norm)) {
                     Context applicableContext;
 
-                    try{
+                    try {
                         applicableContext = getApplicableContext(norm, situation);
-                    }catch(UnapplicableNormException e){
+                    } catch (UnapplicableNormException e) {
                         continue;
                     }
 
@@ -189,6 +195,7 @@ public class NormativePlan extends Plan {
 
     /**
      * A helper function to filter out prohibitions inside a set of regulative norms
+     *
      * @param allRegulativeNorms : the set of regulative norms to be filtered
      * @return all prohibitions from allRegulativeNorms
      */
@@ -202,6 +209,7 @@ public class NormativePlan extends Plan {
     /**
      * A helper function to filter out all obligations which enforces actions from a set of
      * regulative norms
+     *
      * @param allRegulativeNorms : the set of regulative norms to be filtered
      * @return
      */
@@ -214,6 +222,7 @@ public class NormativePlan extends Plan {
 
     /**
      * A helper function to filter out all permissions from all regulative norms
+     *
      * @return all permissions from all regulative norms
      */
     private List<RegulativeNorm> getPermissions() {
@@ -283,42 +292,46 @@ public class NormativePlan extends Plan {
                         return action.getActionName().equals(normativeAction.getActionName());
                     });
 
-            if (!actionExists){
+            if (!actionExists) {
                 this.addNormativeFlaw(situation, norm, applicableContext);
             }
         }
     }
 
     public void addMissingProhibitionIfAny(
-        Interval applicableInterval,
-        RegulativeNorm prohibition,
-        Context intervalStartContext
-    ){
-        NormativeAction prohibitedAction = (NormativeAction) prohibition.getNormConsequences();
+            Interval applicableInterval,
+            RegulativeNorm prohibition,
+            Context intervalStartContext
+    ) {
+        if (prohibition.enforceAction()) {
+            NormativeAction prohibitedAction = (NormativeAction) prohibition.getNormConsequences();
 
-        boolean actionExists = this.getSteps()
-                .stream()
-                .filter(step -> step.getAction().sameName(prohibitedAction))
-                .anyMatch(step -> isBetween(
-                        applicableInterval.getBeginningSituation(),
-                        step,
-                        applicableInterval.getEndingSituation() == null ?
-                                getFinalSituation()
-                                :applicableInterval.getEndingSituation())
-                );
+            boolean actionExists = this.getSteps()
+                    .stream()
+                    .filter(step -> step.getAction().sameName(prohibitedAction))
+                    .anyMatch(step -> isBetween(
+                            applicableInterval.getBeginningSituation(),
+                            step,
+                            applicableInterval.getEndingSituation() == null ?
+                                    getFinalSituation()
+                                    : applicableInterval.getEndingSituation())
+                    );
 
-        if(actionExists){
-            this.getFlaws().add(new NormativeFlaw(this, prohibition, applicableInterval,
-                    intervalStartContext));
+            if (actionExists) {
+                this.getFlaws().add(new NormativeFlaw(this, prohibition, applicableInterval,
+                        intervalStartContext));
+            }
         }
     }
+
     /**
      * Return the interval where a norm is applicable in the plan, from its earliest to its latest
      * applicable situation
+     *
      * @param norm
      * @return
      */
-    private Interval getApplicableInterval(RegulativeNorm norm){
+    private Interval getApplicableInterval(RegulativeNorm norm) {
         PopSituation begin = getFirstApplicableSituation(norm);
         PopSituation end = getInapplicableSituationAfter(begin, norm);
 
@@ -327,37 +340,39 @@ public class NormativePlan extends Plan {
 
     /**
      * Fetches the first situation in the plan where the norm is applicable.
+     *
      * @param norm: the norm to be checked if applicable
      * @return the earliest situation where it is applicable.
      */
     private PopSituation getFirstApplicableSituation(RegulativeNorm norm) {
         PopSituation initialSituation = this.getInitialSituation();
-        if(hasApplicableContext(norm, initialSituation)){
+        if (hasApplicableContext(norm, initialSituation)) {
             return initialSituation;
         }
 
         PopSituation firstApplicableSituation = null;
         for (PopSituation situation : this.getSituations()) {
-            Context conditionContext = new Context();
             try {
+                Context conditionContext = getApplicableContext(norm, situation);
                 norm.getApplicableCodenotations(this, situation, conditionContext);
 
                 if (firstApplicableSituation == null ||
-                        this.getTc().isBefore(situation,firstApplicableSituation)
+                        this.getTc().isBefore(situation, firstApplicableSituation)
                 ) {
                     firstApplicableSituation = situation;
                 }
-            } catch(UnapplicableNormException e) {}
+            } catch (UnapplicableNormException e) {
+                continue;
+            }
         }
 
         return firstApplicableSituation;
     }
 
     private boolean hasApplicableContext(RegulativeNorm norm, PopSituation situation) {
-        Context conditionContext = new Context();
         try {
-            norm.getApplicableCodenotations(this, situation,  conditionContext);
-        } catch(UnapplicableNormException e){
+            this.getApplicableContext(norm, situation);
+        } catch (UnapplicableNormException e) {
             return false;
         }
         return true;
@@ -365,6 +380,7 @@ public class NormativePlan extends Plan {
 
     /**
      * Get the non-applicable situation in which the norm stops being applicable
+     *
      * @param applicableSituation : the starting situation where the interval will start.
      * @return
      */
@@ -372,6 +388,10 @@ public class NormativePlan extends Plan {
             PopSituation applicableSituation,
             RegulativeNorm flawedNorm
     ) {
+        if (applicableSituation == null) {
+            return null;
+        }
+
         PopSituation inapplicableSituation = null;
         List<PopSituation> situationsAfterApplication = this.getSituations()
                 .stream()
@@ -379,13 +399,13 @@ public class NormativePlan extends Plan {
                 .toList();
 
         for (PopSituation situation : situationsAfterApplication) {
-            Context conditionContext = new Context();
             try {
+                Context conditionContext = getApplicableContext(flawedNorm, situation);
                 flawedNorm.getApplicableCodenotations(this, situation, conditionContext);
-            } catch(UnapplicableNormException e){
-                if(inapplicableSituation == null ||
-                        this.getTc().isAfter(situation, inapplicableSituation)
-                ){
+            } catch (UnapplicableNormException e) {
+                if (inapplicableSituation == null ||
+                        this.getTc().isBefore(situation, inapplicableSituation)
+                ) {
                     inapplicableSituation = situation;
                 }
             }
@@ -397,6 +417,7 @@ public class NormativePlan extends Plan {
     /**
      * Adds a normative flaw to the set of flaws inside the plan. This happens when a regulative
      * norm is applicable but not applied as it should.
+     *
      * @param situation is where the norm is applicable but not applied
      * @param norm      : the regulative norm concerned by the normative flaw
      */
@@ -433,6 +454,7 @@ public class NormativePlan extends Plan {
     /**
      * Verifies if a norm is applicable by verifying all of its conditions, which either demands
      * some constitutive norm, or some proposition to be necessarily true
+     *
      * @param situation : the situation on which we want to check the norm's applicability
      *                  conditions
      * @param norm      : the norm whose applicability conditions will be tested.
@@ -440,14 +462,12 @@ public class NormativePlan extends Plan {
      */
     public boolean isApplicable(PopSituation situation, RegulativeNorm norm) {
         Context conditionContext = new Context();
-        Context normContext = new Context();
 
         for (Atom condition : norm.getNormConditions().getConditions()) {
             if (isRole(condition)) {
                 if (!validatedByConstitutiveNorms(
                         condition,
                         conditionContext,
-                        normContext,
                         this.getCc().copy()
                 )) {
                     // logger.error("Not applicable because ROLE : " + condition + " is not ok");
@@ -455,8 +475,10 @@ public class NormativePlan extends Plan {
                 }
             } else {
                 if (!isSatisfiedInSituation(situation, conditionContext, condition)) {
-                    //logger.error("Not applicable because CONDITION : " + condition + " is not ok");
+                    logger.error("Not applicable because CONDITION : " + condition + " is not ok");
                     return false;
+                } else {
+                    logger.error(" Condition CLEAR : " + condition);
                 }
             }
         }
@@ -513,27 +535,32 @@ public class NormativePlan extends Plan {
     /**
      * Checks if a condition matches with some constitutive norms of either the organization
      * or the institution
+     *
      * @param condition : the proposition we want to verify as a constitutive norm
      * @return true if the condition is confirmed by some constitutive norm, and false otherwise
      */
     public boolean validatedByConstitutiveNorms(
             Atom condition,
             Context conditionContext,
-            Context normContext,
             CodenotationConstraints ccCopy
     ) {
+        Context normContext = new Context();
+
         Term subject = condition.getPredicate().getTerms().get(0);
         String roleName = condition.getPredicate().getName();
 
         for (ConstitutiveNorm constitutiveNorm : this.getAllConstitutiveNorms()) {
             if ((roleName.equals(constitutiveNorm.getTarget().getName()))
-                    && (subject.unify(
-                    conditionContext,
-                    constitutiveNorm.getSource(),
+                    && (constitutiveNorm.getSource().unify(
                     normContext,
+                    subject,
+                    conditionContext,
                     ccCopy))
             ) {
-                return !condition.isNegation();
+//                if(condition.getPredicate().getName().equals("member")){
+//                    logger.warn("Condition : " + condition + " is valid with cc : " + ccCopy);
+//                }
+                return !condition.isNegation() && ccCopy.isTransitivelyCoherent();
             }
         }
         return false;
@@ -604,8 +631,6 @@ public class NormativePlan extends Plan {
                 if (forbiddenStep.isPresent()) {
                     return forbiddenStep.get().getActionInstance().getContext();
                 }
-            } else {
-
             }
         }
         throw new UnapplicableNormException(norm.getNormConditions(), situation);
@@ -614,6 +639,7 @@ public class NormativePlan extends Plan {
     /**
      * Returns all applicable regulative norms imposed by all current organizations the agent is a
      * part of. Organizations it is not a part of are simply not listed.
+     *
      * @return all applicable regulative norms from all organizations
      */
     private List<RegulativeNorm> getAllRegulativeNorms() {
@@ -767,7 +793,6 @@ public class NormativePlan extends Plan {
                 if (!validatedByConstitutiveNorms(
                         precondition,
                         step.getActionInstance().getContext(),
-                        new Context(),
                         temporaryCc
                 )) {
                     openConditions.add(buildOpenCondition(precondition, step));
@@ -793,7 +818,7 @@ public class NormativePlan extends Plan {
             PopSituation situation,
             CodenotationConstraints cc
     ) {
-       return this.getSteps().stream()
+        return this.getSteps().stream()
                 .filter(this::isNotFinalStep)
                 .anyMatch(step -> this.getTc().isBefore(step, situation)
                         && step.assertsWithPermanentCodenotations(proposition, cc)
@@ -859,8 +884,9 @@ public class NormativePlan extends Plan {
 
     /**
      * Fetches the step which established a proposition in the plan in a given situation
+     *
      * @param proposition : the proposition to be established
-     * @param situation : the situation in which it is made necessarily true
+     * @param situation   : the situation in which it is made necessarily true
      * @return : the step which establishes (or asserts) the `proposition` in `situation`
      */
     public Step getEstablisher(NormativeProposition proposition, PopSituation situation) {
@@ -869,11 +895,11 @@ public class NormativePlan extends Plan {
                 .filter(step -> !this.getTc().isAfter(step, situation))
                 .toList();
 
-        for(Step step : precedingOrParallelSteps){
+        for (Step step : precedingOrParallelSteps) {
             Context contextPerStep = new Context();
             ContextualAtom propositionWithContext = new ContextualAtom(contextPerStep, proposition);
 
-            if(step.asserts(propositionWithContext, this.getCc())){
+            if (step.asserts(propositionWithContext, this.getCc())) {
                 return step;
             }
         }

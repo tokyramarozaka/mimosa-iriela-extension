@@ -7,7 +7,6 @@ import lombok.ToString;
 
 @Getter
 @AllArgsConstructor
-@ToString
 public class Interval {
     private PopSituation beginningSituation;
     private PopSituation endingSituation;
@@ -18,5 +17,15 @@ public class Interval {
 
     public boolean isInstant(){
         return this.beginningSituation == this.endingSituation;
+    }
+
+    public boolean isEmpty(){
+        return this.beginningSituation == null && this.endingSituation == null;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + this.beginningSituation + ","
+                + this.endingSituation + "[";
     }
 }

@@ -20,10 +20,6 @@ public class LogicalInstance implements Operator {
         this.context = context;
     }
 
-    @Override
-    public String toString() {
-        return this.getLogicalEntity().build(this.context).toString() + ":" + context.getId();
-    }
 
     public String toStringWithCodenotations(CodenotationConstraints cc){
         return this.getLogicalEntity().build(this.getContext(), cc).toString() + ":"
@@ -38,5 +34,10 @@ public class LogicalInstance implements Operator {
     @Override
     public String toGraphArc() {
         return this.toString();
+    }
+    @Override
+    public String toString() {
+        return this.getLogicalEntity().build(this.context).toString()
+                + ":" + context.getId();
     }
 }

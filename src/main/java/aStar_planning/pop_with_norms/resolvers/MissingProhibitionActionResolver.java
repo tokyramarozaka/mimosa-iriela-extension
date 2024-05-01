@@ -25,13 +25,17 @@ public class MissingProhibitionActionResolver {
       MissingProhibitionActionResolver.class);
 
   public static List<PlanModification> byPromotion(NormativePlan plan, NormativeFlaw flaw) {
+     if(flaw.getApplicableInterval().getBeginningSituation().equals(plan.getInitialSituation())){
+          return new ArrayList<>();
+     }
+
     Step targetStep = getStep(flaw);
 
     Optional<Step> forbiddenStep = getForbiddenStepFromPlan(plan, flaw, targetStep);
 
     PartialOrder stepBeforeSituation = new PartialOrder(
         plan.getTc().getFollowingSituation(forbiddenStep.get()),
-        flaw.getApplicableSituation());
+        flaw.getApplicableInterval().getBeginningSituation());
 
     TemporalConstraints temporalChanges = new TemporalConstraints(new ArrayList<>(
         List.of(stepBeforeSituation)));
@@ -40,10 +44,7 @@ public class MissingProhibitionActionResolver {
   }
 
   public static List<PlanModification> byDemotion(NormativePlan plan, NormativeFlaw flaw) {
-    PopSituation inapplicableSituation = plan.getInapplicableSituationAfter(
-        flaw.getApplicableSituation(),
-        flaw.getFlawedNorm()
-    );
+    PopSituation inapplicableSituation = flaw.getApplicableInterval().getEndingSituation();
 
     if (inapplicableSituation == null || plan.getFinalSituation().equals(inapplicableSituation)) {
       return new ArrayList<>();
@@ -73,7 +74,6 @@ public class MissingProhibitionActionResolver {
     if (forbiddenStep.isEmpty()) {
       throw new RuntimeException("Flaw's prohibited step was not detected during resolution");
     }
-
     return forbiddenStep;
   }
 

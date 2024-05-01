@@ -1,9 +1,11 @@
 package aStar_planning.pop.resolvers;
 
 import aStar.Operator;
+import aStar_planning.pop.components.PlanModification;
 import aStar_planning.pop.mapper.PlanModificationMapper;
 import aStar_planning.pop.components.OpenCondition;
 import aStar_planning.pop.utils.TemporalConstraintsBuilder;
+import constraints.Codenotation;
 import constraints.CodenotationConstraints;
 import constraints.PartialOrder;
 import aStar_planning.pop.components.Plan;
@@ -48,7 +50,7 @@ public class OpenConditionResolver {
                         openCondition.getProposition(), plan.getCc()))
                 .forEach(codenotationConstraintsList -> {
                     codenotationConstraintsList.forEach(codenotationConstraints -> {
-                        Operator toAdd;
+                        PlanModification toAdd;
                         if(openCondition.getProposition().getAtom().isNegation()){
                             toAdd = PlanModificationMapper
                                     .from(openCondition, codenotationConstraints.reverse());
@@ -56,7 +58,15 @@ public class OpenConditionResolver {
                             toAdd = PlanModificationMapper
                                     .from(openCondition, codenotationConstraints);
                         }
-                        operators.add(toAdd);
+
+                        Codenotation codenotationToAdd = toAdd.getAddedCc().getCodenotations()
+                                .get(0);
+                        boolean isAlreadyInCc = plan.getCc().getCodenotations().stream()
+                                .anyMatch(codenotation -> codenotation.toString()
+                                        .equals(codenotationToAdd.toString()));
+                        if (!isAlreadyInCc) {
+                            operators.add(toAdd);
+                        }
                     });
                 });
 
