@@ -54,8 +54,7 @@ public class Iriela_IT {
     /* === PROHIBITIONS === */
     @Test
     public void findSolution_forFish__prohibitedTrespassing_inSacredZone_ok() throws IOException {
-        NormativePlanningProblem problem = PlanningProblemFactory
-                    .irielaProblem_noTrespassing();
+        NormativePlanningProblem problem = PlanningProblemFactory.irielaProblem_noTrespassing();
 
         AStarPlanner planner = new AStarPlanner(problem);
 

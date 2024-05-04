@@ -149,14 +149,11 @@ public class NormativePlan extends Plan {
         for (RegulativeNorm prohibition : prohibitions) {
             Interval applicableInterval = getApplicableInterval(prohibition);
 
-//            logger.debug("---> Applicable interval is : " + applicableInterval);
-
             if (applicableInterval.isEmpty()) {
                 continue;
             }
 
             Context startContext;
-
             try {
                 startContext = getApplicableContext(prohibition, applicableInterval
                         .getBeginningSituation());
@@ -307,22 +304,59 @@ public class NormativePlan extends Plan {
         if (prohibition.enforceAction()) {
             NormativeAction prohibitedAction = (NormativeAction) prohibition.getNormConsequences();
 
-            boolean actionExists = this.getSteps()
-                    .stream()
-                    .filter(step -> step.getAction().sameName(prohibitedAction))
-                    .anyMatch(step -> isBetween(
-                            applicableInterval.getBeginningSituation(),
-                            step,
-                            applicableInterval.getEndingSituation() == null ?
-                                    getFinalSituation()
-                                    : applicableInterval.getEndingSituation())
-                    );
+            if (actionExistsIn(prohibitedAction, applicableInterval)) {
+                this.getFlaws().add(new NormativeFlaw(
+                        this, prohibition, applicableInterval, intervalStartContext
+                ));
+            }
+        } else {
+            NormativeProposition prohibitedProposition = (NormativeProposition) prohibition.
+                    getNormConsequences();
 
-            if (actionExists) {
+            boolean propositionExists = propositionExistsIn(prohibitedProposition,
+                    applicableInterval, intervalStartContext);
+
+            if (propositionExists) {
                 this.getFlaws().add(new NormativeFlaw(this, prohibition, applicableInterval,
                         intervalStartContext));
             }
         }
+    }
+
+    private boolean propositionExistsIn(
+            NormativeProposition prohibitedProposition,
+            Interval applicableInterval,
+            Context applicableContext
+    ) {
+        return this.getSituations()
+                .stream()
+                .filter(situation -> isBetween(
+                        applicableInterval.getBeginningSituation(), situation,
+                        applicableInterval.getEndingSituation() == null ? getFinalSituation()
+                                : applicableInterval.getEndingSituation())
+                )
+                .anyMatch(situation -> {
+                    ContextualAtom forbiddenProposition = new ContextualAtom(
+                            applicableContext,
+                            prohibitedProposition
+                    );
+                    logger.debug("Forbidden proposition is : " + forbiddenProposition);
+                    logger.debug("Applicable context is : " + applicableContext);
+                    return isAsserted(forbiddenProposition, situation);
+                });
+    }
+
+    private boolean actionExistsIn(NormativeAction prohibitedAction, Interval applicableInterval) {
+        return this.getSteps()
+                .stream()
+                .filter(step -> step.getAction().sameName(prohibitedAction))
+                .anyMatch(step -> isBetween(
+                        applicableInterval.getBeginningSituation(),
+                        step,
+                        applicableInterval.getEndingSituation() == null ?
+                                getFinalSituation()
+                                : applicableInterval.getEndingSituation())
+                );
     }
 
     /**
