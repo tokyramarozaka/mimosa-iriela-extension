@@ -44,11 +44,7 @@ public class Variable extends Term {
             List<ContextualTerm> currentChanges,
             CodenotationConstraints cc
     ) {
-        if (!cc.isCoherent()) {
-            return false;
-        }
-
-        if (fromContext.equals(toContext) && this.equals(to)) {
+     if (fromContext.equals(toContext) && this.equals(to)) {
             return true;
         }
 
@@ -57,20 +53,21 @@ public class Variable extends Term {
 
             return variableLink
                     .getTerm()
-                    .unify(variableLink.getContext(), to, toContext, cc);
+                    .attemptUnification(variableLink.getContext(), to, toContext, currentChanges, cc);
         }
 
-        if (!cc.isAllowed(new Codenotation(
+        Codenotation toAdd = new Codenotation(
                 true,
                 new ContextualTerm(fromContext, this),
-                new ContextualTerm(toContext, (Term) to))
-        )) {
+                new ContextualTerm(toContext, (Term) to));
+
+        if (!cc.isAllowed(toAdd)) {
             return false;
         }
 
         cc.link(this, fromContext, (Term) to, toContext);
         currentChanges.add(new ContextualTerm(fromContext, this));
-        return cc.isCoherent();
+        return true;
     }
 
     public boolean attemptUnificationWithConstitutiveNorms(

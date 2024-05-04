@@ -118,10 +118,10 @@ public class PlanModification implements Operator {
         return new StringBuilder()
                 .append("TO RESOLVE ")
                 .append(this.getTargetFlaw())
-                .append(addedStep == null ? "" : "\nAdd : \n\t" + this.addedStep)
-                .append(addedSituations == null ? "" : "\nAdd : \n\t" + this.addedSituations)
-                .append(addedCc == null ? "" : "\nAdd : \n\t" + this.addedCc)
-                .append(addedTc == null ? "" : "\nAdd : \n\t" + this.addedTc)
+                .append(addedStep == null ? "" : "\nAdd step: " + this.addedStep)
+                .append(addedSituations == null ? "" : "\nAdd situations: " + this.addedSituations)
+                .append(addedCc == null ? "" : "\nAdd cc: \n\t" + this.addedCc)
+                .append(addedTc == null ? "" : "\nAdd tc: \n\t" + this.addedTc)
                 .toString();
     }
 

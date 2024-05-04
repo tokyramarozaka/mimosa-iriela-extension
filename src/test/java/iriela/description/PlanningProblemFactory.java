@@ -46,14 +46,14 @@ public class PlanningProblemFactory {
         );
     }
 
-    public static NormativePlanningProblem irielaProblem_haveWoodOnly() {
+    public static NormativePlanningProblem irielaProblem_haveWoodOnly_permittedCutIfLicense() {
         return new NormativePlanningProblem(
                 new Situation(),
                 new ArrayList<>(),
                 new Goal(),
                 new ArrayList<>(List.of(
                         GlobalOrg.get(),
-                        VillageOrg.get(),
+                        VillageOrg.get_only_permittedCutIfLicense(),
                         HouseholdOrg.get_haveWoodOnly()
                 ))
         );

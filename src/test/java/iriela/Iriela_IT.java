@@ -75,7 +75,7 @@ public class Iriela_IT {
     /* === PERMISSIONS === */
     @Test
     public void findSolution_forWood__permittedCut_withLicense_ok() throws IOException {
-        NormativePlanningProblem problem = PlanningProblemFactory.irielaProblem_haveWoodOnly();
+        NormativePlanningProblem problem = PlanningProblemFactory.irielaProblem_haveWoodOnly_permittedCutIfLicense();
         AStarPlanner planner = new AStarPlanner(problem);
 
         planner.outputSolutionPlan();

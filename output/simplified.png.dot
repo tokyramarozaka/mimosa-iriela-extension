@@ -1,5 +1,8 @@
 digraph G { 
-  "initial():3" -> "move(X,Y,B1):55";
-  "cut(X,B1):12" -> "final(X):2";
-  "move(X,Y,B1):55" -> "cut(X,B1):12";
+  "initial():3" -> "move(X,Y,A2):349258";
+  "cut(X,C2):21" -> "final(X):2";
+  "getExploitationLicense(B2,X):323" -> "move(X,B2,C2):744";
+  "move(X,B2,C2):744" -> "cut(X,C2):21";
+  "move(X,A2,B2):48965" -> "getExploitationLicense(B2,X):323";
+  "move(X,Y,A2):349258" -> "move(X,A2,B2):48965";
 }

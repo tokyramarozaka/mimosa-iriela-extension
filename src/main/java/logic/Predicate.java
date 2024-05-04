@@ -50,6 +50,10 @@ public class Predicate implements Unifiable {
             Context toContext,
             CodenotationConstraints cc
     ) {
+        if (this.getName().equals("located") && toContext.getId() == 53 && fromContext.getId() == 337153) {
+            System.out.println("");
+        }
+
         List<ContextualTerm> changes = new ArrayList<>();
 
         boolean res = attemptUnification(fromContext, to, toContext, changes, cc);

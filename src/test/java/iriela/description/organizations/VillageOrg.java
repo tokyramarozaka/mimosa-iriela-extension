@@ -69,4 +69,12 @@ public class VillageOrg {
                 VillageOrg.assertions()
         );
     }
+
+    public static Organization get_only_permittedCutIfLicense() {
+        return new Organization(
+                Village.get_permittedCutWithLicense(),
+                VillageOrg.constitutiveNorms(),
+                VillageOrg.assertions()
+        );
+    }
 }

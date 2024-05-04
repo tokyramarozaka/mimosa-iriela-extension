@@ -29,6 +29,7 @@ public class Step implements PlanElement {
 
     /**
      * A shortcut to access the step's preconditions
+     *
      * @return the set of preconditions of the step
      */
     public ActionPrecondition getActionPreconditions() {
@@ -39,6 +40,7 @@ public class Step implements PlanElement {
 
     /**
      * A shortcut to access the step's consequences.
+     *
      * @return the set of consequences of the step
      */
     public ActionConsequence getActionConsequences() {
@@ -49,9 +51,10 @@ public class Step implements PlanElement {
 
     /**
      * A shortcut to access the abstract action of this step
+     *
      * @return Action that is instantiated by this step.
      */
-    public Action getAction(){
+    public Action getAction() {
         return (Action) this.actionInstance.getLogicalEntity();
     }
 
@@ -59,6 +62,7 @@ public class Step implements PlanElement {
      * Checks if the current step makes the given proposition necessarily true in its preceding
      * situation. If true, we say that the current step ASSERTS the proposition.
      * This version does not change the given Codenotation Constraints.
+     *
      * @param proposition : the proposition to check if it is asserted by the current step or not
      * @param cc          : codenotations constraints describing variable bindings which will NOT
      *                    be changed during the function as we use a copy of it.
@@ -84,6 +88,7 @@ public class Step implements PlanElement {
     /**
      * Checks if the current step can assert the given proposition, and save the changes made to
      * codenotation constraints that would make the assertion possible.
+     *
      * @param proposition : the proposition to check if it is asserted
      * @param cc          : the current codenotations set in the plan(which will change if need be)
      * @return
@@ -109,15 +114,16 @@ public class Step implements PlanElement {
 
     /**
      * Determines if the current step destroys a given proposition without adding any other bindings
+     *
      * @param proposition : the proposition to check
      * @param cc          : the current codenotation constraint of the plan.
      * @return true if this step destroys the given proposition and false otherwise.
      */
     public boolean destroys(ContextualAtom proposition, CodenotationConstraints cc) {
         for (Atom consequence : this.getActionConsequences().getAtoms()) {
-            if(!consequence.getPredicate().getName().equals(
+            if (!consequence.getPredicate().getName().equals(
                     proposition.getAtom().getPredicate().getName())
-            ){
+            ) {
                 continue;
             }
 
@@ -139,6 +145,7 @@ public class Step implements PlanElement {
     /**
      * Check if two propositions (contextual atom) can be unified and commits to permanent
      * variable bindings (codenotation constraints)
+     *
      * @param consequenceInstance : the first proposition to be unified
      * @param proposition         : the second proposition to be unified
      * @param tempCc              : current codenotation constraints representing the current bindings
@@ -236,6 +243,7 @@ public class Step implements PlanElement {
 
     /**
      * Converts an action instance into codenotations based upon its context
+     *
      * @return a set of codenotation constraints which copies the variable bindings in the context
      */
     public CodenotationConstraints toCodenotation() {
@@ -256,7 +264,7 @@ public class Step implements PlanElement {
         return this.getActionInstance().toString();
     }
 
-    public String toStringWithCodenotations(CodenotationConstraints cc){
+    public String toStringWithCodenotations(CodenotationConstraints cc) {
         return this.getActionInstance().toStringWithCodenotations(cc);
     }
 }

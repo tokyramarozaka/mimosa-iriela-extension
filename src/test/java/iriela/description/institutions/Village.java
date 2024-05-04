@@ -100,6 +100,16 @@ public class Village {
                 List.of(VillageNorms.obligatoryReportFish(TermsFactory.X))
         );
     }
+    public static Institution get_permittedCutWithLicense() {
+        return new Institution(
+                "village",
+                7,
+                Village.concepts(),
+                Village.assertions(),
+                Village.roleActions(),
+                List.of(VillageNorms.permittedCutWithLicense(TermsFactory.X, TermsFactory.Z))
+        );
+    }
 
     private static List<Constant> concepts() {
         return List.of(

@@ -134,7 +134,6 @@ public class NormativePlan extends Plan {
         List<RegulativeNorm> prohibitions = getProhibitions(allRegulativeNorms);
         prohibitions.addAll(generatedProhibitionsFromPermissions(getAllRegulativeNorms()));
 
-        logger.info("prohbitions : " + prohibitions);
         evaluateObligationsPerSituation(obligationsOnActions);
         evaluateProhibitionsPerInterval(prohibitions);
     }
@@ -470,15 +469,11 @@ public class NormativePlan extends Plan {
                         conditionContext,
                         this.getCc().copy()
                 )) {
-                    // logger.error("Not applicable because ROLE : " + condition + " is not ok");
                     return false;
                 }
             } else {
                 if (!isSatisfiedInSituation(situation, conditionContext, condition)) {
-                    logger.error("Not applicable because CONDITION : " + condition + " is not ok");
                     return false;
-                } else {
-                    logger.error(" Condition CLEAR : " + condition);
                 }
             }
         }
