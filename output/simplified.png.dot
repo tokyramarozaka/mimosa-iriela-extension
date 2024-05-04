@@ -1,8 +1,7 @@
 digraph G { 
-  "initial():3" -> "move(X,Y,A2):349258";
-  "cut(X,C2):21" -> "final(X):2";
-  "getExploitationLicense(B2,X):323" -> "move(X,B2,C2):744";
-  "move(X,B2,C2):744" -> "cut(X,C2):21";
-  "move(X,A2,B2):48965" -> "getExploitationLicense(B2,X):323";
-  "move(X,Y,A2):349258" -> "move(X,A2,B2):48965";
+  "initial():3" -> "move(X,Y,A2):13579";
+  "fish(X,A3):25" -> "reportFish(X):13026";
+  "move(X,A2,A3):497" -> "fish(X,A3):25";
+  "reportFish(X):13026" -> "final(X):2";
+  "move(X,Y,A2):13579" -> "move(X,A2,A3):497";
 }

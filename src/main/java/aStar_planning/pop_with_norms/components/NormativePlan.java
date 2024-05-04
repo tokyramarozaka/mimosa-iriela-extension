@@ -132,6 +132,7 @@ public class NormativePlan extends Plan {
         List<RegulativeNorm> allRegulativeNorms = new ArrayList<>(getAllRegulativeNorms());
         List<RegulativeNorm> obligationsOnActions = getObligationsOnActions(allRegulativeNorms);
         List<RegulativeNorm> prohibitions = getProhibitions(allRegulativeNorms);
+
         prohibitions.addAll(generatedProhibitionsFromPermissions(getAllRegulativeNorms()));
 
         evaluateObligationsPerSituation(obligationsOnActions);
@@ -288,7 +289,8 @@ public class NormativePlan extends Plan {
                         Action action = (Action) step.getActionInstance().getLogicalEntity();
                         NormativeAction normativeAction = (NormativeAction) norm
                                 .getNormConsequences();
-                        return action.getActionName().equals(normativeAction.getActionName());
+                        return action.getActionName().getName()
+                                .equals(normativeAction.getActionName().getName());
                     });
 
             if (!actionExists) {

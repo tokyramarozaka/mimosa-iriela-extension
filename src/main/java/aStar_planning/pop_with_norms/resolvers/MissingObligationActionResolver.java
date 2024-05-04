@@ -66,7 +66,7 @@ public class MissingObligationActionResolver {
      * @return a List of all operators which will solve flaw in plan.
      * **/
     public static List<Operator> byCreation(NormativePlan plan, NormativeFlaw flaw) {
-        // if the flaw happens in the final situation no steps can be added after it
+        // if the flaw happens in the final situation the mandatory action can be added after it
         if (flaw.getApplicableSituation().equals(plan.getFinalSituation())) {
             return new ArrayList<>();
         }

@@ -40,8 +40,7 @@ public class NormConditions {
 
         for (Atom condition : this.conditions) {
             if (plan.isRole(condition)) {
-                if(!plan.validatedByConstitutiveNorms(condition, conditionContext, cc)){
-//                    logger.error(condition + " failed in situation : " + situation + " | " + cc);
+                if(!plan.validatedByConstitutiveNorms(condition, conditionContext, cc.copy())){
                     throw new UnapplicableNormException(this, situation);
                 }
             } else {
