@@ -1,101 +1,126 @@
 digraph G {
-"(338) " [style=filled,fillcolor="red"];
-"(337) " [style=filled,fillcolor="yellow"];
-"(328) " [style=filled,fillcolor="yellow"];
-"(321) " [style=filled,fillcolor="yellow"];
+"(12588) " [style=filled,fillcolor="red"];
+"(12587) " [style=filled,fillcolor="yellow"];
+"(1707) " [style=filled,fillcolor="yellow"];
 "(1) " [style=filled,fillcolor="lightgreen"];
-"(1) " -> "(2) " [label="(OC): haveFish(X) IN Situation2
-+fish(X,Z):25
+"(1) " -> "(2) " [label="(OC): haveWood(X) IN Situation2
++cut(X,Z):21
 
-+C25::X == C2::X. 
++C21::X == C2::X. 
 
-+Situation5 < fish(X,Z):25
-fish(X,Z):25 < Situation6
++Situation5 < cut(X,Z):21
+cut(X,Z):21 < Situation6
 Situation6 < Situation2
 Situation1 < Situation5
 
 "];
-"(2) " -> "(6) " [label="(OC): containsFishes(Z) IN Situation5
-+C25::Z == C3::A3. 
+"(2) " -> "(5) " [label="(OC): containsTrees(Z) IN Situation5
++C21::Z == C3::C2. 
 
 "];
-"(2) " -> "(3) " [label="(OBLIGATION) : [member(X) , haveFish(X)] -> reportFish(X) IN Situation6
-+reportFish(X):67
-
-+C25::X == C2::X. C67::X == C25::X. 
-
-+Situation9 < reportFish(X):67
-reportFish(X):67 < Situation10
-Situation6 < Situation9
-Situation10 < Situation2
+"(2) " -> "(3) " [label="(OC): containsTrees(Z) IN Situation5
++C21::Z == C3::B1. 
 
 "];
-"(2) " -> "(1) And 4 other option(s).";
-"(6) " -> "(17) " [label="(OC): located(X,Z) IN Situation5
-+move(X,Y,Z):497
+"(2) " -> "(1) And 2 other option(s).";
+"(5) " -> "(16) " [label="(OC): haveExploitationLicense(X) IN Situation5
++getExploitationLicense(Z,X):323
 
-+C497::X == C25::X. C497::Z == C25::Z. 
++C323::X == C21::X. 
 
-+Situation29 < move(X,Y,Z):497
-move(X,Y,Z):497 < Situation30
-Situation30 < Situation5
-Situation1 < Situation29
-
-"];
-"(6) " -> "(15) " [label="(OBLIGATION) : [member(X) , haveFish(X)] -> reportFish(X) IN Situation6
-+reportFish(X):488
-
-+C25::X == C2::X. C25::Z == C3::A3. C488::X == C25::X. 
-
-+Situation27 < reportFish(X):488
-reportFish(X):488 < Situation28
-Situation6 < Situation27
-Situation28 < Situation2
++Situation35 < getExploitationLicense(Z,X):323
+getExploitationLicense(Z,X):323 < Situation36
+Situation36 < Situation5
+Situation1 < Situation35
 
 "];
-"(6) " -> "(2) And 2 other option(s).";
-"(17) " -> "(326) " [label="(OBLIGATION) : [member(X) , haveFish(X)] -> reportFish(X) IN Situation6
-+reportFish(X):13026
+"(5) " -> "(17) " [label="(OC): located(X,Z) IN Situation5
++move(X,Y,Z):328
 
-+C25::X == C2::X. C25::Z == C3::A3. C497::X == C25::X. C497::Z == C25::Z. C13026::X == C25::X. 
++C328::X == C21::X. C328::Z == C21::Z. 
 
-+Situation517 < reportFish(X):13026
-reportFish(X):13026 < Situation518
-Situation6 < Situation517
-Situation518 < Situation2
-
-"];
-"(17) " -> "(321) " [label="(T): move(X,Y,Z):497 THREATENS located(X,Z) IN fish(X,Z):25
-+Situation6 < Situation29
++Situation37 < move(X,Y,Z):328
+move(X,Y,Z):328 < Situation38
+Situation38 < Situation5
+Situation1 < Situation37
 
 "];
-"(17) " -> "(3) And 5 other option(s).";
-"(326) " -> "(331) " [label="(OC): areAdjacents(Y,Z) IN Situation29
-+C497::Y == C3::A2. 
+"(16) " -> "(35) " [label="(OC): located(X,Z) IN Situation5
++move(X,Y,Z):744
+
++C744::X == C21::X. C744::Z == C21::Z. 
+
++Situation73 < move(X,Y,Z):744
+move(X,Y,Z):744 < Situation74
+Situation74 < Situation5
+Situation1 < Situation73
 
 "];
-"(326) " -> "(328) " [label="(T): move(X,Y,Z):497 THREATENS located(X,Z) IN fish(X,Z):25
-+Situation6 < Situation29
+"(16) " -> "(33) " [label="(OC): located(X,Z) IN Situation35
++C2::X == C3::SELF. C323::Z == C3::A1. 
 
 "];
-"(326) " -> "(4) And 2 other option(s).";
-"(331) " -> "(335) " [label="(OC): located(X,Y) IN Situation29
-+move(X,Y):13579
-
-+C13579::X == C497::X. C13579::Z == C497::Y. 
-
-+Situation525 < move(X,Y):13579
-move(X,Y):13579 < Situation526
-Situation526 < Situation29
-Situation1 < Situation525
+"(16) " -> "(2) And 1 other option(s).";
+"(35) " -> "(1647) " [label="(OC): areAdjacents(Y,Z) IN Situation73
++C744::Y == C3::B2. 
 
 "];
-"(335) " -> "(338) " [label="(T): move(X,Y):13579 THREATENS located(X,Y) IN move(X,Y,Z):497
-+C13579::Y != C497::Y. 
+"(35) " -> "(1641) " [label="(OC): located(X,Z) IN Situation35
++C2::X == C3::SELF. C323::Z == C3::A1. 
 
 "];
-"(335) " -> "(337) " [label="(T): move(X,Y):13579 THREATENS located(X,Y) IN move(X,Y,Z):497
-+Situation30 < Situation525
+"(35) " -> "(3) And 7 other option(s).";
+"(1647) " -> "(1669) " [label="(T): move(X,Y,Z):744 THREATENS located(X,Z) IN getExploitationLicense(Z,X):323
++Situation36 < Situation73
+
+"];
+"(1647) " -> "(1667) " [label="(OC): located(X,Z) IN Situation35
++C2::X == C3::SELF. C323::Z == C3::A1. 
+
+"];
+"(1647) " -> "(4) And 3 other option(s).";
+"(1669) " -> "(1709) " [label="(OC): located(X,Z) IN Situation35
++move(X,Y,Z):48965
+
++C48965::X == C323::X. C48965::Z == C323::Z. 
+
++Situation2607 < move(X,Y,Z):48965
+move(X,Y,Z):48965 < Situation2608
+Situation2608 < Situation35
+Situation1 < Situation2607
+
+"];
+"(1669) " -> "(1707) " [label="(OC): located(X,Z) IN Situation35
++Situation74 < Situation35
+
+"];
+"(1669) " -> "(5) And 2 other option(s).";
+"(1709) " -> "(12429) " [label="(OC): areAdjacents(Y,Z) IN Situation2607
++C48965::Y == C3::A2. C323::Z == C3::B2. 
+
+"];
+"(1709) " -> "(12425) " [label="(OC): areAdjacents(Y,Z) IN Situation2607
++C48965::Y == C3::A1. C323::Z == C3::B1. 
+
+"];
+"(1709) " -> "(6) And 27 other option(s).";
+"(12429) " -> "(12454) " [label="(OC): located(X,Y) IN Situation2607
++move(X,Y):349258
+
++C349258::X == C48965::X. C349258::Z == C48965::Y. 
+
++Situation14793 < move(X,Y):349258
+move(X,Y):349258 < Situation14794
+Situation14794 < Situation2607
+Situation1 < Situation14793
+
+"];
+"(12454) " -> "(12588) " [label="(T): move(X,Y):349258 THREATENS located(X,Y) IN move(X,Y,Z):48965
++C349258::Y != C48965::Y. 
+
+"];
+"(12454) " -> "(12587) " [label="(T): move(X,Y):349258 THREATENS located(X,Y) IN move(X,Y,Z):48965
++Situation2608 < Situation14793
 
 "];
 }

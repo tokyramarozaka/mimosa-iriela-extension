@@ -118,7 +118,7 @@ public class PlanningProblemFactory {
                 new ArrayList<>(List.of(
                         GlobalOrg.get(),
                         VillageOrg.get_withOnly_trespassingProhibition(),
-                        HouseholdOrg.get()
+                        HouseholdOrg.get_haveFishOnly()
                 ))
         );
     }

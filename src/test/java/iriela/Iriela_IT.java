@@ -90,4 +90,3 @@ public class Iriela_IT {
         planner.outputSolutionPlan();
     }
 }
-

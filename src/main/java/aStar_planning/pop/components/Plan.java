@@ -51,7 +51,7 @@ import java.util.stream.Collectors;
 public class Plan implements State {
     private final static Logger logger = LogManager.getLogger(Plan.class);
     private static final AtomicInteger sequence = new AtomicInteger(0);
-    private int id;
+    private final int id;
     private List<PopSituation> situations;
     private List<Step> steps;
     private CodenotationConstraints cc;
