@@ -89,7 +89,7 @@ public class VillageActions {
 
     public static ActionConsequence getFishingNet_consequences(Term subject) {
         return new ActionConsequence(List.of(
-            new Atom(false, Village.haveFishingNet(subject))
+            new Atom(false, Village.hasFishingNet(subject))
         ));
     }
 

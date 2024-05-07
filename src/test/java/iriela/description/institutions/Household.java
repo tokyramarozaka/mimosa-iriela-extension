@@ -26,6 +26,19 @@ public class Household {
                 Household.norms()
         );
     }
+
+    public static Institution get_withFishingNet(){
+        return new Institution(
+                "household",
+                9.5f,
+                Household.concepts(),
+                Household.assertions(),
+                Household.roleActions_withFishingNet(),
+                Household.norms_haveFishOnly()
+        );
+    }
+
+
     public static Institution get_haveWoodOnly() {
         return new Institution(
                 "household",
@@ -54,6 +67,13 @@ public class Household {
         );
     }
 
+    private static List<Action> providerActions_withFishingNet() {
+        return List.of(
+                HouseholdActions.cut(TermsFactory.X, TermsFactory.Z),
+                HouseholdActions.fish_withFishingNet(TermsFactory.X, TermsFactory.Z)
+        );
+    }
+
     private static List<Predicate> assertions() {
         return List.of(
                 containsTrees(TermsFactory.X),
@@ -74,7 +94,6 @@ public class Household {
     public static final Role river = new Role("river");
     public static final ActionName fish = new ActionName("fish");
     public static final ActionName cut = new ActionName("cut");
-
     //  ASSERTIONS
     public static Predicate containsTrees(Term zone) {
         return new Predicate("containsTrees", List.of(zone));
@@ -89,17 +108,12 @@ public class Household {
         return PredicateFactory.haveWood(subject);
     }
 
+    public static Predicate hasFishingNet(Term subject){
+        return new Predicate("hasFishingNet", List.of(subject));
+    }
+
     public static Predicate provider(Term subject){
         return new Predicate("provider", List.of(subject));
-    }
-    public static Predicate land(Term subject){
-        return new Predicate ("land", List.of(subject));
-    }
-    public static Predicate forest(Term subject) {
-        return new Predicate("forest", List.of(subject));
-    }
-    public static Predicate river(Term subject) {
-        return new Predicate("river", List.of(subject));
     }
 
     // NORMS
@@ -125,8 +139,16 @@ public class Household {
         return List.of(forProvider());
     }
 
+    private static List<RoleActions> roleActions_withFishingNet(){
+        return List.of(forProvider_fishingNet());
+    }
+
     private static RoleActions forProvider() {
         return new RoleActions(provider, providerActions());
+    }
+
+    private static RoleActions forProvider_fishingNet(){
+        return new RoleActions(provider, providerActions_withFishingNet());
     }
 
 }

@@ -19,6 +19,13 @@ public class HouseholdOrg {
         );
     }
 
+    public static Organization get_withFishingNet(){
+        return new Organization(
+                Household.get_withFishingNet(),
+                HouseholdOrg.norms(),
+                HouseholdOrg.assertions()
+        );
+    }
     public static Organization get_haveFishOnly(){
         return new Organization(
                 Household.get_haveFishOnly(),

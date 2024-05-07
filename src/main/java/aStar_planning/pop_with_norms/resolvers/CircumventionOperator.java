@@ -2,9 +2,13 @@ package aStar_planning.pop_with_norms.resolvers;
 
 import aStar.Operator;
 import aStar_planning.pop.components.OpenCondition;
+import aStar_planning.pop.components.PopSituation;
+import aStar_planning.pop.components.Step;
 import aStar_planning.pop.resolvers.OpenConditionResolver;
+import aStar_planning.pop_with_norms.components.DeonticOperator;
 import aStar_planning.pop_with_norms.components.NormativeFlaw;
 import aStar_planning.pop_with_norms.components.NormativePlan;
+import aStar_planning.pop_with_norms.components.NormativeProposition;
 import constraints.CodenotationConstraints;
 import logic.Action;
 import logic.Atom;
@@ -27,7 +31,7 @@ public class CircumventionOperator {
 
         flaw.getFlawedNorm().getNormConditions().getConditions().forEach(condition -> {
             OpenCondition toSolve = createReverseOpenCondition(
-                    plan, flaw, possibleActions, condition, flaw.getContext()
+                    plan, flaw, condition, flaw.getContext()
             );
             operators.addAll(plan.resolve(toSolve, possibleActions));
         });
@@ -60,31 +64,45 @@ public class CircumventionOperator {
      * Creates an open condition on the negation of some condition of some norm.
      * @param plan : the plan in which the normative flaw was found.
      * @param flaw : the normative flaw
-     * @param possibleActions : the set of all possible actions to choose from
      * @param condition : the condition to circumvent
      * @return an OpenCondition based on the negation of the condition.
      */
     private static OpenCondition createReverseOpenCondition(
             NormativePlan plan,
             NormativeFlaw flaw,
-            List<Action> possibleActions,
             Atom condition,
             Context conditionContext
     ){
-        /*
-        CodenotationConstraints applicableCodenotations= flaw.getFlawedNorm()
-                .getApplicableCodenotations(plan, flaw.getApplicableSituation(),
-                        flaw.getContext())
-                .fuseWith(plan.getCc());
-
-        */
         ContextualAtom toAssert = new ContextualAtom(
                 conditionContext,
                 new Atom(!condition.isNegation(), condition.getPredicate())
         );
 
-        return new OpenCondition(
-                flaw.getApplicableSituation(), toAssert
-        );
+        PopSituation openConditionSituation = getOpenConditionSituation(plan, flaw);
+
+        return new OpenCondition(openConditionSituation, toAssert);
+    }
+
+    private static PopSituation getOpenConditionSituation(
+            NormativePlan plan,
+            NormativeFlaw flaw
+    ) {
+        if(flaw.getFlawedNorm().enforceProposition() &&
+                flaw.getFlawedNorm().getDeonticOperator().equals(DeonticOperator.PROHIBITION)
+        ){
+            NormativeProposition forbiddenProposition = (NormativeProposition) flaw
+                    .getFlawedNorm()
+                    .getNormConsequences();
+
+            Step establisher = plan.getEstablisher(forbiddenProposition, plan.getFinalSituation());
+
+            if(!establisher.isTheInitialStep()){
+                return plan.getTc().getPrecedingSituation(establisher);
+            } else {
+                return plan.getInitialSituation();
+            }
+        } else {
+            return flaw.getApplicableSituation();
+        }
     }
 }

@@ -92,7 +92,7 @@ public class PlanningProblemFactory {
                 new ArrayList<>(List.of(
                         GlobalOrg.get(),
                         VillageOrg.get_withOnly_fishingNetPermission(),
-                        HouseholdOrg.get_haveFishOnly()
+                        HouseholdOrg.get_withFishingNet()
                 ))
         );
     }

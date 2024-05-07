@@ -46,7 +46,7 @@ public class Village {
                 7,
                 Village.concepts(),
                 Village.assertions(),
-                Village.roleActions(),
+                Village.roleActions_withFishingNet(),
                 norms_permittedToHaveFishingNet_ifHasLicense()
         );
     }
@@ -88,7 +88,9 @@ public class Village {
     }
 
     private static List<Norm> norms_permittedToHaveFishingNet_ifHasLicense(){
-        return List.of(VillageNorms.permittedToHaveFishingNet_ifHasLicense(TermsFactory.X));
+        return List.of(
+                VillageNorms.permittedToHaveFishingNet_ifHasLicense(TermsFactory.X)
+        );
     }
     public static Institution get_fishingReportObligation() {
         return new Institution(
@@ -129,7 +131,7 @@ public class Village {
                 haveFishingLicense(TermsFactory.X),
                 haveExploitationLicense(TermsFactory.X),
                 filledFishReport(TermsFactory.X),
-                haveFishingNet(TermsFactory.X)
+                hasFishingNet(TermsFactory.X)
         );
     }
 
@@ -142,7 +144,7 @@ public class Village {
         );
     }
 
-    // CHECK PREDICATES
+    // ONTOLOGY PREDICATES
     public static Predicate sacred(Term subject) {
         return new Predicate("sacred", List.of(subject));
     }
@@ -171,8 +173,8 @@ public class Village {
         return new Predicate("filledFishReport", List.of(subject));
     }
 
-    public static Predicate haveFishingNet(Term subject) {
-        return new Predicate("haveFishingNet", List.of(subject));
+    public static Predicate hasFishingNet(Term subject) {
+        return new Predicate("hasFishingNet", List.of(subject));
     }
 
     private static List<RoleActions> roleActions() {
@@ -180,6 +182,16 @@ public class Village {
     }
 
     private static RoleActions forMember() {
+        return new RoleActions(member, memberActions());
+    }
+
+    private static List<RoleActions> roleActions_withFishingNet() {
+        return List.of(
+                forMember_withFishingNet()
+        );
+    }
+
+    private static RoleActions forMember_withFishingNet() {
         return new RoleActions(member, memberActions());
     }
 

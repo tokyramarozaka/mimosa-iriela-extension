@@ -34,6 +34,22 @@ public class HouseholdActions {
         );
     }
 
+    public static ActionPrecondition fishPreconditions_withFishingNet(Term subject, Term someZone) {
+        return new ActionPrecondition(List.of(
+                new Atom(false, Global.located(subject, someZone)),
+                new Atom(false, Household.containsFishes(someZone)),
+                new Atom(false, Household.hasFishingNet(subject))
+        ));
+    }
+
+    public static Action fish_withFishingNet(Term subject, Term zone) {
+        return new Action(
+                Household.fish,
+                fishPreconditions_withFishingNet(subject, zone),
+                fishConsequences(subject, zone)
+        );
+    }
+
     public static ActionPrecondition cutPreconditions(Term subject, Term someZone) {
         return new ActionPrecondition(List.of(
                 new Atom(false, Global.located(subject, someZone)),

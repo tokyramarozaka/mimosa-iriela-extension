@@ -75,6 +75,7 @@ public class NormativePlan extends Plan {
             ActionPrecondition normativePreconditions = new ActionPrecondition(new ArrayList<>(
                     targetedAction.getPreconditions().getAtoms()
             ));
+
             for (Atom normativeCondition : permission.getNormConditions().getConditions()) {
                 if (!isRole(normativeCondition)) {
                     normativePreconditions.getAtoms().add(normativeCondition);
@@ -147,6 +148,14 @@ public class NormativePlan extends Plan {
      */
     private void evaluateProhibitionsPerInterval(List<RegulativeNorm> prohibitions) {
         for (RegulativeNorm prohibition : prohibitions) {
+            boolean isApplicable = false;
+            for (PopSituation situation : this.getSituations()) {
+                if(isApplicable(situation, prohibition)){
+                    isApplicable = true;
+                }
+            }
+            if(!isApplicable) continue;
+
             Interval applicableInterval = getApplicableInterval(prohibition);
 
             if (applicableInterval.isEmpty()) {
@@ -242,7 +251,9 @@ public class NormativePlan extends Plan {
         for (RegulativeNorm permission : permissionsOnPropositions) {
             this.getSituations().stream()
                     .filter(situation -> !this.isApplicable(situation, permission))
-                    .forEach(insertProhibition(generatedProhibitions, permission));
+                    .forEach(
+                            insertProhibition(generatedProhibitions, permission)
+                    );
         }
 
         return generatedProhibitions;
@@ -252,11 +263,22 @@ public class NormativePlan extends Plan {
             List<RegulativeNorm> generatedProhibitions,
             RegulativeNorm permission
     ) {
-        return situation -> generatedProhibitions.add(new RegulativeNorm(
+        NormConditions reversedConditions = new NormConditions(permission.getNormConditions()
+                .getConditions()
+                .stream()
+                .map(condition -> new Atom(!condition.isNegation(), condition.getPredicate()))
+                .toList());
+
+        RegulativeNorm toAdd = new RegulativeNorm(
                 DeonticOperator.PROHIBITION,
-                permission.getNormConditions(),
+                reversedConditions,
                 permission.getNormConsequences()
-        ));
+        );
+        return situation -> {
+            if (!generatedProhibitions.contains(toAdd)) {
+                generatedProhibitions.add(toAdd);
+            }
+        };
     }
 
     /**
@@ -313,8 +335,10 @@ public class NormativePlan extends Plan {
             NormativeProposition prohibitedProposition = (NormativeProposition) prohibition.
                     getNormConsequences();
 
-            boolean propositionExists = propositionExistsIn(prohibitedProposition,
-                    applicableInterval, intervalStartContext);
+            boolean propositionExists = propositionExistsIn(
+                    prohibition,
+                    applicableInterval
+            );
 
             if (propositionExists) {
                 this.getFlaws().add(new NormativeFlaw(this, prohibition, applicableInterval,
@@ -323,11 +347,20 @@ public class NormativePlan extends Plan {
         }
     }
 
+    /**
+     * Checks if some forbidden proposition is asserted or not inside some interval of situation
+     *
+     * @param prohibition:        the prohibition containing the proposition we want to check.
+     * @param applicableInterval: the interval in which the norm is applicable in the plan.
+     * @return true if the proposition exists in the given interval, and false otherwise.
+     */
     private boolean propositionExistsIn(
-            NormativeProposition prohibitedProposition,
-            Interval applicableInterval,
-            Context applicableContext
+            RegulativeNorm prohibition,
+            Interval applicableInterval
     ) {
+        NormativeProposition prohibitedProposition = (NormativeProposition) prohibition
+                .getNormConsequences();
+
         return this.getSituations()
                 .stream()
                 .filter(situation -> isBetween(
@@ -336,13 +369,20 @@ public class NormativePlan extends Plan {
                                 : applicableInterval.getEndingSituation())
                 )
                 .anyMatch(situation -> {
-                    ContextualAtom forbiddenProposition = new ContextualAtom(
-                            applicableContext,
-                            prohibitedProposition
-                    );
-                    logger.debug("Forbidden proposition is : " + forbiddenProposition);
-                    logger.debug("Applicable context is : " + applicableContext);
-                    return isAsserted(forbiddenProposition, situation);
+                    try {
+                        Context conditionContext = new Context();
+                        CodenotationConstraints applicableCodenotations = prohibition
+                                .getApplicableCodenotations(this, situation, conditionContext);
+
+                        ContextualAtom toCheck = new ContextualAtom(
+                                conditionContext,
+                                prohibitedProposition
+                        );
+
+                        return isAsserted(toCheck, situation, applicableCodenotations);
+                    } catch (UnapplicableNormException e) {
+                        return false;
+                    }
                 });
     }
 
@@ -367,10 +407,46 @@ public class NormativePlan extends Plan {
      * @return
      */
     private Interval getApplicableInterval(RegulativeNorm norm) {
-        PopSituation begin = getFirstApplicableSituation(norm);
-        PopSituation end = getInapplicableSituationAfter(begin, norm);
+        if (norm.enforceAction()) {
+            PopSituation begin = getFirstApplicableSituation(norm);
+            PopSituation end = getInapplicableSituationAfter(begin, norm);
 
-        return new Interval(begin, end);
+            return new Interval(begin, end);
+        } else {
+            // TODO: urgent
+            NormativeProposition prohibited = (NormativeProposition) norm.getNormConsequences();
+            Step establisher = getEstablisher(prohibited, this.getFinalSituation());
+
+            if(establisher == null){
+                return new Interval(null, null);
+            }
+
+            PopSituation begin = this.getTc().getFollowingSituation(establisher);
+            PopSituation end = getInapplicableSituationAfter(begin, norm);
+
+            return new Interval(begin, end);
+        }
+    }
+
+    private Step getAssertingStep(RegulativeNorm prohibition, PopSituation finalSituation) {
+        for (Step step : this.getSteps().stream().filter(this::isNotFinalStep).toList()) {
+            Context conditionContext = new Context();
+            PopSituation followingSituation = this.getTc().getFollowingSituation(step);
+            CodenotationConstraints applicableCc = prohibition.getApplicableCodenotations(
+                    this, followingSituation,conditionContext
+            );
+            NormativeProposition prohibited = (NormativeProposition) prohibition
+                    .getNormConsequences();
+
+            if(isAsserted(
+                    new ContextualAtom(conditionContext, prohibited),
+                    followingSituation,
+                    applicableCc)
+            ){
+                return step;
+            }
+        }
+        return null;
     }
 
     /**
@@ -379,7 +455,7 @@ public class NormativePlan extends Plan {
      * @param norm: the norm to be checked if applicable
      * @return the earliest situation where it is applicable.
      */
-    private PopSituation getFirstApplicableSituation(RegulativeNorm norm) {
+    public PopSituation getFirstApplicableSituation(RegulativeNorm norm) {
         PopSituation initialSituation = this.getInitialSituation();
         if (hasApplicableContext(norm, initialSituation)) {
             return initialSituation;

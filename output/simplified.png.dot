@@ -1,7 +1,10 @@
 digraph G { 
-  "initial():3" -> "move(X,Y,B1):65546";
-  "fish(X,B3):23" -> "final(X):2";
-  "move(X,B2,B3):600" -> "fish(X,B3):23";
-  "move(X,B1,B2):12808" -> "move(X,B2,B3):600";
-  "move(X,Y,B1):65546" -> "move(X,B1,B2):12808";
+  "initial():3" -> "move(X,Y,B1):1155967";
+  "fish(X,B3):26" -> "final(X):2";
+  "getFishingNet():63" -> "fish(X,B3):26";
+  "getFishingLicense(X,B2):191" -> "getFishingNet():63";
+  "getFishingLicense(X,B2):191" -> "move(X,B2,B3):3369";
+  "move(X,B2,B3):3369" -> "fish(X,B3):26";
+  "move(X,B1,B2):250388" -> "getFishingLicense(X,B2):191";
+  "move(X,Y,B1):1155967" -> "move(X,B1,B2):250388";
 }

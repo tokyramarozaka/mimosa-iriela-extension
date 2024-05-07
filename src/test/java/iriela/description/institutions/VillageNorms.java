@@ -107,6 +107,6 @@ public class VillageNorms {
     }
 
     private static NormConsequences haveFishingNetWithLicense_consequences(Term subject){
-        return new NormativeProposition(false, Village.haveFishingNet(subject));
+        return new NormativeProposition(false, Village.hasFishingNet(subject));
     }
 }

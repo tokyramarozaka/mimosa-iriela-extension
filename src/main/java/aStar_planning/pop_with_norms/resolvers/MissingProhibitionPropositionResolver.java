@@ -30,16 +30,20 @@ public class MissingProhibitionPropositionResolver {
      */
     public static List<Operator> byPromotion(NormativePlan plan, NormativeFlaw flaw) {
         List<Operator> operators = new ArrayList<>();
-        PopSituation applicableSituation = flaw.getApplicableSituation();
+        PopSituation applicableSituation = plan.getFirstApplicableSituation(
+                flaw.getFlawedNorm()
+        );
+
         NormativeProposition forbiddenProposition = (NormativeProposition) flaw
                 .getFlawedNorm()
                 .getNormConsequences();
 
-        Step establisher = plan.getEstablisher(forbiddenProposition, flaw.getApplicableSituation());
+        Step establisher = plan.getEstablisher(forbiddenProposition, plan.getFinalSituation());
 
         if (establisher == null) {
-            throw new NullPointerException("Establisher not found");
+            throw new NullPointerException("Establisher for " + forbiddenProposition + "not found");
         }
+
         PopSituation establisherPostSituation = plan.getTc().getFollowingSituation(establisher);
 
         TemporalConstraints toAdd = new TemporalConstraints(List.of(
