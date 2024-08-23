@@ -423,7 +423,6 @@ public class NormativePlan extends Plan {
 
             PopSituation begin = this.getTc().getFollowingSituation(establisher);
             PopSituation end = getInapplicableSituationAfter(begin, norm);
-
             return new Interval(begin, end);
         }
     }
